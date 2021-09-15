@@ -1,4 +1,4 @@
-# Project <insert name>
+# Benchmark denoising strategies on fMRIPrep 
 
 ## Dataset structure
 
