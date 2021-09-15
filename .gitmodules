@@ -2,3 +2,4 @@
 	path = inputs/openneuro/ds000228
 	url = git@github.com:OpenNeuroDatasets/ds000228.git
 	datalad-id = 4d7dc6d4-8a11-11e8-8850-0242ac120014
+	datalad-url = git@github.com:OpenNeuroDatasets/ds000228.git
