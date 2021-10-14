@@ -1,0 +1,28 @@
+{
+    "no_cleaning": null,
+    "params2": {
+        "strategy" : ["high_pass", "non_steady_state", "wm_csf"],
+        "wm_csf": "basic"
+    },
+    "params6": {
+        "strategy": ["high_pass", "non_steady_state", "motion"],
+        "motion": "basic"
+    },
+    "simple": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "wm_csf": "basic",
+        "motion": "basic"
+    },
+    "params9": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "wm_csf": "basic",
+        "motion": "basic",
+        "global_signal": "basic"
+    },
+    "params9scrub": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
+        "wm_csf": "basic",
+        "motion": "basic",
+        "scrub": 5
+    }
+}

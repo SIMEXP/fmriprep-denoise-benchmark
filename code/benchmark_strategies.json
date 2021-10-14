@@ -1,0 +1,65 @@
+{
+    "params2": {
+        "strategy" : ["high_pass", "non_steady_state", "wm_csf"],
+        "wm_csf": "basic"
+    },
+    "params6": {
+        "strategy": ["high_pass", "non_steady_state", "motion"],
+        "motion": "basic"
+    },
+    "simple": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "wm_csf": "basic",
+        "motion": "basic"
+    },
+    "params9": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "wm_csf": "basic",
+        "motion": "basic",
+        "global_signal": "basic"
+    },
+    "params24": {
+        "strategy": ["high_pass", "non_steady_state", "motion"],
+        "motion": "full"
+    },
+    "params36": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "wm_csf": "full",
+        "motion": "full",
+        "global_signal": "full"
+    },
+    "params36scrub": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
+        "wm_csf": "full",
+        "motion": "full",
+        "scrub": 5
+    },
+    "acompcor": {
+        "strategy": ["high_pass", "non_steady_state", "motion", "compcor"],
+        "motion": "full",
+        "n_compcor": 5,
+        "compcor": "anat_combined"
+    },
+    "acompcor50": {
+        "strategy": ["high_pass", "non_steady_state", "motion", "compcor"],
+        "motion": "full",
+        "n_compcor": "full",
+        "compcor": "anat_combined"
+    },
+    "tcompcor": {
+        "strategy": ["high_pass", "non_steady_state", "compcor"],
+        "n_compcor": 6,
+        "compcor": "temporal"
+    },
+    "ica_aroma": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "ica_aroma"],
+        "wm_csf": "basic",
+        "ica_aroma": "full"
+    },
+    "ica_aroma_gsr": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "ica_aroma", "global"],
+        "wm_csf": "basic",
+        "ica_aroma": "full",
+        "global_signal": "basic"
+    }
+}
