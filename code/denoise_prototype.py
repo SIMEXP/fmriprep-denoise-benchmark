@@ -25,9 +25,10 @@ from nilearn.input_data import (fmriprep_confounds,
                                 NiftiLabelsMasker, NiftiMapsMasker)
 
 
+# define path of input and output
 # strategy_file = Path(__file__).parent / "benchmark_strategies.json"
 strategy_file = Path(__file__).parent / "test_strategies.json"
-
+output = Path(__file__).parents[1] / "results"
 
 def generate_dataset_connectomes(func_img, masker, strategy_name, parameters):
     """Create confound-removed subject-level connectomes for a dataset.
@@ -176,14 +177,14 @@ def main():
     ax = sns.barplot(data=(sig_per_edge<0.05), ci=None)
     ax.set(ylabel='Proportion of edge significantly correlated with mean FD',
            xlabel='confound removal strategy')
-    plt.savefig(Path(__file__).parents[1] / "results/percentage_sig_edge.png")
+    plt.savefig(output / "percentage_sig_edge.png")
     plt.close()
     sns.stripplot(data=metric_per_edge, dodge=True, alpha=.01, zorder=1)
     sns.pointplot(data=metric_per_edge, dodge=.8 - .8 / 3,
                   join=False, palette="dark",
                   estimator=np.median,
                   markers="d", scale=.75, ci=None)
-    plt.savefig(Path(__file__).parents[1] / "results/dsitribution_edge.png")
+    plt.savefig(output / "dsitribution_edge.png")
 
 if __name__ == "__main__":
     main()

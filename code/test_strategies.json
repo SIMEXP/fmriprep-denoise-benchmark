@@ -9,7 +9,7 @@
         "motion": "basic"
     },
     "simple": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion"],
         "wm_csf": "basic",
         "motion": "basic"
     },
