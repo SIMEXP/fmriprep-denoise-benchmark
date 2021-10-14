@@ -1,4 +1,5 @@
 {
+    "no_cleaning": null,
     "params2": {
         "strategy" : ["high_pass", "non_steady_state", "wm_csf"],
         "wm_csf": "basic"

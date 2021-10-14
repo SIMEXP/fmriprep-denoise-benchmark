@@ -174,8 +174,8 @@ def main():
 
     # plotting test
     ax = sns.barplot(data=(sig_per_edge<0.05), ci=None)
-    ax.set(xlabel='Proportion of edge significantly correlated with mean FD',
-           ylabel='confound removal strategy')
+    ax.set(ylabel='Proportion of edge significantly correlated with mean FD',
+           xlabel='confound removal strategy')
     plt.savefig(Path(__file__).parents[1] / "results/percentage_sig_edge.png")
     plt.close()
     sns.stripplot(data=metric_per_edge, dodge=True, alpha=.01, zorder=1)
