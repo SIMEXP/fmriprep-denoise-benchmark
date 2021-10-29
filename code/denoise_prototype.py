@@ -14,9 +14,10 @@ import json
 
 import numpy as np
 import pandas as pd
-from scipy import stats, linalg
-import seaborn as sns
 import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy import stats, linalg
+from sklearn.utils import Bunch
 
 from nilearn import datasets
 
@@ -112,6 +113,38 @@ def partial_correlation(x, y, cov):
     return stats.pearsonr(resid_x, resid_y)
 
 
+def fetch_fmriprep_derivative(path_dataset, path_fmriprep_derivative,
+                              specifier, space="MNI152NLin2009cAsym"):
+    """Fetch fmriprep derivative and return nilearn.dataset.fetch* like output.
+    Load functional image, confounds, and participants.tsv only.
+    """
+    participant_tsv_path = path_dataset / "participants.tsv"
+    if not participant_tsv_path.is_file():
+        raise(FileNotFoundError, f"Cannot find {participant_tsv_path}")
+    participant_tsv = pd.read_csv(path_dataset / "participants.tsv",
+                                  index_col="participant_id",
+                                  sep="\t")
+
+    subject_dirs = path_fmriprep_derivative.glob("sub-*/")
+    func_img_path, confounds_tsv_path, include_subjects = [], [], []
+    for subject_dir in subject_dirs:
+        subject = subject_dir.name
+        cur_func = (subject_dir / "func" /
+            f"{subject}_{specifier}_space-{space}_desc-preproc_bold.nii.gz")
+        cur_confound = (subject_dir / "func" /
+            f"{subject}_{specifier}_desc-confounds_timeseries.tsv")
+
+        if cur_func.is_file() and cur_confound.is_file():
+            func_img_path.append(str(cur_func))
+            confounds_tsv_path.append(str(cur_confound))
+            include_subjects.append(subject)
+
+    return Bunch(func=func_img_path,
+                 confounds=confounds_tsv_path,
+                 phenotypic=participant_tsv.iloc[include_subjects, :]
+                 )
+
+
 def main():
     """Main function."""
     # load 10 subjects for making the prototype
@@ -175,6 +208,7 @@ def main():
 
     # plotting test
     ax = sns.barplot(data=(sig_per_edge<0.05), ci=None)
+    ax.set_xticklabels(ax.get_xticklabels(), rotation=30)
     ax.set(ylabel='Proportion of edge significantly correlated with mean FD',
            xlabel='confound removal strategy')
     plt.savefig(output / "percentage_sig_edge.png")
@@ -189,6 +223,17 @@ def main():
 if __name__ == "__main__":
     main()
 
+import pytest
+
+
 # Test of some customised function
+def test_fetch_fmriprep_derivative(tmp_path):
+
+
+def generate_dir(specifier, space):
+    for subject in range(1, 11):
+        template = f"sub-{subject:03d}/func/sub-{subject:03d}_{specifier}_space-{space}_desc-preproc.nii.gz"  # no qa
+
+
 # def test_partial_correlation():
 #     partial_correlation()
