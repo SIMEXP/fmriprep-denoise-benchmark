@@ -1,38 +1,52 @@
 {
     "no_cleaning": null,
-    "params2": {
+    "high_pass": {
+        "strategy" : ["high_pass", "non_steady_state"]
+    },
+    "wm_csf2": {
         "strategy" : ["high_pass", "non_steady_state", "wm_csf"],
         "wm_csf": "basic"
     },
-    "params6": {
+    "motion6": {
         "strategy": ["high_pass", "non_steady_state", "motion"],
         "motion": "basic"
     },
-    "simple": {
+    "global1": {
+        "strategy": ["high_pass", "non_steady_state", "global"],
+        "global_signal": "basic"
+    },
+    "motion24": {
+        "strategy": ["high_pass", "non_steady_state", "motion"],
+        "motion": "full"
+    },
+    "wm_csf2+motion6": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion"],
         "wm_csf": "basic",
         "motion": "basic"
     },
-    "params9": {
+    "wm_csf2+motion6+global1": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
         "wm_csf": "basic",
         "motion": "basic",
         "global_signal": "basic"
     },
-    "params24": {
-        "strategy": ["high_pass", "non_steady_state", "motion"],
-        "motion": "full"
+    "wm_csf2+motion6+scrub": {
+        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
+        "wm_csf": "basic",
+        "motion": "basic",
+        "scrub": 5
     },
-    "params36": {
+    "wm_csf8+motion24+global4": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
         "wm_csf": "full",
         "motion": "full",
         "global_signal": "full"
     },
-    "params36scrub": {
+    "wm_csf8+motion24+global4+scrub": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
         "wm_csf": "full",
         "motion": "full",
+        "global_signal": "full",
         "scrub": 5
     },
     "acompcor": {
@@ -44,7 +58,7 @@
     "acompcor50": {
         "strategy": ["high_pass", "non_steady_state", "motion", "compcor"],
         "motion": "full",
-        "n_compcor": "full",
+        "n_compcor": "all",
         "compcor": "anat_combined"
     },
     "tcompcor": {
