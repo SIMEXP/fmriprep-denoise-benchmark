@@ -11,6 +11,28 @@ def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
                               specifier, space="MNI152NLin2009cAsym"):
     """Fetch fmriprep derivative and return nilearn.dataset.fetch* like output.
     Load functional image, confounds, and participants.tsv only.
+
+    Parameters
+    ----------
+
+    participant_tsv_path : pathlib.Path
+        A pathlib path point to the BIDS participants file.
+
+    path_fmriprep_derivative : pathlib.Path
+        A pathlib path point to the BIDS participants file.
+
+    specifier : string
+        Text in a fmriprep file name, in between sub-<subject>_ses-<session>_
+        and `space-<template>`.
+
+    space : string, default "MNI152NLin2009cAsym"
+        Template flow tempate name in fmriprep output.
+
+    Returns
+    -------
+    sklearn.utils.Bunch
+        nilearn.dataset.fetch* like output.
+
     """
 
     # participants tsv from the main dataset
@@ -76,7 +98,10 @@ def deconfound_connectome_single_strategy(func_img, masker, strategy):
         if strategy_name == "no_cleaning":
             subject_timeseries = masker.fit_transform(img)
 
-        reduced_confounds, sample_mask = fmriprep_confounds(img, **parameters)
+        if parameters:
+            reduced_confounds, sample_mask = fmriprep_confounds(img, **parameters)
+        else:
+            reduced_confounds, sample_mask = None, None
 
         # scrubbing related issue: subject with too many frames removed
         # should not be included
@@ -96,3 +121,24 @@ def deconfound_connectome_single_strategy(func_img, masker, strategy):
             subject_timeseries = None
             dataset_connectome.loc[subject_id, :] = np.nan
     return dataset_connectome
+
+
+def ds000288_movement(data):
+    """Retreive  for ds000288."""
+    # get motion QC related metrics from confound files
+    group_mean_fd = pd.DataFrame()
+    group_mean_fd.index = group_mean_fd.index.set_names("participant_id")
+    for confounds in data.confounds:
+        subject_id = confounds.split("/")[-1].split("_")[0]
+        confounds = pd.read_csv(confounds, sep="\t")
+        mean_fd = confounds["framewise_displacement"].mean()
+        group_mean_fd.loc[subject_id, "mean_framewise_displacement"] = mean_fd
+
+    # load gender and age as confounds for the developmental dataset
+    participants = data.phenotypic.copy()
+    covar = participants.loc[:, ["Age", "Gender"]]
+    covar.loc[covar['Gender'] == 'F', 'Gender'] = 1
+    covar.loc[covar['Gender'] == 'M', 'Gender'] = 0
+    covar['Gender'] = covar['Gender'].astype('float')
+
+    return pd.concat((group_mean_fd, covar), axis=1)

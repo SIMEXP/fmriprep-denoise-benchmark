@@ -20,44 +20,32 @@ from nilearn import datasets
 from nilearn.input_data import NiftiMapsMasker
 
 from metrics import quality_control_connectivity
-from utils.dataset import fetch_fmriprep_derivative, deconfound_connectome_single_strategy
+from utils.dataset import fetch_fmriprep_derivative, deconfound_connectome_single_strategy, ds000288_movement
 
 
 # define path of input and output
-strategy_file = Path(__file__).parent / "benchmark_strategies.json"
-# strategy_file = Path(__file__).parent / "test_strategies.json"
-output = Path(__file__).parents[1] / "results"
+STRATEGY = "code/benchmark_strategies.json"
+OUTPUT = "results"
+INPUT_FMRIPREP = "inputs/dev_data"
+INPUT_BIDS_PARTICIPANTS = "inputs/dev_data/participants.tsv"
+FMRIPREP_SPECIFIER = "task-pixar"
 
 
 def main():
     """Main function."""
-    data = fetch_fmriprep_derivative(
-        Path(__file__).parents[1] / "inputs/dev_data/participants.tsv",
-        Path(__file__).parents[1] / "inputs/dev_data",
-        "task-pixar")
+    strategy_file = Path(__file__).parents[1] / STRATEGY
+    output = Path(__file__).parents[1] / OUTPUT
+    input_fmriprep = Path(__file__).parents[1] / INPUT_FMRIPREP
+    input_bids_participants = Path(__file__).parents[1] / INPUT_BIDS_PARTICIPANTS
+
+    data = fetch_fmriprep_derivative(input_bids_participants, input_fmriprep,
+                                     FMRIPREP_SPECIFIER)
 
     # read the strategy deining files
     with open(strategy_file, "r") as file:
         benchmark_strategies = json.load(file)
 
-    # get motion QC related metrics from confound files
-    group_mean_fd = pd.DataFrame()
-    group_mean_fd.index = group_mean_fd.index.set_names("participant_id")
-    for confounds in data.confounds:
-        subject_id = confounds.split("/")[-1].split("_")[0]
-        confounds = pd.read_csv(confounds, sep="\t")
-        mean_fd = confounds["framewise_displacement"].mean()
-        group_mean_fd.loc[subject_id, "mean_framewise_displacement"] = mean_fd
-
-    # load gender and age as confounds for the developmental dataset
-    participants = data.phenotypic.copy()
-    covar = participants.loc[:, ["Age", "Gender"]]
-    covar.loc[covar['Gender'] == 'F', 'Gender'] = 1
-    covar.loc[covar['Gender'] == 'M', 'Gender'] = 0
-    covar['Gender'] = covar['Gender'].astype('float')
-
-    movement = pd.concat((group_mean_fd, covar), axis=1)
-
+    movement = ds000288_movement(data)
 
     atlas = datasets.fetch_atlas_difumo(dimension=64).maps
     masker = NiftiMapsMasker(atlas, standardize=True, detrend=True)
@@ -69,9 +57,7 @@ def main():
     for strategy_name, parameters in benchmark_strategies.items():
         strategy = {strategy_name: parameters}
         dataset_connectomes = deconfound_connectome_single_strategy(data.func, masker, strategy)
-        # dump the intrim results
-        clean_correlation_matrix.update({
-            strategy_name: dataset_connectomes.copy()})
+        clean_correlation_matrix[strategy_name] = dataset_connectomes.copy()
 
     # calculate QC metrices
     metric_per_edge, sig_per_edge = pd.DataFrame(), pd.DataFrame()
