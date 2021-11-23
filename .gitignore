@@ -1,5 +1,7 @@
 # input 
 inputs/dev_data/
+inputs/interim/
+results/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
