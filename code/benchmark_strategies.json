@@ -1,5 +1,5 @@
 {
-    "no_cleaning": null,
+    "raw": null,
     "high_pass": {
         "strategy" : ["high_pass", "non_steady_state"]
     },

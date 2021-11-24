@@ -8,7 +8,7 @@ from nilearn.input_data import fmriprep_confounds
 
 
 def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
-                              specifier, space="MNI152NLin2009cAsym"):
+                              specifier, space="MNI152NLin2009cAsym", aroma=False):
     """Fetch fmriprep derivative and return nilearn.dataset.fetch* like output.
     Load functional image, confounds, and participants.tsv only.
 
@@ -27,6 +27,9 @@ def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
 
     space : string, default "MNI152NLin2009cAsym"
         Template flow tempate name in fmriprep output.
+
+    aroma : boolean, default False
+        Use ICA-AROMA processed data or not.
 
     Returns
     -------
@@ -51,8 +54,10 @@ def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
     func_img_path, confounds_tsv_path, include_subjects = [], [], []
     for subject_dir in subject_dirs:
         subject = subject_dir.name
+        desc = "smoothAROMAnonaggr" if aroma else "preproc"
+        space = "MNI152NLin6Asym" if aroma else space
         cur_func = (subject_dir / "func" /
-            f"{subject}_{specifier}_space-{space}_desc-preproc_bold.nii.gz")
+            f"{subject}_{specifier}_space-{space}_desc-{desc}_bold.nii.gz")
         cur_confound = (subject_dir / "func" /
             f"{subject}_{specifier}_desc-confounds_timeseries.tsv")
 
