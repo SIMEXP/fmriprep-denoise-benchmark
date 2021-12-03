@@ -34,7 +34,9 @@
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
         "wm_csf": "basic",
         "motion": "basic",
-        "scrub": 5
+        "scrub": 5,
+        "fd_threshold": 0.2, 
+        "std_dvars_threshold": null
     },
     "wm_csf8+motion24+global4": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
@@ -47,7 +49,9 @@
         "wm_csf": "full",
         "motion": "full",
         "global_signal": "full",
-        "scrub": 5
+        "scrub": 5,
+        "fd_threshold": 0.2, 
+        "std_dvars_threshold": null
     },
     "acompcor": {
         "strategy": ["high_pass", "non_steady_state", "motion", "compcor"],
