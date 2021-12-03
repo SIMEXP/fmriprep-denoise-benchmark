@@ -1,9 +1,9 @@
 {
     "raw": null,
-    "high_pass": {
+    "highpass": {
         "strategy" : ["high_pass", "non_steady_state"]
     },
-    "wm_csf2": {
+    "wmcsf2": {
         "strategy" : ["high_pass", "non_steady_state", "wm_csf"],
         "wm_csf": "basic"
     },
@@ -19,18 +19,18 @@
         "strategy": ["high_pass", "non_steady_state", "motion"],
         "motion": "full"
     },
-    "wm_csf2+motion6": {
+    "wmcsf2+motion6": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion"],
         "wm_csf": "basic",
         "motion": "basic"
     },
-    "wm_csf2+motion6+global1": {
+    "wmcsf2+motion6+global1": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
         "wm_csf": "basic",
         "motion": "basic",
         "global_signal": "basic"
     },
-    "wm_csf2+motion6+scrub": {
+    "wmcsf2+motion6+scrub": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
         "wm_csf": "basic",
         "motion": "basic",
@@ -38,13 +38,13 @@
         "fd_threshold": 0.2, 
         "std_dvars_threshold": null
     },
-    "wm_csf8+motion24+global4": {
+    "wmcsf8+motion24+global4": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
         "wm_csf": "full",
         "motion": "full",
         "global_signal": "full"
     },
-    "wm_csf8+motion24+global4+scrub": {
+    "wmcsf8+motion24+global4+scrub": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
         "wm_csf": "full",
         "motion": "full",
@@ -70,12 +70,12 @@
         "n_compcor": 6,
         "compcor": "temporal"
     },
-    "ica_aroma": {
+    "aroma": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "ica_aroma"],
         "wm_csf": "basic",
         "ica_aroma": "full"
     },
-    "ica_aroma_gsr": {
+    "aroma+gsr": {
         "strategy": ["high_pass", "non_steady_state", "wm_csf", "ica_aroma", "global"],
         "wm_csf": "basic",
         "ica_aroma": "full",

@@ -22,7 +22,7 @@ ATLAS_METADATA = {
         },
     'difumo': {
         'type': 'dynamic',
-        'resolutions': [128, 512, 1024],
+        'resolutions': [64, 128, 256, 512, 1024],
         'label_idx': 1,
         'fetcher': "nilearn.datasets.fetch_atlas_difumo(dimension={resolution}, resolution_mm=2)"}
 }
