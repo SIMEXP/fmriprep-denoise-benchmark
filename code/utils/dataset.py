@@ -4,8 +4,7 @@ import pandas as pd
 from sklearn.utils import Bunch
 
 from nilearn.connectome import ConnectivityMeasure
-from nilearn.input_data import fmriprep_confounds
-
+from nilearn.interfaces.fmriprep import load_confounds
 
 def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
                               specifier, space="MNI152NLin2009cAsym", aroma=False):
@@ -85,7 +84,7 @@ def deconfound_connectome_single_strategy(func_img, masker, strategy):
 
     strategy : Dict
         Dictionary with a strategy name as key and a parameter set as value.
-        Pass to `nilearn.input_data.fmriprep_confounds`
+        Pass to `nilearn.interfaces.fmriprep.load_confounds`
 
     Returns
     -------
@@ -104,7 +103,7 @@ def deconfound_connectome_single_strategy(func_img, masker, strategy):
             subject_timeseries = masker.fit_transform(img)
 
         if parameters:
-            reduced_confounds, sample_mask = fmriprep_confounds(img, **parameters)
+            reduced_confounds, sample_mask = load_confounds(img, **parameters)
         else:
             reduced_confounds, sample_mask = None, None
 
@@ -114,8 +113,8 @@ def deconfound_connectome_single_strategy(func_img, masker, strategy):
             subject_timeseries = masker.fit_transform(
                 img, confounds=reduced_confounds, sample_mask=sample_mask)
             correlation_measure = ConnectivityMeasure(kind='correlation',
-                                            vectorize=True,
-                                            discard_diagonal=True)
+                                                      vectorize=True,
+                                                      discard_diagonal=True)
             # save the correlation matrix flatten
             flat_connectome = correlation_measure.fit_transform(
                 [subject_timeseries])
