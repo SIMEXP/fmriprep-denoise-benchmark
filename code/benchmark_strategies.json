@@ -4,34 +4,34 @@
         "strategy" : ["high_pass", "non_steady_state"]
     },
     "wmcsf2": {
-        "strategy" : ["high_pass", "non_steady_state", "wm_csf"],
+        "strategy" : ["high_pass", "wm_csf"],
         "wm_csf": "basic"
     },
     "motion6": {
-        "strategy": ["high_pass", "non_steady_state", "motion"],
+        "strategy": ["high_pass", "motion"],
         "motion": "basic"
     },
     "global1": {
-        "strategy": ["high_pass", "non_steady_state", "global"],
+        "strategy": ["high_pass", "global"],
         "global_signal": "basic"
     },
     "motion24": {
-        "strategy": ["high_pass", "non_steady_state", "motion"],
+        "strategy": ["high_pass", "motion"],
         "motion": "full"
     },
     "wmcsf2+motion6": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion"],
+        "strategy": ["high_pass", "wm_csf", "motion"],
         "wm_csf": "basic",
         "motion": "basic"
     },
     "wmcsf2+motion6+global1": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "strategy": ["high_pass", "wm_csf", "motion", "global"],
         "wm_csf": "basic",
         "motion": "basic",
         "global_signal": "basic"
     },
     "wmcsf2+motion6+scrub": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
+        "strategy": ["high_pass", "wm_csf", "motion", "scrub"],
         "wm_csf": "basic",
         "motion": "basic",
         "scrub": 5,
@@ -39,13 +39,13 @@
         "std_dvars_threshold": null
     },
     "wmcsf8+motion24+global4": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "global"],
+        "strategy": ["high_pass", "wm_csf", "motion", "global"],
         "wm_csf": "full",
         "motion": "full",
         "global_signal": "full"
     },
     "wmcsf8+motion24+global4+scrub": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "motion", "scrub"],
+        "strategy": ["high_pass", "wm_csf", "motion", "scrub"],
         "wm_csf": "full",
         "motion": "full",
         "global_signal": "full",
@@ -54,29 +54,29 @@
         "std_dvars_threshold": null
     },
     "acompcor": {
-        "strategy": ["high_pass", "non_steady_state", "motion", "compcor"],
+        "strategy": ["high_pass", "motion", "compcor"],
         "motion": "full",
         "n_compcor": 5,
         "compcor": "anat_combined"
     },
     "acompcor50": {
-        "strategy": ["high_pass", "non_steady_state", "motion", "compcor"],
+        "strategy": ["high_pass", "motion", "compcor"],
         "motion": "full",
         "n_compcor": "all",
         "compcor": "anat_combined"
     },
     "tcompcor": {
-        "strategy": ["high_pass", "non_steady_state", "compcor"],
+        "strategy": ["high_pass", "compcor"],
         "n_compcor": 6,
         "compcor": "temporal"
     },
     "aroma": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "ica_aroma"],
+        "strategy": ["high_pass", "wm_csf", "ica_aroma"],
         "wm_csf": "basic",
         "ica_aroma": "full"
     },
     "aroma+gsr": {
-        "strategy": ["high_pass", "non_steady_state", "wm_csf", "ica_aroma", "global"],
+        "strategy": ["high_pass", "wm_csf", "ica_aroma", "global"],
         "wm_csf": "basic",
         "ica_aroma": "full",
         "global_signal": "basic"
