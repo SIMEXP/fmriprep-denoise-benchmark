@@ -35,7 +35,7 @@ def main():
     movement.to_csv( output / "dataset-ds000288_desc-movement_phenotype.tsv", sep='\t')
 
     atlas = create_atlas_masker(ATLAS)
-    for nroi in atlas:
+    for nroi in atlas['resolutions']:
         print(f"-- {ATLAS}: dimension {nroi} --")
         for strategy_name, parameters in benchmark_strategies.items():
             print(f"Denoising: {strategy_name}")
