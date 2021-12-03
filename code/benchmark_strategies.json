@@ -1,7 +1,7 @@
 {
     "raw": null,
     "highpass": {
-        "strategy" : ["high_pass", "non_steady_state"]
+        "strategy" : ["high_pass"]
     },
     "wmcsf2": {
         "strategy" : ["high_pass", "wm_csf"],
@@ -12,7 +12,7 @@
         "motion": "basic"
     },
     "global1": {
-        "strategy": ["high_pass", "global"],
+        "strategy": ["high_pass", "global_signal"],
         "global_signal": "basic"
     },
     "motion24": {
@@ -25,7 +25,7 @@
         "motion": "basic"
     },
     "wmcsf2+motion6+global1": {
-        "strategy": ["high_pass", "wm_csf", "motion", "global"],
+        "strategy": ["high_pass", "wm_csf", "motion", "global_signal"],
         "wm_csf": "basic",
         "motion": "basic",
         "global_signal": "basic"
@@ -39,7 +39,7 @@
         "std_dvars_threshold": null
     },
     "wmcsf8+motion24+global4": {
-        "strategy": ["high_pass", "wm_csf", "motion", "global"],
+        "strategy": ["high_pass", "wm_csf", "motion", "global_signal"],
         "wm_csf": "full",
         "motion": "full",
         "global_signal": "full"
@@ -76,7 +76,7 @@
         "ica_aroma": "full"
     },
     "aroma+gsr": {
-        "strategy": ["high_pass", "wm_csf", "ica_aroma", "global"],
+        "strategy": ["high_pass", "wm_csf", "ica_aroma", "global_signal"],
         "wm_csf": "basic",
         "ica_aroma": "full",
         "global_signal": "basic"
