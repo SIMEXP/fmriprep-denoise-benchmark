@@ -8,16 +8,17 @@ from utils.atlas import create_atlas_masker
 # define path of input and output
 STRATEGY = "./code/benchmark_strategies.json"
 OUTPUT = "inputs/interim/dataset-ds000288/"
-INPUT_FMRIPREP = "~/scratch/test_data/1637790137/fmriprep"
-INPUT_BIDS_PARTICIPANTS = "~/projects/rrg-pbellec/hwang1/test_data/participants.tsv"
+INPUT_FMRIPREP = "{home}/scratch/test_data/1637790137/fmriprep"
+INPUT_BIDS_PARTICIPANTS = "{home}/projects/rrg-pbellec/hwang1/test_data/participants.tsv"
 FMRIPREP_SPECIFIER = "task-pixar"
 ATLAS = 'difumo'
 
 
 def main():
     strategy_file = Path(__file__).parents[1] / STRATEGY
-    input_fmriprep = Path(INPUT_FMRIPREP)
-    input_bids_participants = Path(INPUT_BIDS_PARTICIPANTS)
+    home = str(Path.home())
+    input_fmriprep = Path(INPUT_FMRIPREP.format_map({'home': home}))
+    input_bids_participants = Path(INPUT_BIDS_PARTICIPANTS.format_map({'home': home}))
     output = Path(__file__).parents[1] /OUTPUT
     output.mkdir(exist_ok=True)
 
@@ -39,7 +40,7 @@ def main():
         for strategy_name, parameters in benchmark_strategies.items():
             print(f"Denoising: {strategy_name}")
             strategy = {strategy_name: parameters}
-            func_data = data_aroma.func if "aroma" in strategy_name else data.func
+            func_data = data_aroma.func[:2] if "aroma" in strategy_name else data.func[:2]
             dataset_connectomes = deconfound_connectome_single_strategy(func_data, atlas[nroi]['masker'], strategy)
             dataset_connectomes.to_csv(output / f"dataset-ds000288_atlas-{ATLAS}_nroi-{nroi}_desc-{strategy_name}_data.tsv", sep='\t')
 
