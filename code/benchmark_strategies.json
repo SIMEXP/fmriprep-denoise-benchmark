@@ -1,84 +1,27 @@
 {
     "raw": null,
-    "highpass": {
-        "strategy" : ["high_pass"]
+    "simple": {
+        "denoise_strategy": "simple"
     },
-    "wmcsf2": {
-        "strategy" : ["high_pass", "wm_csf"],
-        "wm_csf": "basic"
-    },
-    "motion6": {
-        "strategy": ["high_pass", "motion"],
-        "motion": "basic"
-    },
-    "global1": {
-        "strategy": ["high_pass", "global_signal"],
+    "simple+gsr": {
+        "denoise_strategy": "simple",
         "global_signal": "basic"
     },
-    "motion24": {
-        "strategy": ["high_pass", "motion"],
-        "motion": "full"
+    "scrubbing": {
+        "denoise_strategy": "srubbing"
     },
-    "wmcsf2+motion6": {
-        "strategy": ["high_pass", "wm_csf", "motion"],
-        "wm_csf": "basic",
-        "motion": "basic"
-    },
-    "wmcsf2+motion6+global1": {
-        "strategy": ["high_pass", "wm_csf", "motion", "global_signal"],
-        "wm_csf": "basic",
-        "motion": "basic",
+    "scrubbing+gsr": {
+        "denoise_strategy": "srubbing",
         "global_signal": "basic"
     },
-    "wmcsf2+motion6+scrub": {
-        "strategy": ["high_pass", "wm_csf", "motion", "scrub"],
-        "wm_csf": "basic",
-        "motion": "basic",
-        "scrub": 5,
-        "fd_threshold": 0.2, 
-        "std_dvars_threshold": null
-    },
-    "wmcsf8+motion24+global4": {
-        "strategy": ["high_pass", "wm_csf", "motion", "global_signal"],
-        "wm_csf": "full",
-        "motion": "full",
-        "global_signal": "full"
-    },
-    "wmcsf8+motion24+global4+scrub": {
-        "strategy": ["high_pass", "wm_csf", "motion", "scrub"],
-        "wm_csf": "full",
-        "motion": "full",
-        "global_signal": "full",
-        "scrub": 5,
-        "fd_threshold": 0.2, 
-        "std_dvars_threshold": null
-    },
-    "acompcor": {
-        "strategy": ["high_pass", "motion", "compcor"],
-        "motion": "full",
-        "n_compcor": 5,
-        "compcor": "anat_combined"
-    },
-    "acompcor50": {
-        "strategy": ["high_pass", "motion", "compcor"],
-        "motion": "full",
-        "n_compcor": "all",
-        "compcor": "anat_combined"
-    },
-    "tcompcor": {
-        "strategy": ["high_pass", "compcor"],
-        "n_compcor": 6,
-        "compcor": "temporal"
+    "compcor": {
+        "denoise_strategy": "compcor"
     },
     "aroma": {
-        "strategy": ["high_pass", "wm_csf", "ica_aroma"],
-        "wm_csf": "basic",
-        "ica_aroma": "full"
+        "denoise_strategy": "ica_aroma"
     },
     "aroma+gsr": {
-        "strategy": ["high_pass", "wm_csf", "ica_aroma", "global_signal"],
-        "wm_csf": "basic",
-        "ica_aroma": "full",
+        "denoise_strategy": "ica_aroma",
         "global_signal": "basic"
     }
 }

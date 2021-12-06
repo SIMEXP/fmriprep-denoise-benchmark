@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.utils import Bunch
 
 from nilearn.connectome import ConnectivityMeasure
-from nilearn.interfaces.fmriprep import load_confounds
+from nilearn.interfaces.fmriprep import load_confounds_strategy
 
 def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
                               specifier, space="MNI152NLin2009cAsym", aroma=False):
@@ -103,7 +103,7 @@ def deconfound_connectome_single_strategy(func_img, masker, strategy):
             subject_timeseries = masker.fit_transform(img)
 
         if parameters:
-            reduced_confounds, sample_mask = load_confounds(img, **parameters)
+            reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
         else:
             reduced_confounds, sample_mask = None, None
 
