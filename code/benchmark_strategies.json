@@ -8,10 +8,10 @@
         "global_signal": "basic"
     },
     "scrubbing": {
-        "denoise_strategy": "srubbing"
+        "denoise_strategy": "scrubbing"
     },
     "scrubbing+gsr": {
-        "denoise_strategy": "srubbing",
+        "denoise_strategy": "scrubbing",
         "global_signal": "basic"
     },
     "compcor": {
