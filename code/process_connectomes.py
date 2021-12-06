@@ -53,12 +53,12 @@ def main():
     nroi = args.dimension
 
     fmriprep_specifier = "task-pixar"
-    
+
     home = str(Path.home())
     strategy_file = Path(STRATEGY.format_map({'home': home}))
     input_fmriprep = Path(INPUT_FMRIPREP.format_map({'home': home}))
     input_bids_participants = Path(INPUT_BIDS_PARTICIPANTS.format_map({'home': home}))
-    
+
     output = Path(args.output_path)
     output.mkdir(exist_ok=True)
 
