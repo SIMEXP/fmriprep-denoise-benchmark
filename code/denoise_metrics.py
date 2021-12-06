@@ -20,7 +20,7 @@ from metrics import quality_control_connectivity
 # define path of input and output
 STRATEGY = "code/benchmark_strategies.json"
 OUTPUT = "inputs/interim"
-INPUT_CONNECTOMES = "inputs/interim"
+INPUT_CONNECTOMES = "inputs/"
 
 
 def main():
@@ -40,7 +40,7 @@ def main():
     for strategy_name in benchmark_strategies:
         print(strategy_name)
 
-        dataset_connectomes = pd.read_csv(input_connectomes / strategy_name / "dataset-ds000288_atlas-BASC_nroi-444_data.tsv",
+        dataset_connectomes = pd.read_csv(input_connectomes / f"dataset-ds000288_atlas-schaefer7networks_nroi-100_desc-{strategy_name}_data.tsv",
                                           sep='\t', index_col=0, header=0)
         # QC-FC per edge
         cur_qc_fc, cur_sig = quality_control_connectivity(movement, dataset_connectomes)
