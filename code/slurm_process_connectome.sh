@@ -17,4 +17,4 @@ mkdir ${OUTPUT}
 mapfile -t arr < <(jq -r 'keys[]' code/benchmark_strategies.json)
 STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
 echo $STRATEGY
-python ./code/process_connectomes.py ${OUTPUT} --atlas schaefer7networks --review_strategies 400 --strategy-name ${STRATEGY}
+python ./code/process_connectomes.py ${OUTPUT} --atlas schaefer7networks --dimension 400 --strategy-name ${STRATEGY}
