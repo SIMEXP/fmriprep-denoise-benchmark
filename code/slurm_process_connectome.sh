@@ -1,12 +1,12 @@
 #!/bin/bash
-#SBATCH --job-name=schaefer
+#SBATCH --job-name=schaefer7networks
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/schaefer.%a.out
-#SBATCH --error=logs/schaefer.%a.err
-#SBATCH --array=0-15 
+#SBATCH --output=logs/schaefer7networks.%a.out
+#SBATCH --error=logs/schaefer7networks.%a.err
+#SBATCH --array=0-7 
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=8G 
+#SBATCH --mem=4G 
 
 
 OUTPUT="/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/"
@@ -17,5 +17,4 @@ mkdir ${OUTPUT}
 mapfile -t arr < <(jq -r 'keys[]' code/benchmark_strategies.json)
 STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
 echo $STRATEGY
-python ./code/process_connectomes.py ${OUTPUT} --atlas schaefer7networks --strategy-name ${STRATEGY}
-
+python ./code/process_connectomes.py ${OUTPUT} --atlas schaefer7networks --review_strategies 400 --strategy-name ${STRATEGY}
