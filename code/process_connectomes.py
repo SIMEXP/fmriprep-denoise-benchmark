@@ -81,7 +81,7 @@ def main():
         strategy_names = [strategy_name]
 
     atlas = create_atlas_masker(atlas_name)
-    resolutions = atlas['resolutions'] if nroi is None else [nroi]
+    resolutions = atlas['resolutions'] if nroi is None else [int(nroi)]
     for nroi in resolutions:
         print(f"-- {atlas_name}: dimension {nroi} --")
         for name in strategy_names:
