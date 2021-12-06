@@ -20,7 +20,7 @@ def main():
     # plotting test
     ax = sns.barplot(data=(sig_per_edge<0.05), ci=None)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    ax.set(ylabel="Proportion of edge significantly correlated with mean FD",
+    ax.set(ylabel="Proportion of \nedge significantly correlated \nwith mean FD",
             xlabel="confound removal strategy")
     plt.tight_layout()
     plt.savefig(output / "dataset-ds000288_qc-fc_percentage_sig_edge.png")
