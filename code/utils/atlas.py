@@ -15,11 +15,6 @@ ATLAS_METADATA = {
         'resolutions' : [122, 197, 325, 444],
         'fetcher': "nilearn.datasets.fetch_atlas_basc_multiscale_2015(version='asym')"
         },
-    'craddock':{
-        'type': 'static',
-        'resolutions' : [100, 500, 1000],
-        'fetcher': "nilearn.datasets.fetch_atlas_craddock_2012()"
-        },
     'difumo': {
         'type': 'dynamic',
         'resolutions': [64, 128, 256, 512, 1024],

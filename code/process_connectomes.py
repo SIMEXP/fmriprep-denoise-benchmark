@@ -10,7 +10,7 @@ from utils.atlas import create_atlas_masker
 STRATEGY = "{home}/projects/rrg-pbellec/hwang1/fmriprep-denoise-benchmark/code/benchmark_strategies.json"
 INPUT_FMRIPREP = "{home}/scratch/test_data/1637790137/fmriprep"
 INPUT_BIDS_PARTICIPANTS = "{home}/projects/rrg-pbellec/hwang1/test_data/participants.tsv"
-ATLAS = 'difumo'
+ATLAS = 'schaefer7networks'
 NROI = None
 
 
@@ -29,12 +29,12 @@ def parse_args():
         "--atlas",
         default=ATLAS,
         type=str,
-        help="Atlas name (currently only support difumo)"
+        help="Atlas name (schaefer7networks, basc, difumo)"
     )
     parser.add_argument(
         "--dimension",
         default=NROI,
-        help="Number of ROI (currently only support difumo). Process all resolution if None.",
+        help="Number of ROI. Process all resolution if None.",
     )
     parser.add_argument(
         "--strategy-name",
