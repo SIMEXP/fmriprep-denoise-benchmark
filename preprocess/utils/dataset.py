@@ -104,6 +104,7 @@ def deconfound_connectome_single_strategy(func_img, masker, strategy):
 
         if parameters:
             reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
+            print(parameters)
         else:
             reduced_confounds, sample_mask = None, None
 

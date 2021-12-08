@@ -74,6 +74,7 @@ def main():
     # read the strategy deining files
     with open(strategy_file, "r") as file:
         benchmark_strategies = json.load(file)
+
     if strategy_name is None:
         print("Process all strategies.")
         strategy_names = [*benchmark_strategies]
@@ -89,6 +90,7 @@ def main():
             print(f"Denoising: {name}")
             strategy = {name: parameters}
             func_data = data_aroma.func if "aroma" in name else data.func
+            print(func_data[0])
             dataset_connectomes = deconfound_connectome_single_strategy(func_data, atlas[nroi]['masker'], strategy)
             dataset_connectomes.to_csv(output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv", sep='\t')
 
