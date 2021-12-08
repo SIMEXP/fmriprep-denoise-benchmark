@@ -1,4 +1,5 @@
-from metrics.quality_control_connectivity import quality_control_connectivity
+from metrics.quality_control_connectivity import qcfc
+from metrics.distance_dependency import compute_pairwise_distance
 
 
-__all__ = ['quality_control_connectivity']
+__all__ = ['qcfc', 'compute_pairwise_distance']

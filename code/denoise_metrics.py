@@ -1,5 +1,6 @@
 """Prototype for the denoising project.
 
+The dataset used is hard coded for now.
 To-do:
 
 - plotting and reports
@@ -11,51 +12,56 @@ To-do:
 """
 import tarfile
 import io
-from os import sep
 from pathlib import Path
-import json
 import pandas as pd
 
-from metrics import quality_control_connectivity
+from metrics import qcfc, compute_pairwise_distance
 
 
 # define path of input and output
-STRATEGY = "code/benchmark_strategies.json"
 OUTPUT = "inputs/interim"
 INPUT = "inputs/dataset-ds000288.tar.gz"
+CENTROIDS = "inputs/atlas/schaefer20187networks/Schaefer2018_400Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
 
 
 def main():
     """Main function."""
-    strategy_file = Path(__file__).parents[1] / STRATEGY
     output = Path(__file__).parents[1] / OUTPUT
     input_connectomes = Path(__file__).parents[1] / INPUT
+    input_centroids = Path(__file__).parents[1] / CENTROIDS
 
-    metric_per_edge, sig_per_edge = pd.DataFrame(), pd.DataFrame()
+    # pairwise distance
+    rsa_centroids = pd.read_csv(input_centroids)
+    rsa_centroids = rsa_centroids.loc[:, ['R', 'S', 'A']].values
+    metrics = compute_pairwise_distance(rsa_centroids)
+
     with tarfile.open(input_connectomes, 'r:gz') as tar:
-        movement = tar.extractfile('dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv').read()
+        movement = tar.extractfile("dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv").read()
         movement = pd.read_csv(io.BytesIO(movement),
                                sep='\t', index_col=0, header=0, encoding='utf8')
+
+        # find the strategies we need to iterate through.
         benchmark_strategies = []
         for member in tar.getmembers():
             filename = member.name.split('/')[-1]
             if "data.tsv" in filename:
-                strategy = filename.split('desc-')[-1].split('_data')[0]
+                strategy = filename.split("desc-")[-1].split("_data")[0]
                 benchmark_strategies.append(strategy)
 
-    for strategy_name in benchmark_strategies:
-        with tarfile.open(input_connectomes, 'r:gz') as tar:
-            connectome = tar.extractfile(f'dataset-ds000288/atlas-schaefer7networks/dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-{strategy_name}_data.tsv').read()
+        for strategy_name in benchmark_strategies:
+            print(strategy_name)
+            connectome = tar.extractfile(f"dataset-ds000288/atlas-schaefer7networks/dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-{strategy_name}_data.tsv").read()
             dataset_connectomes = pd.read_csv(io.BytesIO(connectome), sep='\t', index_col=0, header=0)
-        # QC-FC per edge
-        cur_qc_fc, cur_sig = quality_control_connectivity(movement, dataset_connectomes)
-        # dump the results
-        metric_per_edge.loc[:, strategy_name] = cur_qc_fc
-        sig_per_edge.loc[:, strategy_name] = cur_sig
-
-    metric_per_edge.to_csv(output / "dataset-ds000288_qc-fc_metric_per_edge.tsv", sep='\t')
-    sig_per_edge.to_csv(output / "dataset-ds000288_qc-fc_sig_per_edge.tsv", sep='\t')
-
+            # QC-FC per edge
+            metric = qcfc(movement, dataset_connectomes)
+            metric = pd.DataFrame(metric)
+            metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
+            metrics = pd.concat((metrics, metric), axis=1)
+    metrics.to_csv(
+        output
+        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv",
+        sep='\t',
+    )
 
 if __name__ == "__main__":
     main()
