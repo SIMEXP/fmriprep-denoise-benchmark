@@ -45,7 +45,8 @@ def parse_args():
         "--strategy-name",
         action="store",
         default=None,
-        help="Denoise strategy name (see benchmark_strategies.json). Process all strategy if None."
+        help=("Denoise strategy name (see benchmark_strategies.json)."
+              "Process all strategy if None.")
     )
     return parser.parse_args()
 
@@ -98,16 +99,17 @@ def main():
             for img in func_data:
                 subject_id, ts_path = _parse_subject_info(atlas_name, nroi, output, img)
                 subject_ts = subject_timeseries(img, atlas[nroi]['masker'], strategy, parameters)
-                subject_ts = pd.Dataframe(subject_ts, columns=range(1, nroi + 1))
+                subject_ts = pd.DataFrame(subject_ts, columns=range(1, nroi + 1))
                 if subject_ts:  # save time series
                     subject_conn = _compute_connectome(subject_id, subject_ts)
                     dataset_connectomes = pd.concat((dataset_connectomes, subject_conn), axis=0)
                 else:
                     subject_ts = pd.DataFame()
                     dataset_connectomes.loc[subject_id, :] = np.nan
-                # save
+                # save timeseries
                 subject_ts.to_csv(ts_path, sep='\t', index=False)
-            dataset_connectomes.to_csv(output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv", sep='\t')
+            output_connectome = output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv"
+            dataset_connectomes.to_csv(output_connectome, sep='\t')
 
 
 def _compute_connectome(subject_id, subject_ts):
