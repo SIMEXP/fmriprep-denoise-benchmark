@@ -12,7 +12,7 @@ from utils.atlas import create_atlas_masker
 
 
 # define path of input and output
-STRATEGY = "{home}/projects/rrg-pbellec/hwang1/fmriprep-denoise-benchmark/code/benchmark_strategies.json"
+STRATEGY = "{home}/projects/rrg-pbellec/hwang1/fmriprep-denoise-benchmark/preprocess/benchmark_strategies.json"
 INPUT_FMRIPREP = "{home}/scratch/test_data/1637790137/fmriprep"
 INPUT_BIDS_PARTICIPANTS = "{home}/projects/rrg-pbellec/hwang1/test_data/participants.tsv"
 ATLAS = 'schaefer7networks'
@@ -76,6 +76,7 @@ def main():
     if not Path(output / "dataset-ds000288_desc-movement_phenotype.tsv").is_file():
         movement = ds000288_movement(data)
         movement.to_csv( output / "dataset-ds000288_desc-movement_phenotype.tsv", sep='\t')
+        print("Generate movement stats.")
 
     # read the strategy deining files
     with open(strategy_file, "r") as file:
