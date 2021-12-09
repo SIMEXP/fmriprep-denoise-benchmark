@@ -3,8 +3,8 @@ import pandas as pd
 
 from sklearn.utils import Bunch
 
-from nilearn.connectome import ConnectivityMeasure
 from nilearn.interfaces.fmriprep import load_confounds_strategy
+
 
 def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
                               specifier, space="MNI152NLin2009cAsym", aroma=False):
@@ -71,60 +71,24 @@ def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
                  )
 
 
-def deconfound_connectome_single_strategy(func_img, masker, strategy):
-    """Create confound-removed by one strategy connectomes for a dataset.
+def subject_timeseries(img, masker, strategy_name, parameters):
+    # remove confounds based on strategy
+    if strategy_name == "no_cleaning":
+        subject_timeseries = masker.fit_transform(img)
 
-    Parameters
-    ----------
-    func_img : List of string
-        List of path to functional images
+    if parameters:
+        reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
+    else:
+        reduced_confounds, sample_mask = None, None
 
-    masker :
-        Nilearn masker object
-
-    strategy : Dict
-        Dictionary with a strategy name as key and a parameter set as value.
-        Pass to `nilearn.interfaces.fmriprep.load_confounds`
-
-    Returns
-    -------
-    pandas.DataFrame
-        Flattened connectome of a whole dataset.
-        Index: subjets
-        Columns: ROI-ROI pairs
-    """
-    dataset_connectome = pd.DataFrame()
-    strategy_name, parameters = strategy.popitem()
-    for img in func_img:
-        subject_id = img.split("/")[-1].split("_")[0]
-
-        # remove confounds based on strategy
-        if strategy_name == "no_cleaning":
-            subject_timeseries = masker.fit_transform(img)
-
-        if parameters:
-            reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
-        else:
-            reduced_confounds, sample_mask = None, None
-
-        # scrubbing related issue: subject with too many frames removed
-        # should not be included
-        if sample_mask is None or len(sample_mask) != 0:
-            subject_timeseries = masker.fit_transform(
-                img, confounds=reduced_confounds, sample_mask=sample_mask)
-            correlation_measure = ConnectivityMeasure(kind='correlation',
-                                                      vectorize=True,
-                                                      discard_diagonal=True)
-            # save the correlation matrix flatten
-            flat_connectome = correlation_measure.fit_transform(
-                [subject_timeseries])
-            flat_connectome = pd.DataFrame(flat_connectome, index=[subject_id])
-            dataset_connectome = pd.concat((dataset_connectome,
-                                            flat_connectome))
-        else:
-            subject_timeseries = None
-            dataset_connectome.loc[subject_id, :] = np.nan
-    return dataset_connectome
+    # scrubbing related issue: subject with too many frames removed
+    # should not be included
+    if sample_mask is None or len(sample_mask) != 0:
+        subject_timeseries = masker.fit_transform(
+            img, confounds=reduced_confounds, sample_mask=sample_mask)
+        return pd.DataFrame(subject_timeseries, columns=range(1, subject_timeseries.shape[1] + 1))
+    else:
+        return None
 
 
 def ds000288_movement(data):
