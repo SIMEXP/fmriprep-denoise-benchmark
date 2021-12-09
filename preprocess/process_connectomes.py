@@ -2,7 +2,12 @@ import argparse
 from pathlib import Path
 import json
 
-from utils.dataset import fetch_fmriprep_derivative, deconfound_connectome_single_strategy, ds000288_movement
+import pandas as pd
+import numpy as np
+
+from nilearn.connectome import ConnectivityMeasure
+
+from utils.dataset import fetch_fmriprep_derivative, subject_timeseries, ds000288_movement
 from utils.atlas import create_atlas_masker
 
 
@@ -40,7 +45,8 @@ def parse_args():
         "--strategy-name",
         action="store",
         default=None,
-        help="Denoise strategy name (see benchmark_strategies.json). Process all strategy if None."
+        help=("Denoise strategy name (see benchmark_strategies.json)."
+              "Process all strategy if None.")
     )
     return parser.parse_args()
 
@@ -90,9 +96,39 @@ def main():
             print(f"Denoising: {name}")
             strategy = {name: parameters}
             func_data = data_aroma.func if "aroma" in name else data.func
-            print(func_data[0])
-            dataset_connectomes = deconfound_connectome_single_strategy(func_data, atlas[nroi]['masker'], strategy)
-            dataset_connectomes.to_csv(output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv", sep='\t')
+            dataset_connectomes = pd.DataFrame()
+            for img in func_data:
+                subject_id, ts_path = _parse_subject_info(atlas_name, nroi, output, img)
+                subject_ts = subject_timeseries(img, atlas[nroi]['masker'], strategy, parameters)
+                if subject_ts:  # save time series
+                    subject_ts = pd.DataFrame(subject_ts, columns=range(1, nroi + 1))
+                    subject_conn = _compute_connectome(subject_id, subject_ts)
+                    dataset_connectomes = pd.concat((dataset_connectomes, subject_conn), axis=0)
+                else:
+                    subject_ts = pd.DataFame()
+                    dataset_connectomes.loc[subject_id, :] = np.nan
+                # save timeseries
+                subject_ts.to_csv(ts_path, sep='\t', index=False)
+            output_connectome = output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv"
+            dataset_connectomes.to_csv(output_connectome, sep='\t')
+
+
+def _compute_connectome(subject_id, subject_ts):
+    correlation_measure = ConnectivityMeasure(kind='correlation',
+                                                            vectorize=True,
+                                                            discard_diagonal=True)
+    subject_conn = correlation_measure.fit_transform([subject_ts])
+    subject_conn = pd.DataFrame(subject_conn, index=[subject_id])
+    return subject_conn
+
+
+def _parse_subject_info(atlas_name, nroi, output, img):
+    subject_spec = img.split('/')[-1].split('_desc-')[0]
+    subject_id = subject_spec.split('_')[0]
+    subject_output = output / subject_id
+    subject_output.mkdir(exist_ok=True)
+    ts_path = subject_output / f"{subject_spec}_desc-{atlas_name}{nroi}_timeseries.tsv"
+    return subject_id, ts_path
 
 
 if __name__ == "__main__":
