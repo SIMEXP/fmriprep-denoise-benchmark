@@ -98,8 +98,12 @@ def main():
             func_data = data_aroma.func if "aroma" in name else data.func
             dataset_connectomes = pd.DataFrame()
             for img in func_data:
-                subject_id, ts_path = _parse_subject_info(atlas_name, nroi, output, img)
-                subject_ts = subject_timeseries(img, atlas[nroi]['masker'], strategy, parameters)
+                subject_id, subject_mask, ts_path = _parse_subject_info(atlas_name, nroi, output, img)
+                masker = atlas[nroi]['masker']
+                masker = masker.set_params(mask_img=subject_mask)
+                subject_ts = subject_timeseries(img, masker, strategy, parameters)
+
+                print(subject_ts.shape)
                 if isinstance(subject_ts, pd.DataFrame):  # save time series
                     subject_conn = _compute_connectome(subject_id, subject_ts)
                     dataset_connectomes = pd.concat((dataset_connectomes, subject_conn), axis=0)
@@ -114,8 +118,8 @@ def main():
 
 def _compute_connectome(subject_id, subject_ts):
     correlation_measure = ConnectivityMeasure(kind='correlation',
-                                                            vectorize=True,
-                                                            discard_diagonal=True)
+                                              vectorize=True,
+                                              discard_diagonal=True)
     subject_conn = correlation_measure.fit_transform([subject_ts])
     subject_conn = pd.DataFrame(subject_conn, index=[subject_id])
     return subject_conn
@@ -123,11 +127,13 @@ def _compute_connectome(subject_id, subject_ts):
 
 def _parse_subject_info(atlas_name, nroi, output, img):
     subject_spec = img.split('/')[-1].split('_desc-')[0]
+    subject_root = img.split(subject_spec)[0]
     subject_id = subject_spec.split('_')[0]
     subject_output = output / subject_id
     subject_output.mkdir(exist_ok=True)
     ts_path = subject_output / f"{subject_spec}_desc-{atlas_name}{nroi}_timeseries.tsv"
-    return subject_id, ts_path
+    subject_mask = f"{subject_root}/{subject_spec}_desc-brain_mask.nii.gz"
+    return subject_id, subject_mask, ts_path
 
 
 if __name__ == "__main__":
