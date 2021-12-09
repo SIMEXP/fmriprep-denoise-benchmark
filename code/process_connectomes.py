@@ -96,20 +96,11 @@ def main():
             func_data = data_aroma.func if "aroma" in name else data.func
             dataset_connectomes = pd.DataFrame()
             for img in func_data:
-                subject_spec = img.split('/')[-1].split('_desc-')[0]
-                subject_id = subject_spec.split('_')[0]
-                subject_output = output / subject_id
-                subject_output.mkdir(exist_ok=True)
-                ts_path = subject_output / f"{subject_spec}_desc-{atlas_name}{nroi}_timeseries.tsv"
-
+                subject_id, ts_path = _parse_subject_info(atlas_name, nroi, output, img)
                 subject_ts = subject_timeseries(img, atlas[nroi]['masker'], strategy, parameters)
                 subject_ts = pd.Dataframe(subject_ts, columns=range(1, nroi + 1))
                 if subject_ts:  # save time series
-                    correlation_measure = ConnectivityMeasure(kind='correlation',
-                                                            vectorize=True,
-                                                            discard_diagonal=True)
-                    subject_conn = correlation_measure.fit_transform([subject_ts])
-                    subject_conn = pd.DataFrame(subject_conn, index=[subject_id])
+                    subject_conn = _compute_connectome(subject_id, subject_ts)
                     dataset_connectomes = pd.concat((dataset_connectomes, subject_conn), axis=0)
                 else:
                     subject_ts = pd.DataFame()
@@ -117,6 +108,24 @@ def main():
                 # save
                 subject_ts.to_csv(ts_path, sep='\t', index=False)
             dataset_connectomes.to_csv(output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv", sep='\t')
+
+
+def _compute_connectome(subject_id, subject_ts):
+    correlation_measure = ConnectivityMeasure(kind='correlation',
+                                                            vectorize=True,
+                                                            discard_diagonal=True)
+    subject_conn = correlation_measure.fit_transform([subject_ts])
+    subject_conn = pd.DataFrame(subject_conn, index=[subject_id])
+    return subject_conn
+
+
+def _parse_subject_info(atlas_name, nroi, output, img):
+    subject_spec = img.split('/')[-1].split('_desc-')[0]
+    subject_id = subject_spec.split('_')[0]
+    subject_output = output / subject_id
+    subject_output.mkdir(exist_ok=True)
+    ts_path = subject_output / f"{subject_spec}_desc-{atlas_name}{nroi}_timeseries.tsv"
+    return subject_id, ts_path
 
 
 if __name__ == "__main__":
