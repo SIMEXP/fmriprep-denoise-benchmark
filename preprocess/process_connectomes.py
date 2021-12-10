@@ -73,20 +73,8 @@ def main():
 
     data_aroma = fetch_fmriprep_derivative(input_bids_participants, input_fmriprep,
                                            fmriprep_specifier, aroma=True)
-    if not Path(output / "dataset-ds000288_desc-movement_phenotype.tsv").is_file():
-        movement = ds000288_movement(data)
-        movement.to_csv( output / "dataset-ds000288_desc-movement_phenotype.tsv", sep='\t')
-        print("Generate movement stats.")
-
-    # read the strategy deining files
-    with open(strategy_file, "r") as file:
-        benchmark_strategies = json.load(file)
-
-    if strategy_name is None:
-        print("Process all strategies.")
-        strategy_names = [*benchmark_strategies]
-    else:
-        strategy_names = [strategy_name]
+    _calculate_movement_stats(output, data)
+    benchmark_strategies, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
 
     atlas = create_atlas_masker(atlas_name)
     output = output / f"atlas-{atlas_name}"
@@ -99,31 +87,62 @@ def main():
             print(f"Denoising: {name}")
             strategy = {name: parameters}
             func_data = data_aroma.func if "aroma" in name else data.func
-            dataset_connectomes = pd.DataFrame()
-            for img in func_data:
-                subject_id, subject_mask, ts_path = _parse_subject_info(output, img, name)
-                masker = atlas[nroi]['masker']
-                masker = masker.set_params(mask_img=subject_mask)
-                subject_ts = subject_timeseries(img, masker, strategy, parameters)
-                if isinstance(subject_ts, pd.DataFrame):  # save time series
-                    subject_conn = _compute_connectome(subject_id, subject_ts)
-                    dataset_connectomes = pd.concat((dataset_connectomes, subject_conn), axis=0)
-                else:
-                    subject_ts = pd.DataFame()
-                    dataset_connectomes.loc[subject_id, :] = np.nan
-                # save timeseries
-                subject_ts.to_csv(ts_path, sep='\t', index=False)
+            valid_subject_ts, valid_subject_id = _dataset_timeseries(nroi, output, atlas, name, parameters, strategy, func_data)
+            dataset_connectomes = _compute_connectome(valid_subject_ts, valid_subject_id)
             output_connectome = output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv"
             dataset_connectomes.to_csv(output_connectome, sep='\t')
 
 
-def _compute_connectome(subject_id, subject_ts):
+def _dataset_timeseries(nroi, output, atlas, name, parameters, strategy, func_data):
+    valid_subject_ts = []
+    valid_subject_id = []
+    for img in func_data:
+        subject_id, subject_mask, ts_path = _parse_subject_info(output, img, name)
+        subject_ts = _get_timeseries(nroi, atlas, parameters, strategy, img, subject_mask, ts_path)
+        if isinstance(subject_ts, pd.DataFrame):
+            valid_subject_ts.append(subject_ts.values)
+            valid_subject_id.append(subject_id)
+    return valid_subject_ts,valid_subject_id
+
+
+def _calculate_movement_stats(output, data):
+    if not Path(output / "dataset-ds000288_desc-movement_phenotype.tsv").is_file():
+        movement = ds000288_movement(data)
+        movement.to_csv( output / "dataset-ds000288_desc-movement_phenotype.tsv", sep='\t')
+        print("Generate movement stats.")
+
+
+def _get_prepro_strategy(strategy_name, strategy_file):
+    # read the strategy deining files
+    with open(strategy_file, "r") as file:
+        benchmark_strategies = json.load(file)
+
+    if strategy_name is None:
+        print("Process all strategies.")
+        strategy_names = [*benchmark_strategies]
+    else:
+        strategy_names = [strategy_name]
+    return benchmark_strategies,strategy_names
+
+
+def _get_timeseries(nroi, atlas, parameters, strategy, img, subject_mask, ts_path):
+    if not Path(ts_path).is_file:
+        masker = atlas[nroi]['masker']
+        masker = masker.set_params(mask_img=subject_mask)
+        subject_ts = subject_timeseries(img, masker, strategy, parameters)
+        # save timeseries
+        subject_ts.to_csv(ts_path, sep='\t', index=False)
+        return subject_ts
+    else:
+        return pd.read_csv(ts_path, header=0, sep='\t')
+
+
+def _compute_connectome(valid_subject_ts, valid_subject_id):
     correlation_measure = ConnectivityMeasure(kind='correlation',
                                               vectorize=True,
                                               discard_diagonal=True)
-    subject_conn = correlation_measure.fit_transform([subject_ts.values])
-    print(subject_conn.shape)
-    subject_conn = pd.DataFrame(subject_conn, index=[subject_id])
+    subject_conn = correlation_measure.fit_transform(valid_subject_ts)
+    subject_conn = pd.DataFrame(subject_conn, index=valid_subject_id)
     return subject_conn
 
 

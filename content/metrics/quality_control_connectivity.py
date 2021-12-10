@@ -39,10 +39,10 @@ def qcfc(movement, connectomes):
         Columns: ROI-ROI pairs
     """
     # concatenate information to match by subject id
-    connectomes = pd.concat((connectomes, movement), axis=1)
     edge_ids = connectomes.columns.tolist()
+    connectomes = pd.concat((connectomes, movement), axis=1)
     # drop subject with no edge value
-    connectomes = connectomes.dropna()
+    connectomes = connectomes.dropna(axis=0)
     qcfc_edge = []
     for edge_id in edge_ids:
         # QC-FC
