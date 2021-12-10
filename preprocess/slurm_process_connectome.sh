@@ -9,7 +9,7 @@
 #SBATCH --mem=4G 
 
 
-OUTPUT="/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/"
+OUTPUT="/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000288/"
 source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 mkdir ${OUTPUT}
