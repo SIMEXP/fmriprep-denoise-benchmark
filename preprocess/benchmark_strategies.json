@@ -8,11 +8,15 @@
         "global_signal": "basic"
     },
     "scrubbing": {
-        "denoise_strategy": "scrubbing"
+        "denoise_strategy": "scrubbing",
+        "fd_threshold": 0.5,
+        "std_dvars_threshold": null
     },
     "scrubbing+gsr": {
         "denoise_strategy": "scrubbing",
-        "global_signal": "basic"
+        "global_signal": "basic",
+        "fd_threshold": 0.5,
+        "std_dvars_threshold": null
     },
     "compcor": {
         "denoise_strategy": "compcor"
