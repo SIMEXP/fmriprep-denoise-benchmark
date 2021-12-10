@@ -105,8 +105,6 @@ def main():
                 masker = atlas[nroi]['masker']
                 masker = masker.set_params(mask_img=subject_mask)
                 subject_ts = subject_timeseries(img, masker, strategy, parameters)
-
-                print(subject_ts.shape)
                 if isinstance(subject_ts, pd.DataFrame):  # save time series
                     subject_conn = _compute_connectome(subject_id, subject_ts)
                     dataset_connectomes = pd.concat((dataset_connectomes, subject_conn), axis=0)
@@ -124,6 +122,7 @@ def _compute_connectome(subject_id, subject_ts):
                                               vectorize=True,
                                               discard_diagonal=True)
     subject_conn = correlation_measure.fit_transform([subject_ts.values])
+    print(subject_conn.shape)
     subject_conn = pd.DataFrame(subject_conn, index=[subject_id])
     return subject_conn
 
