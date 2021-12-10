@@ -89,6 +89,8 @@ def main():
         strategy_names = [strategy_name]
 
     atlas = create_atlas_masker(atlas_name)
+    output = output / f"atlas-{atlas_name}"
+    output.mkdir(exist_ok=True)
     resolutions = atlas['resolutions'] if nroi is None else [int(nroi)]
     for nroi in resolutions:
         print(f"-- {atlas_name}: dimension {nroi} --")
@@ -99,7 +101,7 @@ def main():
             func_data = data_aroma.func if "aroma" in name else data.func
             dataset_connectomes = pd.DataFrame()
             for img in func_data:
-                subject_id, subject_mask, ts_path = _parse_subject_info(atlas_name, nroi, output, img)
+                subject_id, subject_mask, ts_path = _parse_subject_info(output, img, name)
                 masker = atlas[nroi]['masker']
                 masker = masker.set_params(mask_img=subject_mask)
                 subject_ts = subject_timeseries(img, masker, strategy, parameters)
@@ -126,13 +128,13 @@ def _compute_connectome(subject_id, subject_ts):
     return subject_conn
 
 
-def _parse_subject_info(atlas_name, nroi, output, img):
+def _parse_subject_info(output, img, name):
     subject_spec = img.split('/')[-1].split('_desc-')[0]
     subject_root = img.split(subject_spec)[0]
     subject_id = subject_spec.split('_')[0]
     subject_output = output / subject_id
     subject_output.mkdir(exist_ok=True)
-    ts_path = subject_output / f"{subject_spec}_desc-{atlas_name}{nroi}_timeseries.tsv"
+    ts_path = subject_output / f"{subject_spec}_desc-{name}_timeseries.tsv"
     subject_mask = f"{subject_root}/{subject_spec}_desc-brain_mask.nii.gz"
     return subject_id, subject_mask, ts_path
 
