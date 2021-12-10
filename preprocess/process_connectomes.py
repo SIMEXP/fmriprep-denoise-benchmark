@@ -121,7 +121,7 @@ def _compute_connectome(subject_id, subject_ts):
     correlation_measure = ConnectivityMeasure(kind='correlation',
                                               vectorize=True,
                                               discard_diagonal=True)
-    subject_conn = correlation_measure.fit_transform([subject_ts])
+    subject_conn = correlation_measure.fit_transform([subject_ts.values])
     subject_conn = pd.DataFrame(subject_conn, index=[subject_id])
     return subject_conn
 

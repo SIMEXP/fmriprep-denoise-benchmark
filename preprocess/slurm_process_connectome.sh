@@ -14,7 +14,7 @@ source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark
 cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 mkdir ${OUTPUT}
 
-mapfile -t arr < <(jq -r 'keys[]' code/benchmark_strategies.json)
+mapfile -t arr < <(jq -r 'keys[]' preprocess/benchmark_strategies.json)
 STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
 echo $STRATEGY
 python ./preprocess/process_connectomes.py ${OUTPUT} --atlas schaefer7networks --dimension 400 --strategy-name ${STRATEGY}
