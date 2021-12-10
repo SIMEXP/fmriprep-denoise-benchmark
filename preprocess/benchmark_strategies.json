@@ -21,6 +21,10 @@
     "compcor": {
         "denoise_strategy": "compcor"
     },
+    "compcor6": {
+        "denoise_strategy": "compcor",
+        "n_compcor": 5
+    },
     "aroma": {
         "denoise_strategy": "ica_aroma"
     },
