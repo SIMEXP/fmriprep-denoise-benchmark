@@ -126,7 +126,7 @@ def _get_prepro_strategy(strategy_name, strategy_file):
 
 
 def _get_timeseries(nroi, atlas, parameters, strategy, img, subject_mask, ts_path):
-    if not Path(ts_path).is_file:
+    if not Path(ts_path).is_file():
         masker = atlas[nroi]['masker']
         masker = masker.set_params(mask_img=subject_mask)
         subject_ts = subject_timeseries(img, masker, strategy, parameters)

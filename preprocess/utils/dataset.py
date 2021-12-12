@@ -78,6 +78,8 @@ def subject_timeseries(img, masker, strategy_name, parameters):
 
     if parameters:
         reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
+        print("Confounds regressors used: ")
+        print(reduced_confounds.columns.tolist())
     else:
         reduced_confounds, sample_mask = None, None
 
