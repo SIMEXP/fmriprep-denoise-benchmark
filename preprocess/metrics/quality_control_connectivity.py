@@ -1,8 +1,9 @@
 import pandas as pd
+import numpy as np
 from scipy import stats, linalg
 
 
-def _partial_correlation(x, y, cov):
+def _partial_correlation(x, y, cov=None):
     """A minimal implementation of partial correlation.
 
     x, y :
@@ -10,16 +11,18 @@ def _partial_correlation(x, y, cov):
     cov :
         Variable to be removed from variable of interest.
     """
-
-    beta_cov_x = linalg.lstsq(cov, x)[0]
-    beta_cov_y = linalg.lstsq(cov, y)[0]
-    resid_x = x - cov.dot(beta_cov_x)
-    resid_y = y - cov.dot(beta_cov_y)
-    r, p_val = stats.pearsonr(resid_x, resid_y)
+    if isinstance(cov, np.ndarray):
+        beta_cov_x = linalg.lstsq(cov, x)[0]
+        beta_cov_y = linalg.lstsq(cov, y)[0]
+        resid_x = x - cov.dot(beta_cov_x)
+        resid_y = y - cov.dot(beta_cov_y)
+        r, p_val = stats.pearsonr(resid_x, resid_y)
+    else:
+        r, p_val = stats.pearsonr(x, y)
     return {'correlation': r, 'pvalue': p_val}
 
 
-def qcfc(movement, connectomes):
+def qcfc(movement, connectomes, covarates=('Age', 'Gender')):
     """
     metric calculation: quality control / functional connectivity
 
@@ -44,11 +47,13 @@ def qcfc(movement, connectomes):
     # drop subject with no edge value
     connectomes = connectomes.dropna(axis=0)
     qcfc_edge = []
+    if covarates is not None:
+        covarates = connectomes[covarates].values
     for edge_id in edge_ids:
         # QC-FC
         metric = _partial_correlation(
             connectomes[edge_id].values,
             connectomes['mean_framewise_displacement'].values,
-            connectomes[['Age', 'Gender']].values)
+            covarates)
         qcfc_edge.append(metric)
     return qcfc_edge

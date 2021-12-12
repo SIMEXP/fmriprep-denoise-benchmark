@@ -13,5 +13,5 @@ def compute_pairwise_distance(rsa_centroids):
     upper_mask = np.triu(np.ones(pairwise_distance.shape), k=1).astype(np.bool)
     pairwise_distance = pairwise_distance.where(upper_mask)
     pairwise_distance = pairwise_distance.stack().reset_index()
-    pairwise_distance.columns = ['row','column','distance']
+    pairwise_distance.columns = ['row', 'column', 'distance']
     return pairwise_distance
