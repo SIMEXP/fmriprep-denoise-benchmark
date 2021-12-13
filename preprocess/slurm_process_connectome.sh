@@ -4,7 +4,7 @@
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/schaefer7networks.%a.out
 #SBATCH --error=logs/schaefer7networks.%a.err
-#SBATCH --array=0-7 
+#SBATCH --array=0-8 
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G 
 
