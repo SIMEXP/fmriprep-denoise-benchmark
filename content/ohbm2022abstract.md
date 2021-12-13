@@ -63,22 +63,24 @@ long_qcfc["col"] = np.tile(np.hstack((np.ones(metric_per_edge.shape[0]) * i for 
 
 ## Impact of confound removal strategies on functional connectivity generated from fMRIprep preprocessed data
 
-Authors
+
+H-T Wang[^1], P Bellec[^1][^2]
+
+[^1]: CRIUGM - Université de Montréal, Montréal, QC, Canada
+[^2]: Université de Montréal, Montréal, QC, Canada
+
 
 ### Introduction
 
-Denoising strategy is an important topic in fMRI literature. 
+Denoising strategy is an important topic in fMRI data analysis. 
 The impact of the choice of confound regressor on functional connectivity has been a key debates in the field of fMRI (cf. global signal regression). 
 Recent minimal preprocessing pipeline, fMRIPrep {cite:p}`esteban_fmriprep_2020`, aims to reduce the degree of freedom during the preprocessing step. 
-However, a wide range of confound regressors can still introduce errors by the users. 
-Without good understanding of the literature or the official documentation, users can still introduce error or unwanted noise while performing confound regressing. 
+However, a wide range of confound regressors can still introduce errors by the users.
 It’s difficult to navigate the confounds and implement the sensible subset of variables in downstream analysis. 
+Without good understanding of the literature or the fMRIPrep documentation, users can still introduce error or unwanted noise while performing confound regressing. 
 Lastly, recent literature has shown the tool-based variability and the potential impact on the results {cite:p}`li_moving_2021`. 
+The current research on benchmarking confounds have yet cover the output from fMRIPrep. 
 We hope to provide a useful reference for fMRIPrep users, and evaluate if the implementation in fMRIPrep provides consistent results as the past literature using other preprocessing procedures. 
-Here we provide an uniformed API to retrieve fMRIPrep generated confounds implemented in NiLearn. 
-Four predefined strategies are provided with the API. 
-The current research provides a benchmarking on the strategies using the three from {cite:t}`ciric_benchmarking_2017`: 
-the residual relationship between motion and connectivity, distance-dependent effects of motion on connectivity, network identifiability. 
 
 
 ### Methods
@@ -95,10 +97,15 @@ Time series are extracted using Schaefer 7 network atlas of 400 dimensions {cite
 - `aroma`: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed `desc-smoothAROMAnonaggr_bold`.
 - `aroma+gsr`: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), global signal, applied on output suffixed `desc-smoothAROMAnonaggr_bold`.
 
-The following metrics are used to assess quality of functional connectivity: 
-the residual relationship between motion and connectivity, 
-distance-dependent effects of motion on connectivity, 
-network identifiability.
+In addition, we also calculated the connectome based on the raw timeseries as a reference.
+
+Here we provide an uniformed API to retrieve fMRIPrep generated confounds implemented in NiLearn {cite:p}`abraham_machine_2014`. 
+Timeseries, connectome, and confounds removal are all implemented through NiLearn.
+
+The current study used three metrics from {cite:t}`ciric_benchmarking_2017` to evaluate the denosing results: 
+partial correlation between motion and connectivity with age and sex as covariates (quality control / functional connectivity; QCFC {cite:p}`power_recent_2015`), 
+distance-dependent effects of motion on connectivity {cite:p}`power_spurious_2012`, 
+network identifiability based on Louvain method of community detection {cite:p}`satterthwaite_impact_2012`. 
 
 Code and processed data to reproduce the current analysis can be found on [github](https://github.com/SIMEXP/fmriprep-denoise-benchmark). 
 
@@ -148,16 +155,17 @@ for i, name in zip(range(9), metric_per_edge.columns):
     g.facet_axis(axis_i, axis_j).set(title=name)
     if axis_i == 2:
         g.facet_axis(axis_i, axis_j).set(xlabel="Pearson\'s correlation: \nmean FD and\nconnectome edges")
+        
+g.fig.subplots_adjust(top=0.9) 
+g.fig.suptitle('Distribution of correlation between framewise distplacement and edge strength')
 ```
 
 ```{code-cell} ipython3
 :tags: [hide-input]
 
-z_pairwise_distance = pairwise_distance.apply(zscore)
-z_metric_per_edge = metric_per_edge.apply(zscore)
-corr_distance = np.corrcoef(z_pairwise_distance.iloc[:, -1], z_metric_per_edge.T)[1:, 0]
+corr_distance = np.corrcoef(pairwise_distance.iloc[:, -1], metric_per_edge.T)[1:, 0]
 corr_distance = pd.DataFrame(corr_distance, index=z_metric_per_edge.columns)
-long_qcfc['distance'] = np.tile(z_pairwise_distance.iloc[:, -1].values, 9)
+long_qcfc['distance'] = np.tile(pairwise_distance.iloc[:, -1].values, 9)
 
 order = corr_distance.sort_values(0).index.tolist()
 
@@ -176,14 +184,10 @@ for i, name in zip(range(9), metric_per_edge.columns):
     axis_j = i % 3
     g.facet_axis(axis_i, axis_j).set(title=name)
     if axis_i == 2:
-        g.facet_axis(axis_i, axis_j).set(xlabel="Distance (a.u.)")
+        g.facet_axis(axis_i, axis_j).set(xlabel="Distance (mm)")
         
 g.fig.subplots_adjust(top=0.9) 
-g.fig.suptitle('Distribution of correlation between framewise distplacement and edge strength')
-```
-
-```{code-cell} ipython3
-corr_modularity
+g.fig.suptitle('Correlation between nodewise Euclidian distance and QCFC')
 ```
 
 ```{code-cell} ipython3
@@ -211,7 +215,7 @@ plt.subplot(1, 2, 2)
 corr_modularity = pd.DataFrame(corr_modularity).sort_values('correlation')
 ax = sns.barplot(data=corr_modularity, y='correlation', x='strategy', ci=None, color=bar_color)
 ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-ax.set_title("Correlation between\nnetwork modularity and motion")
+ax.set_title("Correlation between\nnetwork modularity and \nmean framewise displacement")
 ax.set(ylabel="Pearson's correlation",
        xlabel="confound removal strategy")
 plt.tight_layout()
@@ -219,10 +223,16 @@ plt.tight_layout()
 
 ### Conclusions
 
-We aim to run the same benchmark on different fMRIPrepLTS outputs and different type of parcelation scheme.
-
+The denosing methods involving global signal regreesion is systematically contradicting with the literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. 
+Further investigation is needed.
+We will to run the same benchmark on different fMRIPrepLTS outputs and different type of parcelation scheme.
+The aim is to provide a software for researchers to produce the benchmark for their own dataset to select the most suitable strategy.
 
 ### References
 ```{bibliography}
 :filter: docname in docnames
+```
+
+```{code-cell} ipython3
+
 ```
