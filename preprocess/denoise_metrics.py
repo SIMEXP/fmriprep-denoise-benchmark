@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 from multiprocessing import Pool
 
-from metrics import qcfc, compute_pairwise_distance, louvain_modularity
+from fmriprep_denoise.metrics import qcfc, compute_pairwise_distance, louvain_modularity
 
 
 # define path of input and output

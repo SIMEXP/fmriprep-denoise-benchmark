@@ -3,12 +3,11 @@ from pathlib import Path
 import json
 
 import pandas as pd
-import numpy as np
 
 from nilearn.connectome import ConnectivityMeasure
 
-from utils.dataset import fetch_fmriprep_derivative, subject_timeseries, ds000288_movement
-from utils.atlas import create_atlas_masker
+from fmriprep_denoise.utils.dataset import fetch_fmriprep_derivative, subject_timeseries, ds000288_movement
+from fmriprep_denoise.utils.atlas import create_atlas_masker
 
 
 # define path of input and output

@@ -1,10 +1,9 @@
 import pandas as pd
 import numpy as np
 from scipy import stats, linalg
-from multiprocessing import Pool
 
 
-def _partial_correlation(x, y, cov=None):
+def partial_correlation(x, y, cov=None):
     """A minimal implementation of partial correlation.
 
     x, y :
@@ -54,7 +53,7 @@ def qcfc(movement, connectomes, covarates=('Age', 'Gender')):
         covarates = connectomes[covarates].values
     for edge_id in edge_ids:
         # QC-FC
-        metric = _partial_correlation(
+        metric = partial_correlation(
             connectomes[edge_id].values,
             connectomes['mean_framewise_displacement'].values,
             covarates)
