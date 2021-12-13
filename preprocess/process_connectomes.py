@@ -88,6 +88,7 @@ def main():
             func_data = data_aroma.func if "aroma" in name else data.func
             valid_subject_ts, valid_subject_id = _dataset_timeseries(nroi, output, atlas, name, parameters, strategy, func_data)
             dataset_connectomes = _compute_connectome(valid_subject_ts, valid_subject_id)
+            dataset_connectomes = dataset_connectomes.sort_index()
             output_connectome = output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv"
             dataset_connectomes.to_csv(output_connectome, sep='\t')
 
@@ -107,6 +108,7 @@ def _dataset_timeseries(nroi, output, atlas, name, parameters, strategy, func_da
 def _calculate_movement_stats(output, data):
     if not Path(output / "dataset-ds000288_desc-movement_phenotype.tsv").is_file():
         movement = ds000288_movement(data)
+        movement = movement.sort_index()
         movement.to_csv( output / "dataset-ds000288_desc-movement_phenotype.tsv", sep='\t')
         print("Generate movement stats.")
 
