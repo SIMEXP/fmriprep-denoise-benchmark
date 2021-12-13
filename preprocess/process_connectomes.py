@@ -121,7 +121,7 @@ def _get_prepro_strategy(strategy_name, strategy_file):
         strategy_names = [*benchmark_strategies]
     else:
         strategy_names = [strategy_name]
-    return benchmark_strategies,strategy_names
+    return benchmark_strategies, strategy_names
 
 
 def _get_timeseries(nroi, atlas, parameters, strategy, img, subject_mask, ts_path):
