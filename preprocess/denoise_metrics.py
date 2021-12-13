@@ -6,14 +6,15 @@ import tarfile
 import io
 from pathlib import Path
 import pandas as pd
+from multiprocessing import Pool
 
-from metrics import qcfc, compute_pairwise_distance
+from metrics import qcfc, compute_pairwise_distance, louvain_modularity
 
 
 # define path of input and output
 OUTPUT = "inputs/"
 INPUT = "inputs/dataset-ds000288.tar.gz"
-CENTROIDS = "inputs/atlas/schaefer20187networks/Schaefer2018_400Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
+CENTROIDS = "inputs/atlas/schaefer7networks/Schaefer2018_400Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
 
 
 def main():
@@ -23,7 +24,7 @@ def main():
     input_centroids = Path(__file__).parents[1] / CENTROIDS
 
     metrics = pd.DataFrame()
-    metrics_cov = pd.DataFrame()
+    modularity = pd.DataFrame()
 
     benchmark_strategies = ['raw',
                             'simple', 'simple+gsr',
@@ -44,34 +45,37 @@ def main():
             dataset_connectomes = pd.read_csv(io.BytesIO(connectome),
                                             sep='\t',
                                             index_col=0, header=0).sort_index()
-
-            metric = qcfc(movement, dataset_connectomes, None)
-            metric_cov = qcfc(movement, dataset_connectomes, ['Age', 'Gender'])
-
+            print("Loaded connectome...")
+            metric = qcfc(movement, dataset_connectomes, ['Age', 'Gender'])
             metric = pd.DataFrame(metric)
             metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
             metrics = pd.concat((metrics, metric), axis=1, join='outer')
-
-            metric_cov = pd.DataFrame(metric_cov)
-            metric_cov.columns = [f'{strategy_name}_{col}' for col in metric_cov.columns]
-            metrics_cov = pd.concat((metrics_cov, metric_cov), axis=1, join='outer')
-
-    labels = pd.read_csv(input_centroids)
-    pairwise_distance = compute_pairwise_distance(labels.loc[:, ['R', 'S', 'A']])
+            print("QC-FC...")
+            with Pool(30) as pool:
+                qs = pool.map(louvain_modularity, dataset_connectomes.values.tolist())
+            modularity_index = pd.DataFrame(qs,
+                                            columns=[strategy_name],
+                                            index=dataset_connectomes.index)
+            modularity = pd.concat((modularity, modularity_index), axis=1, join='outer')
+            print("Modularity...")
 
     metrics.to_csv(
         output
         / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv",
         sep='\t',
     )
-    metrics_cov.to_csv(
+    modularity.to_csv(
         output
-        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-covqcfc.tsv",
+        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity.tsv",
         sep='\t',
     )
+
+    labels = pd.read_csv(input_centroids)
+    pairwise_distance = compute_pairwise_distance(labels.loc[:, ['R', 'S', 'A']])
+
     pairwise_distance.to_csv(
         output
-        / "atlas/schaefer20187networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv",
+        / "atlas/schaefer7networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv",
         sep='\t',
         index=False
     )

@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 from scipy import stats, linalg
+from multiprocessing import Pool
 
 
 def _partial_correlation(x, y, cov=None):
@@ -46,6 +47,8 @@ def qcfc(movement, connectomes, covarates=('Age', 'Gender')):
     connectomes = pd.concat((connectomes, movement), axis=1)
     # drop subject with no edge value
     connectomes = connectomes.dropna(axis=0)
+    # standardise all measures for partial correlation
+    connectomes = connectomes.apply(stats.zscore)
     qcfc_edge = []
     if covarates is not None:
         covarates = connectomes[covarates].values
