@@ -12,4 +12,5 @@ The aim is to evaluate the impact of denoising strategy on functional connectivi
   [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5764254.svg)](https://doi.org/10.5281/zenodo.5764254)
 
 
-- All custom code is located in `code/`.
+- Custom code is located in `fmriprep_denoise/`. Installable through `pip install .`
+- Preprocessing scripts are in `preprocess/`
