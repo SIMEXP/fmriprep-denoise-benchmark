@@ -2,6 +2,22 @@ import pandas as pd
 import numpy as np
 from scipy import stats, linalg
 
+from statsmodels.stats import multitest
+
+
+def calculate_median_absolute(x):
+    """Calculate Absolute median"""
+    return (x - x.median()).abs().median()
+
+
+def fdr(x, alpha=0.05, method='fdr_bh'):
+    '''
+    Apply FDR correction to a pandas.Series p-value object
+    '''
+    res, _, _, _ = multitest.multipletests(x, alpha=alpha,
+                                           method=method)
+    return res
+
 
 def partial_correlation(x, y, cov=None):
     """A minimal implementation of partial correlation.
@@ -64,4 +80,5 @@ def qcfc(movement, connectomes, covarates=None):
             connectomes['mean_framewise_displacement'].values,
             connectomes[cov_names].values)
         qcfc_edge.append(metric)
+
     return qcfc_edge

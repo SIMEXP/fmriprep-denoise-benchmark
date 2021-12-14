@@ -36,10 +36,10 @@ def create_atlas_masker(atlas_name, nilearn_cache=""):
 
         if curr_atlas['type'] == "static":
             masker = NiftiLabelsMasker(
-                atlas_map, detrend=True, standardize=True)
+                atlas_map, detrend=True)
         elif curr_atlas['type'] == "dynamic":
             masker = NiftiMapsMasker(
-                atlas_map, detrend=True, standardize=True)
+                atlas_map, detrend=True)
         if nilearn_cache:
             masker = masker.set_params(memory=nilearn_cache, memory_level=1)
         # fill atlas info
