@@ -5,6 +5,7 @@ import json
 import pandas as pd
 
 from nilearn.connectome import ConnectivityMeasure
+from nilearn.image import smooth_img
 
 from fmriprep_denoise.utils.dataset import fetch_fmriprep_derivative, subject_timeseries, ds000288_movement
 from fmriprep_denoise.utils.atlas import create_atlas_masker
@@ -130,6 +131,9 @@ def _get_timeseries(nroi, atlas, parameters, strategy, img, subject_mask, ts_pat
     if not Path(ts_path).is_file():
         masker = atlas[nroi]['masker']
         masker = masker.set_params(mask_img=subject_mask)
+        if "smoothAROMAnonaggr" not in img:
+            img = smooth_img(img, fwhm=6)
+
         subject_ts = subject_timeseries(img, masker, strategy, parameters)
         # save timeseries
         subject_ts.to_csv(ts_path, sep='\t', index=False)
