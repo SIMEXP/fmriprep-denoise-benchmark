@@ -3,6 +3,7 @@ import pandas as pd
 
 from sklearn.utils import Bunch
 
+from nilearn.image import smooth_img
 from nilearn.interfaces.fmriprep import load_confounds_strategy
 
 
@@ -82,6 +83,9 @@ def subject_timeseries(img, masker, strategy_name, parameters):
         print(reduced_confounds.columns.tolist())
     else:
         reduced_confounds, sample_mask = None, None
+
+    if "smoothAROMAnonaggr" not in img:
+        img = smooth_img(img, fwhm=6)
 
     # scrubbing related issue: subject with too many frames removed
     # should not be included
