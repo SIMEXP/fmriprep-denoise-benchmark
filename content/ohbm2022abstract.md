@@ -103,13 +103,15 @@ Here we provide an uniformed API to retrieve fMRIPrep generated confounds implem
 Timeseries, connectome, and confounds removal are all implemented through NiLearn.
 
 The current study used three metrics from {cite:t}`ciric_benchmarking_2017` to evaluate the denosing results: 
-partial correlation between motion and connectivity with age and sex as covariates (quality control / functional connectivity; QCFC {cite:p}`power_recent_2015`), 
-distance-dependent effects of motion on connectivity {cite:p}`power_spurious_2012`, 
-network identifiability based on Louvain method of community detection {cite:p}`satterthwaite_impact_2012`. 
+1. Quality control / functional connectivity (QCFC {cite:p}`power_recent_2015`): Partial correlation between motion and connectivity with age and sex as covariates 
+2. Distance-dependent effects of motion on connectivity {cite:p}`power_spurious_2012`
+3. Network identifiability based on Louvain method of community detection {cite:p}`satterthwaite_impact_2012` implemented by Brain Connnectome Toolbox
 
 Code and processed data to reproduce the current analysis can be found on [github](https://github.com/SIMEXP/fmriprep-denoise-benchmark). 
 
 ### Results
+
+The proportion of connectivity edges correlating with motion
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -121,6 +123,7 @@ ax.set_title("Proportion of edge significantly correlated with mean FD")
 ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set(ylabel="Proportion",
        xlabel="confound removal strategy")
+plt.tight_layout()
 ```
 
 ```{code-cell} ipython3
@@ -137,7 +140,7 @@ ax.set_title("Absolute median QC-FC")
 ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set(ylabel="Absolute median",
        xlabel="confound removal strategy")
-
+plt.tight_layout()
 
 def draw_absolute_median(data, **kws):
     ax = plt.gca()
@@ -158,13 +161,14 @@ for i, name in zip(range(9), metric_per_edge.columns):
         
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Distribution of correlation between framewise distplacement and edge strength')
+plt.tight_layout()
 ```
 
 ```{code-cell} ipython3
 :tags: [hide-input]
 
 corr_distance = np.corrcoef(pairwise_distance.iloc[:, -1], metric_per_edge.T)[1:, 0]
-corr_distance = pd.DataFrame(corr_distance, index=z_metric_per_edge.columns)
+corr_distance = pd.DataFrame(corr_distance, index=metric_per_edge.columns)
 long_qcfc['distance'] = np.tile(pairwise_distance.iloc[:, -1].values, 9)
 
 order = corr_distance.sort_values(0).index.tolist()
@@ -174,8 +178,9 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set_title("Distance-dependent effects of motion")
 ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
         xlabel="confound removal strategy")
+plt.tight_layout()
 
-g = sns.FacetGrid(long_qcfc, col="col", row="row", height=2, aspect=1.3)
+g = sns.FacetGrid(long_qcfc, col="col", row="row", height=1.7, aspect=1.5)
 g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None, 
       line_kws={'color': 'red'}, scatter_kws={'s': 0.5, 'alpha': 0.15,})
 g.refline(y=0)
@@ -188,6 +193,7 @@ for i, name in zip(range(9), metric_per_edge.columns):
         
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Correlation between nodewise Euclidian distance and QCFC')
+plt.tight_layout()
 ```
 
 ```{code-cell} ipython3

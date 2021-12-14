@@ -43,10 +43,13 @@ def main():
             connectome = tar.extractfile(
                 f"dataset-ds000288/atlas-schaefer7networks/dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-{strategy_name}_data.tsv").read()
             dataset_connectomes = pd.read_csv(io.BytesIO(connectome),
-                                            sep='\t',
-                                            index_col=0, header=0).sort_index()
+                                              sep='\t',
+                                              index_col=0,
+                                              header=0).sort_index()
             print("Loaded connectome...")
-            metric = qcfc(movement, dataset_connectomes, ['Age', 'Gender'])
+            metric = qcfc(movement.loc[:, 'mean_framewise_displacement'],
+                          dataset_connectomes,
+                          movement.loc[:, ['Age', 'Gender']])
             metric = pd.DataFrame(metric)
             metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
             metrics = pd.concat((metrics, metric), axis=1, join='outer')

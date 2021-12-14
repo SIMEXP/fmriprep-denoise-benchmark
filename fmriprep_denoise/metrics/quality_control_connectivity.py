@@ -22,7 +22,7 @@ def partial_correlation(x, y, cov=None):
     return {'correlation': r, 'pvalue': p_val}
 
 
-def qcfc(movement, connectomes, covarates=('Age', 'Gender')):
+def qcfc(movement, connectomes, covarates=None):
     """
     metric calculation: quality control / functional connectivity
 
@@ -34,28 +34,34 @@ def qcfc(movement, connectomes, covarates=('Age', 'Gender')):
     Parameters
     ----------
     movement: pandas.DataFrame
-        Containing header: ["Age", "Gender", "mean_framewise_displacement"]
+        Containing header: ["mean_framewise_displacement"]
 
     connectomes: pandas.DataFrame
         Flattened connectome of a whole dataset.
         Index: subjets
         Columns: ROI-ROI pairs
+
+    covariates: pandas.DataFrame or None
+        Age", Gender
     """
     # concatenate information to match by subject id
     edge_ids = connectomes.columns.tolist()
     connectomes = pd.concat((connectomes, movement), axis=1)
+
+    if covarates is not None:
+        covarates = covarates.apply(stats.zscore)
+        cov_names = covarates.columns
+        connectomes = pd.concat((connectomes, covarates), axis=1)
+
     # drop subject with no edge value
     connectomes = connectomes.dropna(axis=0)
-    # standardise all measures for partial correlation
-    connectomes = connectomes.apply(stats.zscore)
+
     qcfc_edge = []
-    if covarates is not None:
-        covarates = connectomes[covarates].values
     for edge_id in edge_ids:
         # QC-FC
         metric = partial_correlation(
             connectomes[edge_id].values,
             connectomes['mean_framewise_displacement'].values,
-            covarates)
+            connectomes[cov_names].values)
         qcfc_edge.append(metric)
     return qcfc_edge
