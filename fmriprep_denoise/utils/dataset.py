@@ -84,15 +84,17 @@ def subject_timeseries(img, masker, strategy_name, parameters):
     else:
         reduced_confounds, sample_mask = None, None
 
+    kept_vol = len(sample_mask) / reduced_confounds.shhape[0]
     # if "smoothAROMAnonaggr" not in img:
     #     img = smooth_img(img, fwhm=6)
 
-    # scrubbing related issue: subject with too many frames removed
-    # should not be included
-    if sample_mask is None or len(sample_mask) != 0:
+    # scrubbing related issue: subject with 80% frames removed
+    # should not be included (Parkes 2018)
+    if sample_mask is None or kept_vol > 0.8:
         subject_timeseries = masker.fit_transform(
             img, confounds=reduced_confounds, sample_mask=sample_mask)
-        return pd.DataFrame(subject_timeseries, columns=range(1, subject_timeseries.shape[1] + 1))
+        return pd.DataFrame(subject_timeseries,
+                            columns=range(1, subject_timeseries.shape[1] + 1))
     else:
         return None
 
