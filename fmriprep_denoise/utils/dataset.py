@@ -84,8 +84,8 @@ def subject_timeseries(img, masker, strategy_name, parameters):
     else:
         reduced_confounds, sample_mask = None, None
 
-    if "smoothAROMAnonaggr" not in img:
-        img = smooth_img(img, fwhm=6)
+    # if "smoothAROMAnonaggr" not in img:
+    #     img = smooth_img(img, fwhm=6)
 
     # scrubbing related issue: subject with too many frames removed
     # should not be included
