@@ -88,18 +88,18 @@ def subject_timeseries(img, masker, strategy_name, parameters):
         kept_vol = len(sample_mask) / reduced_confounds.shape[0]
     else:
         kept_vol = 1
-    # if "smoothAROMAnonaggr" not in img:
-    #     img = smooth_img(img, fwhm=6)
 
-    # scrubbing related issue: subject with 80% frames removed
+    # scrubbing related issue: subject with more than 20% frames removed
     # should not be included (Parkes 2018)
-    if sample_mask is None or kept_vol > 0.8:
-        subject_timeseries = masker.fit_transform(
-            img, confounds=reduced_confounds, sample_mask=sample_mask)
-        return pd.DataFrame(subject_timeseries,
-                            columns=range(1, subject_timeseries.shape[1] + 1))
-    else:
+    if kept_vol < 0.2:
         return None
+
+    subject_timeseries = masker.fit_transform(
+        img, confounds=reduced_confounds, sample_mask=sample_mask)
+    if sample_mask is None:
+        sample_mask = range(1, subject_timeseries.shape[1] + 1)
+    return pd.DataFrame(subject_timeseries,
+                        columns=sample_mask)
 
 
 def ds000288_movement(data):
