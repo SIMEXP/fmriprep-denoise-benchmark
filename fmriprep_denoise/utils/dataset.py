@@ -84,7 +84,10 @@ def subject_timeseries(img, masker, strategy_name, parameters):
     else:
         reduced_confounds, sample_mask = None, None
 
-    kept_vol = len(sample_mask) / reduced_confounds.shape[0]
+    if sample_mask is not None:
+        kept_vol = len(sample_mask) / reduced_confounds.shape[0]
+    else:
+        kept_vol = 1
     # if "smoothAROMAnonaggr" not in img:
     #     img = smooth_img(img, fwhm=6)
 
