@@ -132,7 +132,10 @@ def _get_timeseries(nroi, atlas, parameters, strategy, img, subject_mask, ts_pat
         masker = masker.set_params(mask_img=subject_mask)
         subject_ts = subject_timeseries(img, masker, strategy, parameters)
         # save timeseries
-        subject_ts.to_csv(ts_path, sep='\t', index=False)
+        if subject_ts is not None:
+            subject_ts.to_csv(ts_path, sep='\t', index=False)
+        else:
+            pd.DataFrame().to_csv(ts_path, sep='\t', index=False)
         return subject_ts
     else:
         return pd.read_csv(ts_path, header=0, sep='\t')
