@@ -64,25 +64,14 @@ def main():
 
     metrics.to_csv(
         output
-        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv",
+        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc_smooth.tsv",
         sep='\t',
     )
     modularity.to_csv(
         output
-        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity.tsv",
+        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity_smooth.tsv",
         sep='\t',
     )
-
-    labels = pd.read_csv(input_centroids)
-    pairwise_distance = compute_pairwise_distance(labels.loc[:, ['R', 'S', 'A']])
-
-    pairwise_distance.to_csv(
-        output
-        / "atlas/schaefer7networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv",
-        sep='\t',
-        index=False
-    )
-
 
 if __name__ == "__main__":
     main()

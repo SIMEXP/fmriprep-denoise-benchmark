@@ -7,15 +7,26 @@
         "denoise_strategy": "simple",
         "global_signal": "basic"
     },
-    "scrubbing": {
+    "scrubbing.5": {
         "denoise_strategy": "scrubbing",
         "fd_threshold": 0.5,
         "std_dvars_threshold": null
     },
-    "scrubbing+gsr": {
+    "scrubbing.5+gsr": {
         "denoise_strategy": "scrubbing",
         "global_signal": "basic",
         "fd_threshold": 0.5,
+        "std_dvars_threshold": null
+    },
+    "scrubbing.2": {
+        "denoise_strategy": "scrubbing",
+        "fd_threshold": 0.2,
+        "std_dvars_threshold": null
+    },
+    "scrubbing.2+gsr": {
+        "denoise_strategy": "scrubbing",
+        "global_signal": "basic",
+        "fd_threshold": 0.2,
         "std_dvars_threshold": null
     },
     "compcor": {

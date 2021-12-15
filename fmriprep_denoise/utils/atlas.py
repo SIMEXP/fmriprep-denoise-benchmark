@@ -1,6 +1,7 @@
+from pathlib import Path
 import nilearn
 from nilearn.input_data import NiftiLabelsMasker, NiftiMapsMasker
-
+from fmriprep_denoise.metrics import compute_pairwise_distance
 
 # not availible in nilearn: Gordon, FIND, brainnetome
 # not clear: ICA?
@@ -19,7 +20,12 @@ ATLAS_METADATA = {
         'type': 'dynamic',
         'resolutions': [64, 128, 256, 512, 1024],
         'label_idx': 1,
-        'fetcher': "nilearn.datasets.fetch_atlas_difumo(dimension={resolution}, resolution_mm=2)"}
+        'fetcher': "nilearn.datasets.fetch_atlas_difumo(dimension={resolution}, resolution_mm=2)"},
+    'gordon333': {
+        'type': 'static',
+        'resolutions': [333],
+        'path': "gordon/Parcels_MNI_333.nii"
+    }
 }
 
 
@@ -32,7 +38,11 @@ def create_atlas_masker(atlas_name, nilearn_cache=""):
 
     for resolution in curr_atlas['resolutions']:
 
-        atlas, atlas_map = _get_atlas_maps(atlas_name, curr_atlas['fetcher'], resolution)
+        if 'fetcher' in curr_atlas:
+            atlas, atlas_map = _get_atlas_maps(atlas_name, curr_atlas['fetcher'], resolution)
+        else:
+            atlas = {}
+            atlas_map = str(Path(__file__).parent / "data" / curr_atlas['path'])
 
         if curr_atlas['type'] == "static":
             masker = NiftiLabelsMasker(
@@ -80,4 +90,16 @@ def _get_atlas_maps(atlas_name, atlas_fetcher, resolution):
         raise NotImplementedError
     else:
         raise NotImplementedError
-    return atlas,atlas_map
+    return atlas, atlas_map
+
+
+# def _generate_distance(input_centroids):
+    # labels = pd.read_csv(input_centroids)
+    # pairwise_distance = compute_pairwise_distance(labels.loc[:, ['R', 'S', 'A']])
+
+    # pairwise_distance.to_csv(
+    #     output
+    #     / "atlas/schaefer7networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv",
+    #     sep='\t',
+    #     index=False
+    # )

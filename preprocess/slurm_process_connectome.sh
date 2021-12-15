@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=schaefer7networks
+#SBATCH --job-name=connectomes
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/schaefer7networks.%a.out
-#SBATCH --error=logs/schaefer7networks.%a.err
-#SBATCH --array=0-8 
+#SBATCH --output=logs/connectomes.%a.out
+#SBATCH --error=logs/connectomes.%a.err
+#SBATCH --array=0-10 
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=4G 
 
@@ -18,3 +18,4 @@ mapfile -t arr < <(jq -r 'keys[]' preprocess/benchmark_strategies.json)
 STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
 echo $STRATEGY
 python ./preprocess/process_connectomes.py ${OUTPUT} --atlas schaefer7networks --dimension 400 --strategy-name ${STRATEGY}
+python ./preprocess/process_connectomes.py ${OUTPUT} --atlas gordon333 --dimension 333 --strategy-name ${STRATEGY}
