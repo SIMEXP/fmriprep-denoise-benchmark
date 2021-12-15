@@ -1,6 +1,11 @@
 # input 
 inputs/dev_data/
 inputs/interim/
+
+# HCP
+logs/
+
+# Jupyterbook
 content/_build
 
 # Byte-compiled / optimized / DLL files
