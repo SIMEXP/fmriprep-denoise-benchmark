@@ -107,7 +107,7 @@ def _dataset_timeseries(nroi, output, atlas, name, parameters, strategy, func_da
 
 def _calculate_movement_stats(output, data):
     if not Path(output / "dataset-ds000228_desc-movement_phenotype.tsv").is_file():
-        movement = ds000288_movement(data)
+        movement = ds000228_movement(data)
         movement = movement.sort_index()
         movement.to_csv( output / "dataset-ds000228_desc-movement_phenotype.tsv", sep='\t')
         print("Generate movement stats.")
