@@ -12,8 +12,6 @@ kernelspec:
   name: python3
 ---
 
-# OHBM 2022 abstract
-
 ```{code-cell} ipython3
 :tags: [hide-input, hide-output]
 
@@ -33,7 +31,7 @@ path_root = Path.cwd().parents[0] / "inputs"
 file_qcfc = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv"
 file_dist = "atlas/schaefer7networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv"
 file_network = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity.tsv"
-file_dataset = "dataset-ds000288_gsr.tar.gz"
+file_dataset = "dataset-ds000288.tar.gz"
 
 # load data
 with tarfile.open(path_root / file_dataset, 'r:gz') as tar:
@@ -55,6 +53,8 @@ sig_per_edge.columns = [col.split('_')[0] for col in sig_per_edge.columns]
 metric_per_edge = qcfc.filter(regex="correlation")
 metric_per_edge.columns = [col.split('_')[0] for col in metric_per_edge.columns]
 ```
+
+# OHBM 2022 abstract
 
 ## Impact of confound removal strategies on functional connectivity generated from fMRIprep preprocessed data
 
@@ -79,21 +79,21 @@ However, a wide range of confound regressors can still introduce errors by the u
 It’s difficult to navigate the confounds and implement the sensible subset of variables in downstream analysis. 
 Without good understanding of the literature or the fMRIPrep documentation, users can still introduce error or unwanted noise while performing confound regressing. 
 Lastly, recent literature has shown the tool-based variability and the potential impact on the results {cite:p}`li_moving_2021`. 
-The current research on benchmarking confounds have yet cover the output from fMRIPrep. 
-We hope to provide a useful reference for fMRIPrep users, and evaluate if the implementation in fMRIPrep provides consistent results as the past literature using other preprocessing procedures. 
-
+The current research on denoising benchmarks have yet cover the output from fMRIPrep. 
+We hope to provide a useful reference for fMRIPrep users, and evaluate whether the confound regressors from fMRIPrep provides consistent results as the past literature using other preprocessing procedures. 
 
 ### Methods
 
 The dataset of choice is ds000228 {cite:p}`richardson_development_2018` on OpenNeuro, preprocessed with fMRIprep LTS20.2.1, using fMRIPrep-slurm wrapper with option `--use-aroma`. 
+After fMRIPrep, regular BOLD outputs were smoothed with a 6 mm FWHM kernel.
 Time series are extracted using Schaefer 7 network atlas of 400 dimensions {cite:p}`schaefer_local-global_2017` and applied the following denoising strategies:
 
-- `simple`: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total), signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed`desc-prepro_bold`.
-- `simple+gsr`: strategy above, with basic global signal, applied on output suffixed`desc-prepro_bold`.
-- `scrubbing`: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total),  signal from tissue masks (white matter and csf, basic, the temporal derivative and quadratic, 8 parameters), motion outlier threshold set at 0.5 framewise displacement, segments with less than 5 consecutive volumes are removed, applied on output suffixed`desc-prepro_bold`.
-- `scrubbing+gsr`: strategy above, with basic global signal, applied on output suffixed`desc-prepro_bold`.
-- `acompcor`: high pass filtering, 24 motion parameters, compcor components explaining 50% of the variance with combined white matter and csf mask, applied on output suffixed`desc-prepro_bold`.
-- `acompcor6`: high pass filtering, 24 motion parameters, top 6 compcor components with combined white matter and csf mask.
+- `simple`: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 para meters in total), signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed `desc-prepro_bold`.
+- `simple+gsr`: strategy above, with basic global signal, applied on output suffixed `desc-prepro_bold`.
+- `scrubbing`: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total),  signal from tissue masks (white matter and csf, basic, the temporal derivative and quadratic, 8 parameters), motion outlier threshold set at 0.5 framewise displacement, segments with less than 5 consecutive volumes are removed, applied on output suffixed `desc-prepro_bold`.
+- `scrubbing+gsr`: strategy above, with basic global signal, applied on output suffixed `desc-prepro_bold`.
+- `acompcor`: high pass filtering, 24 motion parameters, compcor components explaining 50% of the variance with combined white matter and csf mask, applied on output suffixed `desc-prepro_bold`.
+- `acompcor6`: high pass filtering, 24 motion parameters, top 6 compcor components with combined white matter and csf mask, applied on output suffixed `desc-prepro_bold`.
 - `aroma`: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed `desc-smoothAROMAnonaggr_bold`.
 - `aroma+gsr`: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), global signal, applied on output suffixed `desc-smoothAROMAnonaggr_bold`.
 
@@ -111,7 +111,15 @@ Code and processed data to reproduce the current analysis can be found on [githu
 
 ### Results
 
-Percentage
+Consistant with previous findings, no denoising can remove the correlation with motion captured by mean framewise displacement. 
+`aroma`, `acompcor6`, and `simple` reduced correlation between connectivity edges and mean framewise displacement. 
+The `scrubbing` and `scrubbing+gsr` did not perform as well as the past literature, possibly due to the liberal threshold used on the current dataset. 
+`acompcor`, the suggested method of applying compcor based regressors, perfroms worse than the baseline of connectome created with raw timeseries. 
+Suprisingly, all strategy with GSR underperforms, contradicting with the existing literature.
+Further investiagtion of the code base of the current project and/or nilearn/fMRIprep is needed.
+
+
+The absolute median
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -140,9 +148,9 @@ median_absolute = metric_per_edge.apply(calculate_median_absolute)
 order = median_absolute.sort_values().index.tolist()
 
 ax = sns.barplot(data=(pd.DataFrame(median_absolute).T), ci=None, order=order, color=bar_color)
-ax.set_title("Absolute median QC-FC")
+ax.set_title("Median absolute deviation QC-FC")
 ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-ax.set(ylabel="Absolute median",
+ax.set(ylabel="Median absolute deviation",
        xlabel="confound removal strategy")
 plt.tight_layout()
 
@@ -174,10 +182,13 @@ g.fig.suptitle('Distribution of correlation between framewise distplacement and 
 plt.tight_layout()
 ```
 
+Distance dependence of motion has been reduced for all strategies other than `simple` and `scrubbing`.
+GSR-based strategies performs consistantly well. 
+
 ```{code-cell} ipython3
 :tags: [hide-input]
 
-corr_distance, p_val = spearmanr(pairwise_distance.iloc[:, -1], metric_per_edge)
+corr_distance, p_val = spearmanr(pairwise_distance.iloc[:, -1], metric_per_edge)  
 # corr_distance = np.corrcoef(pairwise_distance.iloc[:, -1], metric_per_edge.T)
 
 corr_distance = pd.DataFrame(corr_distance[1:, 0], index=metric_per_edge.columns)
@@ -211,15 +222,19 @@ g.fig.suptitle('Correlation between nodewise Euclidian distance and QC-FC')
 plt.tight_layout()
 ```
 
+All strategies other than `aroma` improved the network modularity comparing to the raw signal.
+The network modularity between `aroma` and the raw signal are similar. 
+To confirm whether network identifiability was systematically impacted by motion, we also evaluated the correlation between modularity quality and motion for each denoising approach. Compcor based strategy and ICA aroma strategy are the best at eliminating the correlation between motion and modularity.
+
 ```{code-cell} ipython3
 :tags: [hide-input]
 
 corr_modularity = []
-z_movment = movement.apply(zscore)
+z_movement = movement.apply(zscore)
 for column, values in modularity.iteritems():
     current_strategy = partial_correlation(values.values, 
-                                           z_movment['mean_framewise_displacement'].values, 
-                                           z_movment[['Age', 'Gender']].values)
+                                           movement['mean_framewise_displacement'].values, 
+                                           z_movement[['Age', 'Gender']].values)
     current_strategy['strategy'] = column
     corr_modularity.append(current_strategy)
 

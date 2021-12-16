@@ -17,54 +17,75 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-pairwise_distance = pairwise_distance.apply(zscore)
-metric_per_edge = metric_per_edge.apply(zscore)
-corr_distance = np.corrcoef(pairwise_distance.iloc[:, -1], metric_per_edge.T)[1:, 0]
-corr_distance = pd.DataFrame(corr_distance, index=metric_per_edge.columns)
-long_qcfc['distance'] = np.tile(pairwise_distance.iloc[:, -1].values, 9)
+import tarfile
+import io
+from pathlib import Path
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.stats import zscore, spearmanr
+from fmriprep_denoise.metrics import partial_correlation, fdr, calculate_median_absolute
 
-ax = sns.barplot(data=corr_distance.T, ci=None)
-ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-ax.set_title("Distance-dependent effects of motion")
-ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
-        xlabel="confound removal strategy")
 
-g = sns.FacetGrid(long_qcfc, col="col", row="row", col_wrap=4, height=3.5)
-g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None, 
-      line_kws={'color': 'red'}, scatter_kws={'s': 0.5, 'alpha': 0.15,})
-g.refline(y=0)
-for i, name in zip(range(9), metric_per_edge.columns):
-    axis_i = int(i / 3)
-    axis_j = i % 3
-    g.facet_axis(axis_i, axis_j).set(title=name)
+# Load metric data
+path_root = Path.cwd().parents[0] / "inputs"
+file_qcfc = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv"
+file_dist = "atlas/schaefer7networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv"
+file_network = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity.tsv"
+file_dataset = "dataset-ds000288_no-std.tar.gz"
 
-g.fig.subplots_adjust(top=0.9) 
-g.fig.suptitle('Distribution of correlation between framewise distplacement and edge strength.')
+# load data
+with tarfile.open(path_root / file_dataset, 'r:gz') as tar:
+    movement = tar.extractfile(
+        "dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv").read()
+    movement = pd.read_csv(io.BytesIO(movement),
+                        sep='\t', index_col=0, header=0, encoding='utf8')
+    movement = movement.sort_index()
+
+
+pairwise_distance = pd.read_csv(path_root / file_dist, sep='\t')
+qcfc = pd.read_csv(path_root / file_qcfc, sep='\t', index_col=0)
+modularity = pd.read_csv(path_root / file_network, sep='\t', index_col=0)
+
+
+# separate correlation from siginficant value
+sig_per_edge = qcfc.filter(regex="pvalue")
+sig_per_edge.columns = [col.split('_')[0] for col in sig_per_edge.columns]
+metric_per_edge = qcfc.filter(regex="correlation")
+metric_per_edge.columns = [col.split('_')[0] for col in metric_per_edge.columns]
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mValueError[0m                                Traceback (most recent call last)
-[0;32m/tmp/ipykernel_70526/251574252.py[0m in [0;36m<module>[0;34m[0m
-[1;32m     11[0m         xlabel="confound removal strategy")
-[1;32m     12[0m [0;34m[0m[0m
-[0;32m---> 13[0;31m [0mg[0m [0;34m=[0m [0msns[0m[0;34m.[0m[0mFacetGrid[0m[0;34m([0m[0mlong_qcfc[0m[0;34m,[0m [0mcol[0m[0;34m=[0m[0;34m"col"[0m[0;34m,[0m [0mrow[0m[0;34m=[0m[0;34m"row"[0m[0;34m,[0m [0mcol_wrap[0m[0;34m=[0m[0;36m4[0m[0;34m,[0m [0mheight[0m[0;34m=[0m[0;36m3.5[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m     14[0m g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None, 
-[1;32m     15[0m       line_kws={'color': 'red'}, scatter_kws={'s': 0.5, 'alpha': 0.15,})
+[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
+[0;32m/tmp/ipykernel_40271/162932605.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     18[0m [0;34m[0m[0m
+[1;32m     19[0m [0;31m# load data[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 20[0;31m [0;32mwith[0m [0mtarfile[0m[0;34m.[0m[0mopen[0m[0;34m([0m[0mpath_root[0m [0;34m/[0m [0mfile_dataset[0m[0;34m,[0m [0;34m'r:gz'[0m[0;34m)[0m [0;32mas[0m [0mtar[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     21[0m     movement = tar.extractfile(
+[1;32m     22[0m         "dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv").read()
 
-[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/seaborn/_decorators.py[0m in [0;36minner_f[0;34m(*args, **kwargs)[0m
-[1;32m     44[0m             )
-[1;32m     45[0m         [0mkwargs[0m[0;34m.[0m[0mupdate[0m[0;34m([0m[0;34m{[0m[0mk[0m[0;34m:[0m [0marg[0m [0;32mfor[0m [0mk[0m[0;34m,[0m [0marg[0m [0;32min[0m [0mzip[0m[0;34m([0m[0msig[0m[0;34m.[0m[0mparameters[0m[0;34m,[0m [0margs[0m[0;34m)[0m[0;34m}[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0;32m---> 46[0;31m         [0;32mreturn[0m [0mf[0m[0;34m([0m[0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m     47[0m     [0;32mreturn[0m [0minner_f[0m[0;34m[0m[0;34m[0m[0m
-[1;32m     48[0m [0;34m[0m[0m
+[0;32m/usr/lib/python3.8/tarfile.py[0m in [0;36mopen[0;34m(cls, name, mode, fileobj, bufsize, **kwargs)[0m
+[1;32m   1619[0m             [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1620[0m                 [0;32mraise[0m [0mCompressionError[0m[0;34m([0m[0;34m"unknown compression type %r"[0m [0;34m%[0m [0mcomptype[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 1621[0;31m             [0;32mreturn[0m [0mfunc[0m[0;34m([0m[0mname[0m[0;34m,[0m [0mfilemode[0m[0;34m,[0m [0mfileobj[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   1622[0m [0;34m[0m[0m
+[1;32m   1623[0m         [0;32melif[0m [0;34m"|"[0m [0;32min[0m [0mmode[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
 
-[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/seaborn/axisgrid.py[0m in [0;36m__init__[0;34m(self, data, row, col, hue, col_wrap, sharex, sharey, height, aspect, palette, row_order, col_order, hue_order, hue_kws, dropna, legend_out, despine, margin_titles, xlim, ylim, subplot_kws, gridspec_kws, size)[0m
-[1;32m    380[0m             [0;32mif[0m [0mrow[0m [0;32mis[0m [0;32mnot[0m [0;32mNone[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[1;32m    381[0m                 [0merr[0m [0;34m=[0m [0;34m"Cannot use `row` and `col_wrap` together."[0m[0;34m[0m[0;34m[0m[0m
-[0;32m--> 382[0;31m                 [0;32mraise[0m [0mValueError[0m[0;34m([0m[0merr[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m    383[0m             [0mncol[0m [0;34m=[0m [0mcol_wrap[0m[0;34m[0m[0;34m[0m[0m
-[1;32m    384[0m             [0mnrow[0m [0;34m=[0m [0mint[0m[0;34m([0m[0mnp[0m[0;34m.[0m[0mceil[0m[0;34m([0m[0mlen[0m[0;34m([0m[0mcol_names[0m[0;34m)[0m [0;34m/[0m [0mcol_wrap[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m/usr/lib/python3.8/tarfile.py[0m in [0;36mgzopen[0;34m(cls, name, mode, fileobj, compresslevel, **kwargs)[0m
+[1;32m   1665[0m [0;34m[0m[0m
+[1;32m   1666[0m         [0;32mtry[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 1667[0;31m             [0mfileobj[0m [0;34m=[0m [0mGzipFile[0m[0;34m([0m[0mname[0m[0;34m,[0m [0mmode[0m [0;34m+[0m [0;34m"b"[0m[0;34m,[0m [0mcompresslevel[0m[0;34m,[0m [0mfileobj[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   1668[0m         [0;32mexcept[0m [0mOSError[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1669[0m             [0;32mif[0m [0mfileobj[0m [0;32mis[0m [0;32mnot[0m [0;32mNone[0m [0;32mand[0m [0mmode[0m [0;34m==[0m [0;34m'r'[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
 
-[0;31mValueError[0m: Cannot use `row` and `col_wrap` together.
-ValueError: Cannot use `row` and `col_wrap` together.
+[0;32m/usr/lib/python3.8/gzip.py[0m in [0;36m__init__[0;34m(self, filename, mode, compresslevel, fileobj, mtime)[0m
+[1;32m    171[0m             [0mmode[0m [0;34m+=[0m [0;34m'b'[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    172[0m         [0;32mif[0m [0mfileobj[0m [0;32mis[0m [0;32mNone[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 173[0;31m             [0mfileobj[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mmyfileobj[0m [0;34m=[0m [0mbuiltins[0m[0;34m.[0m[0mopen[0m[0;34m([0m[0mfilename[0m[0;34m,[0m [0mmode[0m [0;32mor[0m [0;34m'rb'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    174[0m         [0;32mif[0m [0mfilename[0m [0;32mis[0m [0;32mNone[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    175[0m             [0mfilename[0m [0;34m=[0m [0mgetattr[0m[0;34m([0m[0mfileobj[0m[0;34m,[0m [0;34m'name'[0m[0;34m,[0m [0;34m''[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/dataset-ds000288_no-std.tar.gz'
+FileNotFoundError: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/dataset-ds000288_no-std.tar.gz'
 
