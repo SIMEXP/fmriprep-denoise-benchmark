@@ -86,12 +86,13 @@ def subject_timeseries(img, masker, strategy_name, parameters):
 
     if sample_mask is not None:
         kept_vol = len(sample_mask) / reduced_confounds.shape[0]
+        removed = 1 - kept_vol
     else:
-        kept_vol = 1
+        removed = 0
 
     # scrubbing related issue: subject with more than 20% frames removed
     # should not be included (Parkes 2018)
-    if kept_vol < 0.2:
+    if removed > 0.2:
         return None
 
     subject_timeseries = masker.fit_transform(

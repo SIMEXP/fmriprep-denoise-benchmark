@@ -8,27 +8,28 @@ from pathlib import Path
 import pandas as pd
 from multiprocessing import Pool
 
-from fmriprep_denoise.metrics import qcfc, compute_pairwise_distance, louvain_modularity
+from fmriprep_denoise.metrics import qcfc, louvain_modularity
 
 
 # define path of input and output
 OUTPUT = "inputs/"
-INPUT = "inputs/dataset-ds000288.tar.gz"
-CENTROIDS = "inputs/atlas/schaefer7networks/Schaefer2018_400Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
+INPUT = "inputs/dataset-ds000288_gordon.tar.gz"
+ATLAS = "gordon333"
+RESOLUTION = 333
 
 
 def main():
     """Main function."""
     output = Path(__file__).parents[1] / OUTPUT
     input_connectomes = Path(__file__).parents[1] / INPUT
-    input_centroids = Path(__file__).parents[1] / CENTROIDS
 
     metrics = pd.DataFrame()
     modularity = pd.DataFrame()
 
     benchmark_strategies = ['raw',
                             'simple', 'simple+gsr',
-                            'scrubbing', 'scrubbing+gsr',
+                            'scrubbing.2', 'scrubbing.2+gsr',
+                            'scrubbing.5', 'scrubbing.5+gsr',
                             'compcor', 'compcor6',
                             'aroma', 'aroma+gsr']
 
@@ -41,7 +42,7 @@ def main():
         for strategy_name in benchmark_strategies:
             print(strategy_name)
             connectome = tar.extractfile(
-                f"dataset-ds000288/atlas-schaefer7networks/dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-{strategy_name}_data.tsv").read()
+                f"dataset-ds000288/atlas-{ATLAS}/dataset-ds000288_atlas-{ATLAS}_nroi-{RESOLUTION}_desc-{strategy_name}_data.tsv").read()
             dataset_connectomes = pd.read_csv(io.BytesIO(connectome),
                                               sep='\t',
                                               index_col=0,
@@ -64,12 +65,12 @@ def main():
 
     metrics.to_csv(
         output
-        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc_smooth.tsv",
+        / f"dataset-ds000288_atlas-{ATLAS}_nroi-{RESOLUTION}_desc-qcfc.tsv",
         sep='\t',
     )
     modularity.to_csv(
         output
-        / "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity_smooth.tsv",
+        / f"dataset-ds000288_atlas-{ATLAS}_nroi-{RESOLUTION}_desc-modularity.tsv",
         sep='\t',
     )
 
