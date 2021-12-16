@@ -98,7 +98,7 @@ def subject_timeseries(img, masker, strategy_name, parameters):
     if sample_mask is None:
         sample_mask = range(1, subject_timeseries.shape[1] + 1)
     return pd.DataFrame(subject_timeseries,
-                        columns=sample_mask)
+                        index=sample_mask)
 
 
 def ds000288_movement(data):
