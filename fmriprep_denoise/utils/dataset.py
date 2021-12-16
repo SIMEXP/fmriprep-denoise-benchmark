@@ -4,7 +4,7 @@ import pandas as pd
 from sklearn.utils import Bunch
 
 from nilearn.image import smooth_img
-from nilearn.interfaces.fmriprep import load_confounds_strategy
+from nilearn.interfaces.fmriprep import load_confounds_strategy, load_confounds
 
 
 def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
@@ -74,15 +74,13 @@ def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
 
 def subject_timeseries(img, masker, strategy_name, parameters):
     # remove confounds based on strategy
-    if strategy_name == "no_cleaning":
-        subject_timeseries = masker.fit_transform(img)
-
-    if parameters:
-        reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
-        print("Confounds regressors used: ")
-        print(reduced_confounds.columns.tolist())
+    if strategy_name == "baseline":
+        reduced_confounds, sample_mask = load_confounds(img, **parameters)
     else:
-        reduced_confounds, sample_mask = None, None
+        reduced_confounds, sample_mask = load_confounds_strategy(img,
+                                                                 **parameters)
+    print("Confounds regressors used: ")
+    print(reduced_confounds.columns.tolist())
 
     if sample_mask is not None:
         kept_vol = len(sample_mask) / reduced_confounds.shape[0]
