@@ -203,6 +203,7 @@ order = corr_distance.sort_values(0).index.tolist()
 ax = sns.barplot(data=corr_distance.T, ci=None, order=order, color=bar_color)
 ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set_title("Distance-dependent effects of motion")
+ax.set(ylim=(-0.5, 0.05))
 ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
         xlabel="confound removal strategy")
 plt.tight_layout()
@@ -270,8 +271,4 @@ The aim is to provide a software for researchers to produce the benchmark for th
 ### References
 ```{bibliography}
 :filter: docname in docnames
-```
-
-```{code-cell} ipython3
-
 ```
