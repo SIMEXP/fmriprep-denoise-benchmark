@@ -96,7 +96,7 @@ def subject_timeseries(img, masker, strategy_name, parameters):
     subject_timeseries = masker.fit_transform(
         img, confounds=reduced_confounds, sample_mask=sample_mask)
     if sample_mask is None:
-        sample_mask = range(1, subject_timeseries.shape[1] + 1)
+        sample_mask = range(1, subject_timeseries.shape[0] + 1)
     return pd.DataFrame(subject_timeseries,
                         index=sample_mask)
 
