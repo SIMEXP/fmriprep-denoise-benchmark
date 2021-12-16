@@ -16,4 +16,5 @@ mkdir ${OUTPUT}
 cd inputs/
 tar -czvf dataset-ds000228.tar.gz dataset-ds000228/
 cd ..
-python ./preprocess/denoise_metrics.py
+python ./preprocess/denoise_metrics.py ${OUTPUT} --atlas schaefer7networks --dimension 400
+python ./preprocess/denoise_metrics.py ${OUTPUT} --atlas gordon333 --dimension 333
