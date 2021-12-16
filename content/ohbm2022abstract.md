@@ -63,29 +63,26 @@ metric_per_edge.columns = [col.split('_')[0] for col in metric_per_edge.columns]
 
 ## Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs
 
+H-T Wang[^1], S L Meisler[^2][^3], N Gensollen[^4], B Thirion[^4], P Bellec[^1][^5]
 
-H-T Wang[^1], S L Meisler[^2][^3], P Bellec[^1][^4]
+[^1] Centre de recherche de l'institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada
+[^2] Harvard University, MA, USA
+[^3] Massachusetts Institute of Technology, MA, USA
+[^4] Inria, CEA, Université Paris-Saclay, Paris, France
+[^5] Psychology Department, Université de Montréal, Montréal, Québec, Canada
 
-[^1]: CRIUGM - Université de Montréal, Montréal, QC, Canada
 
-[^2]: Harvard University, MA, USA
-
-[^3]: Massachusetts Institute of Technology, MA, USA
-
-[^4]: Université de Montréal, Montréal, QC, Canada
 
 
 ### Introduction
 
-Denoising strategy is an important topic in fMRI data analysis. 
-The impact of the choice of confound regressor on functional connectivity has been a key debates in the field of fMRI (cf. global signal regression). 
-Recent minimal preprocessing pipeline, fMRIPrep {cite:p}`esteban_fmriprep_2020`, aims to reduce the degree of freedom during the preprocessing step. 
-However, a wide range of confound regressors can still introduce errors by the users.
-It’s difficult to navigate the confounds and implement the sensible subset of variables in downstream analysis. 
+The impact of the choice of confound regressor on functional connectivity has been a key debate in the field of fMRI. 
+Popular preprocessing software, fMRIPrep {cite:p}`esteban_fmriprep_2020`, aims to reduce the degree of freedom during the preprocessing step. 
+However, a wide range of confound regressors can still introduce errors by the users. 
 Without good understanding of the literature or the fMRIPrep documentation, users can still introduce error or unwanted noise while performing confound regressing. 
 Lastly, recent literature has shown the tool-based variability and the potential impact on the results {cite:p}`li_moving_2021`. 
-The current research on denoising benchmarks have yet cover the output from fMRIPrep. 
-We hope to provide a useful reference for fMRIPrep users, and evaluate whether the confound regressors from fMRIPrep provides consistent results as the past literature using other preprocessing procedures. 
+The current research on denoising benchmarks have yet to cover the output from fMRIPrep. 
+We hope to provide a useful reference for fMRIPrep users, and evaluate whether the confound regressors from fMRIPrep provide results consistent with the past literature using other preprocessing procedures.    
 
 ### Methods
 
@@ -116,15 +113,12 @@ Code and processed data to reproduce the current analysis can be found on [githu
 
 ### Results
 
-Consistant with previous findings, no denoising can remove the correlation with motion captured by mean framewise displacement. 
+#### Mean framewise displacement
+No denoising can remove the correlation with motion captured by mean framewise displacement. 
 `aroma`, `acompcor6`, and `simple` reduced correlation between connectivity edges and mean framewise displacement. 
-The `scrubbing` and `scrubbing+gsr` did not perform as well as the past literature, possibly due to the liberal threshold used on the current dataset. 
-`acompcor`, the suggested method of applying compcor based regressors, perfroms worse than the baseline of connectome created with raw timeseries. 
-Suprisingly, all strategy with GSR underperforms, contradicting with the existing literature.
-Further investiagtion of the code base of the current project and/or nilearn/fMRIprep is needed.
-
-
-The absolute median
+`scrubbing` and `scrubbing+gsr` did not perform as well as in the past literature, possibly due to the liberal threshold used on the current dataset. 
+`acompcor`, the suggested method of applying compcor based regressors, performs worse than the baseline of connectome created with raw time series. 
+Surprisingly, all strategies with GSR underperform, contradicting the existing literature.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -187,8 +181,8 @@ g.fig.suptitle('Distribution of correlation between framewise distplacement and 
 plt.tight_layout()
 ```
 
-Distance dependence of motion has been reduced for all strategies other than `simple` and `scrubbing`.
-GSR-based strategies perform consistently well.
+#### Distance dependence of motion
+Distance dependence of motion has been reduced for all strategies.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -207,6 +201,7 @@ ax.set(ylim=(-0.5, 0.05))
 ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
         xlabel="confound removal strategy")
 plt.tight_layout()
+# plt.savefig("corr_dist_qcfc_mean.png", dpi=300)
 
 g = sns.FacetGrid(long_qcfc, col="col", row="row", height=1.7, aspect=1.5)
 g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None, 
@@ -224,11 +219,12 @@ for i, name in zip(range(9), metric_per_edge.columns):
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Correlation between nodewise Euclidian distance and QC-FC')
 plt.tight_layout()
+# plt.savefig("corr_dist_qcfc_dist.png", dpi=300)
 ```
 
 All strategies other than `aroma` improved the network modularity comparing to the raw signal.
 The network modularity between `aroma` and the raw signal are similar. 
-To confirm whether network identifiability was systematically impacted by motion, we also evaluated the correlation between modularity quality and motion for each denoising approach. Compcor based strategy and ICA aroma strategy are the best at eliminating the correlation between motion and modularity.
+To confirm whether network identifiability was systematically impacted by motion, we also evaluated the correlation between modularity quality and motion for each denoising approach. Compcor based strategy and ICA-AROMA strategy are the best at eliminating the correlation between motion and modularity.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -263,12 +259,16 @@ plt.tight_layout()
 
 ### Conclusions
 
-The denosing methods involving global signal regreesion is systematically contradicting with the literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. 
+We could replicate findings regarding the usefulness of standard strategies (compcorr, aroma etc.), the denoising methods involving global signal regression are systematically contradicting with the literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. 
 Further investigation is needed.
-We will to run the same benchmark on different fMRIPrepLTS outputs and different type of parcelation scheme.
+We will run the same benchmark on different fMRIPrepLTS outputs and different types of parcellation schemes.
 The aim is to provide a software for researchers to produce the benchmark for their own dataset to select the most suitable strategy.
 
 ### References
 ```{bibliography}
 :filter: docname in docnames
+```
+
+```{code-cell} ipython3
+
 ```
