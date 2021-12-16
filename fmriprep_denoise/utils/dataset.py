@@ -74,7 +74,7 @@ def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
 
 def subject_timeseries(img, masker, strategy_name, parameters):
     # remove confounds based on strategy
-    if strategy_name == "baseline":
+    if strategy_name == 'baseline':
         reduced_confounds, sample_mask = load_confounds(img, **parameters)
     else:
         reduced_confounds, sample_mask = load_confounds_strategy(img,
