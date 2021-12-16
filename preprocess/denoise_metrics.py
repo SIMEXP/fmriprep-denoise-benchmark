@@ -13,7 +13,7 @@ from fmriprep_denoise.metrics import qcfc, louvain_modularity
 
 # define path of input and output
 OUTPUT = "inputs/"
-INPUT = "inputs/dataset-ds000288_ohbm.tar.gz"
+INPUT = "inputs/dataset-ds000228_ohbm.tar.gz"
 ATLAS = "gordon333"
 RESOLUTION = 333
 # ATLAS = "schaefer7networks"
