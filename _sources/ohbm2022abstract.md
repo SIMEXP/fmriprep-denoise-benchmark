@@ -63,16 +63,15 @@ metric_per_edge.columns = [col.split('_')[0] for col in metric_per_edge.columns]
 
 ## Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs
 
+H-T Wang[^1], S L Meisler[^2][^3], N Gensollen[^4], B Thirion[^4], P Bellec[^1][^5]
 
-H-T Wang[^1], S L Meisler[^2][^3], P Bellec[^1][^4]
+[^1] Centre de recherche de l'institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada
+[^2] Harvard University, MA, USA
+[^3] Massachusetts Institute of Technology, MA, USA
+[^4] Inria, CEA, Université Paris-Saclay, Paris, France
+[^5] Psychology Department, Université de Montréal, Montréal, Québec, Canada
 
-[^1]: CRIUGM - Université de Montréal, Montréal, QC, Canada
 
-[^2]: Harvard University, MA, USA
-
-[^3]: Massachusetts Institute of Technology, MA, USA
-
-[^4]: Université de Montréal, Montréal, QC, Canada
 
 
 ### Introduction
@@ -119,7 +118,7 @@ No denoising can remove the correlation with motion captured by mean framewise d
 `aroma`, `acompcor6`, and `simple` reduced correlation between connectivity edges and mean framewise displacement. 
 `scrubbing` and `scrubbing+gsr` did not perform as well as in the past literature, possibly due to the liberal threshold used on the current dataset. 
 `acompcor`, the suggested method of applying compcor based regressors, performs worse than the baseline of connectome created with raw time series. 
-Surprisingly, all strategies with GSR underperform, contradicting the existing literature.     
+Surprisingly, all strategies with GSR underperform, contradicting the existing literature.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -183,7 +182,7 @@ plt.tight_layout()
 ```
 
 #### Distance dependence of motion
-Distance dependence of motion has been reduced for all strategies. 
+Distance dependence of motion has been reduced for all strategies.
 
 ```{code-cell} ipython3
 :tags: [hide-input]
@@ -202,7 +201,7 @@ ax.set(ylim=(-0.5, 0.05))
 ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
         xlabel="confound removal strategy")
 plt.tight_layout()
-plt.savefig("corr_dist_qcfc_mean.png", dpi=300)
+# plt.savefig("corr_dist_qcfc_mean.png", dpi=300)
 
 g = sns.FacetGrid(long_qcfc, col="col", row="row", height=1.7, aspect=1.5)
 g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None, 
@@ -220,7 +219,7 @@ for i, name in zip(range(9), metric_per_edge.columns):
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Correlation between nodewise Euclidian distance and QC-FC')
 plt.tight_layout()
-plt.savefig("corr_dist_qcfc_dist.png", dpi=300)
+# plt.savefig("corr_dist_qcfc_dist.png", dpi=300)
 ```
 
 All strategies other than `aroma` improved the network modularity comparing to the raw signal.

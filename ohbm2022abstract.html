@@ -317,22 +317,27 @@
 <h1>OHBM 2022 abstract<a class="headerlink" href="#ohbm-2022-abstract" title="Permalink to this headline">¶</a></h1>
 <section id="impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs">
 <h2>Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs<a class="headerlink" href="#impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs" title="Permalink to this headline">¶</a></h2>
-<p>H-T Wang<a class="footnote-reference brackets" href="#id28" id="id1">1</a>, S L Meisler<a class="footnote-reference brackets" href="#id29" id="id2">2</a><a class="footnote-reference brackets" href="#id30" id="id3">3</a>, P Bellec<a class="footnote-reference brackets" href="#id28" id="id4">1</a><a class="footnote-reference brackets" href="#id31" id="id5">4</a></p>
+<p>H-T Wang[^1], S L Meisler[^2][^3], N Gensollen[^4], B Thirion[^4], P Bellec[^1][^5]</p>
+<p>[^1] Centre de recherche de l’institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada
+[^2] Harvard University, MA, USA
+[^3] Massachusetts Institute of Technology, MA, USA
+[^4] Inria, CEA, Université Paris-Saclay, Paris, France
+[^5] Psychology Department, Université de Montréal, Montréal, Québec, Canada</p>
 <section id="introduction">
 <h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
 <p>The impact of the choice of confound regressor on functional connectivity has been a key debate in the field of fMRI.
-Popular preprocessing software, fMRIPrep <span id="id6">[<a class="reference internal" href="#id18">Esteban <em>et al.</em>, 2020</a>]</span>, aims to reduce the degree of freedom during the preprocessing step.
+Popular preprocessing software, fMRIPrep <span id="id1">[<a class="reference internal" href="#id13">Esteban <em>et al.</em>, 2020</a>]</span>, aims to reduce the degree of freedom during the preprocessing step.
 However, a wide range of confound regressors can still introduce errors by the users.
 Without good understanding of the literature or the fMRIPrep documentation, users can still introduce error or unwanted noise while performing confound regressing.
-Lastly, recent literature has shown the tool-based variability and the potential impact on the results <span id="id7">[<a class="reference internal" href="#id20">Li <em>et al.</em>, 2021</a>]</span>.
+Lastly, recent literature has shown the tool-based variability and the potential impact on the results <span id="id2">[<a class="reference internal" href="#id15">Li <em>et al.</em>, 2021</a>]</span>.
 The current research on denoising benchmarks have yet to cover the output from fMRIPrep.
 We hope to provide a useful reference for fMRIPrep users, and evaluate whether the confound regressors from fMRIPrep provide results consistent with the past literature using other preprocessing procedures.</p>
 </section>
 <section id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-<p>The dataset of choice is ds000228 <span id="id8">[<a class="reference internal" href="#id22">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, preprocessed with fMRIprep LTS20.2.1, using fMRIPrep-slurm wrapper with option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
+<p>The dataset of choice is ds000228 <span id="id3">[<a class="reference internal" href="#id17">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, preprocessed with fMRIprep LTS20.2.1, using fMRIPrep-slurm wrapper with option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
 After fMRIPrep, regular BOLD outputs were smoothed with a 6 mm FWHM kernel.
-Time series are extracted using Schaefer 7 network atlas of 400 dimensions <span id="id9">[<a class="reference internal" href="#id21">Schaefer <em>et al.</em>, 2017</a>]</span> and applied the following denoising strategies:</p>
+Time series are extracted using Schaefer 7 network atlas of 400 dimensions <span id="id4">[<a class="reference internal" href="#id16">Schaefer <em>et al.</em>, 2017</a>]</span> and applied the following denoising strategies:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">simple</span></code>: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total), signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code>: strategy above, with basic global signal, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
@@ -344,13 +349,13 @@ Time series are extracted using Schaefer 7 network atlas of 400 dimensions <span
 <li><p><code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code>: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), global signal, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code>.</p></li>
 </ul>
 <p>In addition, we also calculated the connectome based on the raw timeseries as a reference.</p>
-<p>Here we provide an uniformed API to retrieve fMRIPrep generated confounds implemented in NiLearn <span id="id10">[<a class="reference internal" href="#id24">Abraham <em>et al.</em>, 2014</a>]</span>.
+<p>Here we provide an uniformed API to retrieve fMRIPrep generated confounds implemented in NiLearn <span id="id5">[<a class="reference internal" href="#id19">Abraham <em>et al.</em>, 2014</a>]</span>.
 Timeseries, connectome, and confounds removal are all implemented through NiLearn.</p>
-<p>The current study used three metrics from <span id="id11">Ciric <em>et al.</em> [<a class="reference internal" href="#id19">2017</a>]</span> to evaluate the denosing results:</p>
+<p>The current study used three metrics from <span id="id6">Ciric <em>et al.</em> [<a class="reference internal" href="#id14">2017</a>]</span> to evaluate the denosing results:</p>
 <ol class="simple">
-<li><p>Quality control / functional connectivity (QCFC <span id="id12">[<a class="reference internal" href="#id27">Power <em>et al.</em>, 2015</a>]</span>): Partial correlation between motion and connectivity with age and sex as covariates; multiple comparison in the significant testing is controled with false positive rate correction.</p></li>
-<li><p>Distance-dependent effects of motion on connectivity <span id="id13">[<a class="reference internal" href="#id25">Power <em>et al.</em>, 2012</a>]</span></p></li>
-<li><p>Network identifiability based on Louvain method of community detection <span id="id14">[<a class="reference internal" href="#id26">Satterthwaite <em>et al.</em>, 2012</a>]</span> implemented by Brain Connnectome Toolbox</p></li>
+<li><p>Quality control / functional connectivity (QCFC <span id="id7">[<a class="reference internal" href="#id22">Power <em>et al.</em>, 2015</a>]</span>): Partial correlation between motion and connectivity with age and sex as covariates; multiple comparison in the significant testing is controled with false positive rate correction.</p></li>
+<li><p>Distance-dependent effects of motion on connectivity <span id="id8">[<a class="reference internal" href="#id20">Power <em>et al.</em>, 2012</a>]</span></p></li>
+<li><p>Network identifiability based on Louvain method of community detection <span id="id9">[<a class="reference internal" href="#id21">Satterthwaite <em>et al.</em>, 2012</a>]</span> implemented by Brain Connnectome Toolbox</p></li>
 </ol>
 <p>Code and processed data to reproduce the current analysis can be found on <a class="reference external" href="https://github.com/SIMEXP/fmriprep-denoise-benchmark">github</a>.</p>
 </section>
@@ -453,7 +458,7 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Nodewise correlation between</span><span class="se">\n</span><span class="s2">Euclidian distance and QC-FC metric&quot;</span><span class="p">,</span>
         <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;corr_dist_qcfc_mean.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="c1"># plt.savefig(&quot;corr_dist_qcfc_mean.png&quot;, dpi=300)</span>
 
 <span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">long_qcfc</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;col&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.7</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
 <span class="n">g</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">,</span> <span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="s1">&#39;qcfc&#39;</span><span class="p">,</span> <span class="n">fit_reg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
@@ -471,7 +476,7 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
 <span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span> 
 <span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Correlation between nodewise Euclidian distance and QC-FC&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;corr_dist_qcfc_dist.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="c1"># plt.savefig(&quot;corr_dist_qcfc_dist.png&quot;, dpi=300)</span>
 </pre></div>
 </div>
 </div>
@@ -522,61 +527,46 @@ To confirm whether network identifiability was systematically impacted by motion
 </section>
 <section id="conclusions">
 <h3>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h3>
-<p>We could replicate findings regarding the usefulness of standard strategies (compcorr, aroma etc.), the denoising methods involving global signal regression are systematically contradicting with the literature <span id="id15">[<a class="reference internal" href="#id19">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id16">[<a class="reference internal" href="#id23">Parkes <em>et al.</em>, 2018</a>]</span>.
+<p>We could replicate findings regarding the usefulness of standard strategies (compcorr, aroma etc.), the denoising methods involving global signal regression are systematically contradicting with the literature <span id="id10">[<a class="reference internal" href="#id14">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id11">[<a class="reference internal" href="#id18">Parkes <em>et al.</em>, 2018</a>]</span>.
 Further investigation is needed.
 We will run the same benchmark on different fMRIPrepLTS outputs and different types of parcellation schemes.
 The aim is to provide a software for researchers to produce the benchmark for their own dataset to select the most suitable strategy.</p>
 </section>
 <section id="references">
 <h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
-<p id="id17"><dl class="citation">
-<dt class="label" id="id24"><span class="brackets"><a class="fn-backref" href="#id10">APE+14</a></span></dt>
+<p id="id12"><dl class="citation">
+<dt class="label" id="id19"><span class="brackets"><a class="fn-backref" href="#id5">APE+14</a></span></dt>
 <dd><p>Alexandre Abraham, Fabian Pedregosa, Michael Eickenberg, Philippe Gervais, Andreas Muller, Jean Kossaifi, Alexandre Gramfort, Bertrand Thirion, Gaël Varoquaux, Andreas Mueller, Jean Kossaifi, Alexandre Gramfort, Bertrand Thirion, and Gaël Varoquaux. Machine learning for neuroimaging with scikit-learn. <em>Frontiers in Neuroinformatics</em>, 8:14, February 2014. <a class="reference external" href="https://doi.org/10.3389/fninf.2014.00014">doi:10.3389/fninf.2014.00014</a>.</p>
 </dd>
-<dt class="label" id="id19"><span class="brackets">CWP+17</span><span class="fn-backref">(<a href="#id11">1</a>,<a href="#id15">2</a>)</span></dt>
+<dt class="label" id="id14"><span class="brackets">CWP+17</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id10">2</a>)</span></dt>
 <dd><p>Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. <em>NeuroImage</em>, 154(1):174–187, July 2017. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.03.020">doi:10.1016/j.neuroimage.2017.03.020</a>.</p>
 </dd>
-<dt class="label" id="id18"><span class="brackets"><a class="fn-backref" href="#id6">EMG+20</a></span></dt>
+<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id1">EMG+20</a></span></dt>
 <dd><p>Oscar Esteban, Christopher J. Markiewicz, Mathias Goncalves, Elizabeth DuPre, James D. Kent, Rastko Ciric, Ross W. Blair, Russell A. Poldrack, and Krzysztof J. Gorgolewski. Fmriprep: a robust preprocessing pipeline for functional mri. June 2020. URL: <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">https://doi.org/10.5281/zenodo.3876458</a>, <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">doi:10.5281/zenodo.3876458</a>.</p>
 </dd>
-<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id7">LAG+21</a></span></dt>
+<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id2">LAG+21</a></span></dt>
 <dd><p>Xinhui Li, Lei Ai, Steve Giavasis, Hecheng Jin, Eric Feczko, Ting Xu, Jon Clucas, Alexandre Franco, Anibal Sólon Heinsfeld, Azeez Adebimpe, Joshua T. Vogelstein, Chao-Gan Yan, Oscar Esteban, Russell A. Poldrack, Cameron Craddock, Damien Fair, Theodore Satterthwaite, Gregory Kiar, and Michael P. Milham. Moving beyond processing and analysis — related variation in neuroscience. <em>BioRxiv</em>, pages 2021.12.01.470790, December 2021. <a class="reference external" href="https://doi.org/10.1101/2021.12.01.470790">doi:10.1101/2021.12.01.470790</a>.</p>
 </dd>
-<dt class="label" id="id23"><span class="brackets"><a class="fn-backref" href="#id16">PFYF18</a></span></dt>
+<dt class="label" id="id18"><span class="brackets"><a class="fn-backref" href="#id11">PFYF18</a></span></dt>
 <dd><p>Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. <em>NeuroImage</em>, 171:415–436, May 2018. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.12.073">doi:10.1016/j.neuroimage.2017.12.073</a>.</p>
 </dd>
-<dt class="label" id="id25"><span class="brackets"><a class="fn-backref" href="#id13">PBS+12</a></span></dt>
+<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id8">PBS+12</a></span></dt>
 <dd><p>Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. <em>NeuroImage</em>, 59(3):2142–2154, February 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.10.018">doi:10.1016/j.neuroimage.2011.10.018</a>.</p>
 </dd>
-<dt class="label" id="id27"><span class="brackets"><a class="fn-backref" href="#id12">PSP15</a></span></dt>
+<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id7">PSP15</a></span></dt>
 <dd><p>Jonathan D. Power, Bradley L. Schlaggar, and Steven E. Petersen. Recent progress and outstanding issues in motion correction in resting state fMRI. <em>NeuroImage</em>, 105:536–551, January 2015. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2014.10.044">doi:10.1016/j.neuroimage.2014.10.044</a>.</p>
 </dd>
-<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id8">RLRNS18</a></span></dt>
+<dt class="label" id="id17"><span class="brackets"><a class="fn-backref" href="#id3">RLRNS18</a></span></dt>
 <dd><p>Hilary Richardson, Grace Lisandrelli, Alexa Riobueno-Naylor, and Rebecca Saxe. Development of the social brain from age three to twelve years. <em>Nature Communications</em>, 9(1):1027, March 2018. <a class="reference external" href="https://doi.org/10.1038/s41467-018-03399-2">doi:10.1038/s41467-018-03399-2</a>.</p>
 </dd>
-<dt class="label" id="id26"><span class="brackets"><a class="fn-backref" href="#id14">SWL+12</a></span></dt>
+<dt class="label" id="id21"><span class="brackets"><a class="fn-backref" href="#id9">SWL+12</a></span></dt>
 <dd><p>Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. <em>NeuroImage</em>, 60(1):623–632, March 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.12.063">doi:10.1016/j.neuroimage.2011.12.063</a>.</p>
 </dd>
-<dt class="label" id="id21"><span class="brackets"><a class="fn-backref" href="#id9">SKG+17</a></span></dt>
+<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id4">SKG+17</a></span></dt>
 <dd><p>Alexander Schaefer, Ru Kong, Evan M. Gordon, Timothy O. Laumann, Xi-Nian Zuo, Avram J. Holmes, Simon B. Eickhoff, and B.T. Thomas Yeo. Local-global parcellation of the human cerebral cortex from intrinsic functional connectivity mri. <em>Cerebral Cortex</em>, pages 1–20, 2017. <a class="reference external" href="https://doi.org/10.1093/cercor/bhx179">doi:10.1093/cercor/bhx179</a>.</p>
 </dd>
 </dl>
 </p>
-<hr class="footnotes docutils" />
-<dl class="footnote brackets">
-<dt class="label" id="id28"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id4">2</a>)</span></dt>
-<dd><p>CRIUGM - Université de Montréal, Montréal, QC, Canada</p>
-</dd>
-<dt class="label" id="id29"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
-<dd><p>Harvard University, MA, USA</p>
-</dd>
-<dt class="label" id="id30"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
-<dd><p>Massachusetts Institute of Technology, MA, USA</p>
-</dd>
-<dt class="label" id="id31"><span class="brackets"><a class="fn-backref" href="#id5">4</a></span></dt>
-<dd><p>Université de Montréal, Montréal, QC, Canada</p>
-</dd>
-</dl>
 </section>
 </section>
 </section>
