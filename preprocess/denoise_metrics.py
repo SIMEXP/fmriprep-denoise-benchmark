@@ -25,13 +25,17 @@ def main():
 
     metrics = pd.DataFrame()
     modularity = pd.DataFrame()
-
-    benchmark_strategies = ['raw',
+    benchmark_strategies = ['baseline',
                             'simple', 'simple+gsr',
-                            'scrubbing.2', 'scrubbing.2+gsr',
                             'scrubbing.5', 'scrubbing.5+gsr',
                             'compcor', 'compcor6',
                             'aroma', 'aroma+gsr']
+    # benchmark_strategies = ['baseline',
+    #                         'simple', 'simple+gsr',
+    #                         'scrubbing.2', 'scrubbing.2+gsr',
+    #                         'scrubbing.5', 'scrubbing.5+gsr',
+    #                         'compcor', 'compcor6',
+    #                         'aroma', 'aroma+gsr']
 
     with tarfile.open(input_connectomes, 'r:gz') as tar:
         movement = tar.extractfile(

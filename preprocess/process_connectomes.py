@@ -11,7 +11,7 @@ from fmriprep_denoise.utils.atlas import create_atlas_masker
 
 
 # define path of input and output
-STRATEGY = "{home}/projects/rrg-pbellec/hwang1/fmriprep-denoise-benchmark/preprocess/benchmark_strategies_ohbm.json"
+STRATEGY = "{home}/projects/rrg-pbellec/hwang1/fmriprep-denoise-benchmark/preprocess/benchmark_strategies.json"
 INPUT_FMRIPREP = "{home}/scratch/test_data/1637790137/fmriprep"
 INPUT_BIDS_PARTICIPANTS = "{home}/projects/rrg-pbellec/hwang1/test_data/participants.tsv"
 ATLAS = 'schaefer7networks'
@@ -85,6 +85,7 @@ def main():
             parameters = benchmark_strategies[name]
             print(f"Denoising: {name}")
             strategy = {name: parameters}
+            print(parameters)
             func_data = data_aroma.func if "aroma" in name else data.func
             valid_subject_ts, valid_subject_id = _dataset_timeseries(nroi, output, atlas, name, parameters, strategy, func_data)
             dataset_connectomes = _compute_connectome(valid_subject_ts, valid_subject_id)
