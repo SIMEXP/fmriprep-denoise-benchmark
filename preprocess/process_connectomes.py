@@ -11,7 +11,7 @@ from fmriprep_denoise.utils.atlas import create_atlas_masker
 
 
 # define path of input and output
-STRATEGY = "{home}/projects/rrg-pbellec/hwang1/fmriprep-denoise-benchmark/preprocess/benchmark_strategies.json"
+STRATEGY = "{home}/projects/rrg-pbellec/hwang1/fmriprep-denoise-benchmark/preprocess/benchmark_strategies_ohbm.json"
 INPUT_FMRIPREP = "{home}/scratch/test_data/1637790137/fmriprep"
 INPUT_BIDS_PARTICIPANTS = "{home}/projects/rrg-pbellec/hwang1/test_data/participants.tsv"
 ATLAS = 'schaefer7networks'
