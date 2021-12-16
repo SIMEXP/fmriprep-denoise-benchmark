@@ -101,8 +101,8 @@ def subject_timeseries(img, masker, strategy_name, parameters):
                         index=sample_mask)
 
 
-def ds000288_movement(data):
-    """Retreive  for ds000288."""
+def ds000228_movement(data):
+    """Retreive  for ds000228."""
     # get motion QC related metrics from confound files
     group_mean_fd = pd.DataFrame()
     group_mean_fd.index = group_mean_fd.index.set_names("participant_id")

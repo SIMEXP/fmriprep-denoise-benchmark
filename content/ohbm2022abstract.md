@@ -28,16 +28,16 @@ from fmriprep_denoise.metrics import partial_correlation, fdr, calculate_median_
 
 # Load metric data
 path_root = Path.cwd().parents[0] / "inputs"
-file_qcfc = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv"
+file_qcfc = "dataset-ds000228_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv"
 file_dist = "atlas-schaefer7networks_nroi-400_desc-distance.tsv"
-file_network = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity.tsv"
-file_dataset = "dataset-ds000288.tar.gz"
+file_network = "dataset-ds000228_atlas-schaefer7networks_nroi-400_desc-modularity.tsv"
+file_dataset = "dataset-ds000228.tar.gz"
 
 
 # load data
 with tarfile.open(path_root / file_dataset, 'r:gz') as tar:
     movement = tar.extractfile(
-        "dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv").read()
+        "dataset-ds000228/dataset-ds000228_desc-movement_phenotype.tsv").read()
     movement = pd.read_csv(io.BytesIO(movement),
                         sep='\t', index_col=0, header=0, encoding='utf8')
     movement = movement.sort_index()

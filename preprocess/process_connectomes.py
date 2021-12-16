@@ -6,7 +6,7 @@ import pandas as pd
 
 from nilearn.connectome import ConnectivityMeasure
 
-from fmriprep_denoise.utils.dataset import fetch_fmriprep_derivative, subject_timeseries, ds000288_movement
+from fmriprep_denoise.utils.dataset import fetch_fmriprep_derivative, subject_timeseries, ds000228_movement
 from fmriprep_denoise.utils.atlas import create_atlas_masker
 
 
@@ -21,7 +21,7 @@ NROI = None
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
-        description="Generate connectome based on denoising strategy for ds000288.",
+        description="Generate connectome based on denoising strategy for ds000228.",
     )
     parser.add_argument(
         "output_path",
@@ -89,7 +89,7 @@ def main():
             valid_subject_ts, valid_subject_id = _dataset_timeseries(nroi, output, atlas, name, parameters, name, func_data)
             dataset_connectomes = _compute_connectome(valid_subject_ts, valid_subject_id)
             dataset_connectomes = dataset_connectomes.sort_index()
-            output_connectome = output / f"dataset-ds000288_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv"
+            output_connectome = output / f"dataset-ds000228_atlas-{atlas_name}_nroi-{nroi}_desc-{name}_data.tsv"
             dataset_connectomes.to_csv(output_connectome, sep='\t')
 
 
@@ -106,10 +106,10 @@ def _dataset_timeseries(nroi, output, atlas, name, parameters, strategy, func_da
 
 
 def _calculate_movement_stats(output, data):
-    if not Path(output / "dataset-ds000288_desc-movement_phenotype.tsv").is_file():
+    if not Path(output / "dataset-ds000228_desc-movement_phenotype.tsv").is_file():
         movement = ds000288_movement(data)
         movement = movement.sort_index()
-        movement.to_csv( output / "dataset-ds000288_desc-movement_phenotype.tsv", sep='\t')
+        movement.to_csv( output / "dataset-ds000228_desc-movement_phenotype.tsv", sep='\t')
         print("Generate movement stats.")
 
 

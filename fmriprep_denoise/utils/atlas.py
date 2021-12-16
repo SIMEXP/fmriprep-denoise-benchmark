@@ -91,15 +91,3 @@ def _get_atlas_maps(atlas_name, atlas_fetcher, resolution):
     else:
         raise NotImplementedError
     return atlas, atlas_map
-
-
-# def _generate_distance(input_centroids):
-    # labels = pd.read_csv(input_centroids)
-    # pairwise_distance = compute_pairwise_distance(labels.loc[:, ['R', 'S', 'A']])
-
-    # pairwise_distance.to_csv(
-    #     output
-    #     / "atlas/schaefer7networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv",
-    #     sep='\t',
-    #     index=False
-    # )
