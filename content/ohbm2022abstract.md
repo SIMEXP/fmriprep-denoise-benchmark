@@ -87,17 +87,20 @@ We hope to provide a useful reference for fMRIPrep users, and evaluate whether t
 ### Methods
 
 The dataset of choice is ds000228 {cite:p}`richardson_development_2018` on OpenNeuro, preprocessed with fMRIprep LTS20.2.1, using fMRIPrep-slurm wrapper with option `--use-aroma`. 
-After fMRIPrep, regular BOLD outputs were smoothed with a 6 mm FWHM kernel.
+After fMRIPrep, regular BOLD outputs were smoothed with a 6 mm FWHM kernel.
 Time series are extracted using Schaefer 7 network atlas of 400 dimensions {cite:p}`schaefer_local-global_2017` and applied the following denoising strategies:
 
-- `simple`: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total), signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed `desc-prepro_bold`.
-- `simple+gsr`: strategy above, with basic global signal, applied on output suffixed `desc-prepro_bold`.
-- `scrubbing`: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total),  signal from tissue masks (white matter and csf, basic, the temporal derivative and quadratic, 8 parameters), motion outlier threshold set at 0.5 framewise displacement, segments with less than 5 consecutive volumes are removed, applied on output suffixed `desc-prepro_bold`.
-- `scrubbing+gsr`: strategy above, with basic global signal, applied on output suffixed `desc-prepro_bold`.
-- `acompcor`: high pass filtering, 24 motion parameters, compcor components explaining 50% of the variance with combined white matter and csf mask, applied on output suffixed `desc-prepro_bold`.
-- `acompcor6`: high pass filtering, 24 motion parameters, top 6 compcor components with combined white matter and csf mask, applied on output suffixed `desc-prepro_bold`.
-- `aroma`: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed `desc-smoothAROMAnonaggr_bold`.
-- `aroma+gsr`: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), global signal, applied on output suffixed `desc-smoothAROMAnonaggr_bold`.
+| strategy   | image                          | `high_pass` | `motion` | `wm_csf` | `global_signal` | `scrub` | `fd_thresh` | `compcor`     | `n_compcor` | `ica_aroma` | `demean` |
+|------------|--------------------------------|-------------|----------|----------|-----------------|---------|-------------|---------------|-------------|-------------|----------|
+| baseline   | `desc-preproc_bold`            | `True`      | N/A      | N/A      | N/A             | N/A     | N/A         | N/A           | N/A         | N/A         | `True`   |
+| simple     | `desc-preproc_bold`            | `True`      | full     | basic    | N/A             | N/A     | N/A         | N/A           | N/A         | N/A         | `True`   |
+| simple+gsr | `desc-preproc_bold`            | `True`      | full     | basic    | basic           | N/A     | N/A         | N/A           | N/A         | N/A         | `True`   |
+| scrubbing  | `desc-preproc_bold`            | `True`      | full     | full     | N/A             | 5       | 0.5         | N/A           | N/A         | N/A         | `True`   |
+| simple+gsr | `desc-preproc_bold`            | `True`      | full     | full     | basic           | 5       | 0.5         | N/A           | N/A         | N/A         | `True`   |
+| compcor    | `desc-preproc_bold`            | `True`      | full     | N/A      | N/A             | N/A     | N/A         | anat_combined | all         | N/A         | `True`   |
+| compcor6   | `desc-preproc_bold`            | `True`      | full     | N/A      | N/A             | N/A     | N/A         | anat_combined | 6           | N/A         | `True`   |
+| aroma      | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | basic    | N/A             | N/A     | N/A         | N/A           | N/A         | full        | `True`   |
+| aroma+gsr  | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | basic    | basic           | N/A     | N/A         | N/A           | N/A         | full        | `True`   |
 
 In addition, we also calculated the connectome based on the raw timeseries as a reference.
 
@@ -138,6 +141,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set(ylabel="Percentage %",
        xlabel="confound removal strategy")
 plt.tight_layout()
+plt.savefig("sig_qcfc.png", dpi=300)
 ```
 
 ```{code-cell} ipython3
@@ -152,6 +156,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set(ylabel="Median absolute deviation",
        xlabel="confound removal strategy")
 plt.tight_layout()
+plt.savefig("mad_qcfc.png", dpi=300)
 
 def draw_absolute_median(data, **kws):
     ax = plt.gca()
@@ -179,6 +184,7 @@ for i, name in zip(range(9), metric_per_edge.columns):
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Distribution of correlation between framewise distplacement and edge strength')
 plt.tight_layout()
+plt.savefig("dist_qcfc.png", dpi=300)
 ```
 
 #### Distance dependence of motion
@@ -201,7 +207,7 @@ ax.set(ylim=(-0.5, 0.05))
 ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
         xlabel="confound removal strategy")
 plt.tight_layout()
-# plt.savefig("corr_dist_qcfc_mean.png", dpi=300)
+plt.savefig("corr_dist_qcfc_mean.png", dpi=300)
 
 g = sns.FacetGrid(long_qcfc, col="col", row="row", height=1.7, aspect=1.5)
 g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None, 
@@ -214,12 +220,12 @@ for i, name in zip(range(9), metric_per_edge.columns):
     if axis_i == 2:
         g.facet_axis(axis_i, axis_j).set(xlabel="Distance (mm)")
     if axis_j == 0:
-        g.facet_axis(axis_i, axis_j).set(xlabel="QC-FC")
+        g.facet_axis(axis_i, axis_j).set(ylabel="QC-FC")
         
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Correlation between nodewise Euclidian distance and QC-FC')
 plt.tight_layout()
-# plt.savefig("corr_dist_qcfc_dist.png", dpi=300)
+plt.savefig("corr_dist_qcfc_dist.png", dpi=300)
 ```
 
 All strategies other than `aroma` improved the network modularity comparing to the raw signal.
@@ -255,6 +261,7 @@ ax.set_title("Correlation between\nnetwork modularity and \nmean framewise displ
 ax.set(ylabel="Pearson's correlation",
        xlabel="confound removal strategy")
 plt.tight_layout()
+plt.savefig("modularity.png", dpi=300)
 ```
 
 ### Conclusions

@@ -13,10 +13,11 @@ from fmriprep_denoise.metrics import qcfc, louvain_modularity
 
 # define path of input and output
 OUTPUT = "inputs/"
-INPUT = "inputs/dataset-ds000288_gordon.tar.gz"
+INPUT = "inputs/dataset-ds000288_ohbm.tar.gz"
 ATLAS = "gordon333"
 RESOLUTION = 333
-
+# ATLAS = "schaefer7networks"
+# RESOLUTION = 400
 
 def main():
     """Main function."""
@@ -25,17 +26,13 @@ def main():
 
     metrics = pd.DataFrame()
     modularity = pd.DataFrame()
+    # benchmark_strategies = ['baseline']
     benchmark_strategies = ['baseline',
                             'simple', 'simple+gsr',
+                            'scrubbing.2', 'scrubbing.2+gsr',
                             'scrubbing.5', 'scrubbing.5+gsr',
                             'compcor', 'compcor6',
                             'aroma', 'aroma+gsr']
-    # benchmark_strategies = ['baseline',
-    #                         'simple', 'simple+gsr',
-    #                         'scrubbing.2', 'scrubbing.2+gsr',
-    #                         'scrubbing.5', 'scrubbing.5+gsr',
-    #                         'compcor', 'compcor6',
-    #                         'aroma', 'aroma+gsr']
 
     with tarfile.open(input_connectomes, 'r:gz') as tar:
         movement = tar.extractfile(
@@ -69,12 +66,12 @@ def main():
 
     metrics.to_csv(
         output
-        / f"dataset-ds000288_atlas-{ATLAS}_nroi-{RESOLUTION}_desc-qcfc.tsv",
+        / f"dataset-ds000288_atlas-{ATLAS}_nroi-{RESOLUTION}_desc-qcfc_baseline.tsv",
         sep='\t',
     )
     modularity.to_csv(
         output
-        / f"dataset-ds000288_atlas-{ATLAS}_nroi-{RESOLUTION}_desc-modularity.tsv",
+        / f"dataset-ds000288_atlas-{ATLAS}_nroi-{RESOLUTION}_desc-modularity_baseline.tsv",
         sep='\t',
     )
 
