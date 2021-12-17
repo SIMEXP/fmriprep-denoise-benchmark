@@ -59,13 +59,19 @@ metric_per_edge.columns = [col.split('_')[0] for col in metric_per_edge.columns]
 
 H-T Wang[^1], S L Meisler[^2][^3], H Shamarke, F Paugam[^1][^4], N Gensollen[^5], B Thirion[^5], C Markiewicz[^6], P Bellec[^1][^7]
 
-[^1] Centre de recherche de l'institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada
-[^2] Harvard University, MA, USA
-[^3] Massachusetts Institute of Technology, MA, USA
-[^4] Computer Science and Operations Research Department, Université de Montréal, Montréal, Québec, Canada
-[^5] Inria, CEA, Université Paris-Saclay, Paris, France
-[^6] Department of Psychology, Stanford University, Stanford, United States
-[^7] Psychology Department, Université de Montréal, Montréal, Québec, Canada
+[^1]: Centre de recherche de l'institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada
+
+[^2]: Harvard University, MA, USA
+
+[^3]: Massachusetts Institute of Technology, MA, USA
+
+[^4]: Computer Science and Operations Research Department, Université de Montréal, Montréal, Québec, Canada
+
+[^5]: Inria, CEA, Université Paris-Saclay, Paris, France
+
+[^6]: Department of Psychology, Stanford University, Stanford, United States
+
+[^7]: Psychology Department, Université de Montréal, Montréal, Québec, Canada
 
 ### Introduction
 
@@ -131,7 +137,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set(ylabel="Percentage %",
        xlabel="confound removal strategy")
 plt.tight_layout()
-plt.savefig("sig_qcfc.png", dpi=300)
+# plt.savefig("sig_qcfc.png", dpi=300)
 ```
 
 ```{code-cell} ipython3
@@ -146,7 +152,7 @@ ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
 ax.set(ylabel="Median absolute deviation",
        xlabel="confound removal strategy")
 plt.tight_layout()
-plt.savefig("mad_qcfc.png", dpi=300)
+# plt.savefig("mad_qcfc.png", dpi=300)
 
 def draw_absolute_median(data, **kws):
     ax = plt.gca()
@@ -174,7 +180,7 @@ for i, name in zip(range(9), metric_per_edge.columns):
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Distribution of correlation between framewise distplacement and edge strength')
 plt.tight_layout()
-plt.savefig("dist_qcfc.png", dpi=300)
+# plt.savefig("dist_qcfc.png", dpi=300)
 ```
 
 #### Distance-dependent effects of motion on connectivity
@@ -199,7 +205,7 @@ ax.set(ylim=(-0.5, 0.05))
 ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
         xlabel="confound removal strategy")
 plt.tight_layout()
-plt.savefig("corr_dist_qcfc_mean.png", dpi=300)
+# plt.savefig("corr_dist_qcfc_mean.png", dpi=300)
 
 g = sns.FacetGrid(long_qcfc, col="col", row="row", height=1.7, aspect=1.5)
 g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None, 
@@ -217,7 +223,7 @@ for i, name in zip(range(9), metric_per_edge.columns):
 g.fig.subplots_adjust(top=0.9) 
 g.fig.suptitle('Correlation between nodewise Euclidian distance and QC-FC')
 plt.tight_layout()
-plt.savefig("corr_dist_qcfc_dist.png", dpi=300)
+# plt.savefig("corr_dist_qcfc_dist.png", dpi=300)
 ```
 
 #### Network modularity
@@ -258,7 +264,7 @@ ax.set_title("Correlation between\nnetwork modularity and \nmean framewise displ
 ax.set(ylabel="Pearson's correlation",
        xlabel="confound removal strategy")
 plt.tight_layout()
-plt.savefig("modularity.png", dpi=300)
+# plt.savefig("modularity.png", dpi=300)
 ```
 
 ### Conclusions
