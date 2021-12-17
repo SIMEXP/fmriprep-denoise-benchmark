@@ -230,13 +230,18 @@
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#mean-framewise-displacement">
-       Mean framewise displacement
+      <a class="reference internal nav-link" href="#qc-fc">
+       QC-FC
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#distance-dependence-of-motion">
-       Distance dependence of motion
+      <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity">
+       Distance-dependent effects of motion on connectivity
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#network-modularity">
+       Network modularity
       </a>
      </li>
     </ul>
@@ -279,19 +284,13 @@
 
 <span class="c1"># Load metric data</span>
 <span class="n">path_root</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="s2">&quot;inputs&quot;</span>
-<span class="n">file_qcfc</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv&quot;</span>
+<span class="n">file_qcfc</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000228_atlas-schaefer7networks_nroi-400_qcfc.tsv&quot;</span>
 <span class="n">file_dist</span> <span class="o">=</span> <span class="s2">&quot;atlas-schaefer7networks_nroi-400_desc-distance.tsv&quot;</span>
-<span class="n">file_network</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity.tsv&quot;</span>
-<span class="n">file_dataset</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000288.tar.gz&quot;</span>
-
-
-<span class="c1"># load data</span>
-<span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_dataset</span><span class="p">,</span> <span class="s1">&#39;r:gz&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar</span><span class="p">:</span>
-    <span class="n">movement</span> <span class="o">=</span> <span class="n">tar</span><span class="o">.</span><span class="n">extractfile</span><span class="p">(</span>
-        <span class="s2">&quot;dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-    <span class="n">movement</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">(</span><span class="n">movement</span><span class="p">),</span>
-                        <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
-    <span class="n">movement</span> <span class="o">=</span> <span class="n">movement</span><span class="o">.</span><span class="n">sort_index</span><span class="p">()</span>
+<span class="n">file_network</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000228_atlas-schaefer7networks_nroi-400_modularity.tsv&quot;</span>
+<span class="c1"># file_qcfc = &quot;dataset-ds000228_atlas-gordon333_nroi-333_qcfc.tsv&quot;</span>
+<span class="c1"># file_dist = &quot;atlas-gordon333_nroi-333_desc-distance.tsv&quot;</span>
+<span class="c1"># file_network = &quot;dataset-ds000228_atlas-gordon333_nroi-333_modularity.tsv&quot;</span>
+<span class="n">file_dataset</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000228_desc-movement_phenotype.tsv&quot;</span>
 </pre></div>
 </div>
 </div>
@@ -299,7 +298,7 @@
 <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_dist</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
-
+<span class="n">movement</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_dataset</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
 <span class="n">qcfc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_qcfc</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 <span class="n">modularity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_network</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
@@ -317,57 +316,176 @@
 <h1>OHBM 2022 abstract<a class="headerlink" href="#ohbm-2022-abstract" title="Permalink to this headline">¶</a></h1>
 <section id="impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs">
 <h2>Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs<a class="headerlink" href="#impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs" title="Permalink to this headline">¶</a></h2>
-<p>H-T Wang[^1], S L Meisler[^2][^3], N Gensollen[^4], B Thirion[^4], P Bellec[^1][^5]</p>
-<p>[^1] Centre de recherche de l’institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada
-[^2] Harvard University, MA, USA
-[^3] Massachusetts Institute of Technology, MA, USA
-[^4] Inria, CEA, Université Paris-Saclay, Paris, France
-[^5] Psychology Department, Université de Montréal, Montréal, Québec, Canada</p>
+<p>H-T Wang<a class="footnote-reference brackets" href="#id35" id="id1">1</a>, S L Meisler<a class="footnote-reference brackets" href="#id36" id="id2">2</a><a class="footnote-reference brackets" href="#id37" id="id3">3</a>, H Shamarke, F Paugam<a class="footnote-reference brackets" href="#id35" id="id4">1</a><a class="footnote-reference brackets" href="#id38" id="id5">4</a>, N Gensollen<a class="footnote-reference brackets" href="#id39" id="id6">5</a>, B Thirion<a class="footnote-reference brackets" href="#id39" id="id7">5</a>, C Markiewicz<a class="footnote-reference brackets" href="#id40" id="id8">6</a>, P Bellec<a class="footnote-reference brackets" href="#id35" id="id9">1</a><a class="footnote-reference brackets" href="#id41" id="id10">7</a></p>
 <section id="introduction">
 <h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
-<p>The impact of the choice of confound regressor on functional connectivity has been a key debate in the field of fMRI.
-Popular preprocessing software, fMRIPrep <span id="id1">[<a class="reference internal" href="#id13">Esteban <em>et al.</em>, 2020</a>]</span>, aims to reduce the degree of freedom during the preprocessing step.
-However, a wide range of confound regressors can still introduce errors by the users.
-Without good understanding of the literature or the fMRIPrep documentation, users can still introduce error or unwanted noise while performing confound regressing.
-Lastly, recent literature has shown the tool-based variability and the potential impact on the results <span id="id2">[<a class="reference internal" href="#id15">Li <em>et al.</em>, 2021</a>]</span>.
-The current research on denoising benchmarks have yet to cover the output from fMRIPrep.
-We hope to provide a useful reference for fMRIPrep users, and evaluate whether the confound regressors from fMRIPrep provide results consistent with the past literature using other preprocessing procedures.</p>
+<p>Selecting an optimal denoising strategy is a key issue when processing fMRI data.
+The popular software fMRIPrep <span id="id11">[<a class="reference internal" href="#id25">Esteban <em>et al.</em>, 2020</a>]</span> aims to standardize fMRI preprocessing,
+but users are still offered a wide range of confound regressors to choose from to denoise data.
+Without a good understanding of the literature or the fMRIPrep documentation,
+users can select suboptimal strategies.
+Current work aims to provide a useful reference for fMRIPrep users by systematically evaluating the impact of different confound regression strategies,
+and by contrasting the results with past literature based on alternative preprocessing software.</p>
 </section>
 <section id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-<p>The dataset of choice is ds000228 <span id="id3">[<a class="reference internal" href="#id17">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, preprocessed with fMRIprep LTS20.2.1, using fMRIPrep-slurm wrapper with option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
-After fMRIPrep, regular BOLD outputs were smoothed with a 6 mm FWHM kernel.
-Time series are extracted using Schaefer 7 network atlas of 400 dimensions <span id="id4">[<a class="reference internal" href="#id16">Schaefer <em>et al.</em>, 2017</a>]</span> and applied the following denoising strategies:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">simple</span></code>: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total), signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code>: strategy above, with basic global signal, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">scrubbing</span></code>: high pass filtering, motion (six base motion parameters and temporal derivatives, quadratic terms and their six temporal derivatives, 24 parameters in total),  signal from tissue masks (white matter and csf, basic, the temporal derivative and quadratic, 8 parameters), motion outlier threshold set at 0.5 framewise displacement, segments with less than 5 consecutive volumes are removed, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code>: strategy above, with basic global signal, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">acompcor</span></code>: high pass filtering, 24 motion parameters, compcor components explaining 50% of the variance with combined white matter and csf mask, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">acompcor6</span></code>: high pass filtering, 24 motion parameters, top 6 compcor components with combined white matter and csf mask, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-prepro_bold</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">aroma</span></code>: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code>: high pass filtering, signal from tissue masks (white matter and  csf, 2 parameters), global signal, applied on output suffixed <code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code>.</p></li>
-</ul>
-<p>In addition, we also calculated the connectome based on the raw timeseries as a reference.</p>
-<p>Here we provide an uniformed API to retrieve fMRIPrep generated confounds implemented in NiLearn <span id="id5">[<a class="reference internal" href="#id19">Abraham <em>et al.</em>, 2014</a>]</span>.
-Timeseries, connectome, and confounds removal are all implemented through NiLearn.</p>
-<p>The current study used three metrics from <span id="id6">Ciric <em>et al.</em> [<a class="reference internal" href="#id14">2017</a>]</span> to evaluate the denosing results:</p>
+<p>We selected dataset ds000228 <span id="id12">[<a class="reference internal" href="#id29">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
+Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id13">[<a class="reference internal" href="#id28">Schaefer <em>et al.</em>, 2017</a>]</span>.
+We applied the denoising strategies listed in the table below using fMRIPrep-generated confounds.
+Subjects with less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold were excluded from all analysis.
+We also calculated the connectome from high-pass filtered time series as a comparison baseline.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>strategy</p></th>
+<th class="head"><p>image</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">high_pass</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">motion</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">wm_csf</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">global_signal</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">scrub</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">fd_thresh</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">compcor</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">n_compcor</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">demean</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>baseline</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>simple</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>simple+gsr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>basic</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>scrubbing</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>full</p></td>
+<td><p>N/A</p></td>
+<td><p>5</p></td>
+<td><p>0.5</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>simple+gsr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>full</p></td>
+<td><p>basic</p></td>
+<td><p>5</p></td>
+<td><p>0.5</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>compcor</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>anat_combined</p></td>
+<td><p>all</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>compcor6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>anat_combined</p></td>
+<td><p>6</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>aroma</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>full</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>aroma+gsr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>basic</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>full</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>We used three metrics <span id="id14">[<a class="reference internal" href="#id26">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id15">[<a class="reference internal" href="#id30">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
 <ol class="simple">
-<li><p>Quality control / functional connectivity (QCFC <span id="id7">[<a class="reference internal" href="#id22">Power <em>et al.</em>, 2015</a>]</span>): Partial correlation between motion and connectivity with age and sex as covariates; multiple comparison in the significant testing is controled with false positive rate correction.</p></li>
-<li><p>Distance-dependent effects of motion on connectivity <span id="id8">[<a class="reference internal" href="#id20">Power <em>et al.</em>, 2012</a>]</span></p></li>
-<li><p>Network identifiability based on Louvain method of community detection <span id="id9">[<a class="reference internal" href="#id21">Satterthwaite <em>et al.</em>, 2012</a>]</span> implemented by Brain Connnectome Toolbox</p></li>
+<li><p>Quality control / functional connectivity (QCFC <span id="id16">[<a class="reference internal" href="#id34">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
+<li><p>Distance-dependent effects of motion on connectivity <span id="id17">[<a class="reference internal" href="#id32">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
+<li><p>Network modularity <span id="id18">[<a class="reference internal" href="#id33">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
 </ol>
-<p>Code and processed data to reproduce the current analysis can be found on <a class="reference external" href="https://github.com/SIMEXP/fmriprep-denoise-benchmark">github</a>.</p>
 </section>
 <section id="results">
 <h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
-<section id="mean-framewise-displacement">
-<h4>Mean framewise displacement<a class="headerlink" href="#mean-framewise-displacement" title="Permalink to this headline">¶</a></h4>
-<p>No denoising can remove the correlation with motion captured by mean framewise displacement.
-<code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">acompcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> reduced correlation between connectivity edges and mean framewise displacement.
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> did not perform as well as in the past literature, possibly due to the liberal threshold used on the current dataset.
-<code class="docutils literal notranslate"><span class="pre">acompcor</span></code>, the suggested method of applying compcor based regressors, performs worse than the baseline of connectome created with raw time series.
-Surprisingly, all strategies with GSR underperform, contradicting the existing literature.</p>
+<section id="qc-fc">
+<h4>QC-FC<a class="headerlink" href="#qc-fc" title="Permalink to this headline">¶</a></h4>
+<p>No denoise strategy removed the correlation with motion captured by mean framewise displacement.
+<code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> reduced the correlation between connectivity edges and mean framewise displacement.
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id19">[<a class="reference internal" href="#id34">Power <em>et al.</em>, 2015</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code>, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="#id26">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="#id30">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bar_color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
@@ -385,6 +503,7 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Percentage %&quot;</span><span class="p">,</span>
        <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&quot;sig_qcfc.png&quot;, dpi=300)</span>
 </pre></div>
 </div>
 </div>
@@ -403,11 +522,12 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Median absolute deviation&quot;</span><span class="p">,</span>
        <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&quot;mad_qcfc.png&quot;, dpi=300)</span>
 
 <span class="k">def</span> <span class="nf">draw_absolute_median</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
     <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
     <span class="n">mad</span> <span class="o">=</span> <span class="n">calculate_median_absolute</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;qcfc&#39;</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">mad</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">0.35</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">mad</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
     
 
 <span class="n">long_qcfc</span> <span class="o">=</span> <span class="n">metric_per_edge</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span>
@@ -430,6 +550,7 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
 <span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span> 
 <span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distribution of correlation between framewise distplacement and edge strength&#39;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&quot;dist_qcfc.png&quot;, dpi=300)</span>
 </pre></div>
 </div>
 </div>
@@ -439,9 +560,10 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
 </div>
 </div>
 </section>
-<section id="distance-dependence-of-motion">
-<h4>Distance dependence of motion<a class="headerlink" href="#distance-dependence-of-motion" title="Permalink to this headline">¶</a></h4>
-<p>Distance dependence of motion has been reduced for all strategies.</p>
+<section id="distance-dependent-effects-of-motion-on-connectivity">
+<h4>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">¶</a></h4>
+<p>Consistent with the literature, functional connectivity strength reduced with the distance between the two nodes.
+The <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">compcor</span></code> strategies reduced the distance dependence more than the baseline.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_distance</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">pairwise_distance</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">metric_per_edge</span><span class="p">)</span>  
@@ -471,7 +593,7 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
     <span class="k">if</span> <span class="n">axis_i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Distance (mm)&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">axis_j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;QC-FC&quot;</span><span class="p">)</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;QC-FC&quot;</span><span class="p">)</span>
         
 <span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span> 
 <span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Correlation between nodewise Euclidian distance and QC-FC&#39;</span><span class="p">)</span>
@@ -485,17 +607,23 @@ Surprisingly, all strategies with GSR underperform, contradicting the existing l
 <img alt="_images/ohbm2022abstract_6_1.png" src="_images/ohbm2022abstract_6_1.png" />
 </div>
 </div>
-<p>All strategies other than <code class="docutils literal notranslate"><span class="pre">aroma</span></code> improved the network modularity comparing to the raw signal.
-The network modularity between <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and the raw signal are similar.
-To confirm whether network identifiability was systematically impacted by motion, we also evaluated the correlation between modularity quality and motion for each denoising approach. Compcor based strategy and ICA-AROMA strategy are the best at eliminating the correlation between motion and modularity.</p>
+</section>
+<section id="network-modularity">
+<h4>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">¶</a></h4>
+<p>All strategies increased the network modularity compared to the <code class="docutils literal notranslate"><span class="pre">baseline</span></code>.
+GSR-based strategies improved the network modularity compared to their conunterparts.
+The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_modularity</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">z_movement</span> <span class="o">=</span> <span class="n">movement</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">zscore</span><span class="p">)</span>
 <span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">modularity</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-    <span class="n">current_strategy</span> <span class="o">=</span> <span class="n">partial_correlation</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
-                                           <span class="n">movement</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
-                                           <span class="n">z_movement</span><span class="p">[[</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Gender&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
+    <span class="n">cur_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">modularity</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> 
+                          <span class="n">movement</span><span class="p">[[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]],</span> 
+                          <span class="n">z_movement</span><span class="p">[[</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Gender&#39;</span><span class="p">]]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
+    <span class="n">current_strategy</span> <span class="o">=</span> <span class="n">partial_correlation</span><span class="p">(</span><span class="n">cur_data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
+                                           <span class="n">cur_data</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
+                                           <span class="n">cur_data</span><span class="p">[[</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Gender&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
     <span class="n">current_strategy</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">column</span>
     <span class="n">corr_modularity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_strategy</span><span class="p">)</span>
 
@@ -516,6 +644,7 @@ To confirm whether network identifiability was systematically impacted by motion
 <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Pearson&#39;s correlation&quot;</span><span class="p">,</span>
        <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="c1"># plt.savefig(&quot;modularity.png&quot;, dpi=300)</span>
 </pre></div>
 </div>
 </div>
@@ -527,46 +656,64 @@ To confirm whether network identifiability was systematically impacted by motion
 </section>
 <section id="conclusions">
 <h3>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h3>
-<p>We could replicate findings regarding the usefulness of standard strategies (compcorr, aroma etc.), the denoising methods involving global signal regression are systematically contradicting with the literature <span id="id10">[<a class="reference internal" href="#id14">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id11">[<a class="reference internal" href="#id18">Parkes <em>et al.</em>, 2018</a>]</span>.
-Further investigation is needed.
-We will run the same benchmark on different fMRIPrepLTS outputs and different types of parcellation schemes.
-The aim is to provide a software for researchers to produce the benchmark for their own dataset to select the most suitable strategy.</p>
+<p>We replicated previous findings demonstrating the usefulness of standard denoising strategies (compcor, aroma, etc.).
+However, results involving global signal regression methods systematically contradict the literature<span id="id22">[<a class="reference internal" href="#id26">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id23">[<a class="reference internal" href="#id30">Parkes <em>et al.</em>, 2018</a>]</span>.
+This evaluation is implemented in a fully reproducible jupyter book framework, and it can be applied to evaluate denoising strategies for future fMRIPrep release.
+This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.</p>
 </section>
 <section id="references">
 <h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
-<p id="id12"><dl class="citation">
-<dt class="label" id="id19"><span class="brackets"><a class="fn-backref" href="#id5">APE+14</a></span></dt>
-<dd><p>Alexandre Abraham, Fabian Pedregosa, Michael Eickenberg, Philippe Gervais, Andreas Muller, Jean Kossaifi, Alexandre Gramfort, Bertrand Thirion, Gaël Varoquaux, Andreas Mueller, Jean Kossaifi, Alexandre Gramfort, Bertrand Thirion, and Gaël Varoquaux. Machine learning for neuroimaging with scikit-learn. <em>Frontiers in Neuroinformatics</em>, 8:14, February 2014. <a class="reference external" href="https://doi.org/10.3389/fninf.2014.00014">doi:10.3389/fninf.2014.00014</a>.</p>
-</dd>
-<dt class="label" id="id14"><span class="brackets">CWP+17</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id10">2</a>)</span></dt>
+<p id="id24"><dl class="citation">
+<dt class="label" id="id26"><span class="brackets">CWP+17</span><span class="fn-backref">(<a href="#id14">1</a>,<a href="#id20">2</a>,<a href="#id22">3</a>)</span></dt>
 <dd><p>Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. <em>NeuroImage</em>, 154(1):174–187, July 2017. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.03.020">doi:10.1016/j.neuroimage.2017.03.020</a>.</p>
 </dd>
-<dt class="label" id="id13"><span class="brackets"><a class="fn-backref" href="#id1">EMG+20</a></span></dt>
+<dt class="label" id="id25"><span class="brackets"><a class="fn-backref" href="#id11">EMG+20</a></span></dt>
 <dd><p>Oscar Esteban, Christopher J. Markiewicz, Mathias Goncalves, Elizabeth DuPre, James D. Kent, Rastko Ciric, Ross W. Blair, Russell A. Poldrack, and Krzysztof J. Gorgolewski. Fmriprep: a robust preprocessing pipeline for functional mri. June 2020. URL: <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">https://doi.org/10.5281/zenodo.3876458</a>, <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">doi:10.5281/zenodo.3876458</a>.</p>
 </dd>
-<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id2">LAG+21</a></span></dt>
-<dd><p>Xinhui Li, Lei Ai, Steve Giavasis, Hecheng Jin, Eric Feczko, Ting Xu, Jon Clucas, Alexandre Franco, Anibal Sólon Heinsfeld, Azeez Adebimpe, Joshua T. Vogelstein, Chao-Gan Yan, Oscar Esteban, Russell A. Poldrack, Cameron Craddock, Damien Fair, Theodore Satterthwaite, Gregory Kiar, and Michael P. Milham. Moving beyond processing and analysis — related variation in neuroscience. <em>BioRxiv</em>, pages 2021.12.01.470790, December 2021. <a class="reference external" href="https://doi.org/10.1101/2021.12.01.470790">doi:10.1101/2021.12.01.470790</a>.</p>
-</dd>
-<dt class="label" id="id18"><span class="brackets"><a class="fn-backref" href="#id11">PFYF18</a></span></dt>
+<dt class="label" id="id30"><span class="brackets">PFYF18</span><span class="fn-backref">(<a href="#id15">1</a>,<a href="#id21">2</a>,<a href="#id23">3</a>)</span></dt>
 <dd><p>Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. <em>NeuroImage</em>, 171:415–436, May 2018. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.12.073">doi:10.1016/j.neuroimage.2017.12.073</a>.</p>
 </dd>
-<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id8">PBS+12</a></span></dt>
+<dt class="label" id="id32"><span class="brackets"><a class="fn-backref" href="#id17">PBS+12</a></span></dt>
 <dd><p>Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. <em>NeuroImage</em>, 59(3):2142–2154, February 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.10.018">doi:10.1016/j.neuroimage.2011.10.018</a>.</p>
 </dd>
-<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id7">PSP15</a></span></dt>
+<dt class="label" id="id34"><span class="brackets">PSP15</span><span class="fn-backref">(<a href="#id16">1</a>,<a href="#id19">2</a>)</span></dt>
 <dd><p>Jonathan D. Power, Bradley L. Schlaggar, and Steven E. Petersen. Recent progress and outstanding issues in motion correction in resting state fMRI. <em>NeuroImage</em>, 105:536–551, January 2015. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2014.10.044">doi:10.1016/j.neuroimage.2014.10.044</a>.</p>
 </dd>
-<dt class="label" id="id17"><span class="brackets"><a class="fn-backref" href="#id3">RLRNS18</a></span></dt>
+<dt class="label" id="id29"><span class="brackets"><a class="fn-backref" href="#id12">RLRNS18</a></span></dt>
 <dd><p>Hilary Richardson, Grace Lisandrelli, Alexa Riobueno-Naylor, and Rebecca Saxe. Development of the social brain from age three to twelve years. <em>Nature Communications</em>, 9(1):1027, March 2018. <a class="reference external" href="https://doi.org/10.1038/s41467-018-03399-2">doi:10.1038/s41467-018-03399-2</a>.</p>
 </dd>
-<dt class="label" id="id21"><span class="brackets"><a class="fn-backref" href="#id9">SWL+12</a></span></dt>
+<dt class="label" id="id33"><span class="brackets"><a class="fn-backref" href="#id18">SWL+12</a></span></dt>
 <dd><p>Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. <em>NeuroImage</em>, 60(1):623–632, March 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.12.063">doi:10.1016/j.neuroimage.2011.12.063</a>.</p>
 </dd>
-<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id4">SKG+17</a></span></dt>
+<dt class="label" id="id28"><span class="brackets"><a class="fn-backref" href="#id13">SKG+17</a></span></dt>
 <dd><p>Alexander Schaefer, Ru Kong, Evan M. Gordon, Timothy O. Laumann, Xi-Nian Zuo, Avram J. Holmes, Simon B. Eickhoff, and B.T. Thomas Yeo. Local-global parcellation of the human cerebral cortex from intrinsic functional connectivity mri. <em>Cerebral Cortex</em>, pages 1–20, 2017. <a class="reference external" href="https://doi.org/10.1093/cercor/bhx179">doi:10.1093/cercor/bhx179</a>.</p>
 </dd>
 </dl>
 </p>
+<hr class="footnotes docutils" />
+<dl class="footnote brackets">
+<dt class="label" id="id35"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id4">2</a>,<a href="#id9">3</a>)</span></dt>
+<dd><p>Centre de recherche de l’institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada</p>
+</dd>
+<dt class="label" id="id36"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dd><p>Harvard University, MA, USA</p>
+</dd>
+<dt class="label" id="id37"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dd><p>Massachusetts Institute of Technology, MA, USA</p>
+</dd>
+<dt class="label" id="id38"><span class="brackets"><a class="fn-backref" href="#id5">4</a></span></dt>
+<dd><p>Computer Science and Operations Research Department, Université de Montréal, Montréal, Québec, Canada</p>
+</dd>
+<dt class="label" id="id39"><span class="brackets">5</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id7">2</a>)</span></dt>
+<dd><p>Inria, CEA, Université Paris-Saclay, Paris, France</p>
+</dd>
+<dt class="label" id="id40"><span class="brackets"><a class="fn-backref" href="#id8">6</a></span></dt>
+<dd><p>Department of Psychology, Stanford University, Stanford, United States</p>
+</dd>
+<dt class="label" id="id41"><span class="brackets"><a class="fn-backref" href="#id10">7</a></span></dt>
+<dd><p>Psychology Department, Université de Montréal, Montréal, Québec, Canada</p>
+</dd>
+</dl>
 </section>
 </section>
 </section>
