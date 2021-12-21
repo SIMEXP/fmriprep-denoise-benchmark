@@ -1,6 +1,9 @@
 # input 
 inputs/dev_data/
 inputs/interim/
+inputs/*.tsv
+inputs/*.tar.gz
+inputs/dataset-ds000228/
 
 # HCP
 logs/
