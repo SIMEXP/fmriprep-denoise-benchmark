@@ -2,6 +2,16 @@
 # Learn more at https://jupyterbook.org/customize/toc.html
 
 format: jb-book
-root: intro.md
-chapters:
-  - file: ohbm2022abstract.md
+root: index.md
+parts:
+  - caption: Paper
+    chapters:
+    - file: introductions.md
+    - file: methods.md
+    - file: results.md
+      sections:
+      - file: ds000228.md
+    - file: discussions.md
+  - caption: Appendices
+    chapters:
+    - file: ohbm2022abstract.md
