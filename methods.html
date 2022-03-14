@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Introductions &#8212; Benchmark denoising strategies on functional connectomes generated from fMRIPrep outputs</title>
+    <title>Methods &#8212; Benchmark denoising strategies on functional connectomes generated from fMRIPrep outputs</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -52,8 +52,8 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Methods" href="methods.html" />
-    <link rel="prev" title="Overview" href="overview.html" />
+    <link rel="next" title="Results" href="results.html" />
+    <link rel="prev" title="Introductions" href="introductions.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -92,7 +92,7 @@
     <div class="bd-toc-item active">
         <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="overview.html">
+  <a class="reference internal" href="index.html">
    Overview
   </a>
  </li>
@@ -103,13 +103,13 @@
  </span>
 </p>
 <ul class="current nav bd-sidenav">
- <li class="toctree-l1 current active">
-  <a class="current reference internal" href="#">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introductions.html">
    Introductions
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="methods.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Methods
   </a>
  </li>
@@ -188,7 +188,7 @@
         <!-- ipynb file if we had a myst markdown file -->
         
         <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/intro.md"><button type="button"
+        <a class="dropdown-buttons" href="_sources/methods.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
                 data-placement="left">.md</button></a>
         <!-- Download PDF via print -->
@@ -208,7 +208,7 @@
                 data-toggle="tooltip" data-placement="left" title="Source repository"><i
                     class="fab fa-github"></i>repository</button></a>
         <a class="issues-button"
-            href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here."><button
+            href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Fmethods.html&body=Your%20issue%20content%20here."><button
                 type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
                 title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
         
@@ -237,9 +237,155 @@
         
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="introductions">
-<h1>Introductions<a class="headerlink" href="#introductions" title="Permalink to this headline">¶</a></h1>
-<p>Place holder.</p>
+  <section class="tex2jax_ignore mathjax_ignore" id="methods">
+<h1>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h1>
+<p>We selected dataset ds000228 <span id="id1">[<a class="reference internal" href="ohbm2022abstract.html#id29">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
+Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id2">[<a class="reference internal" href="ohbm2022abstract.html#id28">Schaefer <em>et al.</em>, 2017</a>]</span>.
+We applied the denoising strategies listed in the table below using fMRIPrep-generated confounds.
+Subjects with less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold were excluded from all analysis.
+We also calculated the connectome from high-pass filtered time series as a comparison baseline.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="head"><p>strategy</p></th>
+<th class="head"><p>image</p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">high_pass</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">motion</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">wm_csf</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">global_signal</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">scrub</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">fd_thresh</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">compcor</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">n_compcor</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code></p></th>
+<th class="head"><p><code class="docutils literal notranslate"><span class="pre">demean</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>baseline</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>simple</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>simple+gsr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>basic</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>scrubbing</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>full</p></td>
+<td><p>N/A</p></td>
+<td><p>5</p></td>
+<td><p>0.5</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>simple+gsr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>full</p></td>
+<td><p>basic</p></td>
+<td><p>5</p></td>
+<td><p>0.5</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>compcor</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>anat_combined</p></td>
+<td><p>all</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>compcor6</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>full</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>anat_combined</p></td>
+<td><p>6</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>aroma</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>full</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>aroma+gsr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>basic</p></td>
+<td><p>basic</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>full</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>We used three metrics <span id="id3">[<a class="reference internal" href="ohbm2022abstract.html#id26">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id4">[<a class="reference internal" href="ohbm2022abstract.html#id30">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
+<ol class="simple">
+<li><p>Quality control / functional connectivity (QCFC <span id="id5">[<a class="reference internal" href="ohbm2022abstract.html#id34">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
+<li><p>Distance-dependent effects of motion on connectivity <span id="id6">[<a class="reference internal" href="ohbm2022abstract.html#id32">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
+<li><p>Network modularity <span id="id7">[<a class="reference internal" href="ohbm2022abstract.html#id33">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
+</ol>
 </section>
 
     <script type="text/x-thebe-config">
@@ -267,17 +413,17 @@
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="overview.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="introductions.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Overview</p>
+            <p class="prev-next-title">Introductions</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="methods.html" title="next page">
+    <a class='right-next' id="next-link" href="results.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Methods</p>
+        <p class="prev-next-title">Results</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
