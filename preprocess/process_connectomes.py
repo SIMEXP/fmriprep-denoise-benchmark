@@ -76,7 +76,7 @@ def main():
     fmriprep_specifier = args.specifier
     fmriprep_path = Path(args.fmriprep_path)
     participant_tsv = Path(args.participants_tsv)
-    output = Path(args.output_path)
+    output = Path(args.output_path) / dataset_name
 
     output.mkdir(exist_ok=True)
 
@@ -97,9 +97,6 @@ def main():
         print("Generate movement stats.")
 
     benchmark_strategies, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
-
-    output = output / f"atlas-{atlas_name}"
-    output.mkdir(exist_ok=True)
 
     dimensions = get_atlas_dimensions(atlas_name)
     for dimension in dimensions:
@@ -126,7 +123,7 @@ def _dataset_timeseries(output, name, masker, parameters, strategy, func_data):
         if isinstance(subject_ts, pd.DataFrame):
             valid_subject_ts.append(subject_ts.values)
             valid_subject_id.append(subject_id)
-    return valid_subject_ts,valid_subject_id
+    return valid_subject_ts, valid_subject_id
 
 
 def _get_prepro_strategy(strategy_name, strategy_file):
