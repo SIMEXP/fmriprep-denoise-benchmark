@@ -1,93 +1,132 @@
 from pathlib import Path
-import nilearn
-from nilearn.input_data import NiftiLabelsMasker, NiftiMapsMasker
-from fmriprep_denoise.metrics import compute_pairwise_distance
+from re import A
 
-# not availible in nilearn: Gordon, FIND, brainnetome
-# not clear: ICA?
-# possibly not applicable: Glasser
+import pandas as pd
+
+from fmriprep_denoise.metrics import compute_pairwise_distance
+from nilearn.maskers import NiftiLabelsMasker, NiftiMapsMasker
+from sklearn.utils import Bunch
+
+import templateflow
+
+
 ATLAS_METADATA = {
     'schaefer7networks': {
-        'type': 'static',
-        'resolutions': [100, 400, 1000],
-        'fetcher': "nilearn.datasets.fetch_atlas_schaefer_2018(n_rois={resolution}, yeo_networks=7, resolution_mm=2)"},
-    'basc':{
-        'type': 'static',
-        'resolutions' : [122, 197, 325, 444],
-        'fetcher': "nilearn.datasets.fetch_atlas_basc_multiscale_2015(version='asym')"
-        },
+        'atlas': 'Schaefer2018',
+        'template': "MNI152NLin2009cAsym",
+        'resolution': 2,
+        'dimensions': [100, 200, 300, 400, 500, 600, 800, 1000],
+        'source': "templateflow"
+    },
+    'mist':{
+        'atlas': 'MIST',
+        'template': "MNI152NLin2009bSym",
+        'resolution': 3,
+        'dimensions' : [7, 12, 20, 36, 64, 122, 197, 325, 444, "ROI"],
+        'source': "custome_templateflow"
+    },
     'difumo': {
-        'type': 'dynamic',
-        'resolutions': [64, 128, 256, 512, 1024],
-        'label_idx': 1,
-        'fetcher': "nilearn.datasets.fetch_atlas_difumo(dimension={resolution}, resolution_mm=2)"},
+        'atlas': 'DiFuMo',
+        'template': "MNI152NLin2009cAsym",
+        'resolution': 2,
+        'dimensions': [64, 128, 256, 512, 1024],
+        'source': "custome_templateflow"
+    },
     'gordon333': {
-        'type': 'static',
-        'resolutions': [333],
-        'path': "gordon/Parcels_MNI_333.nii"
+        'atlas': 'gordon',
+        'template': "MNI152NLin6Asym",
+        'resolution': 3,
+        'dimensions': [333],
+        'source': "custome_templateflow"
     }
 }
 
+custome_templateflow = Path(__file__).parent / "data" / "custome_templateflow"
 
-def create_atlas_masker(atlas_name, nilearn_cache=""):
-    """Create masker of all resolutions given metadata."""
-    if atlas_name not in ATLAS_METADATA.keys():
-        raise ValueError("{} not defined!".format(atlas_name))
-    curr_atlas = ATLAS_METADATA[atlas_name]
-    curr_atlas['name'] = atlas_name
+def update_templateflow_path(atlas_name):
+    """Update local templateflow path, if needed."""
 
-    for resolution in curr_atlas['resolutions']:
+    atlas_source = ATLAS_METADATA[atlas_name]['source']
 
-        if 'fetcher' in curr_atlas:
-            atlas, atlas_map = _get_atlas_maps(atlas_name, curr_atlas['fetcher'], resolution)
-        else:
-            atlas = {}
-            atlas_map = str(Path(__file__).parent / "data" / curr_atlas['path'])
-
-        if curr_atlas['type'] == "static":
-            masker = NiftiLabelsMasker(
-                atlas_map, detrend=True, standardize=True)
-        elif curr_atlas['type'] == "dynamic":
-            masker = NiftiMapsMasker(
-                atlas_map, detrend=True, standardize=True)
-        if nilearn_cache:
-            masker = masker.set_params(memory=nilearn_cache, memory_level=1)
-        # fill atlas info
-        curr_atlas[resolution] = {'masker': masker}
-
-        if 'labels' in atlas:
-            curr_atlas[resolution]['labels'] = _clean_atlas_labels(curr_atlas, atlas.labels)
-        else:
-            curr_atlas[resolution]['labels'] = [
-                f"region-{label}" for label in range(1, resolution + 1)]
-    return curr_atlas
+    # by default, it uses `~/.cache/templateflow/`
+    if atlas_source == "templateflow":
+        templateflow.conf.TF_HOME = templateflow.conf.TF_DEFAULT_HOME
+        templateflow.conf.update(overwrite=False, silent=True)
+    # otherwise use customised map
+    elif atlas_source == "custome_templateflow":
+        templateflow.conf.TF_HOME = custome_templateflow
+    templateflow.conf.init_layout()
 
 
-def _clean_atlas_labels(curr_atlas, atlas_labels):
-    """Clean atlas in numpy array."""
-    if isinstance(atlas_labels[0], tuple) | isinstance(atlas_labels[0], list):
-        if isinstance(atlas_labels[0][curr_atlas['label_idx']], bytes):
-            return [label[curr_atlas['label_idx']].decode() for label in atlas_labels]
-        else:
-            return [label[curr_atlas['label_idx']] for label in atlas_labels]
-    elif isinstance(atlas_labels[0], bytes):
-            return [label.decode() for label in atlas_labels]
+def fetch_atlas_path(atlas_name, dimension):
+    """
+    Generate a dictionary containing parameters for TemplateFlow quiery.
+    Parameters
+    ----------
+    atlas_name : str
+        Atlas name. Must be a key in ATLAS_METADATA.
+    dimension : str or int
+        Atlas dimension.
+    description_keywords : dict
+        Keys and values to fill in description_pattern.
+        For valid keys check relevant ATLAS_METADATA[atlas_name]['description_pattern'].
+    Return
+    ------
+    sklearn.utils.Bunch
+        Containing the following fields:
+        maps : str
+            Path to atlas map.
+        labels : pandas.DataFrame
+            The corresponding pandas dataframe of the atlas
+        type : str
+            'dseg' (for NiftiLabelsMasker) or 'probseg' (for NiftiMapsMasker)
+    """
+    update_templateflow_path(atlas_name)
+    cur_atlas_meta = ATLAS_METADATA[atlas_name].copy()
+
+    parameters = {
+        'atlas': cur_atlas_meta['atlas'],
+        'resolution': cur_atlas_meta['resolution'],
+        'extension': ".nii.gz"
+    }
+    if atlas_name == 'schaefer7networks':
+        parameters['desc'] = f"{dimension}Parcels7Networks"
+    elif atlas_name == 'difumo':
+        parameters['desc'] = f"{dimension}dimensionsSegmented"
     else:
-        return [label for label in atlas_labels]
+        parameters['desc'] = str(dimension)
+    print(cur_atlas_meta['template'])
+    print(parameters)
+    img_path = templateflow.api.get(cur_atlas_meta['template'], raise_empty=True, **parameters)
+    img_path = str(img_path)
+    if atlas_name == 'schaefer7networks':
+        parameters.popitem('resolution')
+    parameters['extension'] = ".tsv"
+    label_path = templateflow.api.get(cur_atlas_meta['template'], raise_empty=True, **parameters)
+    labels = pd.read_csv(label_path, delimiter="\t")
+    atlas_type = img_path.split('_')[-1].split('.nii.gz')[0]
+
+    return Bunch(maps=img_path, labels=labels, type=atlas_type)
 
 
-def _get_atlas_maps(atlas_name, atlas_fetcher, resolution):
-    """Get atlas map path or nifti object."""
-    if "resolution" in atlas_fetcher:
-        atlas = eval(atlas_fetcher.format(resolution=resolution))
-        atlas_map = atlas.maps
-    elif atlas_name == "basc":
-        atlas = eval(atlas_fetcher)
-        atlas_map = atlas.get(f'scale{resolution:03d}', False)
-        if not atlas_map:
-            raise ValueError("The selected resolution is not avalible with BASC.")
-    elif atlas_name == "craddock":
-        raise NotImplementedError
-    else:
-        raise NotImplementedError
-    return atlas, atlas_map
+def create_atlas_masker(atlas_name, dimension, nilearn_cache=""):
+    """Create masker given metadata.
+    Parameters
+    ----------
+    atlas_name : str
+        Atlas name. Must be a key in ATLAS_METADATA.
+    """
+    atlas = fetch_atlas_path(atlas_name, dimension)
+
+    if atlas.type == 'dseg':
+        masker = NiftiLabelsMasker(atlas.maps, detrend=True)
+    elif atlas.type == 'probseg':
+        masker = NiftiMapsMasker(atlas.maps, detrend=True)
+    if nilearn_cache:
+        masker = masker.set_params(memory=nilearn_cache, memory_level=1)
+    labels = list(range(1, atlas.labels.shape[0] + 1))
+    return masker, labels
+
+
+def get_atlas_dimensions(atlas_name):
+    return ATLAS_METADATA[atlas_name]['dimensions']

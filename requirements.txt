@@ -8,10 +8,12 @@ ipython==7.28.0
 jedi==0.18.0
 matplotlib
 nibabel
-git+git://github.com/nilearn/nilearn@186c47c34c036c092a8d735baf25541d510078ec
+nilearn>=0.9.0
 numpy
 pandas
 scipy
 seaborn
 bctpy
 statsmodels
+templateflow
+pybids
