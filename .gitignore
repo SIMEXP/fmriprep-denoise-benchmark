@@ -1,4 +1,5 @@
 # input 
+inputs/raw/
 inputs/dev_data/
 inputs/interim/
 inputs/*.tsv

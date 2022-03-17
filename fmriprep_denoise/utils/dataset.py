@@ -1,19 +1,29 @@
-import numpy as np
 import pandas as pd
 
 from sklearn.utils import Bunch
 
-from nilearn.image import smooth_img
 from nilearn.interfaces.fmriprep import load_confounds_strategy, load_confounds
 
 
-def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
+PHENOTYPE_INFO = {
+    "ds000228":
+        {"columns": ["Age", "Gender"],
+         "replace": {'Age': 'age', 'Gender': 'gender'}},
+    "ds000030":
+        {"columns": ["age", "gender"]},
+}
+
+
+def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_derivative,
                               specifier, space="MNI152NLin2009cAsym", aroma=False):
     """Fetch fmriprep derivative and return nilearn.dataset.fetch* like output.
     Load functional image, confounds, and participants.tsv only.
 
     Parameters
     ----------
+
+    dataset_name : str
+        Dataset name.
 
     participant_tsv_path : pathlib.Path
         A pathlib path point to the BIDS participants file.
@@ -66,10 +76,12 @@ def fetch_fmriprep_derivative(participant_tsv_path, path_fmriprep_derivative,
             confounds_tsv_path.append(str(cur_confound))
             include_subjects.append(subject)
 
-    return Bunch(func=func_img_path,
-                 confounds=confounds_tsv_path,
-                 phenotypic=participant_tsv.loc[include_subjects, :]
-                 )
+    return Bunch(
+        dataset_name=dataset_name,
+        func=func_img_path,
+        confounds=confounds_tsv_path,
+        phenotypic=participant_tsv.loc[include_subjects, :]
+        )
 
 
 def subject_timeseries(img, masker, strategy_name, parameters):
@@ -101,8 +113,8 @@ def subject_timeseries(img, masker, strategy_name, parameters):
                         index=sample_mask)
 
 
-def ds000228_movement(data):
-    """Retreive  for ds000228."""
+def phenotype_movement(data):
+    """Retreive movement stats and phenotype for ds000228."""
     # get motion QC related metrics from confound files
     group_mean_fd = pd.DataFrame()
     group_mean_fd.index = group_mean_fd.index.set_names("participant_id")
@@ -114,9 +126,12 @@ def ds000228_movement(data):
 
     # load gender and age as confounds for the developmental dataset
     participants = data.phenotypic.copy()
-    covar = participants.loc[:, ["Age", "Gender"]]
-    covar.loc[covar['Gender'] == 'F', 'Gender'] = 1
-    covar.loc[covar['Gender'] == 'M', 'Gender'] = 0
-    covar['Gender'] = covar['Gender'].astype('float')
+    covar = participants.loc[:, PHENOTYPE_INFO[data.dataset_name]['columns']]
+    fix_col_name = PHENOTYPE_INFO[data.dataset_name].get("replace", False)
+    if isinstance(fix_col_name, dict):
+        covar = covar.rename(columns=fix_col_name)
+    covar.loc[covar['gender'] == 'F', 'gender'] = 1
+    covar.loc[covar['gender'] == 'M', 'gender'] = 0
+    covar['gender'] = covar['gender'].astype('float')
 
     return pd.concat((group_mean_fd, covar), axis=1)
