@@ -13,7 +13,7 @@ OUTPUT="/home/${USER}/scratch/giga_timeseries"
 fmriprep_path="/home/${USER}/scratch/ds000228/1643916303/fmriprep"
 participants_tsv="/home/${USER}/scratch/ds000228/participants.tsv"
 source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
-cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
+cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 
 mapfile -t arr < <(jq -r 'keys[]' fmriprep_denoise/benchmark_strategies.json)
 STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
