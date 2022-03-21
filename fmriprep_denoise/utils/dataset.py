@@ -86,13 +86,13 @@ def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_
 
 def subject_timeseries(img, masker, strategy_name, parameters):
     # remove confounds based on strategy
-    if strategy_name == 'baseline':
+    if strategy_name == 'raw':
+        reduced_confounds, sample_mask = None, None
+    elif strategy_name == 'baseline':
         reduced_confounds, sample_mask = load_confounds(img, **parameters)
     else:
         reduced_confounds, sample_mask = load_confounds_strategy(img,
                                                                  **parameters)
-    print("Confounds regressors used: ")
-    print(reduced_confounds.columns.tolist())
 
     if sample_mask is not None:
         kept_vol = len(sample_mask) / reduced_confounds.shape[0]
@@ -105,8 +105,16 @@ def subject_timeseries(img, masker, strategy_name, parameters):
     if removed > 0.2:
         return None
 
-    subject_timeseries = masker.fit_transform(
-        img, confounds=reduced_confounds, sample_mask=sample_mask)
+    if reduced_confounds is not None:
+        print("Confounds regressors used: ")
+        print(reduced_confounds.columns.tolist())
+        subject_timeseries = masker.fit_transform(
+            img, confounds=reduced_confounds, sample_mask=sample_mask)
+    else:
+        print("Output raw time seres")
+        raw_masker = masker.set_params(detrend=False)
+        subject_timeseries = raw_masker.fit_transform(img)
+
     if sample_mask is None:
         sample_mask = range(1, subject_timeseries.shape[0] + 1)
     return pd.DataFrame(subject_timeseries,

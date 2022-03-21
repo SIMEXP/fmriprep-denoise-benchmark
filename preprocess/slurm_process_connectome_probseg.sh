@@ -9,17 +9,18 @@
 #SBATCH --mem=16G 
 
 
-OUTPUT="/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/"
-participants_tsv="fmriprep_denoise/tests/data/participants.tsv"
-source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
+OUTPUT="/home/${USER}/scratch/giga_timeseries"
+fmriprep_path="/home/${USER}/scratch/ds000228/1643916303/fmriprep"
+participants_tsv="/home/${USER}/scratch/ds000228/participants.tsv"
+source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 
-mapfile -t arr < <(jq -r 'keys[]' preprocess/benchmark_strategies.json)
+mapfile -t arr < <(jq -r 'keys[]' fmriprep_denoise/benchmark_strategies.json)
 STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
 echo $STRATEGY
 
-python ./preprocess/process_connectomes.py \
-    --fmriprep_path inputs/raw/ds000228/derivatives/fmriprep/ \
+python ./fmriprep_denoise/process_connectomes.py \
+    --fmriprep_path ${fmriprep_path} \
     --dataset_name ds000228 \
     --specifier task-pixar \
     --participants_tsv ${participants_tsv} \

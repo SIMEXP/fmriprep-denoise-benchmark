@@ -76,7 +76,7 @@ def main():
     fmriprep_specifier = args.specifier
     fmriprep_path = Path(args.fmriprep_path)
     participant_tsv = Path(args.participants_tsv)
-    output = Path(args.output_path) / dataset_name
+    output = Path(args.output_path)
 
     output.mkdir(exist_ok=True)
 
@@ -102,23 +102,26 @@ def main():
     for dimension in dimensions:
         print(f"-- {atlas_name}: dimension {dimension} --")
         masker, _ = create_atlas_masker(atlas_name, dimension, nilearn_cache="")
+        atlas_spec = f"atlas-{atlas_name}_nroi-{dimension}"
         for name in strategy_names:
             parameters = benchmark_strategies[name]
             print(f"Denoising: {name}")
             print(parameters)
             func_data = data_aroma.func if "aroma" in name else data.func
-            valid_subject_ts, valid_subject_id = _dataset_timeseries(output, name, masker, parameters, name, func_data)
+            if name == 'baseline':
+                _, _ = _dataset_timeseries(output, masker, parameters, "raw", func_data, atlas_spec)
+            valid_subject_ts, valid_subject_id = _dataset_timeseries(output, masker, parameters, name, func_data, atlas_spec)
             dataset_connectomes = _compute_connectome(valid_subject_ts, valid_subject_id)
             dataset_connectomes = dataset_connectomes.sort_index()
-            output_connectome = output / f"dataset-{dataset_name}_atlas-{atlas_name}_nroi-{dimension}_desc-{name}_data.tsv"
+            output_connectome = output / f"dataset-{dataset_name}_{atlas_spec}_desc-{name}_data.tsv"
             dataset_connectomes.to_csv(output_connectome, sep='\t')
 
 
-def _dataset_timeseries(output, name, masker, parameters, strategy, func_data):
+def _dataset_timeseries(output, masker, parameters, strategy, func_data, atlas_spec):
     valid_subject_ts = []
     valid_subject_id = []
     for img in func_data:
-        subject_id, subject_mask, ts_path = _parse_subject_info(output, img, name)
+        subject_id, subject_mask, ts_path = _parse_subject_info(output, img, strategy, atlas_spec)
         subject_ts = _get_timeseries(masker, parameters, strategy, img, subject_mask, ts_path)
         if isinstance(subject_ts, pd.DataFrame):
             valid_subject_ts.append(subject_ts.values)
@@ -162,13 +165,13 @@ def _compute_connectome(valid_subject_ts, valid_subject_id):
     return subject_conn
 
 
-def _parse_subject_info(output, img, name):
+def _parse_subject_info(output, img, strategy, atlas_spec):
     subject_spec = img.split('/')[-1].split('_desc-')[0]
     subject_root = img.split(subject_spec)[0]
     subject_id = subject_spec.split('_')[0]
     subject_output = output / subject_id
     subject_output.mkdir(exist_ok=True)
-    ts_path = subject_output / f"{subject_spec}_desc-{name}_timeseries.tsv"
+    ts_path = subject_output / f"{subject_spec}_{atlas_spec}_desc-{strategy}_timeseries.tsv"
     subject_mask = f"{subject_root}/{subject_spec}_desc-brain_mask.nii.gz"
     return subject_id, subject_mask, ts_path
 
