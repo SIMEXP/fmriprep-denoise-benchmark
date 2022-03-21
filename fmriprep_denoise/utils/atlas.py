@@ -54,6 +54,8 @@ def update_templateflow_path(atlas_name):
     # otherwise use customised map
     elif atlas_source == "custome_templateflow":
         templateflow.conf.TF_HOME = custome_templateflow
+        templateflow.conf.update()
+        # templateflow.conf.update(local=False, overwrite=False, silent=True)
     templateflow.conf.init_layout()
 
 
@@ -85,7 +87,7 @@ def fetch_atlas_path(atlas_name, dimension):
 
     parameters = {
         'atlas': cur_atlas_meta['atlas'],
-        'resolution': cur_atlas_meta['resolution'],
+        'resolution': f"{cur_atlas_meta['resolution']:02d}",
         'extension': ".nii.gz"
     }
     if atlas_name == 'schaefer7networks':
@@ -99,7 +101,7 @@ def fetch_atlas_path(atlas_name, dimension):
     img_path = templateflow.api.get(cur_atlas_meta['template'], raise_empty=True, **parameters)
     img_path = str(img_path)
     if atlas_name == 'schaefer7networks':
-        parameters.popitem('resolution')
+        parameters.pop('resolution')
     parameters['extension'] = ".tsv"
     label_path = templateflow.api.get(cur_atlas_meta['template'], raise_empty=True, **parameters)
     labels = pd.read_csv(label_path, delimiter="\t")
