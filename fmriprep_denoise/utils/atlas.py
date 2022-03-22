@@ -53,7 +53,9 @@ def update_templateflow_path(atlas_name):
     # otherwise use customised map
     elif atlas_source == "custome_templateflow":
         templateflow.conf.TF_HOME = custome_templateflow
-    templateflow.conf.init_layout()
+    templateflow.conf.update()
+    if atlas_source == "custome_templateflow":
+        templateflow.conf.init_layout()
 
 
 def fetch_atlas_path(atlas_name, dimension):
