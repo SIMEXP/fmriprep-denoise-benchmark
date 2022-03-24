@@ -91,40 +91,6 @@ def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_
         )
 
 
-def subject_timeseries(img, masker, strategy_name, parameters):
-    # remove confounds based on strategy
-    if strategy_name == 'raw':
-        reduced_confounds, sample_mask = None, None
-    elif strategy_name == 'baseline':
-        reduced_confounds, sample_mask = load_confounds(img, **parameters)
-    else:
-        reduced_confounds, sample_mask = load_confounds_strategy(img,
-                                                                 **parameters)
-
-    if sample_mask is not None:
-        kept_vol = len(sample_mask) / reduced_confounds.shape[0]
-        removed = 1 - kept_vol
-    else:
-        removed = 0
-
-    # scrubbing related issue: subject with more than 20% frames removed
-    # should not be included (Parkes 2018)
-    if removed > 0.2:
-        return None
-
-    if reduced_confounds is not None:
-        subject_timeseries = masker.fit_transform(
-            img, confounds=reduced_confounds, sample_mask=sample_mask)
-    else:
-        raw_masker = masker.set_params(detrend=False)
-        subject_timeseries = raw_masker.fit_transform(img)
-
-    if sample_mask is None:
-        sample_mask = range(1, subject_timeseries.shape[0] + 1)
-    return pd.DataFrame(subject_timeseries,
-                        index=sample_mask)
-
-
 def phenotype_movement(data):
     """Retreive movement stats and phenotype for ds000228."""
     # get motion QC related metrics from confound files
