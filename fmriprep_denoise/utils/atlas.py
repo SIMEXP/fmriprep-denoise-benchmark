@@ -42,6 +42,7 @@ ATLAS_METADATA = {
 
 custome_templateflow = Path(__file__).parent / "data" / "custome_templateflow"
 
+
 def update_templateflow_path(atlas_name):
     """Update local templateflow path, if needed."""
 
@@ -95,8 +96,6 @@ def fetch_atlas_path(atlas_name, dimension):
         parameters['desc'] = f"{dimension}dimensionsSegmented"
     else:
         parameters['desc'] = str(dimension)
-    print(cur_atlas_meta['template'])
-    print(parameters)
     img_path = templateflow.api.get(cur_atlas_meta['template'], raise_empty=True, **parameters)
     img_path = str(img_path)
     if atlas_name == 'schaefer7networks':
@@ -109,7 +108,7 @@ def fetch_atlas_path(atlas_name, dimension):
     return Bunch(maps=img_path, labels=labels, type=atlas_type)
 
 
-def create_atlas_masker(atlas_name, dimension, nilearn_cache=""):
+def create_atlas_masker(atlas_name, dimension, subject_mask, nilearn_cache=""):
     """Create masker given metadata.
     Parameters
     ----------
@@ -119,9 +118,9 @@ def create_atlas_masker(atlas_name, dimension, nilearn_cache=""):
     atlas = fetch_atlas_path(atlas_name, dimension)
 
     if atlas.type == 'dseg':
-        masker = NiftiLabelsMasker(atlas.maps, detrend=True)
+        masker = NiftiLabelsMasker(atlas.maps, mask_img=subject_mask, detrend=True)
     elif atlas.type == 'probseg':
-        masker = NiftiMapsMasker(atlas.maps, detrend=True)
+        masker = NiftiMapsMasker(atlas.maps, mask_img=subject_mask, detrend=True)
     if nilearn_cache:
         masker = masker.set_params(memory=nilearn_cache, memory_level=1)
     labels = list(range(1, atlas.labels.shape[0] + 1))

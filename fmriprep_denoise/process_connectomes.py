@@ -101,7 +101,6 @@ def main():
     dimensions = get_atlas_dimensions(atlas_name)
     for dimension in dimensions:
         print(f"-- {atlas_name}: dimension {dimension} --")
-        masker, _ = create_atlas_masker(atlas_name, dimension, nilearn_cache="")
         atlas_spec = f"atlas-{atlas_name}_nroi-{dimension}"
         for name in strategy_names:
             parameters = benchmark_strategies[name]
@@ -109,20 +108,22 @@ def main():
             print(parameters)
             func_data = data_aroma.func if "aroma" in name else data.func
             if name == 'baseline':
-                _, _ = _dataset_timeseries(output, masker, parameters, "raw", func_data, atlas_spec)
-            valid_subject_ts, valid_subject_id = _dataset_timeseries(output, masker, parameters, name, func_data, atlas_spec)
+                _, _ = _dataset_timeseries(output, parameters, "raw", func_data, atlas_spec, atlas_name, dimension)
+            valid_subject_ts, valid_subject_id = _dataset_timeseries(output, parameters, name, func_data, atlas_spec, atlas_name, dimension)
             dataset_connectomes = _compute_connectome(valid_subject_ts, valid_subject_id)
             dataset_connectomes = dataset_connectomes.sort_index()
             output_connectome = output / f"dataset-{dataset_name}_{atlas_spec}_desc-{name}_data.tsv"
             dataset_connectomes.to_csv(output_connectome, sep='\t')
 
 
-def _dataset_timeseries(output, masker, parameters, strategy, func_data, atlas_spec):
+def _dataset_timeseries(output, parameters, strategy, func_data, atlas_spec, atlas_name, dimension):
     valid_subject_ts = []
     valid_subject_id = []
+
     for img in func_data:
         subject_id, subject_mask, ts_path = _parse_subject_info(output, img, strategy, atlas_spec)
-        subject_ts = _get_timeseries(masker, parameters, strategy, img, subject_mask, ts_path)
+        cur_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask, nilearn_cache="")
+        subject_ts = _get_timeseries(cur_masker, parameters, strategy, img, subject_mask, ts_path)
         if isinstance(subject_ts, pd.DataFrame):
             valid_subject_ts.append(subject_ts.values)
             valid_subject_id.append(subject_id)

@@ -106,12 +106,9 @@ def subject_timeseries(img, masker, strategy_name, parameters):
         return None
 
     if reduced_confounds is not None:
-        print("Confounds regressors used: ")
-        print(reduced_confounds.columns.tolist())
         subject_timeseries = masker.fit_transform(
             img, confounds=reduced_confounds, sample_mask=sample_mask)
     else:
-        print("Output raw time seres")
         raw_masker = masker.set_params(detrend=False)
         subject_timeseries = raw_masker.fit_transform(img)
 
