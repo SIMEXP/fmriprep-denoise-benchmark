@@ -86,7 +86,7 @@ def main():
         for strategy_name in strategy_names:
             print(strategy_name)
             connectome = tar.extractfile(
-                f"dataset-ds000228/atlas-{atlas_name}/dataset-ds000228_atlas-{atlas_name}_nroi-{nroi}_desc-{strategy_name}_data.tsv").read()
+                f"dataset-ds000228/dataset-ds000228_atlas-{atlas_name}_nroi-{nroi}_desc-{strategy_name}_data.tsv").read()
             dataset_connectomes = pd.read_csv(io.BytesIO(connectome),
                                               sep='\t',
                                               index_col=0,

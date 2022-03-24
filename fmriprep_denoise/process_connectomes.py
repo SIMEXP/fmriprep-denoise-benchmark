@@ -1,3 +1,4 @@
+import os
 import argparse
 from pathlib import Path
 import json
@@ -154,6 +155,8 @@ def _get_timeseries(masker, parameters, strategy, img, subject_mask, ts_path):
         else:
             pd.DataFrame().to_csv(ts_path, sep='\t', index=False)
         return subject_ts
+    elif os.stat(ts_path).st_size == 0:
+        return pd.DataFrame()
     else:
         print("load existing file")
         return pd.read_csv(ts_path, header=0, sep='\t')
