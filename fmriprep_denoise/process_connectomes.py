@@ -121,6 +121,7 @@ def _dataset_timeseries(output, parameters, strategy, func_data, atlas_spec, atl
     valid_subject_id = []
 
     for img in func_data:
+        print(img)
         subject_id, subject_mask, ts_path = _parse_subject_info(output, img, strategy, atlas_spec)
         cur_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask, nilearn_cache="")
         subject_ts = _get_timeseries(cur_masker, parameters, strategy, img, subject_mask, ts_path)
@@ -154,6 +155,7 @@ def _get_timeseries(masker, parameters, strategy, img, subject_mask, ts_path):
             pd.DataFrame().to_csv(ts_path, sep='\t', index=False)
         return subject_ts
     else:
+        print("load existing file")
         return pd.read_csv(ts_path, header=0, sep='\t')
 
 
