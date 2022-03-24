@@ -116,23 +116,24 @@ def main():
             print(f"Denoising: {strategy_name}")
             print(parameters)
             ts_path = subject_output / f"{subject_spec}_{atlas_spec}_desc-{strategy_name}_timeseries.tsv"
-            img = data_aroma.func[0] if "aroma" in strategy_name else data.func[0]
-            reduced_confounds, sample_mask = _get_confounds(strategy_name, parameters, img)
+            if not ts_path.is_file():
+                img = data_aroma.func[0] if "aroma" in strategy_name else data.func[0]
+                reduced_confounds, sample_mask = _get_confounds(strategy_name, parameters, img)
 
-            if "aroma" in strategy_name:
-                aroma_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask_aroma, nilearn_cache="")
-                clean_timeseries = aroma_masker.fit_transform(
-                    img, confounds=reduced_confounds, sample_mask=sample_mask)
-            elif _check_exclusion(reduced_confounds, sample_mask):
-                clean_timeseries = []
-            else:
-                clean_timeseries = clean(subject_timeseries,
-                                        detrend=True, standardize=True,
-                                        sample_mask=sample_mask,
-                                        confounds=reduced_confounds)
-            clean_timeseries = pd.DataFrame(clean_timeseries)
+                if "aroma" in strategy_name:
+                    aroma_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask_aroma, nilearn_cache="")
+                    clean_timeseries = aroma_masker.fit_transform(
+                        img, confounds=reduced_confounds, sample_mask=sample_mask)
+                elif _check_exclusion(reduced_confounds, sample_mask):
+                    clean_timeseries = []
+                else:
+                    clean_timeseries = clean(subject_timeseries,
+                                            detrend=True, standardize=True,
+                                            sample_mask=sample_mask,
+                                            confounds=reduced_confounds)
+                clean_timeseries = pd.DataFrame(clean_timeseries)
 
-            clean_timeseries.to_csv(ts_path, sep='\t', index=False)
+                clean_timeseries.to_csv(ts_path, sep='\t', index=False)
 
 
 def _get_confounds(strategy_name, parameters, img):
