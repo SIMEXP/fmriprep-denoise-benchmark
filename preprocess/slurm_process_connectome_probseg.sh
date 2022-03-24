@@ -2,11 +2,11 @@
 #SBATCH --job-name=probseg
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/dseg.%a.out
-#SBATCH --error=logs/dseg.%a.err
+#SBATCH --output=logs/probseg.%a.out
+#SBATCH --error=logs/probseg.%a.err
 #SBATCH --array=0-10 
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=16G 
+#SBATCH --mem=32G 
 
 
 OUTPUT="/home/${USER}/scratch/giga_timeseries"

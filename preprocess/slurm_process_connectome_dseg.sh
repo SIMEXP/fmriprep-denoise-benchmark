@@ -6,7 +6,7 @@
 #SBATCH --error=logs/dseg.%a.err
 #SBATCH --array=0-10 
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=4G 
+#SBATCH --mem=8G 
 
 
 OUTPUT="/home/${USER}/scratch/giga_timeseries"
@@ -18,6 +18,15 @@ cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 mapfile -t arr < <(jq -r 'keys[]' fmriprep_denoise/benchmark_strategies.json)
 STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
 echo $STRATEGY
+
+python ./fmriprep_denoise/process_connectomes.py \
+    --fmriprep_path ${fmriprep_path} \
+    --dataset_name ds000228 \
+    --specifier task-pixar \
+    --participants_tsv ${participants_tsv} \
+    --atlas mist \
+    --strategy-name ${STRATEGY} \
+    ${OUTPUT}
 
 python ./fmriprep_denoise/process_connectomes.py \
     --fmriprep_path ${fmriprep_path} \
@@ -37,11 +46,3 @@ python ./fmriprep_denoise/process_connectomes.py \
     --strategy-name ${STRATEGY} \
     ${OUTPUT}
 
-python ./fmriprep_denoise/process_connectomes.py \
-    --fmriprep_path ${fmriprep_path} \
-    --dataset_name ds000228 \
-    --specifier task-pixar \
-    --participants_tsv ${participants_tsv} \
-    --atlas mist \
-    --strategy-name ${STRATEGY} \
-    ${OUTPUT}
