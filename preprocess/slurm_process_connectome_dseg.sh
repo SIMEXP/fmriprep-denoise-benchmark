@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=dseg
+#SBATCH --job-name=ds000228dseg
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/dseg.%a.out
-#SBATCH --error=logs/dseg.%a.err
-#SBATCH --array=0-10 
+#SBATCH --output=logs/ds000228dseg.%a.out
+#SBATCH --error=logs/ds000228dseg.%a.err
+#SBATCH --array=1-155
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8G 
 
@@ -15,9 +15,9 @@ participants_tsv="/home/${USER}/scratch/ds000228/participants.tsv"
 source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 
-mapfile -t arr < <(jq -r 'keys[]' fmriprep_denoise/benchmark_strategies.json)
-STRATEGY=${arr[${SLURM_ARRAY_TASK_ID}]}
-echo $STRATEGY
+
+subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${participants_tsv} )
+echo $subject
 
 python ./fmriprep_denoise/process_connectomes.py \
     --fmriprep_path ${fmriprep_path} \
@@ -25,7 +25,7 @@ python ./fmriprep_denoise/process_connectomes.py \
     --specifier task-pixar \
     --participants_tsv ${participants_tsv} \
     --atlas mist \
-    --strategy-name ${STRATEGY} \
+    --subject ${subject} \
     ${OUTPUT}
 
 python ./fmriprep_denoise/process_connectomes.py \
@@ -34,7 +34,7 @@ python ./fmriprep_denoise/process_connectomes.py \
     --specifier task-pixar \
     --participants_tsv ${participants_tsv} \
     --atlas gordon333 \
-    --strategy-name ${STRATEGY} \
+    --subject ${subject} \
     ${OUTPUT}
 
 python ./fmriprep_denoise/process_connectomes.py \
@@ -43,6 +43,5 @@ python ./fmriprep_denoise/process_connectomes.py \
     --specifier task-pixar \
     --participants_tsv ${participants_tsv} \
     --atlas schaefer7networks \
-    --strategy-name ${STRATEGY} \
+    --subject ${subject} \
     ${OUTPUT}
-

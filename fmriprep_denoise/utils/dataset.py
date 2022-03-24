@@ -15,7 +15,7 @@ PHENOTYPE_INFO = {
 
 
 def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_derivative,
-                              specifier, space="MNI152NLin2009cAsym", aroma=False):
+                              specifier, subject=None, space="MNI152NLin2009cAsym", aroma=False):
     """Fetch fmriprep derivative and return nilearn.dataset.fetch* like output.
     Load functional image, confounds, and participants.tsv only.
 
@@ -34,6 +34,9 @@ def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_
     specifier : string
         Text in a fmriprep file name, in between sub-<subject>_ses-<session>_
         and `space-<template>`.
+
+    subject : string, default None
+        subject id. If none, return all results.
 
     space : string, default "MNI152NLin2009cAsym"
         Template flow tempate name in fmriprep output.
@@ -60,7 +63,11 @@ def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_
                                   index_col=["participant_id"],
                                   sep="\t")
     # images and confound files
-    subject_dirs = path_fmriprep_derivative.glob("sub-*/")
+    if subject is None:
+        subject_dirs = path_fmriprep_derivative.glob("sub-*/")
+    else:
+        subject_dirs = path_fmriprep_derivative.glob(f"sub-{subject}/")
+
     func_img_path, confounds_tsv_path, include_subjects = [], [], []
     for subject_dir in subject_dirs:
         subject = subject_dir.name

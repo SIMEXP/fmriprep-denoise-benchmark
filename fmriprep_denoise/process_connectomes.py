@@ -41,6 +41,12 @@ def parse_args():
         help="Dataset name."
     )
     parser.add_argument(
+        "--subject",
+        action="store",
+        type=str,
+        help="subject id."
+    )
+    parser.add_argument(
         "--specifier",
         action="store",
         type=str,
@@ -72,6 +78,7 @@ def main():
     args = parse_args()
     print(vars(args))
     dataset_name = args.dataset_name
+    subject = args.subject
     strategy_name = args.strategy_name
     atlas_name = args.atlas
     fmriprep_specifier = args.specifier
@@ -83,20 +90,21 @@ def main():
 
     strategy_file = Path(__file__).parent / "benchmark_strategies.json"
 
-    data = fetch_fmriprep_derivative(dataset_name,
-                                     participant_tsv, fmriprep_path,
-                                     fmriprep_specifier)
-
-    data_aroma = fetch_fmriprep_derivative(dataset_name,
-                                           participant_tsv, fmriprep_path,
-                                           fmriprep_specifier, aroma=True)
 
     if not Path(output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv").is_file():
+        data = fetch_fmriprep_derivative(dataset_name,
+                                         participant_tsv, fmriprep_path,
+                                         fmriprep_specifier)
         movement = phenotype_movement(data)
         movement = movement.sort_index()
         movement.to_csv( output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv", sep='\t')
         print("Generate movement stats.")
-
+    data_aroma = fetch_fmriprep_derivative(dataset_name,
+                                           participant_tsv, fmriprep_path,
+                                           fmriprep_specifier, subject=subject, aroma=True)
+    data = fetch_fmriprep_derivative(dataset_name,
+                                     participant_tsv, fmriprep_path,
+                                     fmriprep_specifier, subject=subject)
     benchmark_strategies, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
 
     dimensions = get_atlas_dimensions(atlas_name)
@@ -109,27 +117,21 @@ def main():
             print(parameters)
             func_data = data_aroma.func if "aroma" in name else data.func
             if name == 'baseline':
-                _, _ = _dataset_timeseries(output, parameters, "raw", func_data, atlas_spec, atlas_name, dimension)
-            valid_subject_ts, valid_subject_id = _dataset_timeseries(output, parameters, name, func_data, atlas_spec, atlas_name, dimension)
-            dataset_connectomes = _compute_connectome(valid_subject_ts, valid_subject_id)
-            dataset_connectomes = dataset_connectomes.sort_index()
-            output_connectome = output / f"dataset-{dataset_name}_{atlas_spec}_desc-{name}_data.tsv"
-            dataset_connectomes.to_csv(output_connectome, sep='\t')
+                _dataset_timeseries(output, parameters, "raw", func_data, atlas_spec, atlas_name, dimension)
+            _dataset_timeseries(output, parameters, name, func_data, atlas_spec, atlas_name, dimension)
 
 
 def _dataset_timeseries(output, parameters, strategy, func_data, atlas_spec, atlas_name, dimension):
-    valid_subject_ts = []
-    valid_subject_id = []
-
     for img in func_data:
-        print(img)
-        subject_id, subject_mask, ts_path = _parse_subject_info(output, img, strategy, atlas_spec)
+        _, subject_mask, ts_path = _parse_subject_info(output, img, strategy, atlas_spec)
         cur_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask, nilearn_cache="")
-        subject_ts = _get_timeseries(cur_masker, parameters, strategy, img, subject_mask, ts_path)
-        if isinstance(subject_ts, pd.DataFrame):
-            valid_subject_ts.append(subject_ts.values)
-            valid_subject_id.append(subject_id)
-    return valid_subject_ts, valid_subject_id
+        if not Path(ts_path).is_file():
+            subject_ts = subject_timeseries(img, cur_masker, strategy, parameters)
+            # save timeseries
+            if subject_ts is not None:
+                subject_ts.to_csv(ts_path, sep='\t', index=False)
+            else:
+                pd.DataFrame().to_csv(ts_path, sep='\t', index=False)
 
 
 def _get_prepro_strategy(strategy_name, strategy_file):
@@ -143,32 +145,6 @@ def _get_prepro_strategy(strategy_name, strategy_file):
     else:
         strategy_names = [strategy_name]
     return benchmark_strategies, strategy_names
-
-
-def _get_timeseries(masker, parameters, strategy, img, subject_mask, ts_path):
-    if not Path(ts_path).is_file():
-        masker = masker.set_params(mask_img=subject_mask)
-        subject_ts = subject_timeseries(img, masker, strategy, parameters)
-        # save timeseries
-        if subject_ts is not None:
-            subject_ts.to_csv(ts_path, sep='\t', index=False)
-        else:
-            pd.DataFrame().to_csv(ts_path, sep='\t', index=False)
-        return subject_ts
-    elif os.stat(ts_path).st_size == 0:
-        return pd.DataFrame()
-    else:
-        print("load existing file")
-        return pd.read_csv(ts_path, header=0, sep='\t')
-
-
-def _compute_connectome(valid_subject_ts, valid_subject_id):
-    correlation_measure = ConnectivityMeasure(kind='correlation',
-                                              vectorize=True,
-                                              discard_diagonal=True)
-    subject_conn = correlation_measure.fit_transform(valid_subject_ts)
-    subject_conn = pd.DataFrame(subject_conn, index=valid_subject_id)
-    return subject_conn
 
 
 def _parse_subject_info(output, img, strategy, atlas_spec):
