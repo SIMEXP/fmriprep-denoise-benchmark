@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=ds000228dseg
+#SBATCH --job-name=ds000228schaefer
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/ds000228dseg.%a.out
-#SBATCH --error=logs/ds000228dseg.%a.err
+#SBATCH --output=logs/ds000228schaefer.%a.out
+#SBATCH --error=logs/ds000228schaefer.%a.err
 #SBATCH --array=1-155
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8G 
@@ -24,15 +24,6 @@ python ./fmriprep_denoise/process_connectomes.py \
     --dataset_name ds000228 \
     --specifier task-pixar \
     --participants_tsv ${participants_tsv} \
-    --atlas mist \
-    --subject ${subject} \
-    ${OUTPUT}
-
-python ./fmriprep_denoise/process_connectomes.py \
-    --fmriprep_path ${fmriprep_path} \
-    --dataset_name ds000228 \
-    --specifier task-pixar \
-    --participants_tsv ${participants_tsv} \
-    --atlas gordon333 \
+    --atlas schaefer7networks \
     --subject ${subject} \
     ${OUTPUT}
