@@ -100,7 +100,7 @@ def main():
                                      participant_tsv, fmriprep_path,
                                      fmriprep_specifier, subject=subject)
     benchmark_strategies, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
-    subject_spec, subject_output, subject_mask, subject_mask_aroma = _get_subject_info(output, data_aroma, data)
+    subject_spec, subject_spec_aroma, subject_output, subject_mask, subject_mask_aroma = _get_subject_info(output, data_aroma, data)
     dimensions = get_atlas_dimensions(atlas_name)
 
     for dimension in dimensions:
@@ -116,6 +116,10 @@ def main():
             print(f"Denoising: {strategy_name}")
             print(parameters)
             ts_path = subject_output / f"{subject_spec}_{atlas_spec}_desc-{strategy_name}_timeseries.tsv"
+
+            if "aroma" in strategy_name:
+                ts_path = subject_output / f"{subject_spec_aroma}_{atlas_spec}_desc-{strategy_name}_timeseries.tsv"
+
             if not ts_path.is_file():
                 img = data_aroma.func[0] if "aroma" in strategy_name else data.func[0]
                 reduced_confounds, sample_mask = _get_confounds(strategy_name, parameters, img)
@@ -180,7 +184,7 @@ def _get_subject_info(output, data_aroma, data):
 
     subject_mask = f"{subject_root}/{subject_spec}_desc-brain_mask.nii.gz"
     subject_mask_aroma = f"{subject_root}/{subject_spec_aroma}_desc-brain_mask.nii.gz"
-    return subject_spec, subject_output, subject_mask, subject_mask_aroma
+    return subject_spec, subject_spec_aroma, subject_output, subject_mask, subject_mask_aroma
 
 
 def _movement_summary(dataset_name, fmriprep_specifier, fmriprep_path, participant_tsv, output):
