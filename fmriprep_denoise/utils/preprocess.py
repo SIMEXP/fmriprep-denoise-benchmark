@@ -119,13 +119,13 @@ def _get_prepro_strategy(strategy_name, strategy_file):
     with open(strategy_file, "r") as file:
         benchmark_strategies = json.load(file)
 
-    if strategy_name not in benchmark_strategies:
+    if isinstance(strategy_name, str) and strategy_name not in benchmark_strategies:
         raise NotImplementedError(
             f"Strategy '{strategy_name}' is not implemented. Select from the"
             f"following: {[*benchmark_strategies]}"
         )
 
-    if strategy_name is 'None':
+    if strategy_name is None:
         print("Process all strategies.")
         strategy_names = [*benchmark_strategies]
     else:
