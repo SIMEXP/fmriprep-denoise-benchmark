@@ -7,7 +7,7 @@ import pandas as pd
 from nilearn.signal import clean
 from nilearn.interfaces.fmriprep import load_confounds_strategy, load_confounds
 
-from fmriprep_denoise.utils.preprocess import fetch_fmriprep_derivative, phenotype_movement
+from fmriprep_denoise.utils.preprocess import fetch_fmriprep_derivative, phenotype_movement, _get_prepro_strategy
 from fmriprep_denoise.utils.atlas import create_atlas_masker, get_atlas_dimensions
 
 
@@ -204,25 +204,6 @@ def _movement_summary(dataset_name, fmriprep_specifier, fmriprep_path, participa
         movement = movement.sort_index()
         movement.to_csv( output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv", sep='\t')
         print("Generate movement stats.")
-
-
-def _get_prepro_strategy(strategy_name, strategy_file):
-    """Select preprocessing strategy and associated parametes."""
-    with open(strategy_file, "r") as file:
-        benchmark_strategies = json.load(file)
-
-    if strategy_name not in benchmark_strategies:
-        raise NotImplementedError(
-            f"Strategy '{strategy_name}' is not implemented. Select from the"
-            f"following: {[*benchmark_strategies]}"
-        )
-
-    if strategy_name is None:
-        print("Process all strategies.")
-        strategy_names = [*benchmark_strategies]
-    else:
-        strategy_names = [strategy_name]
-    return benchmark_strategies, strategy_names
 
 
 if __name__ == "__main__":

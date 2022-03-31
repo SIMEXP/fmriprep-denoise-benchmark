@@ -6,6 +6,7 @@ from pathlib import Path
 from multiprocessing import Pool
 
 from fmriprep_denoise.metrics import qcfc, louvain_modularity
+from fmriprep_denoise.utils.preprocess import _get_prepro_strategy
 from fmriprep_denoise.utils.dataset import load_phenotype, load_valid_timeseries, compute_connectome, check_extraction
 
 
@@ -55,41 +56,49 @@ def main():
     strategy_name = args.strategy_name
     atlas = args.atlas
     dimension = args.dimension
-    output_path = Path(args.output_path)
+    output_path = Path(args.output_path) / "metrics"
 
     extracted_path = check_extraction(input_gz, extracted_path_root=None)
     dataset = extracted_path.name.split('-')[-1]
     phenotype = load_phenotype(dataset=dataset)
     participant_id = phenotype.index.to_list()
 
-    file_pattern = f"atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}"
+    strategy_file = Path(__file__).parent / "benchmark_strategies.json"
+    _, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
 
-    valid_ids, valid_ts = load_valid_timeseries(atlas, extracted_path,
-                                                participant_id, file_pattern)
-    connectome = compute_connectome(valid_ids, valid_ts)
-    print("Loaded connectome...")
-    metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
-                  connectome,
-                  phenotype.loc[:, ['age', 'gender']])
-    metric = pd.DataFrame(metric)
-    metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
-    print("QC-FC...")
-    with Pool(30) as pool:
-        qs = pool.map(louvain_modularity, connectome.values.tolist())
-    modularity = pd.DataFrame(qs,
-                              columns=[strategy_name],
-                              index=connectome.index)
-    print("Modularity...")
-    metric.to_csv(
-        output_path
-        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_qcfc.tsv",
-        sep='\t',
-    )
-    modularity.to_csv(
-        output_path
-        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_modularity.tsv",
-        sep='\t',
-    )
+    for strategy_name in strategy_names:
+        file_pattern = f"atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}"
+
+        valid_ids, valid_ts = load_valid_timeseries(atlas, extracted_path,
+                                                    participant_id, file_pattern)
+        connectome = compute_connectome(valid_ids, valid_ts)
+        print("Loaded connectome...")
+
+        metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
+                    connectome,
+                    phenotype.loc[:, ['age', 'gender']])
+        metric = pd.DataFrame(metric)
+        metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
+
+        print("QC-FC...")
+        with Pool(30) as pool:
+            qs = pool.map(louvain_modularity, connectome.values.tolist())
+
+        modularity = pd.DataFrame(qs,
+                                columns=[strategy_name],
+                                index=connectome.index)
+        print("Modularity...")
+
+        metric.to_csv(
+            output_path
+            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_qcfc.tsv",
+            sep='\t',
+        )
+        modularity.to_csv(
+            output_path
+            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_modularity.tsv",
+            sep='\t',
+        )
 
 if __name__ == "__main__":
     main()

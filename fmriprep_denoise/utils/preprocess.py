@@ -1,3 +1,4 @@
+import json
 import pandas as pd
 
 from sklearn.utils import Bunch
@@ -111,3 +112,22 @@ def phenotype_movement(data):
     covar['gender'] = covar['gender'].astype('float')
 
     return pd.concat((group_mean_fd, covar), axis=1)
+
+
+def _get_prepro_strategy(strategy_name, strategy_file):
+    """Select preprocessing strategy and associated parametes."""
+    with open(strategy_file, "r") as file:
+        benchmark_strategies = json.load(file)
+
+    if strategy_name not in benchmark_strategies:
+        raise NotImplementedError(
+            f"Strategy '{strategy_name}' is not implemented. Select from the"
+            f"following: {[*benchmark_strategies]}"
+        )
+
+    if strategy_name is None:
+        print("Process all strategies.")
+        strategy_names = [*benchmark_strategies]
+    else:
+        strategy_names = [strategy_name]
+    return benchmark_strategies, strategy_names
