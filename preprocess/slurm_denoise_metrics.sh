@@ -16,19 +16,19 @@ source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 
 echo "gordon333"
-python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas gordon333 --dimension 333
+python ./fmriprep_denoise/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas gordon333 --dimension 333
 
 echo "schaefer7networks"
 for n in 100 200 300 400 500 600 800 1000; do
-    python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas schaefer7networks --dimension $n
+    python ./fmriprep_denoise/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas schaefer7networks --dimension $n
 done 
 
 echo "mist"
 for n in 7 12 20 36 64 122 197 325 444 ROI; do
-    python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas mist --dimension $n
+    python ./fmriprep_denoise/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas mist --dimension $n
 done 
 
 echo "difumo"
 for n in 64 128 256 512 1024; do
-    python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas difumo --dimension $n
+    python ./fmriprep_denoise/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas difumo --dimension $n
 done 
