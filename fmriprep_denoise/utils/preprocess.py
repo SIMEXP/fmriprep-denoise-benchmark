@@ -125,7 +125,7 @@ def _get_prepro_strategy(strategy_name, strategy_file):
             f"following: {[*benchmark_strategies]}"
         )
 
-    if strategy_name is None:
+    if strategy_name is 'None':
         print("Process all strategies.")
         strategy_names = [*benchmark_strategies]
     else:
