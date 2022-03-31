@@ -9,7 +9,7 @@
 
 
 INPUTS="/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000228.tar.gz"
-OUTPUT="/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/"
+OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
 
 source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 
