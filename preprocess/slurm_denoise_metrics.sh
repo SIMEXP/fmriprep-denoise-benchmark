@@ -8,14 +8,27 @@
 #SBATCH --mem=4G 
 
 
-INPUTS="/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000228.tar.gz"
-OUTPUT="/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/"
+INPUTS="/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000228.tar.gz"
+OUTPUT="/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/"
 
 source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 
-cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
+cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 
-python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas schaefer7networks --dimension 1000
+echo "gordon333"
 python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas gordon333 --dimension 333
-python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas mist --dimension ROI
-python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas difumo --dimension 1024
+
+echo "schaefer7networks"
+for n in 100 200 300 400 500 600 800 1000; do
+    python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas schaefer7networks --dimension $n
+done 
+
+echo "mist"
+for n in 7 12 20 36 64 122 197 325 444 ROI; do
+    python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas mist --dimension $n
+done 
+
+echo "difumo"
+for n in 64 128 256 512 1024; do
+    python ./preprocess/process_denoise_metrics.py ${INPUTS} ${OUTPUT} --atlas difumo --dimension $n
+done 
