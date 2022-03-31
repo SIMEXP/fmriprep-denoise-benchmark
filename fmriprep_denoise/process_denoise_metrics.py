@@ -66,7 +66,10 @@ def main():
     strategy_file = Path(__file__).parent / "benchmark_strategies.json"
     _, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
 
+
+    metrics, modularities = [], []
     for strategy_name in strategy_names:
+        print(strategy_name)
         file_pattern = f"atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}"
 
         valid_ids, valid_ts = load_valid_timeseries(atlas, extracted_path,
@@ -79,7 +82,7 @@ def main():
                     phenotype.loc[:, ['age', 'gender']])
         metric = pd.DataFrame(metric)
         metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
-
+        metrics.append(metric)
         print("QC-FC...")
         with Pool(30) as pool:
             qs = pool.map(louvain_modularity, connectome.values.tolist())
@@ -87,18 +90,21 @@ def main():
         modularity = pd.DataFrame(qs,
                                 columns=[strategy_name],
                                 index=connectome.index)
+        modularities.append(modularity)
         print("Modularity...")
 
-        metric.to_csv(
-            output_path
-            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_qcfc.tsv",
-            sep='\t',
-        )
-        modularity.to_csv(
-            output_path
-            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_modularity.tsv",
-            sep='\t',
-        )
+    metrics = pd.concat(metrics, join=1)
+    metrics.to_csv(
+        output_path
+        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv",
+        sep='\t',
+    )
+    modularities = pd.concat(modularities, join=1)
+    modularities.to_csv(
+        output_path
+        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_modularity.tsv",
+        sep='\t',
+    )
 
 if __name__ == "__main__":
     main()
