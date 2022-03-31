@@ -1,23 +1,17 @@
-import os
 import argparse
 from pathlib import Path
 import json
 
 import pandas as pd
 
-from nilearn.connectome import ConnectivityMeasure
 from nilearn.signal import clean
 from nilearn.interfaces.fmriprep import load_confounds_strategy, load_confounds
 
-from fmriprep_denoise.utils.dataset import fetch_fmriprep_derivative, phenotype_movement
+from fmriprep_denoise.utils.preprocess import fetch_fmriprep_derivative, phenotype_movement
 from fmriprep_denoise.utils.atlas import create_atlas_masker, get_atlas_dimensions
 
 
-# define path of input and output
-# INPUT_FMRIPREP = "{home}/scratch/test_data/1637790137/fmriprep"
-# INPUT_BIDS_PARTICIPANTS = "{home}/projects/rrg-pbellec/hwang1/test_data/participants.tsv"
 ATLAS = 'schaefer7networks'
-
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -87,10 +81,10 @@ def main():
     fmriprep_path = Path(args.fmriprep_path)
     participant_tsv = Path(args.participants_tsv)
     output = Path(args.output_path)
-
     output.mkdir(exist_ok=True)
     strategy_file = Path(__file__).parent / "benchmark_strategies.json"
-
+    benchmark_strategies, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
+    dimensions = get_atlas_dimensions(atlas_name)
     _movement_summary(dataset_name, fmriprep_specifier, fmriprep_path, participant_tsv, output)
 
     data_aroma = fetch_fmriprep_derivative(dataset_name,
@@ -99,45 +93,72 @@ def main():
     data = fetch_fmriprep_derivative(dataset_name,
                                      participant_tsv, fmriprep_path,
                                      fmriprep_specifier, subject=subject)
-    benchmark_strategies, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
-    subject_spec, subject_spec_aroma, subject_output, subject_mask, subject_mask_aroma = _get_subject_info(output, data_aroma, data)
-    dimensions = get_atlas_dimensions(atlas_name)
+    output = output / f"atlas-{atlas_name}"
+    output.mkdir(exist_ok=True)
 
     for dimension in dimensions:
         print(f"-- {atlas_name}: dimension {dimension} --")
         atlas_spec = f"atlas-{atlas_name}_nroi-{dimension}"
         print("raw time series")
-        rawts_path = subject_output / f"{subject_spec}_{atlas_spec}_desc-raw_timeseries.tsv"
-        raw_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask, detrend=False, nilearn_cache="")
-        subject_timeseries = generate_raw_timeseries(rawts_path, data, raw_masker)
+        atlas_info = {"atlas_name":atlas_name,
+                      "dimension":dimension}
+        subject_timeseries = _generate_raw_timeseries(output, data, atlas_info)
 
         for strategy_name in strategy_names:
             parameters = benchmark_strategies[strategy_name]
             print(f"Denoising: {strategy_name}")
             print(parameters)
-            ts_path = subject_output / f"{subject_spec}_{atlas_spec}_desc-{strategy_name}_timeseries.tsv"
+            if _is_aroma(strategy_name):
+                subject_mask, img, ts_path = _get_output_info(strategy_name, output, data_aroma, atlas_spec)
+            subject_mask, img, ts_path = _get_output_info(strategy_name, output, data, atlas_spec)
 
-            if "aroma" in strategy_name:
-                ts_path = subject_output / f"{subject_spec_aroma}_{atlas_spec}_desc-{strategy_name}_timeseries.tsv"
+            if ts_path.is_file():
+                continue
 
-            if not ts_path.is_file():
-                img = data_aroma.func[0] if "aroma" in strategy_name else data.func[0]
-                reduced_confounds, sample_mask = _get_confounds(strategy_name, parameters, img)
+            reduced_confounds, sample_mask = _get_confounds(strategy_name, parameters, img)
+            if _is_aroma(strategy_name):
+                aroma_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask, nilearn_cache="")
+                clean_timeseries = aroma_masker.fit_transform(
+                    img, confounds=reduced_confounds, sample_mask=sample_mask)
+            elif _check_exclusion(reduced_confounds, sample_mask):
+                clean_timeseries = []
+            else:
+                clean_timeseries = clean(subject_timeseries,
+                                        detrend=True, standardize=True,
+                                        sample_mask=sample_mask,
+                                        confounds=reduced_confounds)
+            clean_timeseries = pd.DataFrame(clean_timeseries)
+            clean_timeseries.to_csv(ts_path, sep='\t', index=False)
 
-                if "aroma" in strategy_name:
-                    aroma_masker, _ = create_atlas_masker(atlas_name, dimension, subject_mask_aroma, nilearn_cache="")
-                    clean_timeseries = aroma_masker.fit_transform(
-                        img, confounds=reduced_confounds, sample_mask=sample_mask)
-                elif _check_exclusion(reduced_confounds, sample_mask):
-                    clean_timeseries = []
-                else:
-                    clean_timeseries = clean(subject_timeseries,
-                                            detrend=True, standardize=True,
-                                            sample_mask=sample_mask,
-                                            confounds=reduced_confounds)
-                clean_timeseries = pd.DataFrame(clean_timeseries)
 
-                clean_timeseries.to_csv(ts_path, sep='\t', index=False)
+def _generate_raw_timeseries(output, data, atlas_info):
+    subject_spec, subject_output, subject_mask = _get_subject_info(output, data)
+    rawts_path = subject_output / f"{subject_spec}_atlas-{atlas_info['atlas_name']}_nroi-{atlas_info['dimension']}_desc-raw_timeseries.tsv"
+    raw_masker, _ = create_atlas_masker(atlas_info['atlas_name'],
+                                        atlas_info['dimension'],
+                                        subject_mask,
+                                        detrend=False,
+                                        nilearn_cache="")
+    if not rawts_path.is_file():
+        subject_timeseries = raw_masker.fit_transform(data.func[0])
+        df = pd.DataFrame(subject_timeseries)
+        df.to_csv(rawts_path, sep='\t', index=False)
+    else:
+        df = pd.read_csv(rawts_path, header=0, sep='\t')
+        subject_timeseries = df.values
+    del raw_masker
+    return subject_timeseries
+
+
+def _is_aroma(strategy_name):
+    return "aroma" in strategy_name
+
+
+def _get_output_info(strategy_name, output, data, atlas_spec):
+    subject_spec, subject_output, subject_mask = _get_subject_info(output, data)
+    img = data.func[0]
+    ts_path = subject_output / f"{subject_spec}_{atlas_spec}_desc-{strategy_name}_timeseries.tsv"
+    return subject_mask,img,ts_path
 
 
 def _get_confounds(strategy_name, parameters, img):
@@ -158,23 +179,10 @@ def _check_exclusion(reduced_confounds, sample_mask):
     return remove
 
 
-def generate_raw_timeseries(rawts_path, data, raw_masker):
-    if not rawts_path.is_file():
-        subject_timeseries = raw_masker.fit_transform(data.func[0])
-        df = pd.DataFrame(subject_timeseries)
-        df.to_csv(rawts_path, sep='\t', index=False)
-    else:
-        df = pd.read_csv(rawts_path, header=0, sep='\t')
-        subject_timeseries = df.values
-    del raw_masker
-    return subject_timeseries
-
-
-def _get_subject_info(output, data_aroma, data):
+def _get_subject_info(output, data):
     img = data.func[0]
 
     subject_spec = data.func[0].split('/')[-1].split('_desc-')[0]
-    subject_spec_aroma = data_aroma.func[0].split('/')[-1].split('_desc-')[0]
 
     subject_root = img.split(subject_spec)[0]
     subject_id = subject_spec.split('_')[0]
@@ -183,11 +191,11 @@ def _get_subject_info(output, data_aroma, data):
     subject_output.mkdir(exist_ok=True)
 
     subject_mask = f"{subject_root}/{subject_spec}_desc-brain_mask.nii.gz"
-    subject_mask_aroma = f"{subject_root}/{subject_spec_aroma}_desc-brain_mask.nii.gz"
-    return subject_spec, subject_spec_aroma, subject_output, subject_mask, subject_mask_aroma
+    return subject_spec, subject_output, subject_mask
 
 
 def _movement_summary(dataset_name, fmriprep_specifier, fmriprep_path, participant_tsv, output):
+    "Save mean FD, sex and age info."
     if not Path(output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv").is_file():
         data = fetch_fmriprep_derivative(dataset_name,
                                          participant_tsv, fmriprep_path,
@@ -199,9 +207,15 @@ def _movement_summary(dataset_name, fmriprep_specifier, fmriprep_path, participa
 
 
 def _get_prepro_strategy(strategy_name, strategy_file):
-    # read the strategy deining files
+    """Select preprocessing strategy and associated parametes."""
     with open(strategy_file, "r") as file:
         benchmark_strategies = json.load(file)
+
+    if strategy_name not in benchmark_strategies:
+        raise NotImplementedError(
+            f"Strategy '{strategy_name}' is not implemented. Select from the"
+            f"following: {[*benchmark_strategies]}"
+        )
 
     if strategy_name is None:
         print("Process all strategies.")
