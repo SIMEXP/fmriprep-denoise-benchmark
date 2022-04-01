@@ -1,4 +1,5 @@
 import argparse
+from operator import index
 
 import pandas as pd
 
@@ -38,13 +39,6 @@ def parse_args():
         action="store",
         help="Number of ROI. See meta data of each atlas to get valid inputs.",
     )
-    parser.add_argument(
-        "--strategy-name",
-        action="store",
-        default=None,
-        help=("Denoise strategy name (see benchmark_strategies.json)."
-              "Process all strategy if None.")
-    )
     return parser.parse_args()
 
 
@@ -53,7 +47,6 @@ def main():
     args = parse_args()
     print(vars(args))
     input_gz = Path(args.input_path)
-    strategy_name = args.strategy_name
     atlas = args.atlas
     dimension = args.dimension
     output_path = Path(args.output_path) / "metrics"
@@ -65,8 +58,9 @@ def main():
     participant_id = phenotype.index.to_list()
 
     strategy_file = Path(__file__).parent / "benchmark_strategies.json"
-    _, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
+    _, strategy_names = _get_prepro_strategy(None, strategy_file)
 
+    metric_qcfc, metric_mod = [], []
     for strategy_name in strategy_names:
         print(strategy_name)
         file_pattern = f"atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}"
@@ -81,12 +75,7 @@ def main():
                       phenotype.loc[:, ['age', 'gender']])
         metric = pd.DataFrame(metric)
         metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
-        metric.to_csv(
-            output_path
-            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_qcfc.tsv",
-            sep='\t',
-        )
-
+        metric_qcfc.append(metric)
         print("QC-FC...")
         with Pool(30) as pool:
             qs = pool.map(louvain_modularity, connectome.values.tolist())
@@ -94,12 +83,21 @@ def main():
         modularity = pd.DataFrame(qs,
                                   columns=[strategy_name],
                                   index=connectome.index)
+        metric_mod.append(modularity)
         print("Modularity...")
-        modularity.to_csv(
-            output_path
-            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_modularity.tsv",
-            sep='\t',
-        )
+
+    metric_qcfc = pd.concat(metric_qcfc, join=1)
+    metric_qcfc.to_csv(
+        output_path
+        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv",
+        sep='\t',
+    )
+    metric_mod = pd.concat(metric_mod, join=1)
+    metric_mod.to_csv(
+        output_path
+        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_modularity.tsv",
+        sep='\t',
+    )
 
 if __name__ == "__main__":
     main()
