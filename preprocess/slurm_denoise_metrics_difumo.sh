@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=metric_difumo
-#SBATCH --time=24:00:00
+#SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/metric.out
 #SBATCH --error=logs/metric.err
