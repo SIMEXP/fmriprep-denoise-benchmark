@@ -68,7 +68,7 @@ def main():
         valid_ids, valid_ts = load_valid_timeseries(atlas, extracted_path,
                                                     participant_id, file_pattern)
         connectome = compute_connectome(valid_ids, valid_ts)
-        print("Loaded connectome...")
+        print("\tLoaded connectome...")
 
         metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
                       connectome,
@@ -76,7 +76,7 @@ def main():
         metric = pd.DataFrame(metric)
         metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
         metric_qcfc.append(metric)
-        print("QC-FC...")
+        print("\tQC-FC...")
         with Pool(30) as pool:
             qs = pool.map(louvain_modularity, connectome.values.tolist())
 
@@ -84,7 +84,7 @@ def main():
                                   columns=[strategy_name],
                                   index=connectome.index)
         metric_mod.append(modularity)
-        print("Modularity...")
+        print("\tModularity...")
 
     metric_qcfc = pd.concat(metric_qcfc, join=1)
     metric_qcfc.to_csv(
