@@ -76,10 +76,16 @@ def main():
         print("Loaded connectome...")
 
         metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
-                    connectome,
-                    phenotype.loc[:, ['age', 'gender']])
+                      connectome,
+                      phenotype.loc[:, ['age', 'gender']])
         metric = pd.DataFrame(metric)
         metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
+        metric.to_csv(
+            output_path
+            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_qcfc.tsv",
+            sep='\t',
+        )
+
         print("QC-FC...")
         with Pool(30) as pool:
             qs = pool.map(louvain_modularity, connectome.values.tolist())
@@ -88,13 +94,6 @@ def main():
                                   columns=[strategy_name],
                                   index=connectome.index)
         print("Modularity...")
-
-        metric.to_csv(
-            output_path
-            / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_qcfc.tsv",
-            sep='\t',
-        )
-        modularity = pd.concat(modularity, join=1)
         modularity.to_csv(
             output_path
             / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}_modularity.tsv",
