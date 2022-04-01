@@ -57,6 +57,7 @@ def main():
     atlas = args.atlas
     dimension = args.dimension
     output_path = Path(args.output_path) / "metrics"
+    output_path.mkdir(exist_ok=True)
 
     extracted_path = check_extraction(input_gz, extracted_path_root=None)
     dataset = extracted_path.name.split('-')[-1]
