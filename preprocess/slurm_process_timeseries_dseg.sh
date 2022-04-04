@@ -1,9 +1,9 @@
 #!/bin/bash
-#SBATCH --job-name=ds000228schaefer
+#SBATCH --job-name=ds000228dseg
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/ds000228schaefer.%a.out
-#SBATCH --error=logs/ds000228schaefer.%a.err
+#SBATCH --output=logs/ds000228dseg.%a.out
+#SBATCH --error=logs/ds000228dseg.%a.err
 #SBATCH --array=1-155
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=8G 
@@ -19,11 +19,20 @@ cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${participants_tsv} )
 echo $subject
 
-python ./fmriprep_denoise/process_connectomes.py \
+python ./fmriprep_denoise/process_timeseries.py \
     --fmriprep_path ${fmriprep_path} \
     --dataset_name ds000228 \
     --specifier task-pixar \
     --participants_tsv ${participants_tsv} \
-    --atlas schaefer7networks \
+    --atlas mist \
+    --subject ${subject} \
+    ${OUTPUT}
+
+python ./fmriprep_denoise/process_timeseries.py \
+    --fmriprep_path ${fmriprep_path} \
+    --dataset_name ds000228 \
+    --specifier task-pixar \
+    --participants_tsv ${participants_tsv} \
+    --atlas gordon333 \
     --subject ${subject} \
     ${OUTPUT}
