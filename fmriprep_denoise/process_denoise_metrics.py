@@ -86,13 +86,13 @@ def main():
         metric_mod.append(modularity)
         print("\tModularity...")
 
-    metric_qcfc = pd.concat(metric_qcfc, join=1)
+    metric_qcfc = pd.concat(metric_qcfc, axis=1)
     metric_qcfc.to_csv(
         output_path
         / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv",
         sep='\t',
     )
-    metric_mod = pd.concat(metric_mod, join=1)
+    metric_mod = pd.concat(metric_mod, axis=1)
     metric_mod.to_csv(
         output_path
         / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_modularity.tsv",
