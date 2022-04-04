@@ -2,8 +2,8 @@
 #SBATCH --job-name=metric_difumo
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/metric.out
-#SBATCH --error=logs/metric.err
+#SBATCH --output=logs/metric_difumo.out
+#SBATCH --error=logs/metric_difumo.err
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G 
 #SBATCH --array=0-4
