@@ -110,7 +110,8 @@ def main():
             print(parameters)
             if _is_aroma(strategy_name):
                 subject_mask, img, ts_path = _get_output_info(strategy_name, output, data_aroma, atlas_spec)
-            subject_mask, img, ts_path = _get_output_info(strategy_name, output, data, atlas_spec)
+            else:
+                subject_mask, img, ts_path = _get_output_info(strategy_name, output, data, atlas_spec)
 
             if ts_path.is_file():
                 continue
