@@ -116,14 +116,17 @@ def create_atlas_masker(atlas_name, dimension, subject_mask, detrend=True, nilea
         Atlas name. Must be a key in ATLAS_METADATA.
     """
     atlas = fetch_atlas_path(atlas_name, dimension)
+    labels = list(range(1, atlas.labels.shape[0] + 1))
 
     if atlas.type == 'dseg':
-        masker = NiftiLabelsMasker(atlas.maps, mask_img=subject_mask, detrend=detrend)
+        masker = NiftiLabelsMasker(atlas.maps, labels=labels,
+                                   mask_img=subject_mask, detrend=detrend)
     elif atlas.type == 'probseg':
-        masker = NiftiMapsMasker(atlas.maps, mask_img=subject_mask, detrend=detrend)
+        masker = NiftiMapsMasker(atlas.maps,
+                                 mask_img=subject_mask, detrend=detrend)
     if nilearn_cache:
         masker = masker.set_params(memory=nilearn_cache, memory_level=1)
-    labels = list(range(1, atlas.labels.shape[0] + 1))
+
     return masker, labels
 
 

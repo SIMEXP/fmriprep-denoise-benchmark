@@ -2,8 +2,8 @@
 #SBATCH --job-name=metric_schaefer
 #SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
-#SBATCH --output=logs/metric_schaefer.out
-#SBATCH --error=logs/metric_schaefer.err
+#SBATCH --output=logs/metric_schaefer.%a.out
+#SBATCH --error=logs/metric_schaefer.%a.err
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G 
 #SBATCH --array=0-8
