@@ -5,7 +5,7 @@
 #SBATCH --output=logs/metric.out
 #SBATCH --error=logs/metric.err
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=4G 
+#SBATCH --mem=8G 
 #SBATCH --array=0-9
 
 
