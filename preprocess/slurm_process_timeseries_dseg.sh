@@ -9,7 +9,7 @@
 #SBATCH --mem=8G 
 
 
-OUTPUT="/home/${USER}/scratch/giga_timeseries/ds000228"
+OUTPUT="/home/${USER}/scratch/giga_timeseries/dataset-ds000228"
 fmriprep_path="/home/${USER}/scratch/ds000228/1643916303/fmriprep"
 participants_tsv="/home/${USER}/scratch/ds000228/participants.tsv"
 source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
