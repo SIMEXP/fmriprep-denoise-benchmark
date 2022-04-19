@@ -2,8 +2,9 @@ from pathlib import Path
 
 import pandas as pd
 
-from fmriprep_denoise.metrics import compute_pairwise_distance
 from nilearn.maskers import NiftiLabelsMasker, NiftiMapsMasker
+from nilearn.plotting import find_probabilistic_atlas_cut_coords
+
 from sklearn.utils import Bunch
 
 import templateflow
@@ -43,22 +44,6 @@ ATLAS_METADATA = {
 custome_templateflow = Path(__file__).parent / "data" / "custome_templateflow"
 
 
-def update_templateflow_path(atlas_name):
-    """Update local templateflow path, if needed."""
-
-    atlas_source = ATLAS_METADATA[atlas_name]['source']
-
-    # by default, it uses `~/.cache/templateflow/`
-    if atlas_source == "templateflow":
-        templateflow.conf.TF_HOME = templateflow.conf.TF_DEFAULT_HOME
-    # otherwise use customised map
-    elif atlas_source == "custome_templateflow":
-        templateflow.conf.TF_HOME = custome_templateflow
-        templateflow.conf.update(local=True)
-    if atlas_source == "custome_templateflow":
-        templateflow.conf.init_layout()
-
-
 def fetch_atlas_path(atlas_name, dimension):
     """
     Generate a dictionary containing parameters for TemplateFlow quiery.
@@ -82,7 +67,7 @@ def fetch_atlas_path(atlas_name, dimension):
         type : str
             'dseg' (for NiftiLabelsMasker) or 'probseg' (for NiftiMapsMasker)
     """
-    update_templateflow_path(atlas_name)
+    _update_templateflow_path(atlas_name)
     cur_atlas_meta = ATLAS_METADATA[atlas_name].copy()
 
     parameters = {
@@ -130,5 +115,36 @@ def create_atlas_masker(atlas_name, dimension, subject_mask, detrend=True, nilea
     return masker, labels
 
 
-def get_atlas_dimensions(atlas_name):
-    return ATLAS_METADATA[atlas_name]['dimensions']
+def get_centroid(atlas_name, dimension):
+    """Load parcel centroid for each atlas."""
+    if atlas_name not in ATLAS_METADATA:
+        raise NotImplementedError("Selected atlas is not supported.")
+
+    if atlas_name == 'schaefer7networks':
+        url = f"https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_{n_roi}Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
+        return pd.read_csv(url).loc[:, ['R', 'S', 'A']].values
+    if atlas_name == 'gordon':
+        raise NotImplemented("Require manual file download. "
+                             "See `fmriprep_denoise/utils/data/README.md`. ")
+
+    current_atlas = fetch_atlas_path(atlas_name, dimension)
+    if atlas_name == 'mist':
+        return current_atlas.labels.loc[:, ['x', 'y', 'z']].values
+    if atlas_name == 'difumo':
+        return find_probabilistic_atlas_cut_coords(current_atlas.maps)
+
+
+def _update_templateflow_path(atlas_name):
+    """Update local templateflow path, if needed."""
+
+    atlas_source = ATLAS_METADATA[atlas_name]['source']
+
+    # by default, it uses `~/.cache/templateflow/`
+    if atlas_source == "templateflow":
+        templateflow.conf.TF_HOME = templateflow.conf.TF_DEFAULT_HOME
+    # otherwise use customised map
+    elif atlas_source == "custome_templateflow":
+        templateflow.conf.TF_HOME = custome_templateflow
+        templateflow.conf.update(local=True)
+    if atlas_source == "custome_templateflow":
+        templateflow.conf.init_layout()
