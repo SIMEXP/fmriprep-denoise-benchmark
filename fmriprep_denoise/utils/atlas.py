@@ -121,11 +121,11 @@ def get_centroid(atlas_name, dimension):
         raise NotImplementedError("Selected atlas is not supported.")
 
     if atlas_name == 'schaefer7networks':
-        url = f"https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_{n_roi}Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
+        url = f"https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_{dimension}Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
         return pd.read_csv(url).loc[:, ['R', 'S', 'A']].values
-    if atlas_name == 'gordon':
-        raise NotImplemented("Require manual file download. "
-                             "See `fmriprep_denoise/utils/data/README.md`. ")
+    if atlas_name == 'gordon333':
+        file_dist = "atlas-gordon333_nroi-333_desc-distance.tsv"
+        return pd.read_csv(Path(__file__).parent / "data" / file_dist, sep='\t')
 
     current_atlas = fetch_atlas_path(atlas_name, dimension)
     if atlas_name == 'mist':
