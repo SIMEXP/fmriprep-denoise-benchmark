@@ -1,5 +1,4 @@
 import argparse
-from operator import index
 
 import pandas as pd
 

@@ -8,7 +8,7 @@ from nilearn.signal import clean
 from nilearn.interfaces.fmriprep import load_confounds_strategy, load_confounds
 
 from fmriprep_denoise.utils.preprocess import fetch_fmriprep_derivative, phenotype_movement, _get_prepro_strategy
-from fmriprep_denoise.utils.atlas import create_atlas_masker, get_atlas_dimensions
+from fmriprep_denoise.utils.atlas import create_atlas_masker, ATLAS_METADATA
 
 
 ATLAS = 'schaefer7networks'
@@ -84,7 +84,7 @@ def main():
     output.mkdir(exist_ok=True)
     strategy_file = Path(__file__).parent / "benchmark_strategies.json"
     benchmark_strategies, strategy_names = _get_prepro_strategy(strategy_name, strategy_file)
-    dimensions = get_atlas_dimensions(atlas_name)
+    dimensions = _get_atlas_dimensions(atlas_name)
     _movement_summary(dataset_name, fmriprep_specifier, fmriprep_path, participant_tsv, output)
 
     data_aroma = fetch_fmriprep_derivative(dataset_name,
@@ -208,6 +208,10 @@ def _movement_summary(dataset_name, fmriprep_specifier, fmriprep_path, participa
         movement = movement.sort_index()
         movement.to_csv( output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv", sep='\t')
         print("Generate movement stats.")
+
+
+def _get_atlas_dimensions(atlas_name):
+    return ATLAS_METADATA[atlas_name]['dimensions']
 
 
 if __name__ == "__main__":
