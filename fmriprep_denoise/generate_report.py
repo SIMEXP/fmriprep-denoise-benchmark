@@ -6,21 +6,23 @@ import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 from scipy.stats import zscore, spearmanr
-from fmriprep_denoise.metrics import partial_correlation, fdr, calculate_median_absolute, get_atlas_pairwise_distance
+from fmriprep_denoise.metrics import (partial_correlation, fdr,
+                                      calculate_median_absolute,
+                                      get_atlas_pairwise_distance)
 
 
-new_loc = {
-    'baseline': {'row': 0, 'col': 0},
-    'simple': {'row': 0, 'col': 2},
-    'simple+gsr': {'row': 0, 'col': 3},
-    'scrubbing.5': {'row': 1, 'col': 0},
-    'scrubbing.5+gsr': {'row': 1, 'col': 1},
-    'scrubbing.2': {'row': 1, 'col': 2},
-    'scrubbing.2+gsr': {'row': 1, 'col': 3},
-    'compcor': {'row': 2, 'col': 0},
-    'compcor6': {'row': 2, 'col': 1},
-    'aroma': {'row': 2, 'col': 2},
-    'aroma+gsr': {'row': 2, 'col': 3},
+grid_location = {
+    (0, 0): 'baseline',
+    (0, 2): 'simple',
+    (0, 3): 'simple+gsr',
+    (1, 0): 'scrubbing.5',
+    (1, 1): 'scrubbing.5+gsr',
+    (1, 2): 'scrubbing.2',
+    (1, 3): 'scrubbing.2+gsr',
+    (2, 0): 'compcor',
+    (2, 1): 'compcor6',
+    (2, 2): 'aroma',
+    (2, 3): 'aroma+gsr',
 }
 
 
@@ -57,148 +59,198 @@ def main():
     atlas_name = args.atlas
     dimension = args.dimension
 
-
     path_root = Path(__file__).parents[1] / "inputs"
     output = Path(__file__).parents[1] / "results"
-    file_qcfc = f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_qcfc.tsv"
-    file_network = f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_modularity.tsv"
-    file_dataset = f"dataset-{dataset}/dataset-{dataset}_desc-movement_phenotype.tsv"
 
-    # calculate metrics
-    pairwise_distance = get_atlas_pairwise_distance(atlas_name, dimension)
-    movement = pd.read_csv(path_root / file_dataset, sep='\t', index_col=0, header=0, encoding='utf8')
-    qcfc = pd.read_csv(path_root / file_qcfc, sep='\t', index_col=0)
-    modularity = pd.read_csv(path_root / file_network, sep='\t', index_col=0)
+    # process data
+    qcfc_per_edge, sig_per_edge, modularity, movement, pairwise_distance = load_metrics(dataset, atlas_name, dimension, path_root)
 
-    # separate correlation from siginficant value
-    sig_per_edge = qcfc.filter(regex="pvalue")
-    sig_per_edge.columns = [col.split('_')[0] for col in sig_per_edge.columns]
-    metric_per_edge = qcfc.filter(regex="correlation")
-    metric_per_edge.columns = [col.split('_')[0] for col in metric_per_edge.columns]
-
-    bar_color = sns.color_palette()[0]
-
-    # multiple comparision on qcfc
-    long_qcfc_sig= sig_per_edge.melt()
-    long_qcfc_sig['fdr'] = long_qcfc_sig.groupby('variable')['value'].transform(fdr)
-    long_qcfc_sig = long_qcfc_sig.groupby('variable').apply(lambda x: 100*x.fdr.sum()/x.fdr.shape[0])
-    long_qcfc_sig = pd.DataFrame(long_qcfc_sig, columns=["p_corrected"])
-
-    order = long_qcfc_sig.sort_values('p_corrected').index.tolist()
-    ax = sns.barplot(data=long_qcfc_sig.T, ci=None, order=order, color=bar_color)
-    ax.set_title("Percentage of edge significantly correlated with mean FD")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    ax.set(ylabel="Percentage %",
-        xlabel="confound removal strategy")
-    plt.tight_layout()
-    plt.savefig(output / f"atlas-{atlas_name}_nroi-{dimension}_sigqcfc.png", dpi=300)
-
-    median_absolute = metric_per_edge.apply(calculate_median_absolute)
-    order = median_absolute.sort_values().index.tolist()
-
-    ax = sns.barplot(data=(pd.DataFrame(median_absolute).T), ci=None, order=order, color=bar_color)
-    ax.set_title("Median absolute deviation QC-FC")
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    ax.set(ylabel="Median absolute deviation",
-        xlabel="confound removal strategy")
-    plt.tight_layout()
-    plt.savefig(output / f"atlas-{atlas_name}_nroi-{dimension}_mad_qcfc.png", dpi=300)
-
-    def draw_absolute_median(data, **kws):
-        ax = plt.gca()
-        mad = calculate_median_absolute(data['qcfc'])
-        ax.vlines(mad, ymin=0, ymax=0.5, color='r', linestyle=':')
-
-    long_qcfc = metric_per_edge.melt()
+    long_qcfc = qcfc_per_edge.melt()
     long_qcfc.columns = ["Strategy", "qcfc"]
 
-    long_qcfc["row"] = long_qcfc.Strategy
-    long_qcfc["col"] = long_qcfc.Strategy
-    for name in new_loc:
-        long_qcfc.loc[long_qcfc.Strategy == name, "row"] = new_loc[name]["row"]
-        long_qcfc.loc[long_qcfc.Strategy == name, "col"] = new_loc[name]["col"]
+    corr_distance_long = qcfc_per_edge.melt()
+    corr_distance_long.columns = ["Strategy", "qcfc"]
+    corr_distance_long['distance'] = np.tile(pairwise_distance.iloc[:, -1].values, 11)
 
-    g = sns.displot(
-        long_qcfc, x="qcfc", col="col", row="row", kind='kde', fill=True, height=1.5, aspect=2
-    )
-    g.fig.delaxes(g.axes[0, 1])
+    modularity_order = modularity.mean().sort_values().index.tolist()
 
-    g.set(ylabel="Density")
-    g.map_dataframe(draw_absolute_median)
-    for name, axis in new_loc.items():
-        g.facet_axis(axis['row'], axis['col']).set(title=name)
-        if axis['row'] == 2:
-            g.facet_axis(axis['row'], axis['col']).set(xlabel="Pearson\'s correlation: \nmean FD and\nconnectome edges")
 
-    g.fig.subplots_adjust(top=0.9)
-    g.fig.suptitle('Distribution of correlation between framewise distplacement and edge strength')
-    plt.tight_layout()
-    plt.savefig(output / f"atlas-{atlas_name}_nroi-{dimension}_distqcfc.png", dpi=300)
-    plt.close()
+    qcfc_sig = _qcfc_fdr(sig_per_edge)
+    qcfc_mad = _get_qcfc_median_absolute(qcfc_per_edge)
+    qcfc_dist = _get_corr_distance(pairwise_distance, qcfc_per_edge)
+    corr_mod = _corr_modularity_motion(modularity, movement)
 
-    corr_distance, p_val = spearmanr(pairwise_distance.iloc[:, -1], metric_per_edge)
+    network_mod = {
+        'data': modularity,
+        'order': modularity_order,
+        'title': "Identifiability of network structure\nafter denoising",
+        'label': "Mean modularity quality (a.u.)",
+    }
 
-    corr_distance = pd.DataFrame(corr_distance[1:, 0], index=metric_per_edge.columns)
-    long_qcfc['distance'] = np.tile(pairwise_distance.iloc[:, -1].values, 11)
+    # strart plotting
+    bar_color = sns.color_palette()[0]
 
-    order = corr_distance.sort_values(0).index.tolist()
+    fig = plt.figure(constrained_layout=True, figsize=(23, 9))
+    subfigs = fig.subfigures(2, 2, wspace=0.01)
 
-    ax = sns.barplot(data=corr_distance.T, ci=None, order=order, color=bar_color)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    ax.set_title("Distance-dependent effects of motion")
-    ax.set(ylim=(-0.5, 0.05))
-    ax.set(ylabel="Nodewise correlation between\nEuclidian distance and QC-FC metric",
-            xlabel="confound removal strategy")
-    plt.tight_layout()
-    plt.savefig(output / f"atlas-{atlas_name}_nroi-{dimension}_corr_dist_qcfc_mean.png", dpi=300)
+    axsTopLeft = subfigs[0, 0].subplots(1, 3, sharey=False)
+    for nn, (ax, figure_data) in enumerate(zip(axsTopLeft, [qcfc_sig, qcfc_mad, qcfc_dist])):
+        sns.barplot(data=figure_data['data'], orient='h',
+                    ci=None, order=figure_data['order'],
+                    color=bar_color, ax=ax)
+        ax.set_title(figure_data['title'])
+        ax.set(xlabel=figure_data['label'])
+        if nn == 0:
+            ax.set(ylabel="Confound removal strategy")
+    subfigs[0, 0].suptitle('Residual effect of motion on connectomes after de-noising')
+    subfigs[0, 0].set_facecolor('0.75')
 
-    g = sns.FacetGrid(long_qcfc, col="col", row="row", height=1.7, aspect=1.5)
-    g.map(sns.regplot, 'distance', 'qcfc', fit_reg=True, ci=None,
-        line_kws={'color': 'red'}, scatter_kws={'s': 0.5, 'alpha': 0.15,})
-    g.refline(y=0)
-    g.fig.delaxes(g.axes[0, 1])
-    for name, axis in new_loc.items():
-        g.facet_axis(axis['row'], axis['col']).set(title=name)
-        if axis['row'] == 2:
-            g.facet_axis(axis['row'], axis['col']).set(xlabel="Distance (mm)")
-        if axis['col'] == 0:
-            g.facet_axis(axis['row'], axis['col']).set(ylabel="QC-FC")
+    axsBottomLeft = subfigs[1, 0].subplots(3, 4, sharex=True, sharey=True)
+    for i, row_axes in enumerate(axsBottomLeft):
+        for j, ax in enumerate(row_axes):
+            if cur_strategy := grid_location.get((i, j), False):
+                mask = corr_distance_long["Strategy"] == cur_strategy
+                g = sns.histplot(data=corr_distance_long.loc[mask, :],
+                                 x='distance', y='qcfc',
+                                 ax=ax)
+                ax.set_title(cur_strategy, fontsize='small')
+                g.axhline(0, linewidth=1, linestyle='--', alpha=0.5, color='k')
+                sns.regplot(data=corr_distance_long.loc[mask, :],
+                            x='distance', y='qcfc',
+                            ci=None,
+                            scatter=False,
+                            line_kws={'color': 'r', 'linewidth': 0.5},
+                            ax=ax)
+                xlabel = "Distance (mm)" if i == 2 else None
+                ylabel = "QC-FC" if j == 0 else None
+                g.set(xlabel=xlabel, ylabel=ylabel)
+            else:
+                subfigs[1, 0].delaxes(axsBottomLeft[i, j])
+    subfigs[1, 0].suptitle('Correlation between nodewise Euclidian distance and QC-FC')
+    subfigs[1, 0].set_facecolor('0.75')
 
-    g.fig.subplots_adjust(top=0.9)
-    g.fig.suptitle('Correlation between nodewise Euclidian distance and QC-FC')
-    plt.tight_layout()
-    plt.savefig(output / f"atlas-{atlas_name}_nroi-{dimension}_corr_dist_qcfc_dist.png", dpi=300)
+    axsTopRight = subfigs[0, 1].subplots(1, 2, sharey=False)
+    sns.barplot(data=network_mod['data'],
+                orient='h',
+                ci=None,
+                order=network_mod['order'],
+                color=bar_color, ax=axsTopRight[0])
+    axsTopRight[0].set_title(network_mod['title'])
+    axsTopRight[0].set(xlabel=network_mod['label'])
+    axsTopRight[0].set(ylabel="Confound removal strategy")
 
+    sns.barplot(data=corr_mod['data'], x='correlation', y='strategy',
+                ci=None,
+                order=None,
+                color=bar_color, ax=axsTopRight[1])
+    axsTopRight[1].set_title(corr_mod['title'])
+    axsTopRight[1].set(xlabel=corr_mod['label'])
+
+    subfigs[0, 1].suptitle('Correlation between\nnetwork modularity and mean framewise displacement')
+    subfigs[0, 1].set_facecolor('0.75')
+
+    axsBottomRight = subfigs[1, 1].subplots(3, 4, sharex=True, sharey=True)
+    for i, row_axes in enumerate(axsBottomRight):
+        for j, ax in enumerate(row_axes):
+            if cur_strategy := grid_location.get((i, j), False):
+                mask = long_qcfc["Strategy"] == cur_strategy
+                g = sns.histplot(data=long_qcfc.loc[mask, :],
+                                x='qcfc',
+                                ax=ax)
+                g.set_title(cur_strategy, fontsize='small')
+                mad = qcfc_mad['data'][cur_strategy].values
+                g.axvline(mad, linewidth=1, linestyle='--', color='r')
+                xlabel = "Pearson\'s correlation" if i == 2 else None
+                g.set(xlabel=xlabel)
+            else:
+                subfigs[1, 1].delaxes(axsBottomRight[i, j])
+    subfigs[1, 1].suptitle('Distribution of correlation between framewise distplacement and edge strength')
+    subfigs[1, 1].set_facecolor('0.75')
+
+    fig.suptitle(f'atlas-{atlas_name}_nroi-{dimension}', fontsize='x-large')
+    fig.savefig(output / f'atlas-{atlas_name}_nroi-{dimension}.png', dpi=300)
+
+
+def load_metrics(dataset, atlas_name, dimension, path_root):
+    file_qcfc = path_root / f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_qcfc.tsv"
+    file_network = path_root / f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_modularity.tsv"
+    file_dataset = path_root / f"dataset-{dataset}/dataset-{dataset}_desc-movement_phenotype.tsv"
+    pairwise_distance = get_atlas_pairwise_distance(atlas_name, dimension)
+    qcfc_per_edge = _get_qcfc_metric(file_qcfc, metric="correlation")
+    sig_per_edge = _get_qcfc_metric(file_qcfc, metric="pvalue")
+    modularity = pd.read_csv(file_network, sep='\t', index_col=0)
+    movement = pd.read_csv(file_dataset, sep='\t', index_col=0, header=0, encoding='utf8')
+    return qcfc_per_edge, sig_per_edge, modularity, movement, pairwise_distance
+
+
+def _get_qcfc_metric(file_path, metric):
+    """ Get correlation or pvalue of QC-FC."""
+    qcfc_stats = pd.read_csv(file_path, sep='\t', index_col=0)
+    qcfc_per_edge = qcfc_stats.filter(regex=metric)
+    qcfc_per_edge.columns = [col.split('_')[0] for col in qcfc_per_edge.columns]
+    return qcfc_per_edge
+
+
+def _get_corr_distance(pairwise_distance, qcfc_per_edge):
+    corr_distance, _ = spearmanr(pairwise_distance.iloc[:, -1], qcfc_per_edge)
+    corr_distance = pd.DataFrame(corr_distance[1:, 0], index=qcfc_per_edge.columns)
+    corr_distance_order = corr_distance.sort_values(0).index.tolist() # needed
+    corr_distance = corr_distance.T  # needed
+    return {
+        'data': corr_distance,
+        'order': corr_distance_order,
+        'title': "Correlation between\nnodewise distance and QC-FC",
+        'label': "Pearson's correlation",
+    }
+
+
+def _corr_modularity_motion(modularity, movement):
+    """Correlation between network modularity and  mean framewise displacement."""
     corr_modularity = []
     z_movement = movement.apply(zscore)
-    for column, values in modularity.iteritems():
+    for column, _ in modularity.iteritems():
         cur_data = pd.concat((modularity[column],
-                            movement[['mean_framewise_displacement']],
-                            z_movement[['age', 'gender']]), axis=1).dropna()
+                              movement[['mean_framewise_displacement']],
+                              z_movement[['age', 'gender']]), axis=1).dropna()
         current_strategy = partial_correlation(cur_data[column].values,
                                             cur_data['mean_framewise_displacement'].values,
                                             cur_data[['age', 'gender']].values)
         current_strategy['strategy'] = column
         corr_modularity.append(current_strategy)
+    return {
+        'data': pd.DataFrame(corr_modularity).sort_values('correlation'),
+        'order': None,
+        'title': "Correlation between\nnetwork modularity and motion",
+        'label': "Pearson's correlation",
+        }
 
-    plt.figure(figsize=(7, 5))
-    plt.subplot(1, 2, 1)
-    order = modularity.mean().sort_values().index.tolist()
-    ax = sns.barplot(data=modularity, order=order, color=bar_color)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    ax.set_title("Identifiability of network structure\nafter denoising")
-    ax.set(ylabel="Mean modularity quality (a.u.)",
-        xlabel="confound removal strategy")
-    plt.subplot(1, 2, 2)
 
-    corr_modularity = pd.DataFrame(corr_modularity).sort_values('correlation')
-    ax = sns.barplot(data=corr_modularity, y='correlation', x='strategy', ci=None, color=bar_color)
-    ax.set_xticklabels(ax.get_xticklabels(), rotation=90)
-    ax.set_title("Correlation between\nnetwork modularity and \nmean framewise displacement")
-    ax.set(ylabel="Pearson's correlation",
-        xlabel="confound removal strategy")
-    plt.tight_layout()
-    plt.savefig(output / f"atlas-{atlas_name}_nroi-{dimension}_modularity.png", dpi=300)
+def _qcfc_fdr(sig_per_edge):
+    """Do FDR correction on qc-fc p-values."""
+    long_qcfc_sig= sig_per_edge.melt()
+    long_qcfc_sig['fdr'] = long_qcfc_sig.groupby('variable')['value'].transform(fdr)
+    long_qcfc_sig = long_qcfc_sig.groupby('variable').apply(lambda x: 100*x.fdr.sum()/x.fdr.shape[0])
+    long_qcfc_sig = pd.DataFrame(long_qcfc_sig, columns=["p_corrected"])
+    long_qcfc_sig_order = long_qcfc_sig.sort_values('p_corrected').index.tolist()
+    return {
+        'data': long_qcfc_sig.T,
+        'order': long_qcfc_sig_order,
+        'title': "Percentage of significant QC-FC",
+        'label': "Percentage %",
+    }
+
+
+def _get_qcfc_median_absolute(qcfc_per_edge):
+    """Calculate absolute median and prepare for plotting."""
+    qcfc_median_absolute = qcfc_per_edge.apply(calculate_median_absolute)
+    qcfc_median_absolute_order = qcfc_median_absolute.sort_values().index.tolist()
+    return {
+        'data': pd.DataFrame(qcfc_median_absolute).T,
+        'order': qcfc_median_absolute_order,
+        'title': "Median absolute deviation\nof QC-FC",
+        'label': "Median absolute deviation",
+    }
+
 
 if __name__ == "__main__":
     main()
