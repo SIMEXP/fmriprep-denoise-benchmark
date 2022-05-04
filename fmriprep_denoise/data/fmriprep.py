@@ -17,70 +17,6 @@ PHENOTYPE_INFO = {
 }
 
 
-def generate_movement_summary(dataset_name, data, output):
-    """Generate and save movement stats and phenotype for openneuro datasets.
-    Parameters
-    ----------
-
-    dataset_name : str
-        Dataset name.
-
-    data : sklearn.utils.Bunch
-        Dataset retreived through fmriprep_denoise.fetch_fmriprep_derivative
-
-    output : str
-        Output directory.
-    """
-    if not Path(output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv").is_file():
-        movement = _phenotype_movement(data)
-        movement = movement.sort_index()
-        movement.to_csv( output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv", sep='\t')
-        print("Generate movement stats.")
-
-
-def _phenotype_movement(data):
-    """Retreive movement stats and phenotype for openneuro datasets."""
-    # get motion QC related metrics from confound files
-    group_mean_fd = pd.DataFrame()
-    group_mean_fd.index = group_mean_fd.index.set_names("participant_id")
-    for confounds in data.confounds:
-        subject_id = confounds.split("/")[-1].split("_")[0]
-        confounds = pd.read_csv(confounds, sep="\t")
-        mean_fd = confounds["framewise_displacement"].mean()
-        group_mean_fd.loc[subject_id, "mean_framewise_displacement"] = mean_fd
-
-    # load gender and age as confounds for the developmental dataset
-    participants = data.phenotypic.copy()
-    covar = participants.loc[:, PHENOTYPE_INFO[data.dataset_name]['columns']]
-    fix_col_name = PHENOTYPE_INFO[data.dataset_name].get("replace", False)
-    if isinstance(fix_col_name, dict):
-        covar = covar.rename(columns=fix_col_name)
-    covar.loc[covar['gender'] == 'F', 'gender'] = 1
-    covar.loc[covar['gender'] == 'M', 'gender'] = 0
-    covar['gender'] = covar['gender'].astype('float')
-
-    return pd.concat((group_mean_fd, covar), axis=1)
-
-
-def get_prepro_strategy(strategy_name=None):
-    """Select a sinlge preprocessing strategy and associated parametes."""
-    strategy_file = Path(__file__).parent / STRATEGY_FILE
-    with open(strategy_file, "r") as file:
-        benchmark_strategies = json.load(file)
-
-    if isinstance(strategy_name, str) and strategy_name not in benchmark_strategies:
-        raise NotImplementedError(
-            f"Strategy '{strategy_name}' is not implemented. Select from the"
-            f"following: {[*benchmark_strategies]}"
-        )
-
-    if strategy_name is None:
-        print("Process all strategies.")
-        return benchmark_strategies
-    (f"Process strategy '{strategy_name}'.")
-    return benchmark_strategies[strategy_name]
-
-
 def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_derivative,
                               specifier, subject=None, space="MNI152NLin2009cAsym", aroma=False):
     """Fetch fmriprep derivative and return nilearn.dataset.fetch* like output.
@@ -156,3 +92,67 @@ def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_
         confounds=confounds_tsv_path,
         phenotypic=participant_tsv.loc[include_subjects, :]
         )
+
+
+def get_prepro_strategy(strategy_name=None):
+    """Select a sinlge preprocessing strategy and associated parametes."""
+    strategy_file = Path(__file__).parent / STRATEGY_FILE
+    with open(strategy_file, "r") as file:
+        benchmark_strategies = json.load(file)
+
+    if isinstance(strategy_name, str) and strategy_name not in benchmark_strategies:
+        raise NotImplementedError(
+            f"Strategy '{strategy_name}' is not implemented. Select from the"
+            f"following: {[*benchmark_strategies]}"
+        )
+
+    if strategy_name is None:
+        print("Process all strategies.")
+        return benchmark_strategies
+    (f"Process strategy '{strategy_name}'.")
+    return benchmark_strategies[strategy_name]
+
+
+def generate_movement_summary(dataset_name, data, output):
+    """Generate and save movement stats and phenotype for openneuro datasets.
+    Parameters
+    ----------
+
+    dataset_name : str
+        Dataset name.
+
+    data : sklearn.utils.Bunch
+        Dataset retreived through fmriprep_denoise.fetch_fmriprep_derivative
+
+    output : str
+        Output directory.
+    """
+    if not Path(output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv").is_file():
+        movement = _phenotype_movement(data)
+        movement = movement.sort_index()
+        movement.to_csv( output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv", sep='\t')
+        print("Generate movement stats.")
+
+
+def _phenotype_movement(data):
+    """Retreive movement stats and phenotype for openneuro datasets."""
+    # get motion QC related metrics from confound files
+    group_mean_fd = pd.DataFrame()
+    group_mean_fd.index = group_mean_fd.index.set_names("participant_id")
+    for confounds in data.confounds:
+        subject_id = confounds.split("/")[-1].split("_")[0]
+        confounds = pd.read_csv(confounds, sep="\t")
+        mean_fd = confounds["framewise_displacement"].mean()
+        group_mean_fd.loc[subject_id, "mean_framewise_displacement"] = mean_fd
+
+    # load gender and age as confounds for the developmental dataset
+    participants = data.phenotypic.copy()
+    covar = participants.loc[:, PHENOTYPE_INFO[data.dataset_name]['columns']]
+    fix_col_name = PHENOTYPE_INFO[data.dataset_name].get("replace", False)
+    if isinstance(fix_col_name, dict):
+        covar = covar.rename(columns=fix_col_name)
+    covar.loc[covar['gender'] == 'F', 'gender'] = 1
+    covar.loc[covar['gender'] == 'M', 'gender'] = 0
+    covar['gender'] = covar['gender'].astype('float')
+
+    return pd.concat((group_mean_fd, covar), axis=1)
