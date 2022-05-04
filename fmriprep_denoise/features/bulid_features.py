@@ -5,9 +5,10 @@ import pandas as pd
 from pathlib import Path
 from multiprocessing import Pool
 
-from fmriprep_denoise.data import get_prepro_strategy
+from fmriprep_denoise.data.fmriprep import get_prepro_strategy
+from fmriprep_denoise.features.derivatives import (compute_connectome,
+                                               check_extraction)
 from fmriprep_denoise.features import qcfc, louvain_modularity
-from fmriprep_denoise.data import load_phenotype, load_valid_timeseries, compute_connectome, check_extraction
 
 
 def parse_args():
@@ -53,8 +54,6 @@ def main():
 
     extracted_path = check_extraction(input_gz, extracted_path_root=None)
     dataset = extracted_path.name.split('-')[-1]
-    phenotype = load_phenotype(dataset=dataset)
-    participant_id = phenotype.index.to_list()
 
     _, strategy_names = get_prepro_strategy(None)
 
@@ -63,9 +62,8 @@ def main():
         print(strategy_name)
         file_pattern = f"atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}"
 
-        valid_ids, valid_ts = load_valid_timeseries(atlas, extracted_path,
-                                                    participant_id, file_pattern)
-        connectome = compute_connectome(valid_ids, valid_ts)
+        connectome, phenotype = compute_connectome(atlas, extracted_path,
+                                                   dataset, file_pattern)
         print("\tLoaded connectome...")
 
         metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],

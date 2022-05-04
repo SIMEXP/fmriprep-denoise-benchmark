@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from nilearn.maskers import NiftiLabelsMasker, NiftiMapsMasker
 from nilearn.plotting import find_probabilistic_atlas_cut_coords
 
 from sklearn.utils import Bunch
@@ -42,6 +43,29 @@ ATLAS_METADATA = {
 
 # Include retreival of these data in README
 custome_templateflow = Path(__file__).parents[2] / "inputs" / "custome_templateflow"
+
+
+def create_atlas_masker(atlas_name, dimension, subject_mask, detrend=True,
+                        nilearn_cache=""):
+    """Create masker given metadata.
+    Parameters
+    ----------
+    atlas_name : str
+        Atlas name. Must be a key in ATLAS_METADATA.
+    """
+    atlas = fetch_atlas_path(atlas_name, dimension)
+    labels = list(range(1, atlas.labels.shape[0] + 1))
+
+    if atlas.type == 'dseg':
+        masker = NiftiLabelsMasker(atlas.maps, labels=labels,
+                                   mask_img=subject_mask, detrend=detrend)
+    elif atlas.type == 'probseg':
+        masker = NiftiMapsMasker(atlas.maps,
+                                 mask_img=subject_mask, detrend=detrend)
+    if nilearn_cache:
+        masker = masker.set_params(memory=nilearn_cache, memory_level=1)
+
+    return masker, labels
 
 
 def get_atlas_dimensions(atlas_name):
@@ -104,12 +128,14 @@ def fetch_atlas_path(atlas_name, dimension):
         parameters['desc'] = f"{dimension}dimensionsSegmented"
     else:
         parameters['desc'] = str(dimension)
-    img_path = templateflow.api.get(cur_atlas_meta['template'], raise_empty=True, **parameters)
+    img_path = templateflow.api.get(cur_atlas_meta['template'],
+                                    raise_empty=True, **parameters)
     img_path = str(img_path)
     if atlas_name == 'schaefer7networks':
         parameters.pop('resolution')
     parameters['extension'] = ".tsv"
-    label_path = templateflow.api.get(cur_atlas_meta['template'], raise_empty=True, **parameters)
+    label_path = templateflow.api.get(cur_atlas_meta['template'],
+                                      raise_empty=True, **parameters)
     labels = pd.read_csv(label_path, delimiter="\t")
     atlas_type = img_path.split('_')[-1].split('.nii.gz')[0]
 
