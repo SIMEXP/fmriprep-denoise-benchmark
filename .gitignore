@@ -10,7 +10,7 @@ logs/
 content/_build
 
 # data
-fmriprep_denoise/utils/data/custome_templateflow
+fmriprep_denoise/data/custome_templateflow
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
