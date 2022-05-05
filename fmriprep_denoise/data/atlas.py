@@ -16,47 +16,47 @@ ATLAS_METADATA = {
         'template': "MNI152NLin2009cAsym",
         'resolution': 2,
         'dimensions': [100, 200, 300, 400, 500, 600, 800, 1000],
-        'source': "templateflow"
     },
     'mist':{
         'atlas': 'MIST',
         'template': "MNI152NLin2009bSym",
         'resolution': 3,
         'dimensions' : [7, 12, 20, 36, 64, 122, 197, 325, 444, "ROI"],
-        'source': "custome_templateflow"
     },
     'difumo': {
         'atlas': 'DiFuMo',
         'template': "MNI152NLin2009cAsym",
         'resolution': 2,
         'dimensions': [64, 128, 256, 512, 1024],
-        'source': "custome_templateflow"
     },
     'gordon333': {
         'atlas': 'gordon',
         'template': "MNI152NLin6Asym",
         'resolution': 3,
         'dimensions': [333],
-        'source': "custome_templateflow"
     }
 }
 
 # Include retreival of these data in README
-custome_templateflow = Path(__file__).parents[2] / "inputs" / "custome_templateflow"
 
 
 def fetch_atlas_path(atlas_name, dimension):
     """
     Generate a dictionary containing parameters for TemplateFlow quiery.
+
     Parameters
     ----------
+
     atlas_name : str
         Atlas name. Must be a key in ATLAS_METADATA.
+
     dimension : str or int
         Atlas dimension.
+
     description_keywords : dict
         Keys and values to fill in description_pattern.
         For valid keys check relevant ATLAS_METADATA[atlas_name]['description_pattern'].
+
     Return
     ------
     sklearn.utils.Bunch
@@ -68,7 +68,7 @@ def fetch_atlas_path(atlas_name, dimension):
         type : str
             'dseg' (for NiftiLabelsMasker) or 'probseg' (for NiftiMapsMasker)
     """
-    _update_templateflow_path(atlas_name)
+    templateflow.conf.TF_HOME = Path(__file__).parents[2] / "inputs" / "custome_templateflow"
     cur_atlas_meta = ATLAS_METADATA[atlas_name].copy()
 
     parameters = {
@@ -140,20 +140,3 @@ def get_centroid(atlas_name, dimension):
 
 def get_atlas_dimensions(atlas_name):
     return ATLAS_METADATA[atlas_name]['dimensions']
-
-
-def _update_templateflow_path(atlas_name):
-    """Update local templateflow path, if needed."""
-
-    atlas_source = ATLAS_METADATA[atlas_name]['source']
-
-    # by default, it uses `~/.cache/templateflow/`
-    if atlas_source == "templateflow":
-        templateflow.conf.TF_HOME = templateflow.conf.TF_DEFAULT_HOME
-    # otherwise use customised map
-    elif atlas_source == "custome_templateflow":
-        templateflow.conf.TF_HOME = custome_templateflow
-        templateflow.conf.update(local=True)
-    if atlas_source == "custome_templateflow":
-        templateflow.conf.init_layout()
-
