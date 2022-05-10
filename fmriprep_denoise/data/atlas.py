@@ -7,8 +7,6 @@ from nilearn.plotting import find_probabilistic_atlas_cut_coords
 
 from sklearn.utils import Bunch
 
-import templateflow
-
 
 ATLAS_METADATA = {
     'schaefer7networks': {
@@ -68,7 +66,11 @@ def fetch_atlas_path(atlas_name, dimension):
         type : str
             'dseg' (for NiftiLabelsMasker) or 'probseg' (for NiftiMapsMasker)
     """
-    templateflow.conf.TF_HOME = Path(__file__).parents[2] / "inputs" / "custome_templateflow"
+    tf_dir = Path(__file__).parents[2] / "inputs" / "custome_templateflow"
+    os.environ['TEMPLATEFLOW_HOME'] = str(tf_dir.resolve())
+
+    import templateflow
+
     cur_atlas_meta = ATLAS_METADATA[atlas_name].copy()
 
     parameters = {
