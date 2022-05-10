@@ -8,6 +8,7 @@ from pathlib import Path
 
 def fetch_schaefer():
     """Download schaefer2018."""
+    import templateflow.api as tf
     schaefer_path = tf.get("MNI152NLin2009cAsym", atlas="Schaefer2018")
     if isinstance(schaefer_path, list) and len(schaefer_path) > 0:
         print("Schaefer atlas exists.")
@@ -15,6 +16,7 @@ def fetch_schaefer():
 
 def verify_gordon():
     """Check gordon 333 exists, or raise warning for sanity."""
+    import templateflow.api as tf
     gordon_path = tf.get("MNI152NLin6Asym", atlas="gordon")
     if isinstance(gordon_path, list) and len(gordon_path) == 2:
         print("Gordon 333 atlas exists.")
@@ -29,11 +31,8 @@ def main():
     tf_dir = Path(__file__).parents[1] / "inputs" / "custome_templateflow"
     os.environ['TEMPLATEFLOW_HOME'] = str(tf_dir.resolve())
 
-    import templateflow.api as tf
-
     fetch_schaefer()
     verify_gordon()
-
 
 
 if __name__ == "__main__":

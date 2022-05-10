@@ -19,7 +19,7 @@ cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${participants_tsv} )
 echo $subject
 
-python ./fmriprep_denoise/process_timeseries.py \
+python ./fmriprep_denoise/data/make_dataset.py \
     --fmriprep_path ${fmriprep_path} \
     --dataset_name ds000228 \
     --specifier task-pixar \

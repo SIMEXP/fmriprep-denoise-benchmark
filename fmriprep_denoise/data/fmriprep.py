@@ -56,12 +56,11 @@ def fetch_fmriprep_derivative(dataset_name, participant_tsv_path, path_fmriprep_
 
     # participants tsv from the main dataset
     if not participant_tsv_path.is_file():
-        raise(FileNotFoundError,
-              f"Cannot find {participant_tsv_path}")
+        raise FileNotFoundError(
+            f"Cannot find {participant_tsv_path}")
     if participant_tsv_path.name != "participants.tsv":
-        raise(FileNotFoundError,
-              f"File {participant_tsv_path} "
-              "is not a BIDS participant file.")
+        raise FileNotFoundError(
+            f"File {participant_tsv_path} is not a BIDS participant file.")
     participant_tsv = pd.read_csv(participant_tsv_path,
                                   index_col=["participant_id"],
                                   sep="\t")

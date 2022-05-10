@@ -11,7 +11,7 @@
 
 OUTPUT="/home/${USER}/scratch/giga_timeseries/dataset-ds000030"
 fmriprep_path="/home/${USER}/scratch/ds000030/1651688951/fmriprep"
-participants_tsv="/home/${USER}/scratch/ds000030/ds000030/participants.tsv"
+participants_tsv="/home/${USER}/scratch/ds000030/participants.tsv"
 valid_id="/home/${USER}/scratch/ds000030/valid_subjects.txt"
 source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
