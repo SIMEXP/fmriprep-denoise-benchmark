@@ -17,75 +17,78 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import tarfile
-import io
-from pathlib import Path
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-import seaborn as sns
-from scipy.stats import zscore, spearmanr
-from fmriprep_denoise.metrics import partial_correlation, fdr, calculate_median_absolute
+fig = plt.figure(constrained_layout=True, figsize=(7, 11), height_ratios=[1, 2])
+subfigs = fig.subfigures(2, 1)
+axsTopRight = subfigs[0].subplots(1, 2, sharey=False)
+sns.barplot(data=network_mod['data'],
+            orient='h',
+            ci=None,
+            order=network_mod['order'],
+            color=bar_color, ax=axsTopRight[0])
+axsTopRight[0].set_title(network_mod['title'])
+axsTopRight[0].set(xlabel=network_mod['label'])
+axsTopRight[0].set(ylabel="Confound removal strategy")
+
+sns.barplot(data=corr_mod['data'], x='correlation', y='strategy',
+            ci=None,
+            order=None,
+            color=bar_color, ax=axsTopRight[1])
+axsTopRight[1].set_title(corr_mod['title'])
+axsTopRight[1].set(xlabel=corr_mod['label'])
+
+fig.suptitle('Correlation between\nnetwork modularity and mean framewise displacement')
+
+axsBottomRight = subfigs[1].subplots(3, 4, sharex=True, sharey=True)
+for i, row_axes in enumerate(axsBottomRight):
+    for j, ax in enumerate(row_axes):
+        if cur_strategy := grid_location.get((i, j), False):
+            mask = long_qcfc["Strategy"] == cur_strategy
+            g = sns.histplot(data=long_qcfc.loc[mask, :],
+                            x='qcfc',
+                            ax=ax)
+            g.set_title(cur_strategy, fontsize='small')
+            mad = qcfc_mad['data'][cur_strategy].values
+            g.axvline(mad, linewidth=1, linestyle='--', color='r')
+            xlabel = "Pearson\'s correlation" if i == 2 else None
+            g.set(xlabel=xlabel)
+        else:
+            subfigs[1].delaxes(axsBottomRight[i, j])
+subfigs[1].suptitle('Distribution of correlation between framewise distplacement and edge strength')
 
 
-# Load metric data
-path_root = Path.cwd().parents[0] / "inputs"
-file_qcfc = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-qcfc.tsv"
-file_dist = "atlas/schaefer7networks/atlas-schaefer7networks_nroi-400_desc-distance.tsv"
-file_network = "dataset-ds000288_atlas-schaefer7networks_nroi-400_desc-modularity.tsv"
-file_dataset = "dataset-ds000288_no-std.tar.gz"
-
-# load data
-with tarfile.open(path_root / file_dataset, 'r:gz') as tar:
-    movement = tar.extractfile(
-        "dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv").read()
-    movement = pd.read_csv(io.BytesIO(movement),
-                        sep='\t', index_col=0, header=0, encoding='utf8')
-    movement = movement.sort_index()
-
-
-pairwise_distance = pd.read_csv(path_root / file_dist, sep='\t')
-qcfc = pd.read_csv(path_root / file_qcfc, sep='\t', index_col=0)
-modularity = pd.read_csv(path_root / file_network, sep='\t', index_col=0)
-
-
-# separate correlation from siginficant value
-sig_per_edge = qcfc.filter(regex="pvalue")
-sig_per_edge.columns = [col.split('_')[0] for col in sig_per_edge.columns]
-metric_per_edge = qcfc.filter(regex="correlation")
-metric_per_edge.columns = [col.split('_')[0] for col in metric_per_edge.columns]
+glue("network-fig", fig, display=False)
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-[0;32m/tmp/ipykernel_40271/162932605.py[0m in [0;36m<module>[0;34m[0m
-[1;32m     18[0m [0;34m[0m[0m
-[1;32m     19[0m [0;31m# load data[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
-[0;32m---> 20[0;31m [0;32mwith[0m [0mtarfile[0m[0;34m.[0m[0mopen[0m[0;34m([0m[0mpath_root[0m [0;34m/[0m [0mfile_dataset[0m[0;34m,[0m [0;34m'r:gz'[0m[0;34m)[0m [0;32mas[0m [0mtar[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m     21[0m     movement = tar.extractfile(
-[1;32m     22[0m         "dataset-ds000288/dataset-ds000288_desc-movement_phenotype.tsv").read()
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+[0;32m/tmp/ipykernel_28610/3514595957.py[0m in [0;36m<module>[0;34m[0m
+[0;32m----> 1[0;31m [0mfig[0m [0;34m=[0m [0mplt[0m[0;34m.[0m[0mfigure[0m[0;34m([0m[0mconstrained_layout[0m[0;34m=[0m[0;32mTrue[0m[0;34m,[0m [0mfigsize[0m[0;34m=[0m[0;34m([0m[0;36m7[0m[0;34m,[0m [0;36m11[0m[0;34m)[0m[0;34m,[0m [0mheight_ratios[0m[0;34m=[0m[0;34m[[0m[0;36m1[0m[0;34m,[0m [0;36m2[0m[0;34m][0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      2[0m [0msubfigs[0m [0;34m=[0m [0mfig[0m[0;34m.[0m[0msubfigures[0m[0;34m([0m[0;36m2[0m[0;34m,[0m [0;36m1[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      3[0m [0maxsTopRight[0m [0;34m=[0m [0msubfigs[0m[0;34m[[0m[0;36m0[0m[0;34m][0m[0;34m.[0m[0msubplots[0m[0;34m([0m[0;36m1[0m[0;34m,[0m [0;36m2[0m[0;34m,[0m [0msharey[0m[0;34m=[0m[0;32mFalse[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      4[0m sns.barplot(data=network_mod['data'],
+[1;32m      5[0m             [0morient[0m[0;34m=[0m[0;34m'h'[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
 
-[0;32m/usr/lib/python3.8/tarfile.py[0m in [0;36mopen[0;34m(cls, name, mode, fileobj, bufsize, **kwargs)[0m
-[1;32m   1619[0m             [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   1620[0m                 [0;32mraise[0m [0mCompressionError[0m[0;34m([0m[0;34m"unknown compression type %r"[0m [0;34m%[0m [0mcomptype[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0;32m-> 1621[0;31m             [0;32mreturn[0m [0mfunc[0m[0;34m([0m[0mname[0m[0;34m,[0m [0mfilemode[0m[0;34m,[0m [0mfileobj[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m   1622[0m [0;34m[0m[0m
-[1;32m   1623[0m         [0;32melif[0m [0;34m"|"[0m [0;32min[0m [0mmode[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/pyplot.py[0m in [0;36mfigure[0;34m(num, figsize, dpi, facecolor, edgecolor, frameon, FigureClass, clear, **kwargs)[0m
+[1;32m    795[0m                 RuntimeWarning)
+[1;32m    796[0m [0;34m[0m[0m
+[0;32m--> 797[0;31m         manager = new_figure_manager(
+[0m[1;32m    798[0m             [0mnum[0m[0;34m,[0m [0mfigsize[0m[0;34m=[0m[0mfigsize[0m[0;34m,[0m [0mdpi[0m[0;34m=[0m[0mdpi[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    799[0m             [0mfacecolor[0m[0;34m=[0m[0mfacecolor[0m[0;34m,[0m [0medgecolor[0m[0;34m=[0m[0medgecolor[0m[0;34m,[0m [0mframeon[0m[0;34m=[0m[0mframeon[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
 
-[0;32m/usr/lib/python3.8/tarfile.py[0m in [0;36mgzopen[0;34m(cls, name, mode, fileobj, compresslevel, **kwargs)[0m
-[1;32m   1665[0m [0;34m[0m[0m
-[1;32m   1666[0m         [0;32mtry[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0;32m-> 1667[0;31m             [0mfileobj[0m [0;34m=[0m [0mGzipFile[0m[0;34m([0m[0mname[0m[0;34m,[0m [0mmode[0m [0;34m+[0m [0;34m"b"[0m[0;34m,[0m [0mcompresslevel[0m[0;34m,[0m [0mfileobj[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m   1668[0m         [0;32mexcept[0m [0mOSError[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[1;32m   1669[0m             [0;32mif[0m [0mfileobj[0m [0;32mis[0m [0;32mnot[0m [0;32mNone[0m [0;32mand[0m [0mmode[0m [0;34m==[0m [0;34m'r'[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/pyplot.py[0m in [0;36mnew_figure_manager[0;34m(*args, **kwargs)[0m
+[1;32m    314[0m     [0;34m"""Create a new figure manager instance."""[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    315[0m     [0m_warn_if_gui_out_of_main_thread[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 316[0;31m     [0;32mreturn[0m [0m_backend_mod[0m[0;34m.[0m[0mnew_figure_manager[0m[0;34m([0m[0;34m*[0m[0margs[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    317[0m [0;34m[0m[0m
+[1;32m    318[0m [0;34m[0m[0m
 
-[0;32m/usr/lib/python3.8/gzip.py[0m in [0;36m__init__[0;34m(self, filename, mode, compresslevel, fileobj, mtime)[0m
-[1;32m    171[0m             [0mmode[0m [0;34m+=[0m [0;34m'b'[0m[0;34m[0m[0;34m[0m[0m
-[1;32m    172[0m         [0;32mif[0m [0mfileobj[0m [0;32mis[0m [0;32mNone[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0;32m--> 173[0;31m             [0mfileobj[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mmyfileobj[0m [0;34m=[0m [0mbuiltins[0m[0;34m.[0m[0mopen[0m[0;34m([0m[0mfilename[0m[0;34m,[0m [0mmode[0m [0;32mor[0m [0;34m'rb'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m    174[0m         [0;32mif[0m [0mfilename[0m [0;32mis[0m [0;32mNone[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[1;32m    175[0m             [0mfilename[0m [0;34m=[0m [0mgetattr[0m[0;34m([0m[0mfileobj[0m[0;34m,[0m [0;34m'name'[0m[0;34m,[0m [0;34m''[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/backend_bases.py[0m in [0;36mnew_figure_manager[0;34m(cls, num, *args, **kwargs)[0m
+[1;32m   3542[0m         [0;32mfrom[0m [0mmatplotlib[0m[0;34m.[0m[0mfigure[0m [0;32mimport[0m [0mFigure[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   3543[0m         [0mfig_cls[0m [0;34m=[0m [0mkwargs[0m[0;34m.[0m[0mpop[0m[0;34m([0m[0;34m'FigureClass'[0m[0;34m,[0m [0mFigure[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 3544[0;31m         [0mfig[0m [0;34m=[0m [0mfig_cls[0m[0;34m([0m[0;34m*[0m[0margs[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   3545[0m         [0;32mreturn[0m [0mcls[0m[0;34m.[0m[0mnew_figure_manager_given_figure[0m[0;34m([0m[0mnum[0m[0;34m,[0m [0mfig[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   3546[0m [0;34m[0m[0m
 
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/dataset-ds000288_no-std.tar.gz'
-FileNotFoundError: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/dataset-ds000288_no-std.tar.gz'
+[0;31mTypeError[0m: __init__() got an unexpected keyword argument 'height_ratios'
+TypeError: __init__() got an unexpected keyword argument 'height_ratios'
 

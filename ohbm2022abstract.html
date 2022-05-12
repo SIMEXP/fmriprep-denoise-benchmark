@@ -52,7 +52,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Discussions" href="discussions.html" />
+    <link rel="prev" title="Copyright Waiver" href="CITATION.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -127,11 +127,21 @@
      ds000228
     </a>
    </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ds000030.html">
+     ds000228
+    </a>
+   </li>
   </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="discussions.html">
    Discussions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
   </a>
  </li>
 </ul>
@@ -141,6 +151,23 @@
  </span>
 </p>
 <ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="supplemental_material.html">
+   Supplemental Material
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CITATION.html">
+     Copyright Waiver
+    </a>
+   </li>
+  </ul>
+ </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    OHBM 2022 abstract
@@ -274,8 +301,8 @@
     </a>
     <ul class="nav section-nav flex-column">
      <li class="toc-h4 nav-item toc-entry">
-      <a class="reference internal nav-link" href="#qc-fc">
-       QC-FC
+      <a class="reference internal nav-link" href="#qc-fc-and-distance-dependent-effect">
+       QC-FC and distance-dependent effect
       </a>
      </li>
      <li class="toc-h4 nav-item toc-entry">
@@ -315,43 +342,63 @@
                 
   <div class="cell tag_hide-input tag_hide-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">tarfile</span>
-<span class="kn">import</span> <span class="nn">io</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.features</span> <span class="kn">import</span> <span class="n">partial_correlation</span><span class="p">,</span> <span class="n">fdr</span><span class="p">,</span> <span class="n">calculate_median_absolute</span><span class="p">,</span> <span class="n">get_atlas_pairwise_distance</span>
+
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">scipy.stats</span> <span class="kn">import</span> <span class="n">zscore</span><span class="p">,</span> <span class="n">spearmanr</span>
-<span class="kn">from</span> <span class="nn">fmriprep_denoise.metrics</span> <span class="kn">import</span> <span class="n">partial_correlation</span><span class="p">,</span> <span class="n">fdr</span><span class="p">,</span> <span class="n">calculate_median_absolute</span>
+
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="n">grid_location</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="s1">&#39;baseline&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="s1">&#39;simple&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="s1">&#39;simple+gsr&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="s1">&#39;scrubbing.5&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="s1">&#39;scrubbing.5+gsr&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="s1">&#39;scrubbing.2&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="s1">&#39;scrubbing.2+gsr&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">):</span> <span class="s1">&#39;compcor&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="s1">&#39;compcor6&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">):</span> <span class="s1">&#39;aroma&#39;</span><span class="p">,</span>
+    <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">):</span> <span class="s1">&#39;aroma+gsr&#39;</span><span class="p">,</span>
+<span class="p">}</span>
 
 
 <span class="c1"># Load metric data</span>
 <span class="n">path_root</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="s2">&quot;inputs&quot;</span>
-<span class="n">file_qcfc</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000228_atlas-schaefer7networks_nroi-400_qcfc.tsv&quot;</span>
-<span class="n">file_dist</span> <span class="o">=</span> <span class="s2">&quot;atlas-schaefer7networks_nroi-400_desc-distance.tsv&quot;</span>
-<span class="n">file_network</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000228_atlas-schaefer7networks_nroi-400_modularity.tsv&quot;</span>
-<span class="c1"># file_qcfc = &quot;dataset-ds000228_atlas-gordon333_nroi-333_qcfc.tsv&quot;</span>
-<span class="c1"># file_dist = &quot;atlas-gordon333_nroi-333_desc-distance.tsv&quot;</span>
-<span class="c1"># file_network = &quot;dataset-ds000228_atlas-gordon333_nroi-333_modularity.tsv&quot;</span>
-<span class="n">file_dataset</span> <span class="o">=</span> <span class="s2">&quot;dataset-ds000228_desc-movement_phenotype.tsv&quot;</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="cell tag_hide-input tag_hide-output docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pairwise_distance</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_dist</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
-<span class="n">movement</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_dataset</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s1">&#39;utf8&#39;</span><span class="p">)</span>
-<span class="n">qcfc</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_qcfc</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">modularity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_root</span> <span class="o">/</span> <span class="n">file_network</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000228&quot;</span>
+<span class="n">atlas_name</span> <span class="o">=</span> <span class="s2">&quot;schaefer7networks&quot;</span>
+<span class="n">dimension</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="p">(</span><span class="n">qcfc_per_edge</span><span class="p">,</span> <span class="n">sig_per_edge</span><span class="p">,</span> <span class="n">modularity</span><span class="p">,</span> <span class="n">movement</span><span class="p">,</span> <span class="n">pairwise_distance</span><span class="p">)</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">load_metrics</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">path_root</span><span class="p">)</span>
+
+<span class="n">long_qcfc</span> <span class="o">=</span> <span class="n">qcfc_per_edge</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span>
+<span class="n">long_qcfc</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;qcfc&quot;</span><span class="p">]</span>
+
+<span class="n">corr_distance_long</span> <span class="o">=</span> <span class="n">qcfc_per_edge</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span>
+<span class="n">corr_distance_long</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;qcfc&quot;</span><span class="p">]</span>
+<span class="n">corr_distance_long</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">pairwise_distance</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span>
+
+<span class="n">modularity_order</span> <span class="o">=</span> <span class="n">modularity</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
 
 
-<span class="c1"># separate correlation from siginficant value</span>
-<span class="n">sig_per_edge</span> <span class="o">=</span> <span class="n">qcfc</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;pvalue&quot;</span><span class="p">)</span>
-<span class="n">sig_per_edge</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">sig_per_edge</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
-<span class="n">metric_per_edge</span> <span class="o">=</span> <span class="n">qcfc</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="n">regex</span><span class="o">=</span><span class="s2">&quot;correlation&quot;</span><span class="p">)</span>
-<span class="n">metric_per_edge</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">col</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">metric_per_edge</span><span class="o">.</span><span class="n">columns</span><span class="p">]</span>
+<span class="n">qcfc_sig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">_qcfc_fdr</span><span class="p">(</span><span class="n">sig_per_edge</span><span class="p">)</span>
+<span class="n">qcfc_mad</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">_get_qcfc_median_absolute</span><span class="p">(</span><span class="n">qcfc_per_edge</span><span class="p">)</span>
+<span class="n">qcfc_dist</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">_get_corr_distance</span><span class="p">(</span><span class="n">pairwise_distance</span><span class="p">,</span> <span class="n">qcfc_per_edge</span><span class="p">)</span>
+<span class="n">corr_mod</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">_corr_modularity_motion</span><span class="p">(</span><span class="n">modularity</span><span class="p">,</span> <span class="n">movement</span><span class="p">)</span>
+<span class="n">network_mod</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">modularity</span><span class="p">,</span>
+    <span class="s1">&#39;order&#39;</span><span class="p">:</span> <span class="n">modularity_order</span><span class="p">,</span>
+    <span class="s1">&#39;title&#39;</span><span class="p">:</span> <span class="s2">&quot;Identifiability of network structure</span><span class="se">\n</span><span class="s2">after denoising&quot;</span><span class="p">,</span>
+    <span class="s1">&#39;label&#39;</span><span class="p">:</span> <span class="s2">&quot;Mean modularity quality (a.u.)&quot;</span><span class="p">,</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -360,11 +407,11 @@
 <h1>OHBM 2022 abstract<a class="headerlink" href="#ohbm-2022-abstract" title="Permalink to this headline">¶</a></h1>
 <section id="impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs">
 <h2>Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs<a class="headerlink" href="#impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs" title="Permalink to this headline">¶</a></h2>
-<p>H-T Wang<a class="footnote-reference brackets" href="#id35" id="id1">1</a>, S L Meisler<a class="footnote-reference brackets" href="#id36" id="id2">2</a><a class="footnote-reference brackets" href="#id37" id="id3">3</a>, H Shamarke, F Paugam<a class="footnote-reference brackets" href="#id35" id="id4">1</a><a class="footnote-reference brackets" href="#id38" id="id5">4</a>, N Gensollen<a class="footnote-reference brackets" href="#id39" id="id6">5</a>, B Thirion<a class="footnote-reference brackets" href="#id39" id="id7">5</a>, C Markiewicz<a class="footnote-reference brackets" href="#id40" id="id8">6</a>, P Bellec<a class="footnote-reference brackets" href="#id35" id="id9">1</a><a class="footnote-reference brackets" href="#id41" id="id10">7</a></p>
+<p>H-T Wang<a class="footnote-reference brackets" href="#id72" id="id1">1</a>, S L Meisler<a class="footnote-reference brackets" href="#id73" id="id2">2</a><a class="footnote-reference brackets" href="#id74" id="id3">3</a>, H Shamarke, F Paugam<a class="footnote-reference brackets" href="#id72" id="id4">1</a><a class="footnote-reference brackets" href="#id75" id="id5">4</a>, N Gensollen<a class="footnote-reference brackets" href="#id76" id="id6">5</a>, B Thirion<a class="footnote-reference brackets" href="#id76" id="id7">5</a>, C Markiewicz<a class="footnote-reference brackets" href="#id77" id="id8">6</a>, P Bellec<a class="footnote-reference brackets" href="#id72" id="id9">1</a><a class="footnote-reference brackets" href="#id78" id="id10">7</a></p>
 <section id="introduction">
 <h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
 <p>Selecting an optimal denoising strategy is a key issue when processing fMRI data.
-The popular software fMRIPrep <span id="id11">[<a class="reference internal" href="#id25">Esteban <em>et al.</em>, 2020</a>]</span> aims to standardize fMRI preprocessing,
+The popular software fMRIPrep <span id="id11">[<a class="reference internal" href="references.html#id2">Esteban <em>et al.</em>, 2020</a>]</span> aims to standardize fMRI preprocessing,
 but users are still offered a wide range of confound regressors to choose from to denoise data.
 Without a good understanding of the literature or the fMRIPrep documentation,
 users can select suboptimal strategies.
@@ -373,8 +420,8 @@ and by contrasting the results with past literature based on alternative preproc
 </section>
 <section id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-<p>We selected dataset ds000228 <span id="id12">[<a class="reference internal" href="#id29">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
-Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id13">[<a class="reference internal" href="#id28">Schaefer <em>et al.</em>, 2017</a>]</span>.
+<p>We selected dataset ds000228 <span id="id12">[<a class="reference internal" href="references.html#id16">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
+Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id13">[<a class="reference internal" href="references.html#id17">Schaefer <em>et al.</em>, 2017</a>]</span>.
 We applied the denoising strategies listed in the table below using fMRIPrep-generated confounds.
 Subjects with less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold were excluded from all analysis.
 We also calculated the connectome from high-pass filtered time series as a comparison baseline.</p>
@@ -447,7 +494,7 @@ We also calculated the connectome from high-pass filtered time series as a compa
 <td><p>N/A</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>simple+gsr</p></td>
+<tr class="row-even"><td><p>scrubbing+gsr</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
 <td><p>full</p></td>
@@ -514,247 +561,216 @@ We also calculated the connectome from high-pass filtered time series as a compa
 </tr>
 </tbody>
 </table>
-<p>We used three metrics <span id="id14">[<a class="reference internal" href="#id26">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id15">[<a class="reference internal" href="#id30">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
+<p>We used three metrics <span id="id14">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id15">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
 <ol class="simple">
-<li><p>Quality control / functional connectivity (QCFC <span id="id16">[<a class="reference internal" href="#id34">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
-<li><p>Distance-dependent effects of motion on connectivity <span id="id17">[<a class="reference internal" href="#id32">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
-<li><p>Network modularity <span id="id18">[<a class="reference internal" href="#id33">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
+<li><p>Quality control / functional connectivity (QCFC <span id="id16">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
+<li><p>Distance-dependent effects of motion on connectivity <span id="id17">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
+<li><p>Network modularity <span id="id18">[<a class="reference internal" href="references.html#id11">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
 </ol>
 </section>
 <section id="results">
 <h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">¶</a></h3>
-<section id="qc-fc">
-<h4>QC-FC<a class="headerlink" href="#qc-fc" title="Permalink to this headline">¶</a></h4>
+<section id="qc-fc-and-distance-dependent-effect">
+<h4>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">¶</a></h4>
 <p>No denoise strategy removed the correlation with motion captured by mean framewise displacement.
 <code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> reduced the correlation between connectivity edges and mean framewise displacement.
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id19">[<a class="reference internal" href="#id34">Power <em>et al.</em>, 2015</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id19">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>.
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code>, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="#id26">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="#id30">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
-<div class="cell tag_hide-input docutils container">
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
+<div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">bar_color</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
-<span class="c1"># multiple comparision on qcfc</span>
-<span class="n">long_qcfc_sig</span><span class="o">=</span> <span class="n">sig_per_edge</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span>
-<span class="n">long_qcfc_sig</span><span class="p">[</span><span class="s1">&#39;fdr&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">long_qcfc_sig</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;variable&#39;</span><span class="p">)[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">transform</span><span class="p">(</span><span class="n">fdr</span><span class="p">)</span>
-<span class="n">long_qcfc_sig</span> <span class="o">=</span> <span class="n">long_qcfc_sig</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;variable&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">100</span><span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">fdr</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="o">/</span><span class="n">x</span><span class="o">.</span><span class="n">fdr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="n">long_qcfc_sig</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">long_qcfc_sig</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;p_corrected&quot;</span><span class="p">])</span>
-
-<span class="n">order</span> <span class="o">=</span> <span class="n">long_qcfc_sig</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;p_corrected&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">long_qcfc_sig</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Percentage of edge significantly correlated with mean FD&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Percentage %&quot;</span><span class="p">,</span>
-       <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="c1"># plt.savefig(&quot;sig_qcfc.png&quot;, dpi=300)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Residual effect of motion on connectomes after de-noising&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">nn</span><span class="p">,</span> <span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">figure_data</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="p">[</span><span class="n">qcfc_sig</span><span class="p">,</span> <span class="n">qcfc_mad</span><span class="p">])):</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">figure_data</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span>
+                <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">figure_data</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">],</span>
+                <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">figure_data</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">figure_data</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">nn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Confound removal strategy&quot;</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;qcfc-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</div>
+<figure class="align-default" id="qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/ohbm2022abstract_3_0.png" src="_images/ohbm2022abstract_3_0.png" />
+<img alt="_images/ohbm2022abstract_2_0.png" src="_images/ohbm2022abstract_2_0.png" />
 </div>
-</div>
-<div class="cell tag_hide-input docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">median_absolute</span> <span class="o">=</span> <span class="n">metric_per_edge</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">calculate_median_absolute</span><span class="p">)</span>
-<span class="n">order</span> <span class="o">=</span> <span class="n">median_absolute</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="p">(</span><span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">median_absolute</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Median absolute deviation QC-FC&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Median absolute deviation&quot;</span><span class="p">,</span>
-       <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="c1"># plt.savefig(&quot;mad_qcfc.png&quot;, dpi=300)</span>
-
-<span class="k">def</span> <span class="nf">draw_absolute_median</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="o">**</span><span class="n">kws</span><span class="p">):</span>
-    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">gca</span><span class="p">()</span>
-    <span class="n">mad</span> <span class="o">=</span> <span class="n">calculate_median_absolute</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;qcfc&#39;</span><span class="p">])</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">vlines</span><span class="p">(</span><span class="n">mad</span><span class="p">,</span> <span class="n">ymin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ymax</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
-    
-
-<span class="n">long_qcfc</span> <span class="o">=</span> <span class="n">metric_per_edge</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span>
-<span class="n">long_qcfc</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Strategy&quot;</span><span class="p">,</span> <span class="s2">&quot;qcfc&quot;</span><span class="p">]</span>
-<span class="n">long_qcfc</span><span class="p">[</span><span class="s2">&quot;row&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">long_qcfc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)))</span>
-<span class="n">long_qcfc</span><span class="p">[</span><span class="s2">&quot;col&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">3</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">long_qcfc</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">9</span><span class="p">))),</span> <span class="mi">3</span><span class="p">)</span>
-
-<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">displot</span><span class="p">(</span>
-    <span class="n">long_qcfc</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s2">&quot;qcfc&quot;</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;col&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;kde&#39;</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mi">2</span>
-<span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Density&quot;</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">map_dataframe</span><span class="p">(</span><span class="n">draw_absolute_median</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">),</span> <span class="n">metric_per_edge</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
-    <span class="n">axis_i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">axis_j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span>
-    <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">axis_i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Pearson</span><span class="se">\&#39;</span><span class="s2">s correlation: </span><span class="se">\n</span><span class="s2">mean FD and</span><span class="se">\n</span><span class="s2">connectome edges&quot;</span><span class="p">)</span>
-        
-<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span> 
-<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distribution of correlation between framewise distplacement and edge strength&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="c1"># plt.savefig(&quot;dist_qcfc.png&quot;, dpi=300)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/ohbm2022abstract_4_0.png" src="_images/ohbm2022abstract_4_0.png" />
-<img alt="_images/ohbm2022abstract_4_1.png" src="_images/ohbm2022abstract_4_1.png" />
-</div>
-</div>
+</figure>
 </section>
 <section id="distance-dependent-effects-of-motion-on-connectivity">
 <h4>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">¶</a></h4>
-<p>Consistent with the literature, functional connectivity strength reduced with the distance between the two nodes.
-The <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">compcor</span></code> strategies reduced the distance dependence more than the baseline.</p>
-<div class="cell tag_hide-input docutils container">
+<p>Consistent with the literature, <code class="docutils literal notranslate"><span class="pre">aroma</span></code> reduces the distance dependency of motion on connectivity.</p>
+<div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_distance</span><span class="p">,</span> <span class="n">p_val</span> <span class="o">=</span> <span class="n">spearmanr</span><span class="p">(</span><span class="n">pairwise_distance</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">metric_per_edge</span><span class="p">)</span>  
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">subfigs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subfigures</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Residual effect of motion on connectomes after de-noising&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;x-large&#39;</span><span class="p">)</span>
 
-<span class="n">corr_distance</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">corr_distance</span><span class="p">[</span><span class="mi">1</span><span class="p">:,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">index</span><span class="o">=</span><span class="n">metric_per_edge</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span>
-<span class="n">long_qcfc</span><span class="p">[</span><span class="s1">&#39;distance&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">pairwise_distance</span><span class="o">.</span><span class="n">iloc</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> <span class="mi">9</span><span class="p">)</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">subfigs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">order</span> <span class="o">=</span> <span class="n">corr_distance</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">qcfc_dist</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span>
+            <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">qcfc_dist</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">qcfc_dist</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">qcfc_dist</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="k">if</span> <span class="n">nn</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Confound removal strategy&quot;</span><span class="p">)</span>
 
-<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">corr_distance</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Distance-dependent effects of motion&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">))</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Nodewise correlation between</span><span class="se">\n</span><span class="s2">Euclidian distance and QC-FC metric&quot;</span><span class="p">,</span>
-        <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="c1"># plt.savefig(&quot;corr_dist_qcfc_mean.png&quot;, dpi=300)</span>
-
-<span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">FacetGrid</span><span class="p">(</span><span class="n">long_qcfc</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;col&quot;</span><span class="p">,</span> <span class="n">row</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mf">1.7</span><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="mf">1.5</span><span class="p">)</span>
-<span class="n">g</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">,</span> <span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="s1">&#39;qcfc&#39;</span><span class="p">,</span> <span class="n">fit_reg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
-      <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;red&#39;</span><span class="p">},</span> <span class="n">scatter_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;s&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">,</span> <span class="s1">&#39;alpha&#39;</span><span class="p">:</span> <span class="mf">0.15</span><span class="p">,})</span>
-<span class="n">g</span><span class="o">.</span><span class="n">refline</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">9</span><span class="p">),</span> <span class="n">metric_per_edge</span><span class="o">.</span><span class="n">columns</span><span class="p">):</span>
-    <span class="n">axis_i</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span> <span class="o">/</span> <span class="mi">3</span><span class="p">)</span>
-    <span class="n">axis_j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="mi">3</span>
-    <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">name</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">axis_i</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;Distance (mm)&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">axis_j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">g</span><span class="o">.</span><span class="n">facet_axis</span><span class="p">(</span><span class="n">axis_i</span><span class="p">,</span> <span class="n">axis_j</span><span class="p">)</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;QC-FC&quot;</span><span class="p">)</span>
-        
-<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mf">0.9</span><span class="p">)</span> 
-<span class="n">g</span><span class="o">.</span><span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Correlation between nodewise Euclidian distance and QC-FC&#39;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="c1"># plt.savefig(&quot;corr_dist_qcfc_dist.png&quot;, dpi=300)</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">subfigs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row_axes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axs</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row_axes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cur_strategy</span> <span class="o">:=</span> <span class="n">grid_location</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">corr_distance_long</span><span class="p">[</span><span class="s2">&quot;Strategy&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur_strategy</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">corr_distance_long</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:],</span>
+                                <span class="n">x</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;qcfc&#39;</span><span class="p">,</span>
+                                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">cur_strategy</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+            <span class="n">sns</span><span class="o">.</span><span class="n">regplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">corr_distance_long</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:],</span>
+                        <span class="n">x</span><span class="o">=</span><span class="s1">&#39;distance&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;qcfc&#39;</span><span class="p">,</span>
+                        <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                        <span class="n">scatter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                        <span class="n">line_kws</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;color&#39;</span><span class="p">:</span> <span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;linewidth&#39;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">},</span>
+                        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s2">&quot;Distance (mm)&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;QC-FC&quot;</span> <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="o">=</span><span class="n">ylabel</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subfigs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">delaxes</span><span class="p">(</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+<span class="n">subfigs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Correlation between nodewise Euclidian distance and QC-FC&#39;</span><span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distance-dependent effects of motion on connectivity¶&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;dist-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</div>
+<figure class="align-default" id="dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/ohbm2022abstract_6_0.png" src="_images/ohbm2022abstract_6_0.png" />
-<img alt="_images/ohbm2022abstract_6_1.png" src="_images/ohbm2022abstract_6_1.png" />
+<img alt="_images/ohbm2022abstract_4_0.png" src="_images/ohbm2022abstract_4_0.png" />
 </div>
-</div>
+</figure>
 </section>
 <section id="network-modularity">
 <h4>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">¶</a></h4>
-<p>All strategies increased the network modularity compared to the <code class="docutils literal notranslate"><span class="pre">baseline</span></code>.
+<p>All strategies increased the overall network modularity compared to the <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, with scrubbing based methods performing the best out of all.
 GSR-based strategies improved the network modularity compared to their conunterparts.
 The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity.</p>
-<div class="cell tag_hide-input docutils container">
+<div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">corr_modularity</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">z_movement</span> <span class="o">=</span> <span class="n">movement</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span><span class="n">zscore</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">column</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">modularity</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-    <span class="n">cur_data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">modularity</span><span class="p">[</span><span class="n">column</span><span class="p">],</span> 
-                          <span class="n">movement</span><span class="p">[[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]],</span> 
-                          <span class="n">z_movement</span><span class="p">[[</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Gender&#39;</span><span class="p">]]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">dropna</span><span class="p">()</span>
-    <span class="n">current_strategy</span> <span class="o">=</span> <span class="n">partial_correlation</span><span class="p">(</span><span class="n">cur_data</span><span class="p">[</span><span class="n">column</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
-                                           <span class="n">cur_data</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">,</span> 
-                                           <span class="n">cur_data</span><span class="p">[[</span><span class="s1">&#39;Age&#39;</span><span class="p">,</span> <span class="s1">&#39;Gender&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-    <span class="n">current_strategy</span><span class="p">[</span><span class="s1">&#39;strategy&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">column</span>
-    <span class="n">corr_modularity</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_strategy</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">constrained_layout</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">9</span><span class="p">))</span>
+<span class="n">subfigs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subfigures</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">height_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">axsTopRight</span> <span class="o">=</span> <span class="n">subfigs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">network_mod</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span>
+            <span class="n">orient</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span>
+            <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">order</span><span class="o">=</span><span class="n">network_mod</span><span class="p">[</span><span class="s1">&#39;order&#39;</span><span class="p">],</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axsTopRight</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">axsTopRight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">network_mod</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+<span class="n">axsTopRight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">network_mod</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
+<span class="n">axsTopRight</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Confound removal strategy&quot;</span><span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">order</span> <span class="o">=</span> <span class="n">modularity</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">sort_values</span><span class="p">()</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">modularity</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="n">order</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Identifiability of network structure</span><span class="se">\n</span><span class="s2">after denoising&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Mean modularity quality (a.u.)&quot;</span><span class="p">,</span>
-       <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">corr_mod</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;correlation&#39;</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span>
+            <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">order</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axsTopRight</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">axsTopRight</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">corr_mod</span><span class="p">[</span><span class="s1">&#39;title&#39;</span><span class="p">])</span>
+<span class="n">axsTopRight</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">corr_mod</span><span class="p">[</span><span class="s1">&#39;label&#39;</span><span class="p">])</span>
 
-<span class="n">corr_modularity</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">corr_modularity</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span><span class="s1">&#39;correlation&#39;</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">corr_modularity</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="s1">&#39;correlation&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">bar_color</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">get_xticklabels</span><span class="p">(),</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">90</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s2">&quot;Correlation between</span><span class="se">\n</span><span class="s2">network modularity and </span><span class="se">\n</span><span class="s2">mean framewise displacement&quot;</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">ylabel</span><span class="o">=</span><span class="s2">&quot;Pearson&#39;s correlation&quot;</span><span class="p">,</span>
-       <span class="n">xlabel</span><span class="o">=</span><span class="s2">&quot;confound removal strategy&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
-<span class="c1"># plt.savefig(&quot;modularity.png&quot;, dpi=300)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Correlation between</span><span class="se">\n</span><span class="s1">network modularity and mean framewise displacement&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;xx-large&#39;</span><span class="p">)</span>
+
+<span class="n">axsBottomRight</span> <span class="o">=</span> <span class="n">subfigs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">row_axes</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">axsBottomRight</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">row_axes</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">cur_strategy</span> <span class="o">:=</span> <span class="n">grid_location</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">long_qcfc</span><span class="p">[</span><span class="s2">&quot;Strategy&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">cur_strategy</span>
+            <span class="n">g</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">histplot</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">long_qcfc</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">mask</span><span class="p">,</span> <span class="p">:],</span>
+                            <span class="n">x</span><span class="o">=</span><span class="s1">&#39;qcfc&#39;</span><span class="p">,</span>
+                            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">cur_strategy</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s1">&#39;small&#39;</span><span class="p">)</span>
+            <span class="n">mad</span> <span class="o">=</span> <span class="n">qcfc_mad</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">cur_strategy</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">mad</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;r&#39;</span><span class="p">)</span>
+            <span class="n">xlabel</span> <span class="o">=</span> <span class="s2">&quot;Pearson</span><span class="se">\&#39;</span><span class="s2">s correlation&quot;</span> <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">2</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="n">g</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">xlabel</span><span class="o">=</span><span class="n">xlabel</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">subfigs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">delaxes</span><span class="p">(</span><span class="n">axsBottomRight</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+<span class="n">subfigs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span><span class="s1">&#39;Distribution of correlation between framewise distplacement and edge strength&#39;</span><span class="p">)</span>
+
+
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;network-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+</div>
+<figure class="align-default" id="network-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/ohbm2022abstract_8_0.png" src="_images/ohbm2022abstract_8_0.png" />
+<img alt="_images/ohbm2022abstract_6_0.png" src="_images/ohbm2022abstract_6_0.png" />
 </div>
-</div>
+</figure>
 </section>
 </section>
 <section id="conclusions">
 <h3>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h3>
 <p>We replicated previous findings demonstrating the usefulness of standard denoising strategies (compcor, aroma, etc.).
-However, results involving global signal regression methods systematically contradict the literature<span id="id22">[<a class="reference internal" href="#id26">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id23">[<a class="reference internal" href="#id30">Parkes <em>et al.</em>, 2018</a>]</span>.
+However, results involving global signal regression methods systematically contradict the literature<span id="id22">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id23">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span>.
 This evaluation is implemented in a fully reproducible jupyter book framework, and it can be applied to evaluate denoising strategies for future fMRIPrep release.
 This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.</p>
 </section>
 <section id="references">
 <h3>References<a class="headerlink" href="#references" title="Permalink to this headline">¶</a></h3>
 <p id="id24"><dl class="citation">
-<dt class="label" id="id26"><span class="brackets">CWP+17</span><span class="fn-backref">(<a href="#id14">1</a>,<a href="#id20">2</a>,<a href="#id22">3</a>)</span></dt>
+<dt class="label" id="id30"><span class="brackets">CWP+17</span><span class="fn-backref">(<a href="#id14">1</a>,<a href="#id20">2</a>,<a href="#id22">3</a>)</span></dt>
 <dd><p>Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. <em>NeuroImage</em>, 154(1):174–187, July 2017. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.03.020">doi:10.1016/j.neuroimage.2017.03.020</a>.</p>
 </dd>
 <dt class="label" id="id25"><span class="brackets"><a class="fn-backref" href="#id11">EMG+20</a></span></dt>
 <dd><p>Oscar Esteban, Christopher J. Markiewicz, Mathias Goncalves, Elizabeth DuPre, James D. Kent, Rastko Ciric, Ross W. Blair, Russell A. Poldrack, and Krzysztof J. Gorgolewski. Fmriprep: a robust preprocessing pipeline for functional mri. June 2020. URL: <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">https://doi.org/10.5281/zenodo.3876458</a>, <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">doi:10.5281/zenodo.3876458</a>.</p>
 </dd>
-<dt class="label" id="id30"><span class="brackets">PFYF18</span><span class="fn-backref">(<a href="#id15">1</a>,<a href="#id21">2</a>,<a href="#id23">3</a>)</span></dt>
+<dt class="label" id="id32"><span class="brackets">PFYF18</span><span class="fn-backref">(<a href="#id15">1</a>,<a href="#id21">2</a>,<a href="#id23">3</a>)</span></dt>
 <dd><p>Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. <em>NeuroImage</em>, 171:415–436, May 2018. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.12.073">doi:10.1016/j.neuroimage.2017.12.073</a>.</p>
 </dd>
-<dt class="label" id="id32"><span class="brackets"><a class="fn-backref" href="#id17">PBS+12</a></span></dt>
-<dd><p>Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. <em>NeuroImage</em>, 59(3):2142–2154, February 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.10.018">doi:10.1016/j.neuroimage.2011.10.018</a>.</p>
+<dt class="label" id="id27"><span class="brackets"><a class="fn-backref" href="#id17">PBS+12</a></span></dt>
+<dd><p>Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. <em>NeuroImage</em>, 59(3):2142–2154, 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.10.018">doi:10.1016/j.neuroimage.2011.10.018</a>.</p>
 </dd>
-<dt class="label" id="id34"><span class="brackets">PSP15</span><span class="fn-backref">(<a href="#id16">1</a>,<a href="#id19">2</a>)</span></dt>
+<dt class="label" id="id35"><span class="brackets">PSP15</span><span class="fn-backref">(<a href="#id16">1</a>,<a href="#id19">2</a>)</span></dt>
 <dd><p>Jonathan D. Power, Bradley L. Schlaggar, and Steven E. Petersen. Recent progress and outstanding issues in motion correction in resting state fMRI. <em>NeuroImage</em>, 105:536–551, January 2015. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2014.10.044">doi:10.1016/j.neuroimage.2014.10.044</a>.</p>
 </dd>
-<dt class="label" id="id29"><span class="brackets"><a class="fn-backref" href="#id12">RLRNS18</a></span></dt>
+<dt class="label" id="id39"><span class="brackets"><a class="fn-backref" href="#id12">RLRNS18</a></span></dt>
 <dd><p>Hilary Richardson, Grace Lisandrelli, Alexa Riobueno-Naylor, and Rebecca Saxe. Development of the social brain from age three to twelve years. <em>Nature Communications</em>, 9(1):1027, March 2018. <a class="reference external" href="https://doi.org/10.1038/s41467-018-03399-2">doi:10.1038/s41467-018-03399-2</a>.</p>
 </dd>
-<dt class="label" id="id33"><span class="brackets"><a class="fn-backref" href="#id18">SWL+12</a></span></dt>
+<dt class="label" id="id34"><span class="brackets"><a class="fn-backref" href="#id18">SWL+12</a></span></dt>
 <dd><p>Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. <em>NeuroImage</em>, 60(1):623–632, March 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.12.063">doi:10.1016/j.neuroimage.2011.12.063</a>.</p>
 </dd>
-<dt class="label" id="id28"><span class="brackets"><a class="fn-backref" href="#id13">SKG+17</a></span></dt>
+<dt class="label" id="id40"><span class="brackets"><a class="fn-backref" href="#id13">SKG+17</a></span></dt>
 <dd><p>Alexander Schaefer, Ru Kong, Evan M. Gordon, Timothy O. Laumann, Xi-Nian Zuo, Avram J. Holmes, Simon B. Eickhoff, and B.T. Thomas Yeo. Local-global parcellation of the human cerebral cortex from intrinsic functional connectivity mri. <em>Cerebral Cortex</em>, pages 1–20, 2017. <a class="reference external" href="https://doi.org/10.1093/cercor/bhx179">doi:10.1093/cercor/bhx179</a>.</p>
 </dd>
 </dl>
 </p>
 <hr class="footnotes docutils" />
 <dl class="footnote brackets">
-<dt class="label" id="id35"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id4">2</a>,<a href="#id9">3</a>)</span></dt>
+<dt class="label" id="id72"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id4">2</a>,<a href="#id9">3</a>)</span></dt>
 <dd><p>Centre de recherche de l’institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada</p>
 </dd>
-<dt class="label" id="id36"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dt class="label" id="id73"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p>Harvard University, MA, USA</p>
 </dd>
-<dt class="label" id="id37"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dt class="label" id="id74"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
 <dd><p>Massachusetts Institute of Technology, MA, USA</p>
 </dd>
-<dt class="label" id="id38"><span class="brackets"><a class="fn-backref" href="#id5">4</a></span></dt>
+<dt class="label" id="id75"><span class="brackets"><a class="fn-backref" href="#id5">4</a></span></dt>
 <dd><p>Computer Science and Operations Research Department, Université de Montréal, Montréal, Québec, Canada</p>
 </dd>
-<dt class="label" id="id39"><span class="brackets">5</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id7">2</a>)</span></dt>
+<dt class="label" id="id76"><span class="brackets">5</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id7">2</a>)</span></dt>
 <dd><p>Inria, CEA, Université Paris-Saclay, Paris, France</p>
 </dd>
-<dt class="label" id="id40"><span class="brackets"><a class="fn-backref" href="#id8">6</a></span></dt>
+<dt class="label" id="id77"><span class="brackets"><a class="fn-backref" href="#id8">6</a></span></dt>
 <dd><p>Department of Psychology, Stanford University, Stanford, United States</p>
 </dd>
-<dt class="label" id="id41"><span class="brackets"><a class="fn-backref" href="#id10">7</a></span></dt>
+<dt class="label" id="id78"><span class="brackets"><a class="fn-backref" href="#id10">7</a></span></dt>
 <dd><p>Psychology Department, Université de Montréal, Montréal, Québec, Canada</p>
 </dd>
 </dl>
@@ -787,11 +803,11 @@ This software may also be useful for researchers to select the most suitable str
         
             <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="discussions.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="CITATION.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">Discussions</p>
+            <p class="prev-next-title">Copyright Waiver</p>
         </div>
     </a>
 </div>

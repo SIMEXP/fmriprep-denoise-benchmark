@@ -1,3 +1,0 @@
-# Introductions
-
-Place holder.
