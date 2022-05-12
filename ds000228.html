@@ -52,7 +52,7 @@
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ds000228" href="ds000030.html" />
+    <link rel="next" title="ds000030" href="ds000030.html" />
     <link rel="prev" title="Results" href="results.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -130,7 +130,7 @@
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="ds000030.html">
-     ds000228
+     ds000030
     </a>
    </li>
   </ul>
@@ -152,10 +152,22 @@
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
+ <li class="toctree-l1 has-children">
   <a class="reference internal" href="supplemental_material.html">
    Supplemental Material
   </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="CITATION.html">
+     fMRIPrep preprocessing details
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="ohbm2022abstract.html">
@@ -201,7 +213,10 @@
 
     <div class="dropdown-buttons">
         <!-- ipynb file if we had a myst markdown file -->
-        
+        <a class="dropdown-buttons"
+            href="_sources/ds000228.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
         <!-- Download raw file -->
         <a class="dropdown-buttons" href="_sources/ds000228.md"><button type="button"
                 class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
@@ -239,11 +254,51 @@
 
             <!-- Launch buttons -->
 
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/SIMEXP/fmriprep-denoise-benchmark/main?urlpath=tree/content/ds000228.md"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        
+    </div>
+</div>
+
         </div>
 
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#qc-fc-and-distance-dependent-effect">
+   QC-FC and distance-dependent effect
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity">
+   Distance-dependent effects of motion on connectivity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#network-modularity">
+   Network modularity
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -254,7 +309,69 @@
                 
   <section class="tex2jax_ignore mathjax_ignore" id="ds000228">
 <h1>ds000228<a class="headerlink" href="#ds000228" title="Permalink to this headline">¶</a></h1>
-<p>place holder.</p>
+<div class="cell tag_hide-input tag_hide-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+
+<span class="c1"># Load metric data</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000228&quot;</span>
+<span class="n">atlas_name</span> <span class="o">=</span> <span class="s2">&quot;difumo&quot;</span>
+<span class="n">dimension</span> <span class="o">=</span> <span class="mi">128</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">_qcfc-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_distance_dependence</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">_dist-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">_network-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/ds000228_1_3.png" src="_images/ds000228_1_3.png" />
+<img alt="_images/ds000228_1_4.png" src="_images/ds000228_1_4.png" />
+<img alt="_images/ds000228_1_5.png" src="_images/ds000228_1_5.png" />
+</div>
+</div>
+<section id="qc-fc-and-distance-dependent-effect">
+<h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">¶</a></h2>
+<p>No denoise strategy removed the correlation with motion captured by mean framewise displacement.
+<code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> reduced the correlation between connectivity edges and mean framewise displacement.
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id1">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code>, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id2">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id3">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
+<figure class="align-default" id="ds000228-difumo-128-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/ds000228_1_0.png" src="_images/ds000228_1_0.png" />
+</div>
+</figure>
+</section>
+<section id="distance-dependent-effects-of-motion-on-connectivity">
+<h2>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">¶</a></h2>
+<p>Consistent with the literature, <code class="docutils literal notranslate"><span class="pre">aroma</span></code> reduces the distance dependency of motion on connectivity.</p>
+<figure class="align-default" id="ds000228-difumo-128-dist-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/ds000228_1_1.png" src="_images/ds000228_1_1.png" />
+</div>
+</figure>
+</section>
+<section id="network-modularity">
+<h2>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">¶</a></h2>
+<p>All strategies increased the overall network modularity compared to the <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, with scrubbing based methods performing the best out of all.
+GSR-based strategies improved the network modularity compared to their conunterparts.
+The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity.</p>
+<figure class="align-default" id="ds000228-difumo-128-network-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/ds000228_1_2.png" src="_images/ds000228_1_2.png" />
+</div>
+</figure>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -292,7 +409,7 @@
     <a class='right-next' id="next-link" href="ds000030.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ds000228</p>
+        <p class="prev-next-title">ds000030</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
