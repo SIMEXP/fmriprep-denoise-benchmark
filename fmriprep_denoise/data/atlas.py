@@ -15,7 +15,7 @@ ATLAS_METADATA = {
         'atlas': 'Schaefer2018',
         'template': "MNI152NLin2009cAsym",
         'resolution': 2,
-        'dimensions': [100, 200, 300, 400, 500, 600, 800, 1000],
+        'dimensions': [100, 200, 300, 400, 500, 600, 800],
         'source': "templateflow"
     },
     'mist':{
