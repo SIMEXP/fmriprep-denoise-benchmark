@@ -341,11 +341,12 @@
 </div>
 <section id="qc-fc-and-distance-dependent-effect">
 <h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">¶</a></h2>
-<p>No denoise strategy removed the correlation with motion captured by mean framewise displacement.
-<code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> reduced the correlation between connectivity edges and mean framewise displacement.
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id1">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>.
-<code class="docutils literal notranslate"><span class="pre">compcor</span></code>, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id2">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id3">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
+<!-- 
+No denoise strategy removed the correlation with motion captured by mean framewise displacement. 
+`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement. 
+`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`. 
+`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series. 
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. -->
 <figure class="align-default" id="ds000228-difumo-128-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_0.png" src="_images/ds000228_1_0.png" />
@@ -354,7 +355,7 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </section>
 <section id="distance-dependent-effects-of-motion-on-connectivity">
 <h2>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">¶</a></h2>
-<p>Consistent with the literature, <code class="docutils literal notranslate"><span class="pre">aroma</span></code> reduces the distance dependency of motion on connectivity.</p>
+<!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  -->
 <figure class="align-default" id="ds000228-difumo-128-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_1.png" src="_images/ds000228_1_1.png" />
@@ -363,9 +364,10 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </section>
 <section id="network-modularity">
 <h2>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">¶</a></h2>
-<p>All strategies increased the overall network modularity compared to the <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, with scrubbing based methods performing the best out of all.
+<!-- 
+All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all. 
 GSR-based strategies improved the network modularity compared to their conunterparts.
-The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity.</p>
+The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity. -->
 <figure class="align-default" id="ds000228-difumo-128-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_2.png" src="_images/ds000228_1_2.png" />
