@@ -11,7 +11,12 @@ parts:
     - file: results.md
       sections:
       - file: ds000228.md
+      - file: ds000030.md
     - file: discussions.md
+    - file: references.md
   - caption: Appendices
     chapters:
+    - file: supplemental_material.md
+      sections:
+      - file: CITATION.md
     - file: ohbm2022abstract.md
