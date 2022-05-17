@@ -309,36 +309,6 @@
                 
   <section class="tex2jax_ignore mathjax_ignore" id="ds000228">
 <h1>ds000228<a class="headerlink" href="#ds000228" title="Permalink to this headline">¶</a></h1>
-<div class="cell tag_hide-input tag_hide-output docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
-<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
-
-
-<span class="c1"># Load metric data</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000228&quot;</span>
-<span class="n">atlas_name</span> <span class="o">=</span> <span class="s2">&quot;difumo&quot;</span>
-<span class="n">dimension</span> <span class="o">=</span> <span class="mi">128</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">_qcfc-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_distance_dependence</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">_dist-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas_name</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">dimension</span><span class="si">}</span><span class="s2">_network-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<img alt="_images/ds000228_1_3.png" src="_images/ds000228_1_3.png" />
-<img alt="_images/ds000228_1_4.png" src="_images/ds000228_1_4.png" />
-<img alt="_images/ds000228_1_5.png" src="_images/ds000228_1_5.png" />
-</div>
-</div>
 <section id="qc-fc-and-distance-dependent-effect">
 <h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">¶</a></h2>
 <!-- 
@@ -346,20 +316,92 @@ No denoise strategy removed the correlation with motion captured by mean framewi
 `aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement. 
 `scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`. 
 `compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series. 
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. -->
-<figure class="align-default" id="ds000228-difumo-128-qcfc-fig" style="width: 800px">
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. --><div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="c1"># Load metric data</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000228&quot;</span>
+<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mist&quot;</span><span class="p">,</span> <span class="s2">&quot;difumo&quot;</span><span class="p">,</span> <span class="s2">&quot;schaefer7networks&quot;</span><span class="p">,</span> <span class="s2">&quot;gordon333&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
+  <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">)</span>
+  <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s2">_qcfc-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="tabbed-set docutils">
+<input checked="checked" id="b88df62a-0599-442f-8117-d4fa0932d043" name="c6fd0c58-57b7-4ba2-b745-1aaa862b560d" type="radio">
+</input><label class="tabbed-label" for="b88df62a-0599-442f-8117-d4fa0932d043">
+MIST</label><div class="tabbed-content docutils">
+<figure class="align-default" id="tbl-ds000228-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_0.png" src="_images/ds000228_1_0.png" />
 </div>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-qcfc-fig" title="Permalink to this image">¶</a></p>
+</figcaption>
 </figure>
+</div>
+<input id="d42d36b6-126c-4471-8ffc-5f9c34cff95b" name="c6fd0c58-57b7-4ba2-b745-1aaa862b560d" type="radio">
+</input><label class="tabbed-label" for="d42d36b6-126c-4471-8ffc-5f9c34cff95b">
+DiFuMo</label><div class="tabbed-content docutils">
+<figure class="align-default" id="tbl-ds000228-difumo-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/ds000228_1_1.png" src="_images/ds000228_1_1.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-difumo-qcfc-fig" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="3bb9db08-18d8-4ba5-a15e-628de09340bf" name="c6fd0c58-57b7-4ba2-b745-1aaa862b560d" type="radio">
+</input><label class="tabbed-label" for="3bb9db08-18d8-4ba5-a15e-628de09340bf">
+Schaefer 7 Networks</label><div class="tabbed-content docutils">
+<figure class="align-default" id="tbl-ds000228-schaefer7networks-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/ds000228_1_2.png" src="_images/ds000228_1_2.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-qcfc-fig" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="a7cd63e4-e3dd-4629-aa0e-643ca2463dcc" name="c6fd0c58-57b7-4ba2-b745-1aaa862b560d" type="radio">
+</input><label class="tabbed-label" for="a7cd63e4-e3dd-4629-aa0e-643ca2463dcc">
+Gordon 333 parcels</label><div class="tabbed-content docutils">
+<figure class="align-default" id="tbl-ds000228-gordon333-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/ds000228_1_3.png" src="_images/ds000228_1_3.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-qcfc-fig" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
 </section>
 <section id="distance-dependent-effects-of-motion-on-connectivity">
 <h2>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">¶</a></h2>
 <!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  -->
-<figure class="align-default" id="ds000228-difumo-128-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="_images/ds000228_1_1.png" src="_images/ds000228_1_1.png" />
-</div>
+<figure class="align-default" id="ds000228-mist-dist-fig" style="width: 800px">
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">MIST</span><a class="headerlink" href="#ds000228-mist-dist-fig" title="Permalink to this image">¶</a></p>
+</figcaption>
+</figure>
+<figure class="align-default" id="ds000228-schaefer7networks-dist-fig" style="width: 800px">
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Schaefer</span><a class="headerlink" href="#ds000228-schaefer7networks-dist-fig" title="Permalink to this image">¶</a></p>
+</figcaption>
 </figure>
 </section>
 <section id="network-modularity">
@@ -368,10 +410,7 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all. 
 GSR-based strategies improved the network modularity compared to their conunterparts.
 The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity. -->
-<figure class="align-default" id="ds000228-difumo-128-network-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="_images/ds000228_1_2.png" src="_images/ds000228_1_2.png" />
-</div>
+<figure class="align-default" id="ds000228-network-fig" style="width: 800px">
 </figure>
 </section>
 </section>
