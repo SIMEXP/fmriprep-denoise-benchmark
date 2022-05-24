@@ -5,7 +5,6 @@ from pathlib import Path
 import pandas as pd
 
 from nilearn.maskers import NiftiLabelsMasker, NiftiMapsMasker
-from nilearn.plotting import find_probabilistic_atlas_cut_coords
 
 from sklearn.utils import Bunch
 
@@ -121,25 +120,6 @@ def create_atlas_masker(atlas_name, dimension, subject_mask, detrend=True,
         masker = masker.set_params(memory=nilearn_cache, memory_level=1)
 
     return masker, labels
-
-
-def get_centroid(atlas_name, dimension):
-    """Load parcel centroid for each atlas."""
-    if atlas_name not in ATLAS_METADATA:
-        raise NotImplementedError("Selected atlas is not supported.")
-
-    if atlas_name == 'schaefer7networks':
-        url = f"https://raw.githubusercontent.com/ThomasYeoLab/CBIG/master/stable_projects/brain_parcellation/Schaefer2018_LocalGlobal/Parcellations/MNI/Centroid_coordinates/Schaefer2018_{dimension}Parcels_7Networks_order_FSLMNI152_2mm.Centroid_RAS.csv"
-        return pd.read_csv(url).loc[:, ['R', 'S', 'A']].values
-    if atlas_name == 'gordon333':
-        file_dist = "atlas-gordon333_nroi-333_desc-distance.tsv"
-        return pd.read_csv(Path(__file__).parent / "data" / file_dist, sep='\t')
-
-    current_atlas = fetch_atlas_path(atlas_name, dimension)
-    if atlas_name == 'mist':
-        return current_atlas.labels.loc[:, ['x', 'y', 'z']].values
-    if atlas_name == 'difumo':
-        return find_probabilistic_atlas_cut_coords(current_atlas.maps)
 
 
 def get_atlas_dimensions(atlas_name):
