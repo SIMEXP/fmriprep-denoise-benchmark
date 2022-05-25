@@ -51,7 +51,7 @@ def get_centroid(atlas_name, dimension):
         p = Path(__file__).parent / "data" / f"atlas-DiFuMo_nroi-{dimension}_desc-distance.tsv"
         if not p.is_file():
             get_difumo_centroids(dimension)
-        return pd.read_csv(p, sep='\t')
+        return pd.read_csv(p, sep='\t').loc[:, ['x', 'y', 'z']].values
 
 
 def get_difumo_centroids(d):
