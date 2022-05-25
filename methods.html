@@ -173,7 +173,7 @@
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="ohbm2022abstract.html">
-   OHBM 2022 abstract
+   OHBM 2022 abstract - submitted text
   </a>
  </li>
 </ul>
@@ -334,7 +334,7 @@
 <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id15">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id14">Bilder <em>et al.</em>, 2020</a>]</span>.
 Dataset <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> contains fMRI scans of participants watching a silent version of Pixar animated movie “Partly Cloudy”.
 The dataset includes 33 adult subjects (Age M(s.d.) = 24.8(5.3); range: 18–39; 20 female) and 122 children subjects (Age M(s.d.) = 6.7,(2.3); range: 3.5–12; 64 females).
-For more information for the dataset please refers to <span id="id3">[<a class="reference internal" href="references.html#id16">Richardson <em>et al.</em>, 2018</a>]</span>.
+For more information for the dataset please refers to <span id="id3">[<a class="reference internal" href="ohbm2022abstract.html#id39">Richardson <em>et al.</em>, 2018</a>]</span>.
 Dataset <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
 The current analysis only focused on the resting state scans,
 resulting 259 subjects in the final analysis.
@@ -397,7 +397,7 @@ The demographic information per condition is in the following table.</p>
 <h2>Time series extraction and connectome generation<a class="headerlink" href="#time-series-extraction-and-connectome-generation" title="Permalink to this headline">¶</a></h2>
 <p>We extract time series with regions of interest (ROI) defined by the following atlases:
 Gordon atlas <span id="id4">[<a class="reference internal" href="references.html#id19">Gordon <em>et al.</em>, 2014</a>]</span>,
-Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="references.html#id17">Schaefer <em>et al.</em>, 2017</a>]</span>,
+Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="ohbm2022abstract.html#id40">Schaefer <em>et al.</em>, 2017</a>]</span>,
 Multiresolution Intrinsic Segmentation Template (MIST) <span id="id6">[<a class="reference internal" href="references.html#id20">Urchs <em>et al.</em>, 2019</a>]</span>,
 and Dictionary of Functional Modes (DiFuMo)<span id="id7">[<a class="reference internal" href="references.html#id18">Dadi <em>et al.</em>, 2020</a>]</span>.
 All atlases were resampled to the resolution of the preprocessed functional data.</p>
@@ -424,7 +424,7 @@ Subjects with high motion, indicated by less than 80% of remaining volumes after
 Confound variables were accessed using API <code class="docutils literal notranslate"><span class="pre">nilearn.interfaces.fmriprep.load_confounds_strategy</span></code>.
 The API implemented four common strategies:
 <code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id11">[<a class="reference internal" href="references.html#id3">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters, and tissue signal),
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id12">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id12">[<a class="reference internal" href="ohbm2022abstract.html#id27">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id13">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
 and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id14">[<a class="reference internal" href="references.html#id6">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising, and tissue signal).
 All strategies but <code class="docutils literal notranslate"><span class="pre">compcor</span></code> provides an option to add global signal to the confound regressors.
@@ -486,7 +486,7 @@ A full breakdown of parameters used under the hood is presented in the table bel
 <td><p>N/A</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p>scrubbing</p></td>
+<tr class="row-odd"><td><p>scrubbing.5</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
@@ -499,7 +499,7 @@ A full breakdown of parameters used under the hood is presented in the table bel
 <td><p>N/A</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
 </tr>
-<tr class="row-even"><td><p>simple+gsr</p></td>
+<tr class="row-even"><td><p>scrubbing.5+gsr</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
@@ -507,6 +507,32 @@ A full breakdown of parameters used under the hood is presented in the table bel
 <td><p><code class="docutils literal notranslate"><span class="pre">basic</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>scrubbing.2</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.2</span></code></p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p>N/A</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>scrubbing.2+gsr</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">basic</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">0.2</span></code></p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
 <td><p>N/A</p></td>
@@ -569,12 +595,12 @@ A full breakdown of parameters used under the hood is presented in the table bel
 </section>
 <section id="denoising-evaluation-measures">
 <h2>Denoising evaluation measures<a class="headerlink" href="#denoising-evaluation-measures" title="Permalink to this headline">¶</a></h2>
-<p>We used three metrics <span id="id15">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id16">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span> described in the previous literature to evaluate the denoising results.
+<p>We used three metrics <span id="id15">[<a class="reference internal" href="ohbm2022abstract.html#id30">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id16">[<a class="reference internal" href="ohbm2022abstract.html#id32">Parkes <em>et al.</em>, 2018</a>]</span> described in the previous literature to evaluate the denoising results.
 Motion related metrics are centred around framewise displacement.
 Framewise displacement (FD) indexes the movement of the head from one volume to the next.
 The movement includes the transitions on the three axises (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span>) and the respective rotation (<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta_t\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>).
-Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id17">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
-fMRIPrep genetates the FD based on the formula proposed in <span id="id18">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
+Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id17">[<a class="reference internal" href="ohbm2022abstract.html#id27">Power <em>et al.</em>, 2012</a>]</span>.
+fMRIPrep genetates the FD based on the formula proposed in <span id="id18">[<a class="reference internal" href="ohbm2022abstract.html#id27">Power <em>et al.</em>, 2012</a>]</span>.
 The FD at each time point <span class="math notranslate nohighlight">\(t\)</span> is expressed as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -583,14 +609,14 @@ The FD at each time point <span class="math notranslate nohighlight">\(t\)</span
 \]</div>
 <p>The details of each measures are explained as followed.</p>
 <section id="quality-control-functional-connectivity-qc-fc-power-recent-2015">
-<h3>Quality control / functional connectivity (QC-FC <span id="id19">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>)<a class="headerlink" href="#quality-control-functional-connectivity-qc-fc-power-recent-2015" title="Permalink to this headline">¶</a></h3>
+<h3>Quality control / functional connectivity (QC-FC <span id="id19">[<a class="reference internal" href="ohbm2022abstract.html#id35">Power <em>et al.</em>, 2015</a>]</span>)<a class="headerlink" href="#quality-control-functional-connectivity-qc-fc-power-recent-2015" title="Permalink to this headline">¶</a></h3>
 <p>QC-FC quantifies the correlation between mean FD and functional connectivity.
 This is calculated by a partial correlation between mean FD and connectivity with age and sex as covariates.
 The denoising methods should aim to reduce the QC-FC value.
 The significants values reported are control for multiple comparisons with false positive rate correction.</p>
 </section>
 <section id="distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012">
-<h3>Distance-dependent effects of motion on connectivity <span id="id20">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012" title="Permalink to this headline">¶</a></h3>
+<h3>Distance-dependent effects of motion on connectivity <span id="id20">[<a class="reference internal" href="ohbm2022abstract.html#id27">Power <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012" title="Permalink to this headline">¶</a></h3>
 <p>To determine the residual distance-dependence of subject movement,
 we first calculate the Euclidean distance between the centers of mass of ecah pair of parcels.
 We then correlated the distance separating each pair of parcels and the associated QC-FC correlation of the edge connecting those parcels.
@@ -598,7 +624,7 @@ Closer parcels generally exhibiting greater impact of motion on connectivity.
 We expect to see a general trend of negative correlation to no correlation after confound regression.</p>
 </section>
 <section id="network-modularity-satterthwaite-impact-2012">
-<h3>Network modularity <span id="id21">[<a class="reference internal" href="references.html#id11">Satterthwaite <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#network-modularity-satterthwaite-impact-2012" title="Permalink to this headline">¶</a></h3>
+<h3>Network modularity <span id="id21">[<a class="reference internal" href="ohbm2022abstract.html#id34">Satterthwaite <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#network-modularity-satterthwaite-impact-2012" title="Permalink to this headline">¶</a></h3>
 <p>Confound regressors has the potential to remove real signal in addition to motion-related noise.
 In order to evaluate this possibility, we computed modularity quality,
 an explicit quantification of the degree to which there are structured sub-networks in a given network,

@@ -27,7 +27,7 @@ dimension = 400
 
 ```
 
-# OHBM 2022 abstract
+# OHBM 2022 abstract - submitted text
 
 ## Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs
 

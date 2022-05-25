@@ -78,17 +78,19 @@ All strategies but `compcor` provides an option to add global signal to the conf
 The connectome generated from high-pass filtered time series were served as a comparison baseline.
 A full breakdown of parameters used under the hood is presented in the table below.
 
-| strategy   | image                          | `high_pass` | `motion` | `wm_csf` | `global_signal` | `scrub` | `fd_thresh` | `compcor`       | `n_compcor` | `ica_aroma` | `demean` |
-|------------|--------------------------------|-------------|----------|----------|-----------------|---------|-------------|-----------------|-------------|-------------|----------|
-| baseline   | `desc-preproc_bold`            | `True`      | N/A      | N/A      | N/A             | N/A     | N/A         | N/A             | N/A         | N/A         | `True`   |
-| simple     | `desc-preproc_bold`            | `True`      | `full`   | `basic`  | N/A             | N/A     | N/A         | N/A             | N/A         | N/A         | `True`   |
-| simple+gsr | `desc-preproc_bold`            | `True`      | `full`   | `basic`  | `basic`         | N/A     | N/A         | N/A             | N/A         | N/A         | `True`   |
-| scrubbing  | `desc-preproc_bold`            | `True`      | `full`   | `full`   | N/A             | `5`     | `0.5`       | N/A             | N/A         | N/A         | `True`   |
-| simple+gsr | `desc-preproc_bold`            | `True`      | `full`   | `full`   | `basic`         | `5`     | `0.5`       | N/A             | N/A         | N/A         | `True`   |
-| compcor    | `desc-preproc_bold`            | `True`      | `full`   | N/A      | N/A             | N/A     | N/A         | `anat_combined` | `all`       | N/A         | `True`   |
-| compcor6   | `desc-preproc_bold`            | `True`      | `full`   | N/A      | N/A             | N/A     | N/A         | `anat_combined` | `6 `        | N/A         | `True`   |
-| aroma      | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | N/A             | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
-| aroma+gsr  | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | `basic`         | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
+| strategy        | image                          | `high_pass` | `motion` | `wm_csf` | `global_signal` | `scrub` | `fd_thresh` | `compcor`       | `n_compcor` | `ica_aroma` | `demean` |
+|-----------------|--------------------------------|-------------|----------|----------|-----------------|---------|-------------|-----------------|-------------|-------------|----------|
+| baseline        | `desc-preproc_bold`            | `True`      | N/A      | N/A      | N/A             | N/A     | N/A         | N/A             | N/A         | N/A         | `True`   |
+| simple          | `desc-preproc_bold`            | `True`      | `full`   | `basic`  | N/A             | N/A     | N/A         | N/A             | N/A         | N/A         | `True`   |
+| simple+gsr      | `desc-preproc_bold`            | `True`      | `full`   | `basic`  | `basic`         | N/A     | N/A         | N/A             | N/A         | N/A         | `True`   |
+| scrubbing.5     | `desc-preproc_bold`            | `True`      | `full`   | `full`   | N/A             | `5`     | `0.5`       | N/A             | N/A         | N/A         | `True`   |
+| scrubbing.5+gsr | `desc-preproc_bold`            | `True`      | `full`   | `full`   | `basic`         | `5`     | `0.5`       | N/A             | N/A         | N/A         | `True`   |
+| scrubbing.2     | `desc-preproc_bold`            | `True`      | `full`   | `full`   | N/A             | `5`     | `0.2`       | N/A             | N/A         | N/A         | `True`   |
+| scrubbing.2+gsr | `desc-preproc_bold`            | `True`      | `full`   | `full`   | `basic`         | `5`     | `0.2`       | N/A             | N/A         | N/A         | `True`   |
+| compcor         | `desc-preproc_bold`            | `True`      | `full`   | N/A      | N/A             | N/A     | N/A         | `anat_combined` | `all`       | N/A         | `True`   |
+| compcor6        | `desc-preproc_bold`            | `True`      | `full`   | N/A      | N/A             | N/A     | N/A         | `anat_combined` | `6 `        | N/A         | `True`   |
+| aroma           | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | N/A             | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
+| aroma+gsr       | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | `basic`         | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
 
 ## Denoising evaluation measures
 

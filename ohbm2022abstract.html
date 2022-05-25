@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>OHBM 2022 abstract &#8212; Benchmark denoising strategies on functional connectomes generated from fMRIPrep outputs</title>
+    <title>OHBM 2022 abstract - submitted text &#8212; Benchmark denoising strategies on functional connectomes generated from fMRIPrep outputs</title>
     
   <link href="_static/css/theme.css" rel="stylesheet">
   <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -170,7 +170,7 @@
  </li>
  <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
-   OHBM 2022 abstract
+   OHBM 2022 abstract - submitted text
   </a>
  </li>
 </ul>
@@ -356,15 +356,15 @@
 </div>
 </div>
 </div>
-<section class="tex2jax_ignore mathjax_ignore" id="ohbm-2022-abstract">
-<h1>OHBM 2022 abstract<a class="headerlink" href="#ohbm-2022-abstract" title="Permalink to this headline">¶</a></h1>
+<section class="tex2jax_ignore mathjax_ignore" id="ohbm-2022-abstract-submitted-text">
+<h1>OHBM 2022 abstract - submitted text<a class="headerlink" href="#ohbm-2022-abstract-submitted-text" title="Permalink to this headline">¶</a></h1>
 <section id="impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs">
 <h2>Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs<a class="headerlink" href="#impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs" title="Permalink to this headline">¶</a></h2>
 <p>H-T Wang<a class="footnote-reference brackets" href="#id72" id="id1">1</a>, S L Meisler<a class="footnote-reference brackets" href="#id73" id="id2">2</a><a class="footnote-reference brackets" href="#id74" id="id3">3</a>, H Shamarke, F Paugam<a class="footnote-reference brackets" href="#id72" id="id4">1</a><a class="footnote-reference brackets" href="#id75" id="id5">4</a>, N Gensollen<a class="footnote-reference brackets" href="#id76" id="id6">5</a>, B Thirion<a class="footnote-reference brackets" href="#id76" id="id7">5</a>, C Markiewicz<a class="footnote-reference brackets" href="#id77" id="id8">6</a>, P Bellec<a class="footnote-reference brackets" href="#id72" id="id9">1</a><a class="footnote-reference brackets" href="#id78" id="id10">7</a></p>
 <section id="introduction">
 <h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h3>
 <p>Selecting an optimal denoising strategy is a key issue when processing fMRI data.
-The popular software fMRIPrep <span id="id11">[<a class="reference internal" href="references.html#id2">Esteban <em>et al.</em>, 2020</a>]</span> aims to standardize fMRI preprocessing,
+The popular software fMRIPrep <span id="id11">[<a class="reference internal" href="#id25">Esteban <em>et al.</em>, 2020</a>]</span> aims to standardize fMRI preprocessing,
 but users are still offered a wide range of confound regressors to choose from to denoise data.
 Without a good understanding of the literature or the fMRIPrep documentation,
 users can select suboptimal strategies.
@@ -373,8 +373,8 @@ and by contrasting the results with past literature based on alternative preproc
 </section>
 <section id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">¶</a></h3>
-<p>We selected dataset ds000228 <span id="id12">[<a class="reference internal" href="references.html#id16">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
-Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id13">[<a class="reference internal" href="references.html#id17">Schaefer <em>et al.</em>, 2017</a>]</span>.
+<p>We selected dataset ds000228 <span id="id12">[<a class="reference internal" href="#id39">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
+Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id13">[<a class="reference internal" href="#id40">Schaefer <em>et al.</em>, 2017</a>]</span>.
 We applied the denoising strategies listed in the table below using fMRIPrep-generated confounds.
 Subjects with less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold were excluded from all analysis.
 We also calculated the connectome from high-pass filtered time series as a comparison baseline.</p>
@@ -514,11 +514,11 @@ We also calculated the connectome from high-pass filtered time series as a compa
 </tr>
 </tbody>
 </table>
-<p>We used three metrics <span id="id14">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id15">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
+<p>We used three metrics <span id="id14">[<a class="reference internal" href="#id30">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id15">[<a class="reference internal" href="#id32">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
 <ol class="simple">
-<li><p>Quality control / functional connectivity (QCFC <span id="id16">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
-<li><p>Distance-dependent effects of motion on connectivity <span id="id17">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
-<li><p>Network modularity <span id="id18">[<a class="reference internal" href="references.html#id11">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
+<li><p>Quality control / functional connectivity (QCFC <span id="id16">[<a class="reference internal" href="#id35">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
+<li><p>Distance-dependent effects of motion on connectivity <span id="id17">[<a class="reference internal" href="#id27">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
+<li><p>Network modularity <span id="id18">[<a class="reference internal" href="#id34">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
 </ol>
 </section>
 <section id="results">
@@ -527,9 +527,9 @@ We also calculated the connectome from high-pass filtered time series as a compa
 <h4>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">¶</a></h4>
 <p>No denoise strategy removed the correlation with motion captured by mean framewise displacement.
 <code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> reduced the correlation between connectivity edges and mean framewise displacement.
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id19">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id19">[<a class="reference internal" href="#id35">Power <em>et al.</em>, 2015</a>]</span>.
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code>, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="#id30">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="#id32">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
@@ -584,7 +584,7 @@ The correlation between modularity quality and motion for each denoising approac
 <section id="conclusions">
 <h3>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">¶</a></h3>
 <p>We replicated previous findings demonstrating the usefulness of standard denoising strategies (compcor, aroma, etc.).
-However, results involving global signal regression methods systematically contradict the literature<span id="id22">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id23">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span>.
+However, results involving global signal regression methods systematically contradict the literature<span id="id22">[<a class="reference internal" href="#id30">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id23">[<a class="reference internal" href="#id32">Parkes <em>et al.</em>, 2018</a>]</span>.
 This evaluation is implemented in a fully reproducible jupyter book framework, and it can be applied to evaluate denoising strategies for future fMRIPrep release.
 This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.</p>
 </section>
