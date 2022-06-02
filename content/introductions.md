@@ -14,6 +14,9 @@ Many patient populations exhibit significantly more motion in the MRI scanner th
 Therefore, in functional connectivity based analysis, reducing the impact of confounds, known as denosing, is an major compoenent of the workflow.
 
 <!-- Classes of nuisance regressors - like how load_confounds separate them -->
+<!-- need to add reference to this section-->
+## Types of noise regressors
+
 To minimize impact of confounds, 
 the most common method in functional connectivity analysis is performing a linear regression using the nuisance regressors to model the signals.
 The residual of the linear regression will be the denoised signal for the subsequent analysis.
@@ -27,10 +30,11 @@ All these four classes of regressors can be expanded to their first temporal der
 Principle componenet based method __CompCor__ extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity. 
 Independent component analysis based method, __ICA-FIX__ and __ICA-AROMA__,
 estimate independent component time series related to head-motion through a priori heuristics (ICA-AROMA) or a data-driven classifier. 
-<!-- need to add reference -->
 Different strategy has there own strength and benefits and often involves combining a few classes of regressors described above.
 These regressors are regressed out from the signal after basic processing steps (see fMRIPrep) with linear regression. 
 All the subsequent analysis performs on the redisual signal after the regression step.
+
+## Implementation of denoising step
 
 <!-- How denoising is traditionally done in propriatory software -->
 This was less of an issue when users use preprocessing software with statistical modelling functionality.
@@ -59,6 +63,8 @@ Users can implement project-specific ways to retrieve the relevant regressors,
 making replication of others denoising step more difficult.
 Lastly, the past denoising benchmark literature was performed on the study specific preprocessing pipeline.
 The validity of these results on fMRIPrep has yet to be examined. 
+
+## Aim of the benchmark
 
 Current work aims to introduce an application programming interface (API) to standardise the interaction with fMRIPrep and provide benchmark using functional connectivity generated from resting state data.
 The API is released under popular Python neuroimaging analytic library `nilearn`,  
