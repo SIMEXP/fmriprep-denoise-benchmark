@@ -124,7 +124,7 @@ def plot_distance_dependence(dataset, atlas_name=None, dimension=None):
         ax.set_title('Correlation between nodewise Euclidian distance and QC-FC', fontsize='xx-large')
         ax.set(xlabel=qcfc_dist['label'])
         ax.set(ylabel="Confound removal strategy")
-        ax.set_xlim((-0.55, 0.05))
+        ax.set_xlim((-0.75, 0.05))
     return fig
 
 
