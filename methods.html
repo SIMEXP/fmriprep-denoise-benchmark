@@ -281,6 +281,23 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal nav-link" href="#confound-regression-strategies">
    Confound regression strategies
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#basic-noise-components">
+     Basic noise components
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-defined-strategies">
+     Pre-defined strategies
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#examined-strategies">
+     Examined strategies
+    </a>
+   </li>
+  </ul>
  </li>
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#denoising-evaluation-measures">
@@ -330,10 +347,10 @@ const thebe_selector_output = ".output, .cell_output"
 <section id="datasets">
 <h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">¶</a></h2>
 <p>We selected two datasets on OpenNeuro for the current analysis:
-<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id15">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id14">Bilder <em>et al.</em>, 2020</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id17">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id16">Bilder <em>et al.</em>, 2020</a>]</span>.
 Dataset <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> contains fMRI scans of participants watching a silent version of Pixar animated movie “Partly Cloudy”.
 The dataset includes 33 adult subjects (Age M(s.d.) = 24.8(5.3); range: 18–39; 20 female) and 122 children subjects (Age M(s.d.) = 6.7,(2.3); range: 3.5–12; 64 females).
-For more information for the dataset please refers to <span id="id3">[<a class="reference internal" href="references.html#id16">Richardson <em>et al.</em>, 2018</a>]</span>.
+For more information for the dataset please refers to <span id="id3">[<a class="reference internal" href="references.html#id18">Richardson <em>et al.</em>, 2018</a>]</span>.
 Dataset <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
 The current analysis only focused on the resting state scans,
 resulting 259 subjects in the final analysis.
@@ -395,10 +412,10 @@ The demographic information per condition is in the following table.</p>
 <section id="time-series-extraction-and-connectome-generation">
 <h2>Time series extraction and connectome generation<a class="headerlink" href="#time-series-extraction-and-connectome-generation" title="Permalink to this headline">¶</a></h2>
 <p>We extract time series with regions of interest (ROI) defined by the following atlases:
-Gordon atlas <span id="id4">[<a class="reference internal" href="references.html#id19">Gordon <em>et al.</em>, 2014</a>]</span>,
-Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="references.html#id17">Schaefer <em>et al.</em>, 2017</a>]</span>,
-Multiresolution Intrinsic Segmentation Template (MIST) <span id="id6">[<a class="reference internal" href="references.html#id20">Urchs <em>et al.</em>, 2019</a>]</span>,
-and Dictionary of Functional Modes (DiFuMo)<span id="id7">[<a class="reference internal" href="references.html#id18">Dadi <em>et al.</em>, 2020</a>]</span>.
+Gordon atlas <span id="id4">[<a class="reference internal" href="references.html#id21">Gordon <em>et al.</em>, 2014</a>]</span>,
+Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="references.html#id19">Schaefer <em>et al.</em>, 2017</a>]</span>,
+Multiresolution Intrinsic Segmentation Template (MIST) <span id="id6">[<a class="reference internal" href="references.html#id22">Urchs <em>et al.</em>, 2019</a>]</span>,
+and Dictionary of Functional Modes (DiFuMo)<span id="id7">[<a class="reference internal" href="references.html#id20">Dadi <em>et al.</em>, 2020</a>]</span>.
 All atlases were resampled to the resolution of the preprocessed functional data.</p>
 <p>Further ROI extraction was done on DiFuMo and MIST,
 because area under the same label can be networks with disjointed regions.
@@ -409,8 +426,8 @@ Schaefer 1000 parcels atlas was excluded as some regions would be dropped after 
 <ul class="simple">
 <li><p>Gordon atlas: 333</p></li>
 <li><p>Schaefer atlas: 100, 200, 300, 400, 500, 600, 800</p></li>
-<li><p>Multiresolution Intrinsic Segmentation Template (MIST) <span id="id8">[<a class="reference internal" href="references.html#id20">Urchs <em>et al.</em>, 2019</a>]</span>: 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 splitted by the midline)</p></li>
-<li><p>DiFuMo atlas <span id="id9">[<a class="reference internal" href="references.html#id18">Dadi <em>et al.</em>, 2020</a>]</span>: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)</p></li>
+<li><p>Multiresolution Intrinsic Segmentation Template (MIST) <span id="id8">[<a class="reference internal" href="references.html#id22">Urchs <em>et al.</em>, 2019</a>]</span>: 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 split by the midline)</p></li>
+<li><p>DiFuMo atlas <span id="id9">[<a class="reference internal" href="references.html#id20">Dadi <em>et al.</em>, 2020</a>]</span>: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)</p></li>
 </ul>
 <p>Process involved here are implemented through nilearn <span id="id10">[<a class="reference internal" href="references.html#id10">Abraham <em>et al.</em>, 2014</a>]</span>.
 Time series were extracted using <code class="docutils literal notranslate"><span class="pre">nilearn.maskers.NiftiLabelsMasker</span></code> and <code class="docutils literal notranslate"><span class="pre">nilearn.maskers.NiftiMapsMasker</span></code>.
@@ -418,17 +435,74 @@ Connectomes were calculated using Pearson’s Correlations, implemented through 
 </section>
 <section id="confound-regression-strategies">
 <h2>Confound regression strategies<a class="headerlink" href="#confound-regression-strategies" title="Permalink to this headline">¶</a></h2>
+<p>Confound variables were retrieved using API
+<code class="docutils literal notranslate"><span class="pre">nilearn.interfaces.fmriprep.load_confounds</span></code> (simplified as <code class="docutils literal notranslate"><span class="pre">load_confounds</span></code>),
+the basic API that retrieves different classes of confound regressor,
+and <code class="docutils literal notranslate"><span class="pre">nilearn.interfaces.fmriprep.load_confounds_strategy</span></code>(simplified as <code class="docutils literal notranslate"><span class="pre">load_confounds_strategy</span></code>),
+a higher level wrapper to implement common strategies from the denoising literature.
+The current section describes the logic behind the design of API.
+For documentation of the actual function, please see the latest version of <code class="docutils literal notranslate"><span class="pre">nilearn</span></code>.</p>
+<section id="basic-noise-components">
+<h3>Basic noise components<a class="headerlink" href="#basic-noise-components" title="Permalink to this headline">¶</a></h3>
+<p>To enable easy confound variables loading from fMRIPrep outputs,
+<code class="docutils literal notranslate"><span class="pre">load_confounds</span></code> provides an interface that groups subsets of confound variables into noise components and their parameters.
+It is possible to fine-tune a subset of noise components and their parameters through this function.
+The implementation will only support fMRIPrep functional derivative directory from the 1.2.x series. The compcor noise component requires 1.4.x series or above.</p>
+<!-- Explain the logic of nilearn API mirror the intro -->
+<p>Two types of regressors are always loaded with no additional parameters for user customisation:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">high_pass</span></code>: discrete cosines transformation basis regressors to handle low-frequency signal drifts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">non_steady_state</span></code> denotes volumes collected before the fMRI scanner has reached a stable state.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">motion</span></code>, <code class="docutils literal notranslate"><span class="pre">wm_csf</span></code>, and <code class="docutils literal notranslate"><span class="pre">global_signal</span></code> shares similar expansion options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">motion</span></code>: head motion estimates translation/rotation (6 parameters).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wm_csf</span></code>: average signal extracted from masks of white matter and cerebrospinal fluids (2 parameters).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">global_signal</span></code>: average signal extracted from brain mask (1 parameters).</p></li>
+</ul>
+<p>For these three parameters above, user can select from the following four options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">basic</span></code>: just the original signal (n parameter)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">power2</span></code>: original signal and quadratic term (2 * n parameters)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">derivatives</span></code>: original signal and temporal derivative (2 * n parameters)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>:  original signal + temporal derivatives + quadratic terms + quadratic terms temporal derivatives (4 * n parameters)</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">scrub</span></code> generates mask to exclude volumes with excessive motion <span id="id11">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
+Two types of parameters can be used to determined volumes to be excluded.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fd_threshold</span></code>: set the head motion cut-off value determined by framewise displacement approach <span id="id12">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std_dvars_threshold</span></code>: set the head motion cut-off value determined by the standard deviation of root mean square approach <span id="id13">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span> <span id="id14">[<a class="reference internal" href="references.html#id13">Jenkinson <em>et al.</em>, 2002</a>]</span>.</p></li>
+</ul>
+<p>The CompCor <span id="id15">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span> approach has two associated parameters</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">compcor</span></code> allows users to select components generated by the temporal approach,
+or the anatomical approach with specific details for the mask used in noise signal extraction.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_compcor</span></code> retrieves the number of principle components to retrieve.</p></li>
+</ul>
+<p>For the ICA-based approach, fMRIPrep implemented ICA-AROMA <span id="id16">[<a class="reference internal" href="references.html#id6">Pruim <em>et al.</em>, 2015</a>]</span>.
+User must manually enable ICA-AROMA with flag <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code> when using fMRIPrep.
+The parameter <code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code> allows two approaches:</p>
+<ol class="simple">
+<li><p>Use fMRIPrep output with suffix <code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold.nii.gz</span></code>.</p></li>
+<li><p>Use noise independent components only. Must be used with output with suffix <code class="docutils literal notranslate"><span class="pre">desc-preproc_bold.nii.gz</span></code>.</p></li>
+</ol>
+</section>
+<section id="pre-defined-strategies">
+<h3>Pre-defined strategies<a class="headerlink" href="#pre-defined-strategies" title="Permalink to this headline">¶</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">load_confounds_strategy</span></code> provides an interface to select confounds based on past literature with limited parameters for user customisation:
+<code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id17">[<a class="reference internal" href="references.html#id3">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id18">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id19">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
+and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id20">[<a class="reference internal" href="references.html#id6">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising, and tissue signal).
+All strategies but <code class="docutils literal notranslate"><span class="pre">compcor</span></code> provides an option to add global signal to the confound regressors.</p>
+</section>
+<section id="examined-strategies">
+<h3>Examined strategies<a class="headerlink" href="#examined-strategies" title="Permalink to this headline">¶</a></h3>
 <p>We evaluated common confound regression strategies that are possible through fMRIPrep generated confound regressors.
 Subjects with high motion, indicated by less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold, were excluded from all analysis.
-Confound variables were accessed using API <code class="docutils literal notranslate"><span class="pre">nilearn.interfaces.fmriprep.load_confounds_strategy</span></code>.
-The API implemented four common strategies:
-<code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id11">[<a class="reference internal" href="references.html#id3">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters, and tissue signal),
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id12">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
-<code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id13">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
-and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id14">[<a class="reference internal" href="references.html#id6">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising, and tissue signal).
-All strategies but <code class="docutils literal notranslate"><span class="pre">compcor</span></code> provides an option to add global signal to the confound regressors.
 The connectome generated from high-pass filtered time series were served as a comparison baseline.
-A full breakdown of parameters used under the hood is presented in the table below.</p>
+Confound variables were accessed using API <code class="docutils literal notranslate"><span class="pre">load_confounds_strategy</span></code>.
+The detailed 11 strategies and a full breakdown of parameters used under the hood is presented in the table below.</p>
 <table class="colwidths-auto table">
 <thead>
 <tr class="row-odd"><th class="head"><p>strategy</p></th>
@@ -592,14 +666,15 @@ A full breakdown of parameters used under the hood is presented in the table bel
 </tbody>
 </table>
 </section>
+</section>
 <section id="denoising-evaluation-measures">
 <h2>Denoising evaluation measures<a class="headerlink" href="#denoising-evaluation-measures" title="Permalink to this headline">¶</a></h2>
-<p>We used three metrics <span id="id15">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id16">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span> described in the previous literature to evaluate the denoising results.
+<p>We used three metrics <span id="id21">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id22">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span> described in the previous literature to evaluate the denoising results.
 Motion related metrics are centred around framewise displacement.
 Framewise displacement (FD) indexes the movement of the head from one volume to the next.
-The movement includes the transitions on the three axises (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span>) and the respective rotation (<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta_t\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>).
-Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id17">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
-fMRIPrep genetates the FD based on the formula proposed in <span id="id18">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
+The movement includes the transitions on the three axes (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span>) and the respective rotation (<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta_t\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>).
+Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id23">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
+fMRIPrep genetates the FD based on the formula proposed in <span id="id24">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
 The FD at each time point <span class="math notranslate nohighlight">\(t\)</span> is expressed as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -608,14 +683,14 @@ The FD at each time point <span class="math notranslate nohighlight">\(t\)</span
 \]</div>
 <p>The details of each measures are explained as followed.</p>
 <section id="quality-control-functional-connectivity-qc-fc-power-recent-2015">
-<h3>Quality control / functional connectivity (QC-FC <span id="id19">[<a class="reference internal" href="references.html#id12">Power <em>et al.</em>, 2015</a>]</span>)<a class="headerlink" href="#quality-control-functional-connectivity-qc-fc-power-recent-2015" title="Permalink to this headline">¶</a></h3>
+<h3>Quality control / functional connectivity (QC-FC <span id="id25">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2015</a>]</span>)<a class="headerlink" href="#quality-control-functional-connectivity-qc-fc-power-recent-2015" title="Permalink to this headline">¶</a></h3>
 <p>QC-FC quantifies the correlation between mean FD and functional connectivity.
 This is calculated by a partial correlation between mean FD and connectivity with age and sex as covariates.
 The denoising methods should aim to reduce the QC-FC value.
 The significants values reported are control for multiple comparisons with false positive rate correction.</p>
 </section>
 <section id="distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012">
-<h3>Distance-dependent effects of motion on connectivity <span id="id20">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012" title="Permalink to this headline">¶</a></h3>
+<h3>Distance-dependent effects of motion on connectivity <span id="id26">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012" title="Permalink to this headline">¶</a></h3>
 <p>To determine the residual distance-dependence of subject movement,
 we first calculate the Euclidean distance between the centers of mass of ecah pair of parcels.
 We then correlated the distance separating each pair of parcels and the associated QC-FC correlation of the edge connecting those parcels.
@@ -623,12 +698,12 @@ Closer parcels generally exhibiting greater impact of motion on connectivity.
 We expect to see a general trend of negative correlation to no correlation after confound regression.</p>
 </section>
 <section id="network-modularity-satterthwaite-impact-2012">
-<h3>Network modularity <span id="id21">[<a class="reference internal" href="references.html#id11">Satterthwaite <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#network-modularity-satterthwaite-impact-2012" title="Permalink to this headline">¶</a></h3>
+<h3>Network modularity <span id="id27">[<a class="reference internal" href="references.html#id12">Satterthwaite <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#network-modularity-satterthwaite-impact-2012" title="Permalink to this headline">¶</a></h3>
 <p>Confound regressors has the potential to remove real signal in addition to motion-related noise.
 In order to evaluate this possibility, we computed modularity quality,
 an explicit quantification of the degree to which there are structured sub-networks in a given network,
 in this case the de-noised connectome.
-Modularity quality is quantified by graph community detection based on Louvain method <span id="id22">[<a class="reference internal" href="references.html#id13">Rubinov and Sporns, 2010</a>]</span>,
+Modularity quality is quantified by graph community detection based on Louvain method <span id="id28">[<a class="reference internal" href="references.html#id15">Rubinov and Sporns, 2010</a>]</span>,
 implemented in the Brain Connectome Toolbox.
 If confound regression and censoring were removing real signal in addition to motion-related noise,
 we expect that modularity would decline.
