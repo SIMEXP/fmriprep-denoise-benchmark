@@ -16,13 +16,13 @@ cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 
 echo "gordon333"
 
-python ./fmriprep_denoise/features/bulid_features.py \
+python ./fmriprep_denoise/features/build_features.py \
     "/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000228.tar.gz" \
     ${OUTPUT} \
     --atlas gordon333 \
     --dimension 333
 
-python ./fmriprep_denoise/features/bulid_features.py \
+python ./fmriprep_denoise/features/build_features.py \
     "/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000030.tar.gz" \
     ${OUTPUT} \
     --atlas gordon333 \

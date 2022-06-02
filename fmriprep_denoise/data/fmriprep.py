@@ -126,11 +126,10 @@ def generate_movement_summary(dataset_name, data, output):
     output : str
         Output directory.
     """
-    if not Path(output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv").is_file():
-        movement = _phenotype_movement(data)
-        movement = movement.sort_index()
-        movement.to_csv( output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv", sep='\t')
-        print("Generate movement stats.")
+    movement = _phenotype_movement(data)
+    movement = movement.sort_index()
+    movement.to_csv( output / f"dataset-{dataset_name}_desc-movement_phenotype.tsv", sep='\t')
+    print("Generate movement stats.")
 
 
 def _phenotype_movement(data):
