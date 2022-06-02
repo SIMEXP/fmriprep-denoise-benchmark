@@ -1,12 +1,12 @@
 #!/bin/bash
 #SBATCH --job-name=metric_difumo
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/metric_difumo.%a.out
 #SBATCH --error=logs/metric_difumo.%a.err
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G 
-#SBATCH --array=0-4
+#SBATCH --array=0-3
 
 
 OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"

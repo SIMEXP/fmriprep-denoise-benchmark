@@ -6,11 +6,11 @@
 #SBATCH --error=logs/metric_schaefer.%a.err
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G 
-#SBATCH --array=0-6
+#SBATCH --array=0-5
 
 
 OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
-DIMENSIONS=(100 200 300 400 500 600 800)
+DIMENSIONS=(100 200 300 400 500 600)
 
 source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 
