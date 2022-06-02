@@ -255,6 +255,29 @@ const thebe_selector_output = ".output, .cell_output"
         <!-- Table of contents -->
         <div class="d-none d-md-block col-md-2 bd-toc show">
             
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav" aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#types-of-noise-regressors">
+   Types of noise regressors
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implementation-of-denoising-step">
+   Implementation of denoising step
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#aim-of-the-benchmark">
+   Aim of the benchmark
+  </a>
+ </li>
+</ul>
+
+            </nav>
         </div>
     </div>
 </div>
@@ -278,6 +301,9 @@ When functional connectivity is contaminated with motion, it can lead to altered
 Many patient populations exhibit significantly more motion in the MRI scanner than the healthy controls. <!-- reference here -->
 Therefore, in functional connectivity based analysis, reducing the impact of confounds, known as denosing, is an major compoenent of the workflow.</p>
 <!-- Classes of nuisance regressors - like how load_confounds separate them -->
+<!-- need to add reference to this section-->
+<section id="types-of-noise-regressors">
+<h2>Types of noise regressors<a class="headerlink" href="#types-of-noise-regressors" title="Permalink to this headline">¶</a></h2>
 <p>To minimize impact of confounds,
 the most common method in functional connectivity analysis is performing a linear regression using the nuisance regressors to model the signals.
 The residual of the linear regression will be the denoised signal for the subsequent analysis.
@@ -290,11 +316,13 @@ They are captured by averaging signal within the anatomically-derived masks.
 All these four classes of regressors can be expanded to their first temporal derivatives and their quadratic terms <span id="id2">[<a class="reference internal" href="references.html#id11">Satterthwaite <em>et al.</em>, 2013</a>]</span>.
 Principle componenet based method <strong>CompCor</strong> extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity.
 Independent component analysis based method, <strong>ICA-FIX</strong> and <strong>ICA-AROMA</strong>,
-estimate independent component time series related to head-motion through a priori heuristics (ICA-AROMA) or a data-driven classifier.</p>
-<!-- need to add reference -->
-<p>Different strategy has there own strength and benefits and often involves combining a few classes of regressors described above.
+estimate independent component time series related to head-motion through a priori heuristics (ICA-AROMA) or a data-driven classifier.
+Different strategy has there own strength and benefits and often involves combining a few classes of regressors described above.
 These regressors are regressed out from the signal after basic processing steps (see fMRIPrep) with linear regression.
 All the subsequent analysis performs on the redisual signal after the regression step.</p>
+</section>
+<section id="implementation-of-denoising-step">
+<h2>Implementation of denoising step<a class="headerlink" href="#implementation-of-denoising-step" title="Permalink to this headline">¶</a></h2>
 <!-- How denoising is traditionally done in propriatory software -->
 <p>This was less of an issue when users use preprocessing software with statistical modelling functionality.
 Each of these software would implement their own preferred strategy,
@@ -321,10 +349,14 @@ Users can implement project-specific ways to retrieve the relevant regressors,
 making replication of others denoising step more difficult.
 Lastly, the past denoising benchmark literature was performed on the study specific preprocessing pipeline.
 The validity of these results on fMRIPrep has yet to be examined.</p>
+</section>
+<section id="aim-of-the-benchmark">
+<h2>Aim of the benchmark<a class="headerlink" href="#aim-of-the-benchmark" title="Permalink to this headline">¶</a></h2>
 <p>Current work aims to introduce an application programming interface (API) to standardise the interaction with fMRIPrep and provide benchmark using functional connectivity generated from resting state data.
 The API is released under popular Python neuroimaging analytic library <code class="docutils literal notranslate"><span class="pre">nilearn</span></code>,<br />
 with the aim to maximise the exposure of the API to the larger Python fMRI community.<br />
 The benchmark will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
