@@ -16,8 +16,8 @@ Please find poster number `WTh570`.
 
 ## Acknowledgments
 
-The initial API was started by Hanad Sharmarke [^1] and Pierre Bellec[^1][^7].
-The implementation was completed by Hao-Ting Wang[^1], Steven Meisler[^2][^3], François Paugam [^1][^4], Pierre Bellec.
+The initial API was started by Hanad Sharmarke[^1] and Pierre Bellec[^1][^7].
+The implementation was completed by Hao-Ting Wang[^1], Steven Meisler[^2][^3], François Paugam[^1][^4], Pierre Bellec.
 Hao-Ting Wang migrated the code base to `nilearn`.
 Nicolas Gensollen[^5] and Bertrand Thirion[^5] reviewed the code migrated to `nilearn`.
 We thank Chris Markiewicz[^6] for feedbacks related to fMRIPrep.

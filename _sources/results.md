@@ -1,7 +1,7 @@
 # Results
 
 The current benchmark show consistent results in the two datasets.
-The trend of benchmakr does not differ amongst the choise of atlases.
+The trend of benchmakr does not differ amongst the choice of atlases.
 However, we can see variance within the parcellation scheme MIST and DiFuMo.
 The variance comes from different resolution of the same parcellation scheme, epecially with low parcel counts.
 
