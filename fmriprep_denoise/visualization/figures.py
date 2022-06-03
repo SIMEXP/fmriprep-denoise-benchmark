@@ -53,6 +53,7 @@ def plot_motion_resid(dataset, atlas_name=None, dimension=None):
         axs[0].set(ylabel="Confound removal strategy")
     return fig
 
+
 def _summary_plots(figure_data, ax):
     color_order = _get_palette(list(GRID_LOCATION.values()))
     if figure_data['data'].shape[0] != 1:
@@ -62,10 +63,10 @@ def _summary_plots(figure_data, ax):
                          ax=ax, palette=color_order)
     else:
         sns.stripplot(data=figure_data['data'], orient='h',
-                              order=figure_data['order'],
-                              size=4, palette=color_order,
-                              linewidth=1, alpha=1,
-                              ax=ax)
+                      order=figure_data['order'],
+                      size=4, palette=color_order,
+                      linewidth=1, alpha=1,
+                      ax=ax)
     ax.set(xlabel=figure_data['label'])
     return ax
 
@@ -210,6 +211,7 @@ def _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc):
     subfigs[1].suptitle('Distribution of QC-FC')
     return fig
 
+
 def _get_qcfc_metric(file_path, metric):
     """ Get correlation or pvalue of QC-FC."""
     if not isinstance(file_path, list):
@@ -259,8 +261,8 @@ def _corr_modularity_motion(movement, files_network, labels):
         z_movement = movement.apply(zscore)
         for column, _ in modularity.iteritems():
             cur_data = pd.concat((modularity[column],
-                                movement[['mean_framewise_displacement']],
-                                z_movement[['age', 'gender']]), axis=1).dropna()
+                                  movement[['mean_framewise_displacement']],
+                                  z_movement[['age', 'gender']]), axis=1).dropna()
             current_strategy = partial_correlation(
                 cur_data[column].values,
                 cur_data['mean_framewise_displacement'].values,
