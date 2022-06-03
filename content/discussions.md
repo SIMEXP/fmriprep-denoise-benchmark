@@ -3,7 +3,7 @@
 Selecting the correct conofund variables for denoising minimally preprocessed fMRI data is a challenging task.
 fMRIPrep ensure a large collection of metrics are delivered in the standard way.
 They provided documentation to guide the user for regressor selection.
-However, there's no guarentee it is goining to be correct or people are reading the documentation properly.
+However, there's no guarantee it is goining to be correct or people are reading the documentation properly.
 `load_confounds` is an API to simplify the process. 
 Built with careful curation of the literature, it ensures users select the sensible nusiance regressors.
 It also provide predefined strategies with the best understanding of the literature.
@@ -18,7 +18,7 @@ as well as one common altlas in the previous benchmark literature,
 the Gordon atlas with 333 parcels, to compare with the past literature using different pipelines.
 The benchmark is largely consistent with the recent literatures. 
 Comparing to the baseline, data that was high-pass filtered, 
-<!-- some descriptio of the results -->
+<!-- some description of the results -->
 However, the results related to GSR are weird in both dataset.
 Further investigation is needed on the code for signal cleaning in nilearn and GSR calculation implemented in fMRIPrep.
 
@@ -28,9 +28,9 @@ Aside for the benchmark on denoising performance, another important factor is th
 Losing degree of freedom means the variance left for the subsequent analysis will be limited.
 Despite the good performance of ICA-AROMA, it is the method with the highest losss in degrees of freedom.
 <!-- check what ciric et al say about the degree of freedom -->
-For dataset with shorter data aquisition sequence, methods using too many nuisance regressors might not be a good idea.
+For dataset with shorter data acquisition sequence, methods using too many nuisance regressors might not be a good idea.
 CompCor and ICA-AROMA both performs well but can risk in lossing to much degrees of freedom.
-Compcor method should be used with causion.
+Compcor method should be used with caution.
 The six component cut-off does not respect differences of each dataset, but does perform well on average.
 Our beenchmark shows the 50% variance approach doesn't perform better than just a smaller subset of the components.
 And it risk reintroducing noise to the data and a higher cost in loss of degree of freedom.
@@ -44,5 +44,5 @@ With benchmark on different type of atlas, we also show that the impact of altas
 Volumetric data based atlas, both probablility and descret atlas performs similarly. 
 Surface based atlas provides less variance across different resolutions.
 The current software will be maintained along with the release of fMRIprep.
-The code base used in this paper provides a great fundation for generating reports on dataset for post-fMRIPrep processessing. 
+The code base used in this paper provides a great foundation for generating reports on dataset for post-fMRIPrep processing. 
 The reports on these two dataset will be able to regenerate the for the future release of fMRIprep.
