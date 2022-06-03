@@ -1,15 +1,16 @@
 # Methods
 
 ## Datasets
-
+<!-- need to revise the demographic information -->
 We selected two datasets on OpenNeuro for the current analysis: 
 `ds000228` {cite:p}`ds000228:1.1.0` and `ds000030` {cite:p}`ds000030:1.0.0`.
 Dataset `ds000228` contains fMRI scans of participants watching a silent version of Pixar animated movie "Partly Cloudy". 
 The dataset includes 33 adult subjects (Age M(s.d.) = 24.8(5.3); range: 18--39; 20 female) and 122 children subjects (Age M(s.d.) = 6.7,(2.3); range: 3.5--12; 64 females).
 For more information for the dataset please refers to {cite:p}`richardson_development_2018`.
 Dataset `ds000030` includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls. 
-The current analysis only focused on the resting state scans, 
-resulting 259 subjects in the final analysis.
+The current analysis only focused on the resting state scans.
+Scans with an instrumental artifact (flagged under column `ghost_NoGhost` in `particiapnts.tsv`) were removed from the final analysis.
+259 out of 272 subjects of were included in the benchmark. 
 The demographic information per condition is in the following table.
 
 |                 | Full sample | Healthy control | Schizophrenia | Bipolar disorder |     ADHD    |
