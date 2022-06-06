@@ -13,7 +13,7 @@ on __Wednesday, June 8, 2022, 8:30 PM GMT + 1__.
 At Glasgow, please contact the presenter on [Twitter](https://twitter.com/HaoTingW713) to schedule a time to chat,
 or come to see the presenter on __Wednesday, June 22, 2022, 12:45 PM__ at the poster hall.
 
-[spoiler](./images/ohbm2022_abstract_head.png)
+[spoiler](./content/images/ohbm2022_abstract_head.png)
 
 ## Dataset structure
 
