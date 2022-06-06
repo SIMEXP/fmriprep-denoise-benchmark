@@ -46,7 +46,6 @@ def parse_args():
     return parser.parse_args()
 
 
-
 def main():
     args = parse_args()
     print(vars(args))
@@ -79,6 +78,7 @@ def main():
                 ts_length = reduced_confounds.shape[0] if sample_mask is None else len(sample_mask)
                 excised_vol = reduced_confounds.shape[0] - ts_length
                 aroma = 0
+                compcor = 0
                 if "aroma" in strategy_name:
                     path_aroma_ic = img.split('space-')[0] + 'AROMAnoiseICs.csv'
                     with open(path_aroma_ic, 'r') as f:
@@ -86,24 +86,25 @@ def main():
                 regressors = reduced_confounds.columns.tolist()
                 high_pass = sum('cosine' in i for i in regressors)
                 compcor = sum('comp_cor' in i for i in regressors)
-                parital = aroma + compcor
-                if "aroma" in strategy_name:
+                partial = aroma + compcor
+                if strategy_name != "compcor6":
                     fixed = len(regressors)
                 else:
-                    fixed = len(regressors) - parital - high_pass
+                    fixed = len(regressors) - compcor
+
+
                 stats = {
                     (strategy_name, 'excised_vol'): excised_vol,
                     (strategy_name, 'high_pass'): high_pass,
                     (strategy_name, 'fixed_regressors'): fixed,
-                    (strategy_name, 'partial'): parital
+                    (strategy_name, 'vary'): partial,
+                    (strategy_name, 'total'): len(regressors) + partial
 
                 }
                 if info.get(sub):
                     info[sub].update(stats)
                 else:
                     info[sub] = stats
-        # with open(path_dof, 'w') as f:
-        #     json.dump(info, f, indent=2)
         import pandas as pd
         pd.DataFrame.from_dict(info, orient='index').to_csv(path_dof, sep='\t')
 
