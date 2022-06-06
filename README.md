@@ -1,4 +1,4 @@
-# Benchmark denoising strategies on fMRIPrep 
+# Benchmark denoising strategies on fMRIPrep output
 
 [![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://simexp.github.io/fmriprep-denoise-benchmark/)
 
