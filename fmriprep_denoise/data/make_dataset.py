@@ -1,14 +1,12 @@
 """
 Process fMRIPrep outputs to timeseries based on denoising strategy.
 """
-
-
 import argparse
 from pathlib import Path
 
 from fmriprep_denoise.data.fmriprep import (get_prepro_strategy,
-                                           fetch_fmriprep_derivative,
-                                           generate_movement_summary)
+                                            fetch_fmriprep_derivative,
+                                            generate_movement_summary)
 from fmriprep_denoise.data.timeseries import generate_timeseries_per_dimension
 
 

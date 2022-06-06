@@ -3,7 +3,7 @@
 The project is a continuation of [`load_confounds`](https://github.com/SIMEXP/load_confounds). 
 The aim is to evaluate the impact of denoising strategy on functional connectivity data, using output processed by fMRIPrep LTS.
 
-The main tool is now part of 
+The main tool is now a part of 
 [`nilearn`](https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds).
 
 The preliminary results will be presented at OHBM 2022 as a poster. 

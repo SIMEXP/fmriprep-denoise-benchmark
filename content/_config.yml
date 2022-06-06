@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: Benchmark denoising strategies on functional connectomes generated from fMRIPrep outputs
+title: Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs
 author: Hao-Ting Wang
 logo: logo.png
 

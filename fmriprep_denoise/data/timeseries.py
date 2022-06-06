@@ -19,10 +19,18 @@ def generate_timeseries_per_dimension(atlas_name, output, benchmark_strategies,
         for strategy_name, parameters in benchmark_strategies.items():
             print(f"Denoising: {strategy_name}")
             print(parameters)
-            if _is_aroma(strategy_name):
+            if "aroma" in strategy_name:
                 _clean_timeserise_aroma(atlas_name, dimension, strategy_name, parameters, output, data_aroma)
             else:
                 _clean_timeserise_normal(subject_timeseries, atlas_name, dimension, strategy_name, parameters, output, data)
+
+
+def get_confounds(strategy_name, parameters, img):
+    if strategy_name == 'baseline':
+        reduced_confounds, sample_mask = load_confounds(img, **parameters)
+    else:
+        reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
+    return reduced_confounds, sample_mask
 
 
 def _clean_timeserise_normal(subject_timeseries, atlas_name, dimension, strategy_name, parameters, output, data):
@@ -31,9 +39,9 @@ def _clean_timeserise_normal(subject_timeseries, atlas_name, dimension, strategy
                                        output,
                                        data,
                                        atlas_spec)
-    reduced_confounds, sample_mask = _get_confounds(strategy_name,
-                                                    parameters,
-                                                    img)
+    reduced_confounds, sample_mask = get_confounds(strategy_name,
+                                                   parameters,
+                                                   img)
     if _check_exclusion(reduced_confounds, sample_mask):
         clean_timeseries = []
     else:
@@ -51,9 +59,9 @@ def _clean_timeserise_aroma(atlas_name, dimension, strategy_name, parameters, ou
                                                   output,
                                                   data_aroma,
                                                   atlas_spec)
-    reduced_confounds, sample_mask = _get_confounds(strategy_name,
-                                                    parameters,
-                                                    img)
+    reduced_confounds, sample_mask = get_confounds(strategy_name,
+                                                   parameters,
+                                                   img)
     aroma_masker, _ = create_atlas_masker(atlas_name, dimension,
                                             subject_mask,
                                             nilearn_cache="")
@@ -85,23 +93,11 @@ def _generate_raw_timeseries(output, data, atlas_info):
     return subject_timeseries
 
 
-def _is_aroma(strategy_name):
-    return "aroma" in strategy_name
-
-
 def _get_output_info(strategy_name, output, data, atlas_spec):
     subject_spec, subject_output, subject_mask = _get_subject_info(output, data)
     img = data.func[0]
     ts_path = subject_output / f"{subject_spec}_{atlas_spec}_desc-{strategy_name}_timeseries.tsv"
     return subject_mask,img,ts_path
-
-
-def _get_confounds(strategy_name, parameters, img):
-    if strategy_name == 'baseline':
-        reduced_confounds, sample_mask = load_confounds(img, **parameters)
-    else:
-        reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
-    return reduced_confounds, sample_mask
 
 
 def _check_exclusion(reduced_confounds, sample_mask):

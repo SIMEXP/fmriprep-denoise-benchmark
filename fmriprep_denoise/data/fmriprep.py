@@ -109,7 +109,7 @@ def get_prepro_strategy(strategy_name=None):
         print("Process all strategies.")
         return benchmark_strategies
     (f"Process strategy '{strategy_name}'.")
-    return benchmark_strategies[strategy_name]
+    return {strategy_name: benchmark_strategies[strategy_name]}
 
 
 def generate_movement_summary(dataset_name, data, output):
