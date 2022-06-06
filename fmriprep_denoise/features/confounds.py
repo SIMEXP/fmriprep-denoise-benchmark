@@ -83,8 +83,9 @@ def main():
                     path_aroma_ic = img.split('space-')[0] + 'AROMAnoiseICs.csv'
                     with open(path_aroma_ic, 'r') as f:
                         aroma = len(f.readline().split(','))
-                compcor = sum('comp_cor' in i for i in regressors)
+
                 regressors = reduced_confounds.columns.tolist()
+                compcor = sum('comp_cor' in i for i in regressors)
                 high_pass = sum('cosine' in i for i in regressors)
                 partial = aroma + compcor
                 if "compcor" not in strategy_name:
