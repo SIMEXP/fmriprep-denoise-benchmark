@@ -95,11 +95,11 @@ def main():
 
                 stats = {
                     (strategy_name, 'excised_vol'): excised_vol,
+                    (strategy_name, 'excised_vol_proportion'): excised_vol / ts_length,
                     (strategy_name, 'high_pass'): high_pass,
                     (strategy_name, 'fixed_regressors'): fixed,
                     (strategy_name, 'vary'): partial,
                     (strategy_name, 'total'): fixed + partial
-
                 }
                 if info.get(sub):
                     info[sub].update(stats)

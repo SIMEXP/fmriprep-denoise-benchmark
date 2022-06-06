@@ -6,8 +6,15 @@ The aim is to evaluate the impact of denoising strategy on functional connectivi
 The main tool is now a part of 
 [`nilearn`](https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds).
 
+## OHBM 2022
+
 The preliminary results will be presented at OHBM 2022 as a poster. 
 Please find poster number `WTh570`.
+
+You can find the presenter at the virtual poster session on Wednesday, June 8, 2022, 8:30 PM - 10:00 PM GMT + 1.
+
+At Glasgow, you can contact the presenter on [Twitter](https://twitter.com/HaoTingW713) to schedule a time to chat.
+Or come to see me on Wednesday, June 8, 2022, 12:45 PM at the poster hall.
 
 ```{image} ./images/ohbm2022_abstract_head.png
 :alt: poster
