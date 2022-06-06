@@ -6,10 +6,11 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>ds000228 &#8212; Benchmark denoising strategies on functional connectomes generated from fMRIPrep outputs</title>
+    <title>ds000228 &#8212; Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs</title>
     
-  <link href="_static/css/theme.css" rel="stylesheet">
-  <link href="_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -19,20 +20,16 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
     <script src="_static/jquery.js"></script>
@@ -41,8 +38,9 @@
     <script src="_static/togglebutton.js"></script>
     <script src="_static/clipboard.min.js"></script>
     <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script src="_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -60,7 +58,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint">⚠️This is a working draft for discussion and feedback!⚠️</div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -69,9 +81,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -81,7 +94,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="_static/logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">Benchmark denoising strategies on functional connectomes generated from fMRIPrep outputs</h1>
+      <h1 class="site-logo" id="site-title">Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -89,14 +102,15 @@ const thebe_selector_output = ".output, .cell_output"
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
-        <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="index.html">
-   Overview
-  </a>
- </li>
-</ul>
-<p aria-level="2" class="caption" role="heading">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="index.html">
+                    Overview
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
   Paper
  </span>
@@ -147,26 +161,14 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Appendices
+  Appendices and supplemental material
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1 has-children">
-  <a class="reference internal" href="supplemental_material.html">
-   Supplemental Material
+ <li class="toctree-l1">
+  <a class="reference internal" href="CITATION.html">
+   fMRIPrep preprocessing details
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="CITATION.html">
-     fMRIPrep preprocessing details
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="ohbm2022abstract.html">
@@ -176,110 +178,226 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-<div class="navbar_extra_footer">
-  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
-</div>
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        <a class="dropdown-buttons"
-            href="_sources/ds000228.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download notebook file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="_sources/ds000228.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.md</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/SIMEXP/fmriprep-denoise-benchmark"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Fds000228.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
-    <div class="dropdown-buttons">
-        
-        <a class="binder-button" href="https://mybinder.org/v2/gh/SIMEXP/fmriprep-denoise-benchmark/main?urlpath=tree/content/ds000228.md"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
-                data-placement="left"><img class="binder-button-logo"
-                    src="_static/images/logo_binder.svg"
-                    alt="Interact on binder">Binder</button></a>
-        
-        
-        
-        
-    </div>
-</div>
-
-        </div>
-
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
             </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/SIMEXP/fmriprep-denoise-benchmark/main?urlpath=tree/content/ds000228.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Fds000228.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="_sources/ds000228.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="_sources/ds000228.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#qc-fc-and-distance-dependent-effect">
    QC-FC and distance-dependent effect
@@ -297,19 +415,52 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
-        
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>ds000228</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#qc-fc-and-distance-dependent-effect">
+   QC-FC and distance-dependent effect
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity">
+   Distance-dependent effects of motion on connectivity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#network-modularity">
+   Network modularity
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
               <div>
                 
   <section class="tex2jax_ignore mathjax_ignore" id="ds000228">
-<h1>ds000228<a class="headerlink" href="#ds000228" title="Permalink to this headline">¶</a></h1>
+<h1>ds000228<a class="headerlink" href="#ds000228" title="Permalink to this headline">#</a></h1>
 <section id="qc-fc-and-distance-dependent-effect">
-<h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">¶</a></h2>
+<h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">#</a></h2>
 <!-- 
 No denoise strategy removed the correlation with motion captured by mean framewise displacement. 
 `aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement. 
@@ -332,65 +483,65 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </div>
 </div>
 </div>
-<div class="tabbed-set docutils">
-<input checked="checked" id="abc7ed66-62e5-46f3-b4a1-b3a8a98823ee" name="272545c5-2b59-4852-b357-02c119ec122e" type="radio">
-</input><label class="tabbed-label" for="abc7ed66-62e5-46f3-b4a1-b3a8a98823ee">
-MIST</label><div class="tabbed-content docutils">
+<div class="sd-tab-set docutils">
+<input checked="checked" id="1ea5dcd1-b877-447f-83df-7ce3e65906df" name="342dc3ae-92fe-4945-826f-1bb063378add" type="radio">
+</input><label class="sd-tab-label" for="1ea5dcd1-b877-447f-83df-7ce3e65906df">
+MIST</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_0.png" src="_images/ds000228_1_0.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-qcfc-fig" title="Permalink to this image">¶</a></p>
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="71f7fd00-4d79-4d08-b087-55563e9750e0" name="272545c5-2b59-4852-b357-02c119ec122e" type="radio">
-</input><label class="tabbed-label" for="71f7fd00-4d79-4d08-b087-55563e9750e0">
-DiFuMo</label><div class="tabbed-content docutils">
+<input id="3b7fe1fd-84c0-4827-aef6-84705a0b8e08" name="342dc3ae-92fe-4945-826f-1bb063378add" type="radio">
+</input><label class="sd-tab-label" for="3b7fe1fd-84c0-4827-aef6-84705a0b8e08">
+DiFuMo</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_1.png" src="_images/ds000228_1_1.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
-Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-difumo-qcfc-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="30de727b-8e89-42fc-b74a-7a8ea0f56c12" name="272545c5-2b59-4852-b357-02c119ec122e" type="radio">
-</input><label class="tabbed-label" for="30de727b-8e89-42fc-b74a-7a8ea0f56c12">
-Schaefer 7 Networks</label><div class="tabbed-content docutils">
+<input id="39d60b9b-3517-492a-a416-b359768e76f1" name="342dc3ae-92fe-4945-826f-1bb063378add" type="radio">
+</input><label class="sd-tab-label" for="39d60b9b-3517-492a-a416-b359768e76f1">
+Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-schaefer7networks-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_2.png" src="_images/ds000228_1_2.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
-Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-qcfc-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="d430027e-851e-4895-a36a-0a41db846518" name="272545c5-2b59-4852-b357-02c119ec122e" type="radio">
-</input><label class="tabbed-label" for="d430027e-851e-4895-a36a-0a41db846518">
-Gordon 333 parcels</label><div class="tabbed-content docutils">
+<input id="18aca8ba-2d9a-4498-92f9-745e09606ea6" name="342dc3ae-92fe-4945-826f-1bb063378add" type="radio">
+</input><label class="sd-tab-label" for="18aca8ba-2d9a-4498-92f9-745e09606ea6">
+Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_1_3.png" src="_images/ds000228_1_3.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
-In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-qcfc-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
 </div>
 </section>
 <section id="distance-dependent-effects-of-motion-on-connectivity">
-<h2>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">¶</a></h2>
+<h2>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">#</a></h2>
 <!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  --><div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
@@ -408,73 +559,64 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 </div>
 </div>
 </div>
-<div class="tabbed-set docutils">
-<input checked="checked" id="859aeaf5-3ab0-47fa-b45e-a484805967ce" name="37c829ab-bc31-4ef6-9db1-8a0df0f54b1a" type="radio">
-</input><label class="tabbed-label" for="859aeaf5-3ab0-47fa-b45e-a484805967ce">
-MIST</label><div class="tabbed-content docutils">
+<div class="sd-tab-set docutils">
+<input checked="checked" id="cd653b55-d2d2-48a9-b1f1-c84f64f03119" name="a379df94-a423-484d-a392-80b1e4536eae" type="radio">
+</input><label class="sd-tab-label" for="cd653b55-d2d2-48a9-b1f1-c84f64f03119">
+MIST</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-mist-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_3_1.png" src="_images/ds000228_3_1.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with MIST atlas.
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-dist-fig" title="Permalink to this image">¶</a></p>
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-dist-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="63df4cc7-7082-4dde-84e4-b16bef7bffd4" name="37c829ab-bc31-4ef6-9db1-8a0df0f54b1a" type="radio">
-</input><label class="tabbed-label" for="63df4cc7-7082-4dde-84e4-b16bef7bffd4">
-DiFuMo</label><div class="tabbed-content docutils">
+<input id="fe755e08-e2bf-4562-a01f-276f4b9ef14c" name="a379df94-a423-484d-a392-80b1e4536eae" type="radio">
+</input><label class="sd-tab-label" for="fe755e08-e2bf-4562-a01f-276f4b9ef14c">
+DiFuMo</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-difumo-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_3_0.png" src="_images/ds000228_3_0.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">TBA</span><a class="headerlink" href="#tbl-ds000228-difumo-dist-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 8 </span><span class="caption-text">TBA</span><a class="headerlink" href="#tbl-ds000228-difumo-dist-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="90dbd91f-bcae-433c-9263-22a1e97a1604" name="37c829ab-bc31-4ef6-9db1-8a0df0f54b1a" type="radio">
-</input><label class="tabbed-label" for="90dbd91f-bcae-433c-9263-22a1e97a1604">
-Schaefer 7 Networks</label><div class="tabbed-content docutils">
+<input id="7ead7a04-62db-492d-a225-72996aa76d18" name="a379df94-a423-484d-a392-80b1e4536eae" type="radio">
+</input><label class="sd-tab-label" for="7ead7a04-62db-492d-a225-72996aa76d18">
+Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-schaefer7networks-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_3_2.png" src="_images/ds000228_3_2.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
-Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-dist-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="11d17c43-cb57-49ec-9c15-5809d2c222df" name="37c829ab-bc31-4ef6-9db1-8a0df0f54b1a" type="radio">
-</input><label class="tabbed-label" for="11d17c43-cb57-49ec-9c15-5809d2c222df">
-Gordon 333 parcels</label><div class="tabbed-content docutils">
+<input id="c0ef6eea-d0c9-41f7-9a53-a3a0e9906611" name="a379df94-a423-484d-a392-80b1e4536eae" type="radio">
+</input><label class="sd-tab-label" for="c0ef6eea-d0c9-41f7-9a53-a3a0e9906611">
+Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-gordon333-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_3_3.png" src="_images/ds000228_3_3.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 8 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
-In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-dist-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
+In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-dist-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
 </div>
-<!-- ````{tabbed} DiFuMo
-```{glue:figure} ds000228_difumo_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000228_difumo_dist-fig"
-
-Distance-dependent effects of motion on connectivity with DiFuMo atlas. 
-Each data point represent different resolution.
-```
-```` -->
 </section>
 <section id="network-modularity">
-<h2>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">¶</a></h2>
+<h2>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">#</a></h2>
 <!-- 
 All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all. 
 GSR-based strategies improved the network modularity compared to their conunterparts.
@@ -495,58 +637,58 @@ The correlation between modularity quality and motion for each denoising approac
 </div>
 </div>
 </div>
-<div class="tabbed-set docutils">
-<input checked="checked" id="b9a977ff-0677-466d-87c1-cbc27b7c4a16" name="648690df-3ae3-48f1-a078-d945160ad5a8" type="radio">
-</input><label class="tabbed-label" for="b9a977ff-0677-466d-87c1-cbc27b7c4a16">
-MIST</label><div class="tabbed-content docutils">
+<div class="sd-tab-set docutils">
+<input checked="checked" id="073fb746-4da5-41d9-9ed1-fd3fbc78a98a" name="5e4b6efa-6bd8-4429-9afc-1a89cd090acf" type="radio">
+</input><label class="sd-tab-label" for="073fb746-4da5-41d9-9ed1-fd3fbc78a98a">
+MIST</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-mist-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_5_0.png" src="_images/ds000228_5_0.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 9 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-network-fig" title="Permalink to this image">¶</a></p>
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-network-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="93238243-1e76-49be-8e4a-1e00794450d5" name="648690df-3ae3-48f1-a078-d945160ad5a8" type="radio">
-</input><label class="tabbed-label" for="93238243-1e76-49be-8e4a-1e00794450d5">
-DiFuMo</label><div class="tabbed-content docutils">
+<input id="e8e4e9fb-0b8d-4772-ac21-4d733c9e223a" name="5e4b6efa-6bd8-4429-9afc-1a89cd090acf" type="radio">
+</input><label class="sd-tab-label" for="e8e4e9fb-0b8d-4772-ac21-4d733c9e223a">
+DiFuMo</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-difumo-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_5_1.png" src="_images/ds000228_5_1.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 10 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
-Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-difumo-network-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 12 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-difumo-network-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="d6cf720c-3e8d-4cb2-8fa4-34e6857cf82c" name="648690df-3ae3-48f1-a078-d945160ad5a8" type="radio">
-</input><label class="tabbed-label" for="d6cf720c-3e8d-4cb2-8fa4-34e6857cf82c">
-Schaefer 7 Networks</label><div class="tabbed-content docutils">
+<input id="7fd4d907-47aa-4899-9089-26bca4537214" name="5e4b6efa-6bd8-4429-9afc-1a89cd090acf" type="radio">
+</input><label class="sd-tab-label" for="7fd4d907-47aa-4899-9089-26bca4537214">
+Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-schaefer7networks-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_5_2.png" src="_images/ds000228_5_2.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 11 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
-Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-network-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 13 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-network-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="5fc620bc-053c-413c-96e2-b8a62355d12e" name="648690df-3ae3-48f1-a078-d945160ad5a8" type="radio">
-</input><label class="tabbed-label" for="5fc620bc-053c-413c-96e2-b8a62355d12e">
-Gordon 333 parcels</label><div class="tabbed-content docutils">
+<input id="247d8bbc-20e6-4170-804f-10aca2fc1883" name="5e4b6efa-6bd8-4429-9afc-1a89cd090acf" type="radio">
+</input><label class="sd-tab-label" for="247d8bbc-20e6-4170-804f-10aca2fc1883">
+Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-ds000228-gordon333-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/ds000228_5_3.png" src="_images/ds000228_5_3.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 12 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
-In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-network-fig" title="Permalink to this image">¶</a></p>
+<p><span class="caption-number">Fig. 14 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-network-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
@@ -576,9 +718,11 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 
               </div>
               
-        
-            <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="results.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -594,26 +738,28 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-        
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-    <div class="container">
-      <p>
-        
-          By Hao-Ting Wang<br/>
-        
-            &copy; Copyright 2021.<br/>
-      </p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Hao-Ting Wang<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
     </div>
-  </footer>
-</main>
+    
+</div>
 
 
       </div>
     </div>
   
-  <script src="_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>
