@@ -75,8 +75,9 @@ def main():
                 reduced_confounds, sample_mask = get_confounds(strategy_name,
                                                             parameters,
                                                             img)
-                ts_length = reduced_confounds.shape[0] if sample_mask is None else len(sample_mask)
-                excised_vol = reduced_confounds.shape[0] - ts_length
+                full_length = reduced_confounds.shape[0]
+                ts_length = full_length if sample_mask is None else len(sample_mask)
+                excised_vol = full_length - ts_length
                 aroma = 0
                 compcor = 0
                 if "aroma" in strategy_name:
@@ -95,7 +96,7 @@ def main():
 
                 stats = {
                     (strategy_name, 'excised_vol'): excised_vol,
-                    (strategy_name, 'excised_vol_proportion'): excised_vol / ts_length,
+                    (strategy_name, 'excised_vol_proportion'): excised_vol / full_length,
                     (strategy_name, 'high_pass'): high_pass,
                     (strategy_name, 'fixed_regressors'): fixed,
                     (strategy_name, 'vary'): partial,
