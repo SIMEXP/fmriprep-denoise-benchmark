@@ -80,6 +80,7 @@ def main():
                 excised_vol = full_length - ts_length
                 regressors = reduced_confounds.columns.tolist()
                 fixed = len(regressors)
+                total = fixed
                 aroma = 0
                 compcor = 0
                 if "aroma" in strategy_name:
@@ -91,17 +92,19 @@ def main():
                 high_pass = sum('cosine' in i for i in regressors)
                 if "compcor" in strategy_name:
                     fixed = len(regressors) - compcor
-                    vary = fixed + compcor
+                    compcor = fixed + compcor
+                    total = compcor
                 if "aroma" in strategy_name:
                     aroma = fixed + aroma
+                    total = aroma
                 stats = {
                     (strategy_name, 'excised_vol'): excised_vol,
                     (strategy_name, 'excised_vol_proportion'): excised_vol / full_length,
                     (strategy_name, 'high_pass'): high_pass,
                     (strategy_name, 'fixed_regressors'): fixed,
-                    (strategy_name, 'compcor'): vary,
+                    (strategy_name, 'compcor'): compcor,
                     (strategy_name, 'aroma'): aroma,
-                    (strategy_name, 'total'): fixed + aroma + compcor
+                    (strategy_name, 'total'): total
                 }
                 if info.get(sub):
                     info[sub].update(stats)
