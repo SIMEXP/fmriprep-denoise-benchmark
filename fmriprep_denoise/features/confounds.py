@@ -78,29 +78,30 @@ def main():
                 full_length = reduced_confounds.shape[0]
                 ts_length = full_length if sample_mask is None else len(sample_mask)
                 excised_vol = full_length - ts_length
+                regressors = reduced_confounds.columns.tolist()
+                fixed = len(regressors)
                 aroma = 0
                 compcor = 0
                 if "aroma" in strategy_name:
                     path_aroma_ic = img.split('space-')[0] + 'AROMAnoiseICs.csv'
                     with open(path_aroma_ic, 'r') as f:
                         aroma = len(f.readline().split(','))
-
-                regressors = reduced_confounds.columns.tolist()
+                    aroma = fixed + aroma
                 compcor = sum('comp_cor' in i for i in regressors)
                 high_pass = sum('cosine' in i for i in regressors)
-                partial = aroma + compcor
-                if "compcor" not in strategy_name:
-                    fixed = len(regressors)
-                else:
+                if "compcor" in strategy_name:
                     fixed = len(regressors) - compcor
-
+                    vary = fixed + compcor
+                if "aroma" in strategy_name:
+                    aroma = fixed + aroma
                 stats = {
                     (strategy_name, 'excised_vol'): excised_vol,
                     (strategy_name, 'excised_vol_proportion'): excised_vol / full_length,
                     (strategy_name, 'high_pass'): high_pass,
                     (strategy_name, 'fixed_regressors'): fixed,
-                    (strategy_name, 'vary'): partial,
-                    (strategy_name, 'total'): fixed + partial
+                    (strategy_name, 'compcor'): vary,
+                    (strategy_name, 'aroma'): aroma,
+                    (strategy_name, 'total'): fixed + aroma + compcor
                 }
                 if info.get(sub):
                     info[sub].update(stats)
