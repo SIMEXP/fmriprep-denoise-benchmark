@@ -162,6 +162,79 @@ def plot_network_modularity(dataset, atlas_name=None, dimension=None):
     return fig
 
 
+def plot_dof_overview(plot_info):
+    datasets = ["ds000228", "ds000030"]
+    fig = plt.figure(figsize=(11, 5))
+    axs = fig.subplots(1, 2, sharey=True)
+    for dataset, ax in zip(datasets, axs):
+        file = f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+        path_dof = path_root / "metrics" / file
+        df = pd.read_csv(path_dof, header=[0, 1], index_col=0, sep='\t')
+        df = df.melt()
+        _dof_report(dataset, ax, df, plot_info)
+    axs[1].legend(bbox_to_anchor=(1.6, 1))
+    return fig
+
+
+def plot_dof_dataset(dataset, plot_info):
+    group_info_column = "Child_Adult" if dataset == "ds000228" else "diagnosis"
+    path_dof = path_root / "metrics" / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+    path_participants = f'../inputs/{dataset}/participants.tsv'
+    df = pd.read_csv(path_dof, header=[0, 1], index_col=0, sep='\t')
+    df_participants = pd.read_csv(path_participants, index_col=0, sep='\t').loc[df.index, group_info_column]
+
+    groups = df_participants.unique().tolist()
+
+    # this is lazy
+    if dataset == "ds000228":
+        fig = plt.figure(figsize=(11, 5))
+        axs = fig.subplots(1, 2, sharey=True)
+        legend_loc = 1
+    else:
+        fig = plt.figure(figsize=(11, 11))
+        axs = fig.subplots(2, 2, sharey=True, sharex=True)
+        legend_loc = (0, 1)
+
+    for group, ax in zip(groups, axs.flat):
+        cur_dof = df[df_participants == group].melt()
+        title = f"{dataset}-{group}"
+        _dof_report(title, ax, cur_dof, plot_info)
+    axs[legend_loc].legend(bbox_to_anchor=(1.6, 1))
+    return fig
+
+
+def _dof_report(title, ax, df, plot_info):
+
+    if plot_info == 'dof':
+        df.columns = ['Strategy', 'type', 'Number of regressors']
+        sns.barplot(y='Strategy', x='Number of regressors',
+                    data=df[df['type']=='compcor'], ci=95,
+                    color='blue', ax=ax,
+                    label='CompCor \nregressors')
+        sns.barplot(y='Strategy', x='Number of regressors',
+                    data=df[df['type']=='aroma'], ci=95,
+                    color='orange', ax=ax,
+                    label='ICA-AROMA \npartial regressors')
+        sns.barplot(y='Strategy', x='Number of regressors',
+                    data=df[df['type']=='fixed_regressors'],
+                    color='darkgrey', ax=ax,
+                    label='Head motion and \ntissue signal')
+        sns.barplot(y='Strategy', x='Number of regressors',
+                    data=df[df['type']=='high_pass'], ax=ax,
+                    color='grey', label='Discrete cosine-basis \nregressors')
+        ax.set_title(title)
+        ax.set_xlim(0, 80)
+
+    elif plot_info == 'scrubbing':
+        df.columns = ['Strategy', 'type', 'Proportion of removed volumes to scan length']
+        sns.barplot(y='Strategy', x='Proportion of removed volumes to scan length',
+                    data=df[df['type']=='excised_vol_proportion'], ci=95,
+                    palette=['darkgrey'] * 7+ ['orange', 'orange'] + ['blue', 'blue'],
+                    ax=ax)
+        ax.set_title(title)
+        ax.set_xlim(0, 1)
+
+
 def _get_file_paths(dataset, metric, atlas_name, dimension):
     atlas_name = "*" if isinstance(atlas_name, type(None)) else atlas_name
     dimension = "*" if isinstance(atlas_name, type(None)) or isinstance(dimension, type(None)) else dimension
