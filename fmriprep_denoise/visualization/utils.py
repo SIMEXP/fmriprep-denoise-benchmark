@@ -36,12 +36,16 @@ def _get_palette(order):
 
 
 def _get_participants_groups(dataset):
+
+    # need more general solutions here, maybe as a user input?
+    group_info_column = "Child_Adult" if dataset == "ds000228" else "diagnosis"
+
+    # read the degrees of freedom info as reference for subjects
     path_dof = path_root / "metrics" / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+    path_participants = path_root / dataset / 'participants.tsv'
+
     confounds_phenotype = pd.read_csv(path_dof, header=[0, 1], index_col=0, sep='\t')
     subjects = confounds_phenotype.index
-
-    path_participants = path_root / dataset / 'participants.tsv'
-    group_info_column = "Child_Adult" if dataset == "ds000228" else "diagnosis"
 
     participants_groups = pd.read_csv(path_participants, index_col=0, sep='\t').loc[subjects, group_info_column]
     groups = participants_groups.unique().tolist()
@@ -66,7 +70,6 @@ def _get_qcfc_metric(file_path, metric):
     """ Get correlation or pvalue of QC-FC."""
     if not isinstance(file_path, list):
         file_path = [file_path]
-
     qcfc_per_edge = []
     # read subject information here
     for p in file_path:

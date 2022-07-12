@@ -27,3 +27,17 @@ python ./fmriprep_denoise/features/build_features.py \
     ${OUTPUT} \
     --atlas gordon333 \
     --dimension 333
+
+
+# Get some confounds metadata
+python fmriprep_denoise/features/confounds.py inputs/metrics \
+	--fmriprep_path=/scratch/${USER}/ds000228/1643916303/fmriprep/ \
+	--dataset_name=ds000228 \
+	--specifier=task-pixar \
+	--participants_tsv /scratch/${USER}/ds000228/participants.tsv
+
+python fmriprep_denoise/features/confounds.py inputs/metrics \
+	--fmriprep_path=/scratch/${USER}/ds000030/1651688951/fmriprep/ \
+	--dataset_name=ds000030 \
+	--specifier=task-rest \
+	--participants_tsv /scratch/${USER}/ds000030/participants.tsv
