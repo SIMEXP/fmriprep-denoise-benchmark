@@ -65,6 +65,11 @@ def main():
                                                    dataset, file_pattern)
         print("\tLoaded connectome...")
 
+        # Handle group information, subject exclusion over here
+        # the output groups will include:
+        # full sample, and mask for each sub groups
+        subjects, groups = get_valid_subjects(dataset)
+
         metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
                       connectome,
                       phenotype.loc[:, ['age', 'gender']])
