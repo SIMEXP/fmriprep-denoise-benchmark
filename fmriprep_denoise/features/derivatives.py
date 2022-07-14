@@ -4,6 +4,11 @@ import pandas as pd
 from nilearn.connectome import ConnectivityMeasure
 
 
+
+project_root = Path(__file__).parents[2]
+inputs = project_root / 'inputs'
+
+
 def compute_connectome(atlas, extracted_path, dataset, file_pattern):
     """Compute connectome of all valid data.
 
@@ -58,7 +63,7 @@ def check_extraction(input_path, extracted_path_root=None):
         Correct file path of the extracted dataset.
     """
     dir_name = input_path.name.split('.tar')[0]
-    extracted_path_root = Path(__file__).parents[2] / 'inputs'  \
+    extracted_path_root = inputs \
         if extracted_path_root is None \
         else extracted_path_root
 
@@ -75,11 +80,21 @@ def check_extraction(input_path, extracted_path_root=None):
 
 
 def _load_phenotype(dataset):
-    project_root = Path(__file__).parents[2]
-    phenotype_path = project_root / f"inputs/dataset-{dataset}/" / \
-        f"dataset-{dataset}_desc-movement_phenotype.tsv"
-    phenotype = pd.read_csv(phenotype_path,
-                            sep='\t', index_col=0, header=0)
+    """Get subjects that were processed and passed quality controls."""
+
+    # read relevant files
+    path_phenotype = inputs / \
+        f'dataset-{dataset}/dataset-{dataset}_desc-movement_phenotype.tsv'
+    path_original_participants_info = inputs / \
+        f'{dataset}/participants.tsv'
+
+    phenotype = pd.read_csv(path_phenotype, sep='\t', index_col=0)
+    participants = pd.read_csv(path_original_participants_info, sep='\t', index_col=0)
+    if dataset == 'ds000030':
+        mask_quality = participants['ghost_NoGhost'] == 'No_ghost'
+        participants = participants[mask_quality]
+
+    phenotype = pd.concat([phenotype, participants], axis=1, join='inner')
     return phenotype.sort_index()
 
 

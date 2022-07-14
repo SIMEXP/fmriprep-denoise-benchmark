@@ -10,6 +10,13 @@ from fmriprep_denoise.features.derivatives import (compute_connectome, check_ext
 from fmriprep_denoise.features import qcfc, louvain_modularity
 
 
+# another very bad special case handling
+
+group_info_column = {
+        'ds000228': 'Child_Adult',
+        'ds000030':  'diagnosis'
+    }
+
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
@@ -65,18 +72,29 @@ def main():
                                                    dataset, file_pattern)
         print("\tLoaded connectome...")
 
-        # Handle group information, subject exclusion over here
-        # the output groups will include:
-        # full sample, and mask for each sub groups
-        subjects, groups = get_valid_subjects(dataset)
-
         metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
                       connectome,
                       phenotype.loc[:, ['age', 'gender']])
         metric = pd.DataFrame(metric)
-        metric.columns = [f'{strategy_name}_{col}' for col in metric.columns]
+        metric.columns = [('full_sample', f'{strategy_name}_{col}')
+                          for col in metric.columns]
         metric_qcfc.append(metric)
         print("\tQC-FC...")
+
+        # QC-FC by group
+        if group_info_column.get(dataset):
+            participant_groups = group_info_column[dataset]
+            groups = phenotype[group_info_column[dataset]].unique()
+            for group in groups:
+                subgroup = phenotype[participant_groups == group].index
+                metric = qcfc(phenotype.loc[subgroup, 'mean_framewise_displacement'],
+                              connectome,
+                              phenotype.loc[subgroup, ['age', 'gender']])
+                metric = pd.DataFrame(metric)
+                metric.columns = [(group, f'{strategy_name}_{col}')
+                                  for col in metric.columns]
+                metric_qcfc.append(metric)
+
         with Pool(30) as pool:
             qs = pool.map(louvain_modularity, connectome.values.tolist())
 
@@ -92,6 +110,7 @@ def main():
         / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv",
         sep='\t',
     )
+
     metric_mod = pd.concat(metric_mod, axis=1)
     metric_mod.to_csv(
         output_path
