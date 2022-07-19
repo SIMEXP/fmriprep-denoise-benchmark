@@ -1,11 +1,14 @@
+# set up the project after cloneing
 # Move templates to locations you need them to be
 #!/bin/bash
 
+# make sure the git submodules are updated 
+git submodule update --init --recursive
 
-cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark
+# install the project
+pip install -e .
 
 python scripts/fetch_templates.py
-
 
 python scripts/mist2templateflow/mist2templateflow.py -d -o inputs/custome_templateflow
 
