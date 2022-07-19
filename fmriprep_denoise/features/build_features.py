@@ -77,8 +77,10 @@ def main():
                       connectome,
                       phenotype.loc[:, ['age', 'gender']])
         metric = pd.DataFrame(metric)
-        metric.columns = [('full_sample', f'{strategy_name}_{col}')
-                          for col in metric.columns]
+        columns = [('full_sample', f'{strategy_name}_{col}')
+                   for col in metric.columns]
+        columns = pd.MultiIndex.from_tuples(columns)
+        metric.columns = columns
         metric_qcfc.append(metric)
         print("\tQC-FC...")
 

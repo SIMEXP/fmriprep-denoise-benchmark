@@ -73,7 +73,7 @@ def _get_qcfc_metric(file_path, metric):
     qcfc_per_edge = []
     # read subject information here
     for p in file_path:
-        qcfc_stats = pd.read_csv(p, sep='\t', index_col=0)
+        qcfc_stats = pd.read_csv(p, sep='\t', index_col=0, header=[0, 1])
         # deal with group info here
         df = qcfc_stats.filter(regex=metric)
         df.columns = [col.split('_')[0] for col in df.columns]
