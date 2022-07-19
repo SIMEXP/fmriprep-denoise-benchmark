@@ -11,11 +11,11 @@ from fmriprep_denoise.features import qcfc, louvain_modularity
 
 
 # another very bad special case handling
-
 group_info_column = {
         'ds000228': 'Child_Adult',
         'ds000030':  'diagnosis'
     }
+
 
 def parse_args():
     parser = argparse.ArgumentParser(
@@ -59,6 +59,7 @@ def main():
     output_path.mkdir(exist_ok=True)
 
     extracted_path = check_extraction(input_gz, extracted_path_root=None)
+    print(extracted_path)
     dataset = extracted_path.name.split('-')[-1]
 
     strategy_names = get_prepro_strategy(None)
@@ -84,9 +85,11 @@ def main():
         # QC-FC by group
         if group_info_column.get(dataset):
             participant_groups = group_info_column[dataset]
-            groups = phenotype[group_info_column[dataset]].unique()
+            groups = phenotype[participant_groups].unique()
             for group in groups:
-                subgroup = phenotype[participant_groups == group].index
+                group_mask = phenotype[participant_groups] == group
+                # make sure values are numerical
+                subgroup = phenotype[group_mask].index
                 metric = qcfc(phenotype.loc[subgroup, 'mean_framewise_displacement'],
                               connectome,
                               phenotype.loc[subgroup, ['age', 'gender']])

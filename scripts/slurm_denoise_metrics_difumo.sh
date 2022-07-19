@@ -11,7 +11,7 @@
 
 OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
 DIMENSIONS=(64 128 256 512)
-source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
+source /lustre03/project/6003287/${USER}/.virtualenvs//fmriprep-denoise-benchmark/bin/activate
 
 cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
 

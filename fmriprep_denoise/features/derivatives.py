@@ -3,11 +3,15 @@ from pathlib import Path
 import pandas as pd
 from nilearn.connectome import ConnectivityMeasure
 
+from fmriprep_denoise.data.fmriprep import fetch_fmriprep_derivative
 
 
 project_root = Path(__file__).parents[2]
 inputs = project_root / 'inputs'
-
+group_info_column = {
+        'ds000228': 'Child_Adult',
+        'ds000030':  'diagnosis'
+    }
 
 def compute_connectome(atlas, extracted_path, dataset, file_pattern):
     """Compute connectome of all valid data.
@@ -88,13 +92,19 @@ def _load_phenotype(dataset):
     path_original_participants_info = inputs / \
         f'{dataset}/participants.tsv'
 
+    participant_groups = group_info_column[dataset]
+
     phenotype = pd.read_csv(path_phenotype, sep='\t', index_col=0)
+    phenotype['age'] = phenotype['age'].astype('float')
+    phenotype['gender'] = phenotype['gender'].astype('float')
     participants = pd.read_csv(path_original_participants_info, sep='\t', index_col=0)
     if dataset == 'ds000030':
         mask_quality = participants['ghost_NoGhost'] == 'No_ghost'
         participants = participants[mask_quality]
 
-    phenotype = pd.concat([phenotype, participants], axis=1, join='inner')
+    phenotype = pd.concat(
+        [phenotype, participants[participant_groups]],
+        axis=1, join='inner')
     return phenotype.sort_index()
 
 

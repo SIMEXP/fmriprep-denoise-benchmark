@@ -10,7 +10,7 @@
 
 
 OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
-source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
+source /lustre03/project/6003287/${USER}/.virtualenvs//fmriprep-denoise-benchmark/bin/activate
 DATASET=(ds000030 ds000228)
 
 cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
