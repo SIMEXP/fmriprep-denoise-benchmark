@@ -12,18 +12,18 @@
 OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
 DIMENSIONS=(7 12 20 36 64 122 197 325 444 ROI)
 
-source /lustre03/project/6003287/${USER}/.virtualenvs//fmriprep-denoise-benchmark/bin/activate
+source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 
-cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
+cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 
 python ./fmriprep_denoise/features/build_features.py \
-    "/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000030.tar.gz" \
+    "/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000030.tar.gz" \
     ${OUTPUT} \
     --atlas mist \
     --dimension ${DIMENSIONS[${SLURM_ARRAY_TASK_ID}]}
     
 python ./fmriprep_denoise/features/build_features.py \
-    "/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000228.tar.gz" \
+    "/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-ds000228.tar.gz" \
     ${OUTPUT} \
     --atlas mist \
     --dimension ${DIMENSIONS[${SLURM_ARRAY_TASK_ID}]}

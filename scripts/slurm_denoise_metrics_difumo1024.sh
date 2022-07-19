@@ -13,10 +13,10 @@ OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
 source /lustre03/project/6003287/${USER}/.virtualenvs//fmriprep-denoise-benchmark/bin/activate
 DATASET=(ds000030 ds000228)
 
-cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
+cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 
 python ./fmriprep_denoise/features/build_features.py \
-    "/home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-${DATASET[${SLURM_ARRAY_TASK_ID}]}.tar.gz" \
+    "/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-${DATASET[${SLURM_ARRAY_TASK_ID}]}.tar.gz" \
     ${OUTPUT} \
     --atlas difumo \
     --dimension 1024
