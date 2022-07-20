@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=metric_schaefer_ds000228
-#SBATCH --time=24:00:00
+#SBATCH --time=12:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/metric_schaefer_ds000228.%a.out
 #SBATCH --error=logs/metric_schaefer_ds000228.%a.err
@@ -10,7 +10,7 @@
 
 
 OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
-DIMENSIONS=(100 200 300 400 500 600 800)
+DIMENSIONS=(100 200 300 400 500 600)
 DATASET=ds000228
 
 source /lustre03/project/6003287/${USER}/.virtualenvs//fmriprep-denoise-benchmark/bin/activate
