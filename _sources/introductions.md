@@ -28,8 +28,8 @@ They are captured by averaging signal within the anatomically-derived masks.
 __Global signal__ is calculated by averaging signal within the _full brain_ mask.
 All these four classes of regressors can be expanded to their first temporal derivatives and their quadratic terms {cite:p}`satterthwaite_2013`.
 Principle componenet based method __CompCor__ extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity. 
-Independent component analysis based method, __ICA-FIX__ and __ICA-AROMA__,
-estimate independent component time series related to head-motion through a priori heuristics (ICA-AROMA) or a data-driven classifier. 
+Independent component analysis based method, __ICA-FIX__ {cite:p}`salimi-khorshidi_automatic_2014` and __ICA-AROMA__ {cite:p}`aroma`,
+estimate independent component time series related to head-motion through a data-driven classifier (ICA-FIX) or a pre-trained model (ICA-AROMA). 
 Different strategy has there own strength and benefits and often involves combining a few classes of regressors described above.
 These regressors are regressed out from the signal after basic processing steps (see fMRIPrep) with linear regression. 
 All the subsequent analysis performs on the redisual signal after the regression step.

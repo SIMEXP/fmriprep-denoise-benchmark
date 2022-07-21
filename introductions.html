@@ -438,10 +438,10 @@ The nuisance regressors are separated into a few classes, capturing different ty
 <strong>Non-grey matter tissue signal</strong>, including <em>white matter</em> and <em>cerebrospinal fluid</em>, are unlikely to include signal related to neuronal activity.
 They are captured by averaging signal within the anatomically-derived masks.
 <strong>Global signal</strong> is calculated by averaging signal within the <em>full brain</em> mask.
-All these four classes of regressors can be expanded to their first temporal derivatives and their quadratic terms <span id="id2">[<a class="reference internal" href="references.html#id11">Satterthwaite <em>et al.</em>, 2013</a>]</span>.
+All these four classes of regressors can be expanded to their first temporal derivatives and their quadratic terms <span id="id2">[<a class="reference internal" href="references.html#id10">Satterthwaite <em>et al.</em>, 2013</a>]</span>.
 Principle componenet based method <strong>CompCor</strong> extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity.
-Independent component analysis based method, <strong>ICA-FIX</strong> and <strong>ICA-AROMA</strong>,
-estimate independent component time series related to head-motion through a priori heuristics (ICA-AROMA) or a data-driven classifier.
+Independent component analysis based method, <strong>ICA-FIX</strong> <span id="id3">[<a class="reference internal" href="references.html#id41">Salimi-Khorshidi <em>et al.</em>, 2014</a>]</span> and <strong>ICA-AROMA</strong> <span id="id4">[<a class="reference internal" href="references.html#id40">Pruim <em>et al.</em>, 2015</a>]</span>,
+estimate independent component time series related to head-motion through a data-driven classifier (ICA-FIX) or a pre-trained model (ICA-AROMA).
 Different strategy has there own strength and benefits and often involves combining a few classes of regressors described above.
 These regressors are regressed out from the signal after basic processing steps (see fMRIPrep) with linear regression.
 All the subsequent analysis performs on the redisual signal after the regression step.</p>
@@ -459,7 +459,7 @@ it’s not uncommon for users wanting to adding parameters other than the native
 In the FSL example, if user wants to use unsupported strategy, such as CompCor,
 they will have to calculate the regressors and inject to the workflow manually.</p>
 <!-- Question: should we compare some other software? ie. niak and cpac has a more flexible approach, but still lock user-in  -->
-<p>Recent rise of minimal preprocessing pipelines fMRIPrep <span id="id3">[<a class="reference internal" href="references.html#id2">Esteban <em>et al.</em>, 2020</a>]</span> has address the confound regressor issue from a different angle.
+<p>Recent rise of minimal preprocessing pipelines fMRIPrep <span id="id5">[<a class="reference internal" href="references.html#id2">Esteban <em>et al.</em>, 2020</a>]</span> has address the confound regressor issue from a different angle.
 fMRIprep aims to standardize the established steps of fMRI preprocessing, including registration, slice timing correction, motion correction, and distortion correction.
 Their approach leaves the choice of denoising and spatial smoothing to users.
 Instead of generating a small subset of confound regressors, fMRIPrep calculate a wide range of noise regressors that can be extracted from the fMRI data.

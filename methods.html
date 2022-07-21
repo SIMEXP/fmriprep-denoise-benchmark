@@ -397,28 +397,18 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#quality-control-functional-connectivity-qc-fc-power-recent-2015">
-     Quality control / functional connectivity (QC-FC
-     <span class="xref cite cite-p">
-      power_recent_2015
-     </span>
-     )
+    <a class="reference internal nav-link" href="#quality-control-functional-connectivity-qc-fc">
+     Quality control / functional connectivity (QC-FC)
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012">
+    <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity">
      Distance-dependent effects of motion on connectivity
-     <span class="xref cite cite-p">
-      power_scrubbing_2012
-     </span>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#network-modularity-satterthwaite-impact-2012">
+    <a class="reference internal nav-link" href="#network-modularity">
      Network modularity
-     <span class="xref cite cite-p">
-      satterthwaite_impact_2012
-     </span>
     </a>
    </li>
   </ul>
@@ -485,28 +475,18 @@ title="Print to PDF"
   </a>
   <ul class="nav section-nav flex-column">
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#quality-control-functional-connectivity-qc-fc-power-recent-2015">
-     Quality control / functional connectivity (QC-FC
-     <span class="xref cite cite-p">
-      power_recent_2015
-     </span>
-     )
+    <a class="reference internal nav-link" href="#quality-control-functional-connectivity-qc-fc">
+     Quality control / functional connectivity (QC-FC)
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012">
+    <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity">
      Distance-dependent effects of motion on connectivity
-     <span class="xref cite cite-p">
-      power_scrubbing_2012
-     </span>
     </a>
    </li>
    <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#network-modularity-satterthwaite-impact-2012">
+    <a class="reference internal nav-link" href="#network-modularity">
      Network modularity
-     <span class="xref cite cite-p">
-      satterthwaite_impact_2012
-     </span>
     </a>
    </li>
   </ul>
@@ -527,10 +507,10 @@ title="Print to PDF"
 <h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">#</a></h2>
 <!-- need to revise the demographic information -->
 <p>We selected two datasets on OpenNeuro for the current analysis:
-<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id17">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id16">Bilder <em>et al.</em>, 2020</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id16">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id15">Bilder <em>et al.</em>, 2020</a>]</span>.
 Dataset <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> contains fMRI scans of participants watching a silent version of Pixar animated movie “Partly Cloudy”.
 The dataset includes 33 adult subjects (Age M(s.d.) = 24.8(5.3); range: 18–39; 20 female) and 122 children subjects (Age M(s.d.) = 6.7,(2.3); range: 3.5–12; 64 females).
-For more information for the dataset please refers to <span id="id3">[<a class="reference internal" href="references.html#id18">Richardson <em>et al.</em>, 2018</a>]</span>.
+For more information for the dataset please refers to <span id="id3">Richardson <em>et al.</em> [<a class="reference internal" href="references.html#id17">2018</a>]</span>.
 Dataset <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
 The current analysis only focused on the resting state scans.
 Scans with an instrumental artifact (flagged under column <code class="docutils literal notranslate"><span class="pre">ghost_NoGhost</span></code> in <code class="docutils literal notranslate"><span class="pre">particiapnts.tsv</span></code>) were removed from the final analysis.
@@ -593,10 +573,10 @@ The demographic information per condition is in the following table.</p>
 <section id="time-series-extraction-and-connectome-generation">
 <h2>Time series extraction and connectome generation<a class="headerlink" href="#time-series-extraction-and-connectome-generation" title="Permalink to this headline">#</a></h2>
 <p>We extract time series with regions of interest (ROI) defined by the following atlases:
-Gordon atlas <span id="id4">[<a class="reference internal" href="references.html#id21">Gordon <em>et al.</em>, 2014</a>]</span>,
-Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="references.html#id19">Schaefer <em>et al.</em>, 2017</a>]</span>,
-Multiresolution Intrinsic Segmentation Template (MIST) <span id="id6">[<a class="reference internal" href="references.html#id22">Urchs <em>et al.</em>, 2019</a>]</span>,
-and Dictionary of Functional Modes (DiFuMo)<span id="id7">[<a class="reference internal" href="references.html#id20">Dadi <em>et al.</em>, 2020</a>]</span>.
+Gordon atlas <span id="id4">[<a class="reference internal" href="references.html#id20">Gordon <em>et al.</em>, 2014</a>]</span>,
+Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="references.html#id18">Schaefer <em>et al.</em>, 2017</a>]</span>,
+Multiresolution Intrinsic Segmentation Template (MIST) <span id="id6">[<a class="reference internal" href="references.html#id21">Urchs <em>et al.</em>, 2019</a>]</span>,
+and Dictionary of Functional Modes (DiFuMo)<span id="id7">[<a class="reference internal" href="references.html#id19">Dadi <em>et al.</em>, 2020</a>]</span>.
 All atlases were resampled to the resolution of the preprocessed functional data.</p>
 <p>Further ROI extraction was done on DiFuMo and MIST,
 because area under the same label can be networks with disjointed regions.
@@ -606,11 +586,11 @@ Gordon and Schaefer atlas both comes with parcels as isolated ROI hence were app
 Schaefer 1000 parcels atlas was excluded as some regions would be dropped after resampling.</p>
 <ul class="simple">
 <li><p>Gordon atlas: 333</p></li>
-<li><p>Schaefer atlas: 100, 200, 300, 400, 500, 600, 800<a class="footnote-reference brackets" href="#id30" id="id8">1</a></p></li>
-<li><p>Multiresolution Intrinsic Segmentation Template (MIST) <span id="id9">[<a class="reference internal" href="references.html#id22">Urchs <em>et al.</em>, 2019</a>]</span>: 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 split by the midline)</p></li>
-<li><p>DiFuMo atlas <span id="id10">[<a class="reference internal" href="references.html#id20">Dadi <em>et al.</em>, 2020</a>]</span>: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)</p></li>
+<li><p>Schaefer atlas: 100, 200, 300, 400, 500, 600, 800<a class="footnote-reference brackets" href="#id29" id="id8">1</a></p></li>
+<li><p>Multiresolution Intrinsic Segmentation Template (MIST) <span id="id9">[<a class="reference internal" href="references.html#id21">Urchs <em>et al.</em>, 2019</a>]</span>: 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 split by the midline)</p></li>
+<li><p>DiFuMo atlas <span id="id10">[<a class="reference internal" href="references.html#id19">Dadi <em>et al.</em>, 2020</a>]</span>: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)</p></li>
 </ul>
-<p>Process involved here are implemented through nilearn <span id="id11">[<a class="reference internal" href="references.html#id10">Abraham <em>et al.</em>, 2014</a>]</span>.
+<p>Process involved here are implemented through nilearn <span id="id11">[<a class="reference internal" href="references.html#id9">Abraham <em>et al.</em>, 2014</a>]</span>.
 Time series were extracted using <code class="docutils literal notranslate"><span class="pre">nilearn.maskers.NiftiLabelsMasker</span></code> and <code class="docutils literal notranslate"><span class="pre">nilearn.maskers.NiftiMapsMasker</span></code>.
 Connectomes were calculated using Pearson’s Correlations, implemented through <code class="docutils literal notranslate"><span class="pre">nilearn.connectome.ConnectivityMeasure</span></code>.</p>
 </section>
@@ -652,15 +632,15 @@ The implementation will only support fMRIPrep functional derivative directory fr
 Two types of parameters can be used to determined volumes to be excluded.</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">fd_threshold</span></code>: set the head motion cut-off value determined by framewise displacement approach <span id="id13">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std_dvars_threshold</span></code>: set the head motion cut-off value determined by the standard deviation of root mean square approach <span id="id14">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span> <span id="id15">[<a class="reference internal" href="references.html#id13">Jenkinson <em>et al.</em>, 2002</a>]</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std_dvars_threshold</span></code>: set the head motion cut-off value determined by the standard deviation of root mean square approach <span id="id14">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>, <a class="reference internal" href="references.html#id12">Jenkinson <em>et al.</em>, 2002</a>]</span>.</p></li>
 </ul>
-<p>The CompCor <span id="id16">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span> approach has two associated parameters</p>
+<p>The CompCor <span id="id15">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span> approach has two associated parameters</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">compcor</span></code> allows users to select components generated by the temporal approach,
 or the anatomical approach with specific details for the mask used in noise signal extraction.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">n_compcor</span></code> retrieves the number of principle components to retrieve.</p></li>
 </ul>
-<p>For the ICA-based approach, fMRIPrep implemented ICA-AROMA <span id="id17">[<a class="reference internal" href="references.html#id6">Pruim <em>et al.</em>, 2015</a>]</span>.
+<p>For the ICA-based approach, fMRIPrep implemented ICA-AROMA <span id="id16">[<a class="reference internal" href="references.html#id40">Pruim <em>et al.</em>, 2015</a>]</span>.
 User must manually enable ICA-AROMA with flag <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code> when using fMRIPrep.
 The parameter <code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code> allows two approaches:</p>
 <ol class="simple">
@@ -671,10 +651,10 @@ The parameter <code class="docutils literal notranslate"><span class="pre">ica_a
 <section id="pre-defined-strategies">
 <h3>Pre-defined strategies<a class="headerlink" href="#pre-defined-strategies" title="Permalink to this headline">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">load_confounds_strategy</span></code> provides an interface to select confounds based on past literature with limited parameters for user customisation:
-<code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id18">[<a class="reference internal" href="references.html#id3">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters, and tissue signal),
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id19">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
-<code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id20">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
-and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id21">[<a class="reference internal" href="references.html#id6">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising, and tissue signal).
+<code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id17">[<a class="reference internal" href="references.html#id3">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id18">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id19">[<a class="reference internal" href="references.html#id5">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
+and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id20">[<a class="reference internal" href="references.html#id40">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising, and tissue signal).
 All strategies but <code class="docutils literal notranslate"><span class="pre">compcor</span></code> provides an option to add global signal to the confound regressors.</p>
 </section>
 <section id="examined-strategies">
@@ -850,12 +830,12 @@ The detailed 11 strategies and a full breakdown of parameters used under the hoo
 </section>
 <section id="denoising-evaluation-measures">
 <h2>Denoising evaluation measures<a class="headerlink" href="#denoising-evaluation-measures" title="Permalink to this headline">#</a></h2>
-<p>We used three metrics <span id="id22">[<a class="reference internal" href="references.html#id7">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id23">[<a class="reference internal" href="references.html#id9">Parkes <em>et al.</em>, 2018</a>]</span> described in the previous literature to evaluate the denoising results.
+<p>We used three metrics <span id="id21">[<a class="reference internal" href="references.html#id6">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id22">[<a class="reference internal" href="references.html#id8">Parkes <em>et al.</em>, 2018</a>]</span> described in the previous literature to evaluate the denoising results.
 Motion related metrics are centred around framewise displacement.
 Framewise displacement (FD) indexes the movement of the head from one volume to the next.
 The movement includes the transitions on the three axes (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span>) and the respective rotation (<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta_t\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>).
-Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id24">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
-fMRIPrep genetates the FD based on the formula proposed in <span id="id25">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
+Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id23">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
+fMRIPrep genetates the FD based on the formula proposed in <span id="id24">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
 The FD at each time point <span class="math notranslate nohighlight">\(t\)</span> is expressed as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -863,28 +843,28 @@ The FD at each time point <span class="math notranslate nohighlight">\(t\)</span
 |\Delta d_{z,t}| + |\Delta \alpha_t| + |\Delta \beta_t| + |\Delta \gamma_t|
 \]</div>
 <p>The details of each measures are explained as followed.</p>
-<section id="quality-control-functional-connectivity-qc-fc-power-recent-2015">
-<h3>Quality control / functional connectivity (QC-FC <span id="id26">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2015</a>]</span>)<a class="headerlink" href="#quality-control-functional-connectivity-qc-fc-power-recent-2015" title="Permalink to this headline">#</a></h3>
-<p>QC-FC quantifies the correlation between mean FD and functional connectivity.
+<section id="quality-control-functional-connectivity-qc-fc">
+<h3>Quality control / functional connectivity (QC-FC)<a class="headerlink" href="#quality-control-functional-connectivity-qc-fc" title="Permalink to this headline">#</a></h3>
+<p>QC-FC <span id="id25">[<a class="reference internal" href="references.html#id13">Power <em>et al.</em>, 2015</a>]</span> quantifies the correlation between mean FD and functional connectivity.
 This is calculated by a partial correlation between mean FD and connectivity with age and sex as covariates.
 The denoising methods should aim to reduce the QC-FC value.
 The significants values reported are control for multiple comparisons with false positive rate correction.</p>
 </section>
-<section id="distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012">
-<h3>Distance-dependent effects of motion on connectivity <span id="id27">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity-power-scrubbing-2012" title="Permalink to this headline">#</a></h3>
+<section id="distance-dependent-effects-of-motion-on-connectivity">
+<h3>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">#</a></h3>
 <p>To determine the residual distance-dependence of subject movement,
-we first calculate the Euclidean distance between the centers of mass of ecah pair of parcels.
+we first calculate the Euclidean distance between the centers of mass of ecah pair of parcels <span id="id26">[<a class="reference internal" href="references.html#id4">Power <em>et al.</em>, 2012</a>]</span>.
 We then correlated the distance separating each pair of parcels and the associated QC-FC correlation of the edge connecting those parcels.
 Closer parcels generally exhibiting greater impact of motion on connectivity.
 We expect to see a general trend of negative correlation to no correlation after confound regression.</p>
 </section>
-<section id="network-modularity-satterthwaite-impact-2012">
-<h3>Network modularity <span id="id28">[<a class="reference internal" href="references.html#id12">Satterthwaite <em>et al.</em>, 2012</a>]</span><a class="headerlink" href="#network-modularity-satterthwaite-impact-2012" title="Permalink to this headline">#</a></h3>
+<section id="network-modularity">
+<h3>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">#</a></h3>
 <p>Confound regressors has the potential to remove real signal in addition to motion-related noise.
 In order to evaluate this possibility, we computed modularity quality,
 an explicit quantification of the degree to which there are structured sub-networks in a given network,
-in this case the de-noised connectome.
-Modularity quality is quantified by graph community detection based on Louvain method <span id="id29">[<a class="reference internal" href="references.html#id15">Rubinov and Sporns, 2010</a>]</span>,
+in this case the de-noised connectome <span id="id27">[<a class="reference internal" href="references.html#id11">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
+Modularity quality is quantified by graph community detection based on Louvain method <span id="id28">[<a class="reference internal" href="references.html#id14">Rubinov and Sporns, 2010</a>]</span>,
 implemented in the Brain Connectome Toolbox.
 If confound regression and censoring were removing real signal in addition to motion-related noise,
 we expect that modularity would decline.
@@ -893,7 +873,7 @@ we computed the partial correlation between subjects’ modularity values and me
 with age and sex as covariates.</p>
 <hr class="footnotes docutils" />
 <dl class="footnote brackets">
-<dt class="label" id="id30"><span class="brackets"><a class="fn-backref" href="#id8">1</a></span></dt>
+<dt class="label" id="id29"><span class="brackets"><a class="fn-backref" href="#id8">1</a></span></dt>
 <dd><p>When resampling 1000 parcel version of the Schaefer atlas to match the preprocessed data,
 some subjects will miss a parcel.</p>
 </dd>

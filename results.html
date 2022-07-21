@@ -49,7 +49,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ds000228" href="ds000228.html" />
+    <link rel="next" title="ds000030" href="ds000030.html" />
     <link rel="prev" title="Methods" href="methods.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -136,11 +136,6 @@ const thebe_selector_output = ".output, .cell_output"
    </i>
   </label>
   <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="ds000228.html">
-     ds000228
-    </a>
-   </li>
    <li class="toctree-l2">
     <a class="reference internal" href="ds000030.html">
      ds000030
@@ -376,12 +371,36 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
+   The loss in temporal degrees of freedom in different strategies
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -393,6 +412,19 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
+   The loss in temporal degrees of freedom in different strategies
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -402,72 +434,135 @@ title="Print to PDF"
                 
   <section class="tex2jax_ignore mathjax_ignore" id="results">
 <h1>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h1>
-<p>The current benchmark show consistent results in the two datasets.
-The trend of benchmakr does not differ amongst the choice of atlases.
+<p>Overall, the current benchmark show consistent results in the two datasets.
+The trend of benchmaker metrics does not differ amongst the choice of atlases.
 However, we can see variance within the parcellation scheme MIST and DiFuMo.
 The variance comes from different resolution of the same parcellation scheme, epecially with low parcel counts.</p>
-<!-- new analysis: compare groups -->
-<!-- new analysis: degree of freedom chart--><div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
 
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
-<span class="n">palette</span> <span class="o">=</span> <span class="n">sns</span><span class="o">.</span><span class="n">color_palette</span><span class="p">(</span><span class="s2">&quot;Paired&quot;</span><span class="p">,</span> <span class="n">n_colors</span><span class="o">=</span><span class="mi">12</span><span class="p">)[</span><span class="mi">1</span><span class="p">:]</span>
 
-<span class="c1"># Load metric data</span>
-<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ds000228&quot;</span><span class="p">,</span> <span class="s2">&quot;ds000030&quot;</span><span class="p">]</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
-    <span class="n">path_dof</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;../inputs/metrics/dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_desc-confounds_phenotype.tsv&#39;</span>
-    <span class="n">df_dof</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_dof</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">df_dof</span> <span class="o">=</span> <span class="n">df_dof</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span>
-    <span class="n">df_dof</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Strategy&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Number of regressors&#39;</span><span class="p">]</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Strategy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Number of regressors&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_dof</span><span class="p">[</span><span class="n">df_dof</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;total&#39;</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> 
-                <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;darkgrey&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">7</span><span class="o">+</span> <span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Strategy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Number of regressors&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_dof</span><span class="p">[</span><span class="n">df_dof</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;fixed_regressors&#39;</span><span class="p">],</span> 
-                <span class="n">color</span><span class="o">=</span><span class="s1">&#39;darkgrey&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Strategy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Number of regressors&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_dof</span><span class="p">[</span><span class="n">df_dof</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;high_pass&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;grey&#39;</span><span class="p">)</span>
-    <span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+<span class="n">plot_info</span> <span class="o">=</span> <span class="s1">&#39;dof&#39;</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_overview</span><span class="p">(</span><span class="n">plot_info</span><span class="p">)</span>
 <span class="n">glue</span><span class="p">(</span><span class="s2">&quot;dof-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ds000228&quot;</span><span class="p">,</span> <span class="s2">&quot;ds000030&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plot_info</span><span class="p">)</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dof-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
-<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">datasets</span><span class="p">):</span>
-    <span class="n">path_dof</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;../inputs/metrics/dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_desc-confounds_phenotype.tsv&#39;</span>
-    <span class="n">df_dof</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_dof</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">)</span>
-    <span class="n">df_dof</span> <span class="o">=</span> <span class="n">df_dof</span><span class="o">.</span><span class="n">melt</span><span class="p">()</span>
-    <span class="n">df_dof</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;Strategy&#39;</span><span class="p">,</span> <span class="s1">&#39;type&#39;</span><span class="p">,</span> <span class="s1">&#39;Number of regressors&#39;</span><span class="p">]</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Strategy&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Number of regressors&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df_dof</span><span class="p">[</span><span class="n">df_dof</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;excised_vol&#39;</span><span class="p">],</span> <span class="n">ci</span><span class="o">=</span><span class="mi">95</span><span class="p">,</span> 
-                <span class="n">palette</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;darkgrey&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">7</span><span class="o">+</span> <span class="p">[</span><span class="s1">&#39;orange&#39;</span><span class="p">,</span> <span class="s1">&#39;orange&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="s1">&#39;blue&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">],</span> <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
-<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;scrub-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">plot_info</span> <span class="o">=</span> <span class="s1">&#39;scrubbing&#39;</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_overview</span><span class="p">(</span><span class="n">plot_info</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;scrubbing-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ds000228&quot;</span><span class="p">,</span> <span class="s2">&quot;ds000030&quot;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plot_info</span><span class="p">)</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scrubbing-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
+<section id="the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
+<h2>The loss in temporal degrees of freedom in different strategies<a class="headerlink" href="#the-loss-in-temporal-degrees-of-freedom-in-different-strategies" title="Permalink to this headline">#</a></h2>
+<p>When selecting denoising strategy, the loss in degrees of freedom <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code> used the least amount of regressors.
+In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="references.html#id6">2017</a>]</span>, the equivilant <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
+However, we did not obser this advantage in the two datasets shown in this benchmark.
+The reason potentially lies in the implementation of ICA-AROMA.
+ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="references.html#id40">Pruim <em>et al.</em>, 2015</a>]</span>.
+The two datasets used in the current benchmark both contained subjects with behaviours deviating from the healthy controls.
+<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is comprised of adult healthy controls and children.
+<code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes healthy controls and subjects with three different psychiatric conditions.</p>
+<p>The figures showed the number of regressors used at different stage of denoising.
+The <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">srubbing</span></code>-based strategy and <code class="docutils literal notranslate"><span class="pre">compcor6</span></code> are the strategy with a fixed number of degree of freedom loss.
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.
+We</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="a29fd1c7-62d4-4efc-84db-596692b3dc7f" name="7d42ff51-aaba-4405-8314-7157411643fd" type="radio">
+</input><label class="sd-tab-label" for="a29fd1c7-62d4-4efc-84db-596692b3dc7f">
+Overview</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-dof-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/results_1_0.png" src="_images/results_1_0.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Degree of freedom</span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Loss in temporal degrees of freedom in full sample of each dataset.</span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<figure class="align-default" id="tbl-scrub-fig" style="width: 800px">
+</div>
+<input id="3f2789c4-72a8-4be4-b14c-787c17934b7d" name="7d42ff51-aaba-4405-8314-7157411643fd" type="radio">
+</input><label class="sd-tab-label" for="3f2789c4-72a8-4be4-b14c-787c17934b7d">
+ds000228</label><div class="sd-tab-content docutils">
+<figure class="align-default" id="tbl-dof-ds000228-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/results_1_1.png" src="_images/results_1_1.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Scrubbing</span><a class="headerlink" href="#tbl-scrub-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-dof-ds000228-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
-<!-- new analysis: direct compare mean FD between different groups --><div class="toctree-wrapper compound">
+</div>
+<input id="9d785803-bb20-4940-8887-12c8153a0ecb" name="7d42ff51-aaba-4405-8314-7157411643fd" type="radio">
+</input><label class="sd-tab-label" for="9d785803-bb20-4940-8887-12c8153a0ecb">
+ds000030</label><div class="sd-tab-content docutils">
+<figure class="align-default" id="tbl-dof-ds000030-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/results_1_2.png" src="_images/results_1_2.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Loss in temporal degrees of freedom break down by diagnostics.</span><a class="headerlink" href="#tbl-dof-ds000030-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+<p>Scrubbing</p>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="ce6b0367-cd59-4661-8991-28c1bd21b91b" name="c34e6cc2-cb24-4b1d-bac9-ece51917df3b" type="radio">
+</input><label class="sd-tab-label" for="ce6b0367-cd59-4661-8991-28c1bd21b91b">
+Overview</label><div class="sd-tab-content docutils">
+<figure class="align-default" id="tbl-scrubbing-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/results_1_4.png" src="_images/results_1_4.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Loss in number of volumes in full sample of each dataset.</span><a class="headerlink" href="#tbl-scrubbing-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="7f2b62aa-e02c-4fe4-80dc-5528f52d87fa" name="c34e6cc2-cb24-4b1d-bac9-ece51917df3b" type="radio">
+</input><label class="sd-tab-label" for="7f2b62aa-e02c-4fe4-80dc-5528f52d87fa">
+ds000228</label><div class="sd-tab-content docutils">
+<figure class="align-default" id="tbl-scrubbing-ds000228-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/results_1_6.png" src="_images/results_1_6.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-scrubbing-ds000228-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+<input id="3c2f53f8-2352-4131-ae7b-ea103f7d4c8b" name="c34e6cc2-cb24-4b1d-bac9-ece51917df3b" type="radio">
+</input><label class="sd-tab-label" for="3c2f53f8-2352-4131-ae7b-ea103f7d4c8b">
+ds000030</label><div class="sd-tab-content docutils">
+<figure class="align-default" id="tbl-scrubbing-ds000030-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/results_1_8.png" src="_images/results_1_8.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Loss in number of volumes break down by diagnostics.</span><a class="headerlink" href="#tbl-scrubbing-ds000030-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+</div>
+</div>
+<!-- new analysis: direct compare mean FD between different groups --></section>
+<div class="toctree-wrapper compound">
 </div>
 </section>
 
@@ -505,10 +600,10 @@ The variance comes from different resolution of the same parcellation scheme, ep
             <p class="prev-next-title">Methods</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="ds000228.html" title="next page">
+    <a class='right-next' id="next-link" href="ds000030.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ds000228</p>
+        <p class="prev-next-title">ds000030</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
