@@ -92,33 +92,17 @@ def main():
             # make sure values are numerical
             subgroup = phenotype[group_mask].index
             metric = qcfc(phenotype.loc[subgroup, 'mean_framewise_displacement'],
-                          connectome,
+                          connectome.loc[subgroup, :],
                           phenotype.loc[subgroup, ['age', 'gender']])
             metric = pd.DataFrame(metric)
             metric.columns = [(group, f'{strategy_name}_{col}')
                                 for col in metric.columns]
             metric_qcfc.append(metric)
 
-        with Pool(30) as pool:
-            qs = pool.map(louvain_modularity, connectome.values.tolist())
-
-        modularity = pd.DataFrame(qs,
-                                  columns=[strategy_name],
-                                  index=connectome.index)
-        metric_mod.append(modularity)
-        print("\tModularity...")
-
     metric_qcfc = pd.concat(metric_qcfc, axis=1)
     metric_qcfc.to_csv(
         output_path
         / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv",
-        sep='\t',
-    )
-
-    metric_mod = pd.concat(metric_mod, axis=1)
-    metric_mod.to_csv(
-        output_path
-        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_modularity.tsv",
         sep='\t',
     )
 
