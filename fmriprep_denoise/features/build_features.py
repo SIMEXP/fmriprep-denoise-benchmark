@@ -85,20 +85,19 @@ def main():
         print("\tQC-FC...")
 
         # QC-FC by group
-        if group_info_column.get(dataset):
-            participant_groups = group_info_column[dataset]
-            groups = phenotype[participant_groups].unique()
-            for group in groups:
-                group_mask = phenotype[participant_groups] == group
-                # make sure values are numerical
-                subgroup = phenotype[group_mask].index
-                metric = qcfc(phenotype.loc[subgroup, 'mean_framewise_displacement'],
-                              connectome,
-                              phenotype.loc[subgroup, ['age', 'gender']])
-                metric = pd.DataFrame(metric)
-                metric.columns = [(group, f'{strategy_name}_{col}')
-                                  for col in metric.columns]
-                metric_qcfc.append(metric)
+        groups = phenotype['groups'].unique()
+        for group in groups:
+            print(group)
+            group_mask = phenotype['groups'] == group
+            # make sure values are numerical
+            subgroup = phenotype[group_mask].index
+            metric = qcfc(phenotype.loc[subgroup, 'mean_framewise_displacement'],
+                          connectome,
+                          phenotype.loc[subgroup, ['age', 'gender']])
+            metric = pd.DataFrame(metric)
+            metric.columns = [(group, f'{strategy_name}_{col}')
+                                for col in metric.columns]
+            metric_qcfc.append(metric)
 
         with Pool(30) as pool:
             qs = pool.map(louvain_modularity, connectome.values.tolist())

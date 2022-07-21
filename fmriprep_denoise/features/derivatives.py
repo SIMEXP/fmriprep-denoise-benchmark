@@ -85,14 +85,14 @@ def check_extraction(input_path, extracted_path_root=None):
 
 def _load_phenotype(dataset):
     """Get subjects that were processed and passed quality controls."""
+    if dataset not in group_info_column:
+        raise KeyError(f"Unsupported dataset {dataset}")
 
     # read relevant files
     path_phenotype = inputs / \
         f'dataset-{dataset}/dataset-{dataset}_desc-movement_phenotype.tsv'
     path_original_participants_info = inputs / \
         f'{dataset}/participants.tsv'
-
-    participant_groups = group_info_column[dataset]
 
     phenotype = pd.read_csv(path_phenotype, sep='\t', index_col=0)
     phenotype['age'] = phenotype['age'].astype('float')
@@ -101,9 +101,12 @@ def _load_phenotype(dataset):
     if dataset == 'ds000030':
         mask_quality = participants['ghost_NoGhost'] == 'No_ghost'
         participants = participants[mask_quality]
+    # changen the header to something consistent
+    participant_groups = group_info_column[dataset]
+    participants = participants.rename(columns={participant_groups: 'groups'})
 
     phenotype = pd.concat(
-        [phenotype, participants[participant_groups]],
+        [phenotype, participants['groups']],
         axis=1, join='inner')
     return phenotype.sort_index()
 
@@ -112,10 +115,15 @@ def _load_valid_timeseries(atlas, extracted_path, participant_id, file_pattern):
     """Load time series from tsv file."""
     valid_ids, valid_ts = [], []
     for subject in participant_id:
+        subject_path = (extracted_path / f"atlas-{atlas}" / subject)
         file_path = list(
-            (extracted_path / f"atlas-{atlas}" \
-                / subject).glob(f"{subject}_*_{file_pattern}_timeseries.tsv")
-        )[0]
+            subject_path.glob(f"{subject}_*_{file_pattern}_timeseries.tsv")
+        )
+        if file_path > 1:
+            raise ValueError("Found more than one valid file."
+                             f"{file_path}"
+                             )
+        file_path = file_path[0]
         if file_path.stat().st_size > 1:
             ts = pd.read_csv(file_path,sep='\t', header=0)
             valid_ids.append(subject)
