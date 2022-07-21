@@ -13,15 +13,15 @@ from fmriprep_denoise.visualization import utils
 path_root = Path(__file__).parents[2] / "inputs"
 
 
-def plot_motion_resid(dataset, atlas_name=None, dimension=None):
+def plot_motion_resid(dataset, atlas_name=None, dimension=None, group='full_sample'):
     # One cannot use specidic dimension but use wild card in atlas
     metric = "qcfc"
     files_qcfc, labels = utils._get_connectome_metric_paths(dataset, metric, atlas_name, dimension)
-    qcfc_sig = utils._qcfc_fdr(files_qcfc, labels)
-    qcfc_mad = utils._get_qcfc_median_absolute(files_qcfc, labels)
+    qcfc_sig = utils._qcfc_fdr(files_qcfc, labels, group=group)
+    qcfc_mad = utils._get_qcfc_median_absolute(files_qcfc, labels, group=group)
 
     if len(files_qcfc) == 1 and not isinstance(dimension, type(None)):
-        qcfc_per_edge = utils._get_qcfc_metric(files_qcfc, metric="correlation")[0]
+        qcfc_per_edge = utils._get_qcfc_metric(files_qcfc, metric="correlation", group=group)[0]
         long_qcfc = qcfc_per_edge.melt()
         long_qcfc.columns = ["Strategy", "qcfc"]
         fig = _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc)
@@ -54,10 +54,10 @@ def _summary_plots(figure_data, ax):
     return ax
 
 
-def plot_distance_dependence(dataset, atlas_name=None, dimension=None):
+def plot_distance_dependence(dataset, atlas_name=None, dimension=None, group='full_sample'):
     metric = "qcfc"
     files_qcfc, labels = utils._get_connectome_metric_paths(dataset, metric, atlas_name, dimension)
-    qcfc_dist = utils._get_corr_distance(files_qcfc, labels)
+    qcfc_dist = utils._get_corr_distance(files_qcfc, labels, group=group)
     color_order = utils._get_palette(qcfc_dist['order'])
     if len(files_qcfc) == 1 and not isinstance(dimension, type(None)):
 

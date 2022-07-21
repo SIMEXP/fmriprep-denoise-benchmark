@@ -152,5 +152,5 @@ def _phenotype_movement(data):
     covar.loc[covar['gender'] == 'F', 'gender'] = 1
     covar.loc[covar['gender'] == 'M', 'gender'] = 0
     covar['gender'] = covar['gender'].astype('float')
-
+    covar['age'] = covar['age'].astype('float')
     return pd.concat((group_mean_fd, covar), axis=1)

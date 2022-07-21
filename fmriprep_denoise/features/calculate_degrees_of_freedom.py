@@ -1,7 +1,8 @@
 """Calculate degree of freedom"""
 import argparse
 from pathlib import Path
-import json
+import pandas as pd
+
 
 from fmriprep_denoise.data.timeseries import get_confounds
 from fmriprep_denoise.data.fmriprep import (get_prepro_strategy,
@@ -110,7 +111,7 @@ def main():
                     info[sub].update(stats)
                 else:
                     info[sub] = stats
-        import pandas as pd
+
         pd.DataFrame.from_dict(info, orient='index').to_csv(path_dof, sep='\t')
 
 if __name__ == "__main__":

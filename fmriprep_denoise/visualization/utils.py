@@ -66,23 +66,24 @@ def _get_connectome_metric_paths(dataset, metric, atlas_name, dimension):
     return files, labels
 
 
-def _get_qcfc_metric(file_path, metric):
+def _get_qcfc_metric(file_path, metric, group):
     """ Get correlation or pvalue of QC-FC."""
     if not isinstance(file_path, list):
         file_path = [file_path]
     qcfc_per_edge = []
     # read subject information here
     for p in file_path:
-        qcfc_stats = pd.read_csv(p, sep='\t', index_col=0)
+        qcfc_stats = pd.read_csv(p, sep='\t', index_col=0, header=[0, 1])
         # deal with group info here
+        qcfc_stats = qcfc_stats[group]
         df = qcfc_stats.filter(regex=metric)
         df.columns = [col.split('_')[0] for col in df.columns]
         qcfc_per_edge.append(df)
     return qcfc_per_edge
 
 
-def _get_corr_distance(files_qcfc, labels):
-    qcfc_per_edge = _get_qcfc_metric(files_qcfc, metric="correlation")
+def _get_corr_distance(files_qcfc, labels, group):
+    qcfc_per_edge = _get_qcfc_metric(files_qcfc, metric="correlation", group=group)
     corr_distance = []
     for df, label in zip(qcfc_per_edge, labels):
         atlas_name = label.split("atlas-")[-1].split("_")[0]
@@ -148,9 +149,9 @@ def _corr_modularity_motion(movement, files_network, labels):
     return corr_modularity, network_mod
 
 
-def _qcfc_fdr(file_qcfc, labels):
+def _qcfc_fdr(file_qcfc, labels, group):
     """Do FDR correction on qc-fc p-values."""
-    sig_per_edge = _get_qcfc_metric(file_qcfc, metric="pvalue")
+    sig_per_edge = _get_qcfc_metric(file_qcfc, metric="pvalue", group=group)
 
     long_qcfc_sig = []
     for df, label in zip(sig_per_edge, labels):
@@ -177,9 +178,9 @@ def _qcfc_fdr(file_qcfc, labels):
     }
 
 
-def _get_qcfc_median_absolute(file_qcfc, labels):
+def _get_qcfc_median_absolute(file_qcfc, labels, group):
     """Calculate absolute median and prepare for plotting."""
-    qcfc_per_edge = _get_qcfc_metric(file_qcfc, metric="correlation")
+    qcfc_per_edge = _get_qcfc_metric(file_qcfc, metric="correlation", group=group)
     qcfc_median_absolute = []
     for df, label in zip(qcfc_per_edge, labels):
         df = df.apply(calculate_median_absolute)
