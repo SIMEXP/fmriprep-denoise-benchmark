@@ -72,7 +72,6 @@ def main():
         connectome, phenotype = compute_connectome(atlas, extracted_path,
                                                    dataset, file_pattern)
         print("\tLoaded connectome...")
-
         metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
                       connectome,
                       phenotype.loc[:, ['age', 'gender']])

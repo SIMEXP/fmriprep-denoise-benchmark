@@ -45,6 +45,10 @@ def compute_connectome(atlas, extracted_path, dataset, file_pattern):
                                               discard_diagonal=True)
     subject_conn = correlation_measure.fit_transform(valid_ts)
     subject_conn = pd.DataFrame(subject_conn, index=valid_ids)
+    if subject_conn.shape[0] != phenotype.shape[0]:
+        print('take conjunction of the phenotype and connectome.')
+        idx = subject_conn.index.intersection(phenotype.index)
+        subject_conn, phenotype = subject_conn.loc[idx, :], phenotype.loc[idx, :]
     return subject_conn, phenotype
 
 
