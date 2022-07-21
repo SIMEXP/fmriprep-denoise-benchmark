@@ -119,7 +119,7 @@ def _load_valid_timeseries(atlas, extracted_path, participant_id, file_pattern):
         file_path = list(
             subject_path.glob(f"{subject}_*_{file_pattern}_timeseries.tsv")
         )
-        if file_path > 1:
+        if len(file_path) > 1:
             raise ValueError("Found more than one valid file."
                              f"{file_path}"
                              )
