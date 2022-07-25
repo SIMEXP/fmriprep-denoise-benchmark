@@ -473,10 +473,10 @@ The variance comes from different resolution of the same parcellation scheme, ep
 <section id="the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
 <h2>The loss in temporal degrees of freedom in different strategies<a class="headerlink" href="#the-loss-in-temporal-degrees-of-freedom-in-different-strategies" title="Permalink to this headline">#</a></h2>
 <p>When selecting denoising strategy, the loss in degrees of freedom <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code> used the least amount of regressors.
-In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="references.html#id6">2017</a>]</span>, the equivilant <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
+In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="references.html#id17">2017</a>]</span>, the equivilant <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
 However, we did not obser this advantage in the two datasets shown in this benchmark.
 The reason potentially lies in the implementation of ICA-AROMA.
-ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="references.html#id40">Pruim <em>et al.</em>, 2015</a>]</span>.
+ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="references.html#id51">Pruim <em>et al.</em>, 2015</a>]</span>.
 The two datasets used in the current benchmark both contained subjects with behaviours deviating from the healthy controls.
 <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is comprised of adult healthy controls and children.
 <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes healthy controls and subjects with three different psychiatric conditions.</p>
@@ -485,8 +485,8 @@ The <code class="docutils literal notranslate"><span class="pre">simple</span></
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.
 We</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="a29fd1c7-62d4-4efc-84db-596692b3dc7f" name="7d42ff51-aaba-4405-8314-7157411643fd" type="radio">
-</input><label class="sd-tab-label" for="a29fd1c7-62d4-4efc-84db-596692b3dc7f">
+<input checked="checked" id="585e55f1-9b90-4a51-8332-9a188423ed61" name="71f4ca3e-e693-4cf0-a098-b60a82c27ea0" type="radio">
+</input><label class="sd-tab-label" for="585e55f1-9b90-4a51-8332-9a188423ed61">
 Overview</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-dof-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -497,8 +497,8 @@ Overview</label><div class="sd-tab-content docutils">
 </figcaption>
 </figure>
 </div>
-<input id="3f2789c4-72a8-4be4-b14c-787c17934b7d" name="7d42ff51-aaba-4405-8314-7157411643fd" type="radio">
-</input><label class="sd-tab-label" for="3f2789c4-72a8-4be4-b14c-787c17934b7d">
+<input id="a716044f-0c17-498a-a4d5-5ea22b1cc630" name="71f4ca3e-e693-4cf0-a098-b60a82c27ea0" type="radio">
+</input><label class="sd-tab-label" for="a716044f-0c17-498a-a4d5-5ea22b1cc630">
 ds000228</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-dof-ds000228-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -509,8 +509,8 @@ ds000228</label><div class="sd-tab-content docutils">
 </figcaption>
 </figure>
 </div>
-<input id="9d785803-bb20-4940-8887-12c8153a0ecb" name="7d42ff51-aaba-4405-8314-7157411643fd" type="radio">
-</input><label class="sd-tab-label" for="9d785803-bb20-4940-8887-12c8153a0ecb">
+<input id="8a127619-9974-46aa-9a90-08f9aacfcedb" name="71f4ca3e-e693-4cf0-a098-b60a82c27ea0" type="radio">
+</input><label class="sd-tab-label" for="8a127619-9974-46aa-9a90-08f9aacfcedb">
 ds000030</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-dof-ds000030-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -524,8 +524,8 @@ ds000030</label><div class="sd-tab-content docutils">
 </div>
 <p>Scrubbing</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="ce6b0367-cd59-4661-8991-28c1bd21b91b" name="c34e6cc2-cb24-4b1d-bac9-ece51917df3b" type="radio">
-</input><label class="sd-tab-label" for="ce6b0367-cd59-4661-8991-28c1bd21b91b">
+<input checked="checked" id="1a6d0a0e-f64f-49b5-8787-d6c725620077" name="5447d435-9d4a-4e45-b6b4-1074f0e23928" type="radio">
+</input><label class="sd-tab-label" for="1a6d0a0e-f64f-49b5-8787-d6c725620077">
 Overview</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-scrubbing-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -536,8 +536,8 @@ Overview</label><div class="sd-tab-content docutils">
 </figcaption>
 </figure>
 </div>
-<input id="7f2b62aa-e02c-4fe4-80dc-5528f52d87fa" name="c34e6cc2-cb24-4b1d-bac9-ece51917df3b" type="radio">
-</input><label class="sd-tab-label" for="7f2b62aa-e02c-4fe4-80dc-5528f52d87fa">
+<input id="7df5c43a-3c86-4bf9-939f-e244c589cde7" name="5447d435-9d4a-4e45-b6b4-1074f0e23928" type="radio">
+</input><label class="sd-tab-label" for="7df5c43a-3c86-4bf9-939f-e244c589cde7">
 ds000228</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-scrubbing-ds000228-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -548,8 +548,8 @@ ds000228</label><div class="sd-tab-content docutils">
 </figcaption>
 </figure>
 </div>
-<input id="3c2f53f8-2352-4131-ae7b-ea103f7d4c8b" name="c34e6cc2-cb24-4b1d-bac9-ece51917df3b" type="radio">
-</input><label class="sd-tab-label" for="3c2f53f8-2352-4131-ae7b-ea103f7d4c8b">
+<input id="b21a7656-0f98-4b7f-9aff-758f2b75459b" name="5447d435-9d4a-4e45-b6b4-1074f0e23928" type="radio">
+</input><label class="sd-tab-label" for="b21a7656-0f98-4b7f-9aff-758f2b75459b">
 ds000030</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-scrubbing-ds000030-fig" style="width: 800px">
 <div class="cell_output docutils container">
