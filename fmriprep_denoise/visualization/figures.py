@@ -73,7 +73,7 @@ def plot_distance_dependence(dataset, atlas_name=None, dimension=None, group='fu
         ax.set(ylabel="Confound removal strategy")
 
         axs = subfigs[1].subplots(3, 4, sharex=True, sharey=True)
-        qcfc_per_edge = utils._get_qcfc_metric(files_qcfc, metric="correlation")[0]
+        qcfc_per_edge = utils._get_qcfc_metric(files_qcfc, metric="correlation", group=group)[0]
         pairwise_distance = get_atlas_pairwise_distance(atlas_name, dimension)
         corr_distance_long = qcfc_per_edge.melt()
         corr_distance_long.columns = ["Strategy", "qcfc"]

@@ -53,7 +53,7 @@ for dataset in datasets:
 ## The loss in temporal degrees of freedom in different strategies
 
 When selecting denoising strategy, the loss in degrees of freedom `simple` and `simple+gsr` used the least amount of regressors. 
-In {cite:t}`ciric_benchmarking_2017`, the equivilant `aroma` and `aroma+gsr` strategies were reported with a lower magnitude of loss in temporal degrees of freedom than `scrubbing` or `simple` strategies.
+In {cite:t}`ciric_benchmarking_2017`, the equivalent `aroma` and `aroma+gsr` strategies were reported with a lower magnitude of loss in temporal degrees of freedom than `scrubbing` or `simple` strategies.
 However, we did not obser this advantage in the two datasets shown in this benchmark. 
 The reason potentially lies in the implementation of ICA-AROMA.
 ICA-AROMA uses pretrained model on healthy subjects to select noise components {cite:p}`aroma`. 
