@@ -72,4 +72,7 @@ The validity of these results on fMRIPrep has yet to be examined.
 Current work aims to introduce an application programming interface (API) to standardise the interaction with fMRIPrep and provide benchmark using functional connectivity generated from resting state data.
 The API is released under popular Python neuroimaging analytic library `nilearn`, 
 with the aim to maximise the exposure of the API to the larger Python fMRI community.
-The benchmark will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.  
+We selected two datasets from OpenNeuro, 
+one with adult and child samples, and the other with psychiatric conditions.
+The benchmark will assess the differences in strategies, as well as the impact on different type of samples.
+The research will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.  

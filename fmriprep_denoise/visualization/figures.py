@@ -176,6 +176,24 @@ def plot_dof_overview(plot_info):
     return fig
 
 
+def plot_motion_overview():
+    datasets = ["ds000228", "ds000030"]
+    fig = plt.figure(figsize=(5, 5))
+    axs = fig.subplots(1, 2, sharey=True)
+    for dataset, ax in zip(datasets, axs):
+        file = f'dataset-{dataset}_desc-movement_phenotype.tsv'
+        path_fd = path_root / f"dataset-{dataset}" / file
+        df = pd.read_csv(path_fd, header=[0], index_col=0, sep='\t')
+        _, participants_groups, _ = utils._get_participants_groups(dataset)
+        participants_groups.name = 'group'
+        df = pd.concat([df, participants_groups], axis=1, join='inner')
+        sns.barplot(y='mean_framewise_displacement',
+                    x='group',
+                    data=df,
+                    ax=ax)
+        ax.set_title(dataset)
+    return fig
+
 def plot_dof_dataset(dataset, plot_info):
 
     confounds_phenotype, participant_groups, groups = utils._get_participants_groups(dataset)
