@@ -445,6 +445,27 @@ The variance comes from different resolution of the same parcellation scheme, ep
 <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
 
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_overview</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;meanFD-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<figure class="align-default" id="tbl-meanfd-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/results_1_0.png" src="_images/results_1_0.png" />
+</div>
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Mean framewise displacement of each dataset.</span><a class="headerlink" href="#tbl-meanfd-fig" title="Permalink to this image">#</a></p>
+</figcaption>
+</figure>
+<div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
 
 <span class="n">plot_info</span> <span class="o">=</span> <span class="s1">&#39;dof&#39;</span>
@@ -473,7 +494,7 @@ The variance comes from different resolution of the same parcellation scheme, ep
 <section id="the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
 <h2>The loss in temporal degrees of freedom in different strategies<a class="headerlink" href="#the-loss-in-temporal-degrees-of-freedom-in-different-strategies" title="Permalink to this headline">#</a></h2>
 <p>When selecting denoising strategy, the loss in degrees of freedom <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code> used the least amount of regressors.
-In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="references.html#id17">2017</a>]</span>, the equivilant <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
+In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="references.html#id17">2017</a>]</span>, the equivalent <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
 However, we did not obser this advantage in the two datasets shown in this benchmark.
 The reason potentially lies in the implementation of ICA-AROMA.
 ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="references.html#id51">Pruim <em>et al.</em>, 2015</a>]</span>.
@@ -485,78 +506,84 @@ The <code class="docutils literal notranslate"><span class="pre">simple</span></
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.
 We</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="585e55f1-9b90-4a51-8332-9a188423ed61" name="71f4ca3e-e693-4cf0-a098-b60a82c27ea0" type="radio">
-</input><label class="sd-tab-label" for="585e55f1-9b90-4a51-8332-9a188423ed61">
+<input checked="checked" id="62f456dc-9381-403c-bcb0-b5d1e69880e2" name="9b7a8c35-f1cb-4161-901b-a874d4a399ed" type="radio">
+</input><label class="sd-tab-label" for="62f456dc-9381-403c-bcb0-b5d1e69880e2">
 Overview</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-dof-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_1_0.png" src="_images/results_1_0.png" />
+<img alt="_images/results_3_0.png" src="_images/results_3_0.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Loss in temporal degrees of freedom in full sample of each dataset.</span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Loss in temporal degrees of freedom in full sample of each dataset.</span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="a716044f-0c17-498a-a4d5-5ea22b1cc630" name="71f4ca3e-e693-4cf0-a098-b60a82c27ea0" type="radio">
-</input><label class="sd-tab-label" for="a716044f-0c17-498a-a4d5-5ea22b1cc630">
+<input id="e9f60cd5-aeee-4318-8bad-f96ffe6f27b5" name="9b7a8c35-f1cb-4161-901b-a874d4a399ed" type="radio">
+</input><label class="sd-tab-label" for="e9f60cd5-aeee-4318-8bad-f96ffe6f27b5">
 ds000228</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-dof-ds000228-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_1_1.png" src="_images/results_1_1.png" />
+<img alt="_images/results_3_1.png" src="_images/results_3_1.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-dof-ds000228-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-dof-ds000228-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="8a127619-9974-46aa-9a90-08f9aacfcedb" name="71f4ca3e-e693-4cf0-a098-b60a82c27ea0" type="radio">
-</input><label class="sd-tab-label" for="8a127619-9974-46aa-9a90-08f9aacfcedb">
+<input id="0cafc2d1-023b-4735-a2bc-4df096abc249" name="9b7a8c35-f1cb-4161-901b-a874d4a399ed" type="radio">
+</input><label class="sd-tab-label" for="0cafc2d1-023b-4735-a2bc-4df096abc249">
 ds000030</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-dof-ds000030-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_1_2.png" src="_images/results_1_2.png" />
+<img alt="_images/results_3_2.png" src="_images/results_3_2.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Loss in temporal degrees of freedom break down by diagnostics.</span><a class="headerlink" href="#tbl-dof-ds000030-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Loss in temporal degrees of freedom break down by diagnostics.</span><a class="headerlink" href="#tbl-dof-ds000030-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
 </div>
-<p>Scrubbing</p>
+<p>To compare the loss in number of volumes from scrubbing base strategy across datasets,
+we calculate the proportion of volume loss to number of volumes in a full scan.
+<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> includes child subjects and shows higher loss in volumes comparing to <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> with adult subjects only.
+In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, the trend of volume scrubbed comparing adults and children fits the observation shown in literature <span id="id3">[<a class="reference internal" href="references.html#id22">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
+In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the schizophrania group shows the highest amount of volumes scrubbed, followed by the biolar group, and comparable results betwee the control group and ADHD group.
+With a stringent 0.2 mm threashold, groups with high motion</p>
+<!-- The figure below can be further trimmed down. -->
 <div class="sd-tab-set docutils">
-<input checked="checked" id="1a6d0a0e-f64f-49b5-8787-d6c725620077" name="5447d435-9d4a-4e45-b6b4-1074f0e23928" type="radio">
-</input><label class="sd-tab-label" for="1a6d0a0e-f64f-49b5-8787-d6c725620077">
+<input checked="checked" id="e4bff3f2-70cc-4e1e-a8b8-c431cc0bcecf" name="7943ac87-3d6d-4ec1-9e3e-b086b2fa4dbe" type="radio">
+</input><label class="sd-tab-label" for="e4bff3f2-70cc-4e1e-a8b8-c431cc0bcecf">
 Overview</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-scrubbing-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_1_4.png" src="_images/results_1_4.png" />
+<img alt="_images/results_3_4.png" src="_images/results_3_4.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Loss in number of volumes in full sample of each dataset.</span><a class="headerlink" href="#tbl-scrubbing-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Loss in number of volumes in full sample of each dataset.</span><a class="headerlink" href="#tbl-scrubbing-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="7df5c43a-3c86-4bf9-939f-e244c589cde7" name="5447d435-9d4a-4e45-b6b4-1074f0e23928" type="radio">
-</input><label class="sd-tab-label" for="7df5c43a-3c86-4bf9-939f-e244c589cde7">
+<input id="22befa9b-b9b2-4992-a6fc-9250696fbaca" name="7943ac87-3d6d-4ec1-9e3e-b086b2fa4dbe" type="radio">
+</input><label class="sd-tab-label" for="22befa9b-b9b2-4992-a6fc-9250696fbaca">
 ds000228</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-scrubbing-ds000228-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_1_6.png" src="_images/results_1_6.png" />
+<img alt="_images/results_3_6.png" src="_images/results_3_6.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-scrubbing-ds000228-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-scrubbing-ds000228-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>
-<input id="b21a7656-0f98-4b7f-9aff-758f2b75459b" name="5447d435-9d4a-4e45-b6b4-1074f0e23928" type="radio">
-</input><label class="sd-tab-label" for="b21a7656-0f98-4b7f-9aff-758f2b75459b">
+<input id="e8214c7f-e80d-468f-b735-924e6926d1c0" name="7943ac87-3d6d-4ec1-9e3e-b086b2fa4dbe" type="radio">
+</input><label class="sd-tab-label" for="e8214c7f-e80d-468f-b735-924e6926d1c0">
 ds000030</label><div class="sd-tab-content docutils">
 <figure class="align-default" id="tbl-scrubbing-ds000030-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_1_8.png" src="_images/results_1_8.png" />
+<img alt="_images/results_3_8.png" src="_images/results_3_8.png" />
 </div>
 <figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Loss in number of volumes break down by diagnostics.</span><a class="headerlink" href="#tbl-scrubbing-ds000030-fig" title="Permalink to this image">#</a></p>
+<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Loss in number of volumes break down by diagnostics.</span><a class="headerlink" href="#tbl-scrubbing-ds000030-fig" title="Permalink to this image">#</a></p>
 </figcaption>
 </figure>
 </div>

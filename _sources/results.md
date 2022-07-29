@@ -26,6 +26,25 @@ warnings.filterwarnings("ignore")
 from fmriprep_denoise.visualization import figures
 
 from myst_nb import glue
+fig = figures.plot_motion_overview()
+glue("meanFD-fig", fig, display=False)
+```
+
+```{glue:figure} meanFD-fig
+:figwidth: 800px
+:name: "tbl:meanFD-fig"
+
+Mean framewise displacement of each dataset. 
+```
+
+
+```{code-cell} ipython3
+:tags: [hide-input, remove-output]
+import warnings
+warnings.filterwarnings("ignore")
+from fmriprep_denoise.visualization import figures
+
+from myst_nb import glue
 
 
 plot_info = 'dof'
@@ -53,7 +72,7 @@ for dataset in datasets:
 ## The loss in temporal degrees of freedom in different strategies
 
 When selecting denoising strategy, the loss in degrees of freedom `simple` and `simple+gsr` used the least amount of regressors. 
-In {cite:t}`ciric_benchmarking_2017`, the equivilant `aroma` and `aroma+gsr` strategies were reported with a lower magnitude of loss in temporal degrees of freedom than `scrubbing` or `simple` strategies.
+In {cite:t}`ciric_benchmarking_2017`, the equivalent `aroma` and `aroma+gsr` strategies were reported with a lower magnitude of loss in temporal degrees of freedom than `scrubbing` or `simple` strategies.
 However, we did not obser this advantage in the two datasets shown in this benchmark. 
 The reason potentially lies in the implementation of ICA-AROMA.
 ICA-AROMA uses pretrained model on healthy subjects to select noise components {cite:p}`aroma`. 
@@ -98,7 +117,14 @@ Loss in temporal degrees of freedom break down by diagnostics.
 
 `````
 
-Scrubbing
+To compare the loss in number of volumes from scrubbing base strategy across datasets, 
+we calculate the proportion of volume loss to number of volumes in a full scan.
+`ds000228` includes child subjects and shows higher loss in volumes comparing to `ds000030` with adult subjects only.
+In `ds000228`, the trend of volume scrubbed comparing adults and children fits the observation shown in literature {cite:p}`satterthwaite_impact_2012`. 
+In `ds000030`, the schizophrania group shows the highest amount of volumes scrubbed, followed by the biolar group, and comparable results betwee the control group and ADHD group.
+With a stringent 0.2 mm threashold, groups with high motion 
+
+<!-- The figure below can be further trimmed down. -->
 
 `````{tab-set}
 

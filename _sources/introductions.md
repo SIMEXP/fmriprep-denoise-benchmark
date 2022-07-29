@@ -7,7 +7,7 @@ Especially, functional connectivity {cite:p}`sporns_organization_2004` measure d
 cognitive function {cite:p}`finn_functional_2015`,
 aging {cite:p}`andrews-hanna_disruption_2007`, 
 and pathology {cite:p}`woodward_resting-state_2015`.
-The raise in the popularity of resting state fMRI aslo highlights the challenges and gap in the analytic approach {cite:p}`cole_advances_2010`.  
+The raise in the popularity of resting state fMRI also highlights the challenges and gap in the analytic approach {cite:p}`cole_advances_2010`.  
 Distortion introduced by non-neuronal sources, 
 such as head motion, scanner noise, cardiac and repiratory artifacts {cite:p}`rogers_assessing_2007,murphy_2013`, 
 known as confounds or nuisance regressors, pose a major challenge in functional connectivity analysis {cite:p}`satterthwaite_impact_2012`.
@@ -72,4 +72,7 @@ The validity of these results on fMRIPrep has yet to be examined.
 Current work aims to introduce an application programming interface (API) to standardise the interaction with fMRIPrep and provide benchmark using functional connectivity generated from resting state data.
 The API is released under popular Python neuroimaging analytic library `nilearn`, 
 with the aim to maximise the exposure of the API to the larger Python fMRI community.
-The benchmark will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.  
+We selected two datasets from OpenNeuro, 
+one with adult and child samples, and the other with psychiatric conditions.
+The benchmark will assess the differences in strategies, as well as the impact on different type of samples.
+The research will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.  

@@ -1,0 +1,127 @@
+Traceback (most recent call last):
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
+    executenb(
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 1093, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 559, in async_execute
+    await self.async_execute_cell(
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 854, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 756, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import warnings
+warnings.filterwarnings("ignore")
+from fmriprep_denoise.visualization import figures
+from myst_nb import glue
+
+
+# Load metric data
+dataset = "ds000228"
+atlas_name = "schaefer7networks"
+dimension = 400
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mKeyboardInterrupt[0m                         Traceback (most recent call last)
+[0;32m/tmp/ipykernel_65176/2654582466.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      1[0m [0;32mimport[0m [0mwarnings[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      2[0m [0mwarnings[0m[0;34m.[0m[0mfilterwarnings[0m[0;34m([0m[0;34m"ignore"[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m----> 3[0;31m [0;32mfrom[0m [0mfmriprep_denoise[0m[0;34m.[0m[0mvisualization[0m [0;32mimport[0m [0mfigures[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      4[0m [0;32mfrom[0m [0mmyst_nb[0m [0;32mimport[0m [0mglue[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      5[0m [0;34m[0m[0m
+
+[0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/figures.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      3[0m [0;32mimport[0m [0mpandas[0m [0;32mas[0m [0mpd[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      4[0m [0;34m[0m[0m
+[0;32m----> 5[0;31m [0;32mimport[0m [0mmatplotlib[0m[0;34m.[0m[0mpyplot[0m [0;32mas[0m [0mplt[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      6[0m [0;32mimport[0m [0mseaborn[0m [0;32mas[0m [0msns[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      7[0m [0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/pyplot.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     55[0m [0;32mfrom[0m [0mmatplotlib[0m [0;32mimport[0m [0mdocstring[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     56[0m [0;32mfrom[0m [0mmatplotlib[0m[0;34m.[0m[0mbackend_bases[0m [0;32mimport[0m [0mFigureCanvasBase[0m[0;34m,[0m [0mMouseButton[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 57[0;31m [0;32mfrom[0m [0mmatplotlib[0m[0;34m.[0m[0mfigure[0m [0;32mimport[0m [0mFigure[0m[0;34m,[0m [0mfigaspect[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     58[0m [0;32mfrom[0m [0mmatplotlib[0m[0;34m.[0m[0mgridspec[0m [0;32mimport[0m [0mGridSpec[0m[0;34m,[0m [0mSubplotSpec[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     59[0m [0;32mfrom[0m [0mmatplotlib[0m [0;32mimport[0m [0mrcParams[0m[0;34m,[0m [0mrcParamsDefault[0m[0;34m,[0m [0mget_backend[0m[0;34m,[0m [0mrcParamsOrig[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/figure.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     23[0m [0;34m[0m[0m
+[1;32m     24[0m [0;32mimport[0m [0mmatplotlib[0m [0;32mas[0m [0mmpl[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 25[0;31m [0;32mfrom[0m [0mmatplotlib[0m [0;32mimport[0m [0m_blocking_input[0m[0;34m,[0m [0mdocstring[0m[0;34m,[0m [0mprojections[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     26[0m from matplotlib.artist import (
+[1;32m     27[0m     Artist, allow_rasterization, _finalize_rasterization)
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/projections/__init__.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     54[0m [0;34m[0m[0m
+[1;32m     55[0m [0;32mfrom[0m [0;34m.[0m[0;34m.[0m [0;32mimport[0m [0maxes[0m[0;34m,[0m [0mdocstring[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 56[0;31m [0;32mfrom[0m [0;34m.[0m[0mgeo[0m [0;32mimport[0m [0mAitoffAxes[0m[0;34m,[0m [0mHammerAxes[0m[0;34m,[0m [0mLambertAxes[0m[0;34m,[0m [0mMollweideAxes[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     57[0m [0;32mfrom[0m [0;34m.[0m[0mpolar[0m [0;32mimport[0m [0mPolarAxes[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     58[0m [0;32mfrom[0m [0mmpl_toolkits[0m[0;34m.[0m[0mmplot3d[0m [0;32mimport[0m [0mAxes3D[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/projections/geo.py[0m in [0;36m<module>[0;34m[0m
+[1;32m    297[0m [0;34m[0m[0m
+[1;32m    298[0m [0;34m[0m[0m
+[0;32m--> 299[0;31m [0;32mclass[0m [0mHammerAxes[0m[0;34m([0m[0mGeoAxes[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    300[0m     [0mname[0m [0;34m=[0m [0;34m'hammer'[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    301[0m [0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/artist.py[0m in [0;36m__init_subclass__[0;34m(cls)[0m
+[1;32m    117[0m         [0mcls[0m[0;34m.[0m[0mset[0m[0;34m.[0m[0m__name__[0m [0;34m=[0m [0;34m"set"[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    118[0m         [0mcls[0m[0;34m.[0m[0mset[0m[0;34m.[0m[0m__qualname__[0m [0;34m=[0m [0;34mf"{cls.__qualname__}.set"[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 119[0;31m         [0mcls[0m[0;34m.[0m[0m_update_set_signature_and_docstring[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    120[0m [0;34m[0m[0m
+[1;32m    121[0m     _PROPERTIES_EXCLUDED_FROM_SET = [
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/artist.py[0m in [0;36m_update_set_signature_and_docstring[0;34m(cls)[0m
+[1;32m    138[0m             [Parameter("self", Parameter.POSITIONAL_OR_KEYWORD),
+[1;32m    139[0m              *[Parameter(prop, Parameter.KEYWORD_ONLY, default=_UNSET)
+[0;32m--> 140[0;31m                [0;32mfor[0m [0mprop[0m [0;32min[0m [0mArtistInspector[0m[0;34m([0m[0mcls[0m[0;34m)[0m[0;34m.[0m[0mget_setters[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    141[0m                if prop not in Artist._PROPERTIES_EXCLUDED_FROM_SET]])
+[1;32m    142[0m         [0mcls[0m[0;34m.[0m[0mset[0m[0;34m.[0m[0m_autogenerated_signature[0m [0;34m=[0m [0;32mTrue[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/matplotlib/artist.py[0m in [0;36mget_setters[0;34m(self)[0m
+[1;32m   1433[0m             [0mfunc[0m [0;34m=[0m [0mgetattr[0m[0;34m([0m[0mself[0m[0;34m.[0m[0mo[0m[0;34m,[0m [0mname[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1434[0m             if (not callable(func)
+[0;32m-> 1435[0;31m                     [0;32mor[0m [0mlen[0m[0;34m([0m[0minspect[0m[0;34m.[0m[0msignature[0m[0;34m([0m[0mfunc[0m[0;34m)[0m[0;34m.[0m[0mparameters[0m[0;34m)[0m [0;34m<[0m [0;36m2[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   1436[0m                     or self.is_alias(func)):
+[1;32m   1437[0m                 [0;32mcontinue[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m/usr/lib/python3.8/inspect.py[0m in [0;36msignature[0;34m(obj, follow_wrapped)[0m
+[1;32m   3103[0m [0;32mdef[0m [0msignature[0m[0;34m([0m[0mobj[0m[0;34m,[0m [0;34m*[0m[0;34m,[0m [0mfollow_wrapped[0m[0;34m=[0m[0;32mTrue[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   3104[0m     [0;34m"""Get a signature object for the passed callable."""[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 3105[0;31m     [0;32mreturn[0m [0mSignature[0m[0;34m.[0m[0mfrom_callable[0m[0;34m([0m[0mobj[0m[0;34m,[0m [0mfollow_wrapped[0m[0;34m=[0m[0mfollow_wrapped[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   3106[0m [0;34m[0m[0m
+[1;32m   3107[0m [0;34m[0m[0m
+
+[0;32m/usr/lib/python3.8/inspect.py[0m in [0;36mfrom_callable[0;34m(cls, obj, follow_wrapped)[0m
+[1;32m   2852[0m     [0;32mdef[0m [0mfrom_callable[0m[0;34m([0m[0mcls[0m[0;34m,[0m [0mobj[0m[0;34m,[0m [0;34m*[0m[0;34m,[0m [0mfollow_wrapped[0m[0;34m=[0m[0;32mTrue[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   2853[0m         [0;34m"""Constructs Signature for the given callable object."""[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 2854[0;31m         return _signature_from_callable(obj, sigcls=cls,
+[0m[1;32m   2855[0m                                         follow_wrapper_chains=follow_wrapped)
+[1;32m   2856[0m [0;34m[0m[0m
+
+[0;32m/usr/lib/python3.8/inspect.py[0m in [0;36m_signature_from_callable[0;34m(obj, follow_wrapper_chains, skip_bound_arg, sigcls)[0m
+[1;32m   2302[0m         [0;31m# If it's a pure Python function, or an object that is duck type[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   2303[0m         [0;31m# of a Python function (Cython functions, for instance), then:[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 2304[0;31m         return _signature_from_function(sigcls, obj,
+[0m[1;32m   2305[0m                                         skip_bound_arg=skip_bound_arg)
+[1;32m   2306[0m [0;34m[0m[0m
+
+[0;32m/usr/lib/python3.8/inspect.py[0m in [0;36m_signature_from_function[0;34m(cls, func, skip_bound_arg)[0m
+[1;32m   2172[0m [0;34m[0m[0m
+[1;32m   2173[0m     [0;31m# ... w/ defaults.[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 2174[0;31m     [0;32mfor[0m [0moffset[0m[0;34m,[0m [0mname[0m [0;32min[0m [0menumerate[0m[0;34m([0m[0mpositional[0m[0;34m[[0m[0mnon_default_count[0m[0;34m:[0m[0;34m][0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   2175[0m         [0mkind[0m [0;34m=[0m [0m_POSITIONAL_ONLY[0m [0;32mif[0m [0mposonly_left[0m [0;32melse[0m [0m_POSITIONAL_OR_KEYWORD[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   2176[0m         [0mannotation[0m [0;34m=[0m [0mannotations[0m[0;34m.[0m[0mget[0m[0;34m([0m[0mname[0m[0;34m,[0m [0m_empty[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mKeyboardInterrupt[0m: 
+KeyboardInterrupt: 
+
