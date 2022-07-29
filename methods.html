@@ -223,6 +223,35 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/SIMEXP/fmriprep-denoise-benchmark/main?urlpath=tree/content/methods.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
 <button onclick="toggleFullScreen()"
   class="headerbtn"
   data-toggle="tooltip"
@@ -289,6 +318,23 @@ title="Open an issue"
   </button>
   <div class="menu-dropdown__content">
     <ul>
+      <li>
+        <a href="_sources/methods.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
       <li>
         <a href="_sources/methods.md"
    class="headerbtn"
@@ -503,12 +549,111 @@ title="Print to PDF"
 <!-- need to revise the demographic information -->
 <p>We selected two datasets on OpenNeuro for the current analysis:
 <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id27">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id26">Bilder <em>et al.</em>, 2020</a>]</span>.
-Dataset <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> contains fMRI scans of participants watching a silent version of Pixar animated movie “Partly Cloudy”.
-The dataset includes 33 adult subjects (Age M(s.d.) = 24.8(5.3); range: 18–39; 20 female) and 122 children subjects (Age M(s.d.) = 6.7,(2.3); range: 3.5–12; 64 females).
-For more information for the dataset please refers to <span id="id3">Richardson <em>et al.</em> [<a class="reference internal" href="references.html#id28">2018</a>]</span>.
-Dataset <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
+Dataset <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> (<span class="math notranslate nohighlight">\(N=155\)</span>) contains fMRI scans of participants watching a silent version of Pixar animated movie “Partly Cloudy”.
+The dataset includes 33 adult subjects
+(<span class="math notranslate nohighlight">\(Mean_{age}=24.8\)</span>, <span class="math notranslate nohighlight">\(SD_{age}=5.3\)</span>, <span class="math notranslate nohighlight">\(range_{age}: 18-39\)</span>; <span class="math notranslate nohighlight">\(n_{female}=20\)</span>)
+and 122 children subjects
+(<span class="math notranslate nohighlight">\(Mean_{age}=6.7\)</span>, <span class="math notranslate nohighlight">\(SD_{age}=2.3\)</span>, <span class="math notranslate nohighlight">\(range_{age}: 3.5-12\)</span>; <span class="math notranslate nohighlight">\(n_{female}=64\)</span>)
+For more information for the dataset please refers to <span id="id3">Richardson <em>et al.</em> [<a class="reference internal" href="references.html#id28">2018</a>]</span>.</p>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">tables</span>
+<span class="n">desc</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">lazy_report</span><span class="p">(</span><span class="s1">&#39;ds000228&#39;</span><span class="p">)</span>
+
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;ds000228_desc&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n female: 84.0
+n female in child: 64.0
+n female in adult: 20.0
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>full sample</th>
+      <th>child</th>
+      <th>adult</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>155.000000</td>
+      <td>122.000000</td>
+      <td>33.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>10.555189</td>
+      <td>6.709461</td>
+      <td>24.772727</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>8.071957</td>
+      <td>2.330938</td>
+      <td>5.308521</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>3.518138</td>
+      <td>3.518138</td>
+      <td>18.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>5.300000</td>
+      <td>4.895210</td>
+      <td>21.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>7.680000</td>
+      <td>5.980000</td>
+      <td>23.000000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>10.975000</td>
+      <td>8.397500</td>
+      <td>28.000000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>39.000000</td>
+      <td>12.300000</td>
+      <td>39.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Dataset <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
 The current analysis only focused on the resting state scans.
-Scans with an instrumental artifact (flagged under column <code class="docutils literal notranslate"><span class="pre">ghost_NoGhost</span></code> in <code class="docutils literal notranslate"><span class="pre">particiapnts.tsv</span></code>) were removed from the final analysis.
+Scans with an instrumental artifact (flagged under column <code class="docutils literal notranslate"><span class="pre">ghost_NoGhost</span></code> in <code class="docutils literal notranslate"><span class="pre">particiapnts.tsv</span></code>) were excluded from the analysis pipeline.
 259 out of 272 subjects of were included in the benchmark.
 The demographic information per condition is in the following table.</p>
 <table class="colwidths-auto table">
@@ -545,6 +690,122 @@ The demographic information per condition is in the following table.</p>
 </tr>
 </tbody>
 </table>
+<div class="cell tag_hide-input docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">tables</span>
+<span class="n">desc</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">lazy_report</span><span class="p">(</span><span class="s1">&#39;ds000030&#39;</span><span class="p">)</span>
+
+<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;ds000030_desc&quot;</span><span class="p">,</span> <span class="n">desc</span><span class="p">)</span> 
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n female: 108.0
+n female in ADHD: 19.0
+n female in BIPOLAR: 21.0
+n female in SCHZ: 12.0
+n female in CONTROL: 56.0
+</pre></div>
+</div>
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>full sample</th>
+      <th>ADHD</th>
+      <th>BIPOLAR</th>
+      <th>SCHZ</th>
+      <th>CONTROL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>259.000000</td>
+      <td>40.000000</td>
+      <td>49.000000</td>
+      <td>50.000000</td>
+      <td>120.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>33.347490</td>
+      <td>32.050000</td>
+      <td>35.285714</td>
+      <td>36.460000</td>
+      <td>31.691667</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>9.305064</td>
+      <td>10.409439</td>
+      <td>9.027735</td>
+      <td>8.878339</td>
+      <td>8.827760</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>21.000000</td>
+      <td>21.000000</td>
+      <td>21.000000</td>
+      <td>22.000000</td>
+      <td>21.000000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>25.000000</td>
+      <td>23.750000</td>
+      <td>26.000000</td>
+      <td>29.000000</td>
+      <td>24.000000</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>32.000000</td>
+      <td>28.000000</td>
+      <td>36.000000</td>
+      <td>37.500000</td>
+      <td>28.500000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>41.000000</td>
+      <td>40.000000</td>
+      <td>43.000000</td>
+      <td>43.750000</td>
+      <td>39.250000</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>50.000000</td>
+      <td>50.000000</td>
+      <td>50.000000</td>
+      <td>49.000000</td>
+      <td>50.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
 </section>
 <section id="fmri-data-preprocessing">
 <h2>fMRI data preprocessing<a class="headerlink" href="#fmri-data-preprocessing" title="Permalink to this headline">#</a></h2>

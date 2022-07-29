@@ -7,7 +7,7 @@ Especially, functional connectivity {cite:p}`sporns_organization_2004` measure d
 cognitive function {cite:p}`finn_functional_2015`,
 aging {cite:p}`andrews-hanna_disruption_2007`, 
 and pathology {cite:p}`woodward_resting-state_2015`.
-The raise in the popularity of resting state fMRI also highlights the challenges and gap in the analytic approach {cite:p}`cole_advances_2010`.  
+The raise in the popularity of resting state fMRI also highlights the challenges and gap in the analytic approach {cite:p}`cole_advances_2010`. 
 Distortion introduced by non-neuronal sources, 
 such as head motion, scanner noise, cardiac and repiratory artifacts {cite:p}`rogers_assessing_2007,murphy_2013`, 
 known as confounds or nuisance regressors, pose a major challenge in functional connectivity analysis {cite:p}`satterthwaite_impact_2012`.

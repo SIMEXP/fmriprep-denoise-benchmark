@@ -1,0 +1,63 @@
+Traceback (most recent call last):
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
+    executenb(
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 1093, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 559, in async_execute
+    await self.async_execute_cell(
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 854, in async_execute_cell
+    self._check_raise_for_error(cell, exec_reply)
+  File "/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/nbclient/client.py", line 756, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import warnings
+warnings.filterwarnings("ignore")
+
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from fmriprep_denoise.visualization import utils
+from myst_nb import glue
+
+path_root = Path.cwd().parents[0] / "inputs"
+
+datasets = ["ds000228", "ds000030"]
+
+fig = plt.figure(figsize=(7, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(datasets, axs):
+    file = f"dataset-{dataset}_desc-movement_phenotype.tsv"
+    path_fd = path_root / f"dataset-{dataset}" / file
+    df = pd.read_csv(path_fd, header=[0], index_col=0, sep="\t")
+    _, participants_groups, _ = utils._get_participants_groups(dataset)
+    participants_groups.name = 'Groups'
+    df = pd.concat([df, participants_groups], axis=1, join='inner')
+    mean_fd = df['mean_framewise_displacement'].mean()
+    sd_fd = df['mean_framewise_displacement'].std()
+    df = df.rename(columns={'mean_framewise_displacement': "Mean Framewise Displacement (mm)"})
+    sns.boxplot(y='Mean Framewise Displacement (mm)',
+                x='Groups',
+                data=df,
+                ax=ax)
+    ax.set_title(f"{dataset}\n(Mean{u"\u00B1"}SD={mean_fd:.2f}{u"\u00B1"}{sd_fd:.2f} $N={df.shape[0]}$)")
+# fig.suptitle("Mean framewise displacement per sub-sample")
+
+glue("meanFD-fig", fig, display=False)
+------------------
+
+[0;36m  File [0;32m"/tmp/ipykernel_113009/1609952511.py"[0;36m, line [0;32m32[0m
+[0;31m    ax.set_title(f"{dataset}\n(Mean{u"\u00B1"}SD={mean_fd:.2f}{u"\u00B1"}{sd_fd:.2f} $N={df.shape[0]}$)")[0m
+[0m                                                                                                         ^[0m
+[0;31mSyntaxError[0m[0;31m:[0m unexpected character after line continuation character
+
+SyntaxError: unexpected character after line continuation character (1609952511.py, line 32)
+
