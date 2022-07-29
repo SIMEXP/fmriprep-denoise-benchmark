@@ -5,6 +5,21 @@
 The project is a continuation of [load_confounds](https://github.com/SIMEXP/load_confounds).
 The aim is to evaluate the impact of denoising strategy on functional connectivity data, using output processed by fMRIPrep LTS.
 
+
+## Dataset structure
+
+- All inputs (i.e. building blocks from other sources) are located in
+  `inputs/`.
+  To build the book, one will need all the metrics from the study.
+  The metrics are here:
+  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6941758.svg)](https://doi.org/10.5281/zenodo.6941758)
+
+- Custom code is located in `fmriprep_denoise/`. Installable through `pip install -e .`
+- Preprocessing SLURM scripts are in `script/`
+
+
+## Poster
+
 The preliminary results will be presented at OHBM 2022 as a poster. 
 Please find poster number `WTh570`.
 
@@ -16,14 +31,3 @@ At Glasgow, please contact the presenter on [Twitter](https://twitter.com/HaoTin
 or come to see the presenter on __Wednesday, June 22, 2022, 12:45 PM__ at the poster hall.
 
 ![spoiler](./content/images/ohbm2022_abstract_head.png)
-
-## Dataset structure
-
-- All inputs (i.e. building blocks from other sources) are located in
-  `inputs/`.
-  To build the book, one will need all the metrics from the study.
-  The metrics are here:
-  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5764254.svg)](https://doi.org/10.5281/zenodo.5764254)
-
-- Custom code is located in `fmriprep_denoise/`. Installable through `pip install .`
-- Preprocessing SLURM scripts are in `script/`
