@@ -1,15 +1,49 @@
+---
+jupytext:
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.11.5
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
+---
+
 # Methods
 
 ## Datasets
 <!-- need to revise the demographic information -->
+
 We selected two datasets on OpenNeuro for the current analysis: 
 `ds000228` {cite:p}`ds000228:1.1.0` and `ds000030` {cite:p}`ds000030:1.0.0`.
-Dataset `ds000228` contains fMRI scans of participants watching a silent version of Pixar animated movie "Partly Cloudy". 
-The dataset includes 33 adult subjects (Age M(s.d.) = 24.8(5.3); range: 18--39; 20 female) and 122 children subjects (Age M(s.d.) = 6.7,(2.3); range: 3.5--12; 64 females).
+Dataset `ds000228` ($N=155$) contains fMRI scans of participants watching a silent version of Pixar animated movie "Partly Cloudy". 
+The dataset includes 33 adult subjects 
+($Mean_{age}=24.8$, $SD_{age}=5.3$, $range_{age}: 18-39$; $n_{female}=20$) 
+and 122 children subjects 
+($Mean_{age}=6.7$, $SD_{age}=2.3$, $range_{age}: 3.5-12$; $n_{female}=64$) 
 For more information for the dataset please refers to {cite:t}`richardson_development_2018`.
+
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from myst_nb import glue
+
+from fmriprep_denoise.visualization import tables
+desc = tables.lazy_report('ds000228')
+
+glue("ds000228_desc", desc)
+```
+
 Dataset `ds000030` includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls. 
 The current analysis only focused on the resting state scans.
-Scans with an instrumental artifact (flagged under column `ghost_NoGhost` in `particiapnts.tsv`) were removed from the final analysis.
+Scans with an instrumental artifact (flagged under column `ghost_NoGhost` in `particiapnts.tsv`) were excluded from the analysis pipeline.
 259 out of 272 subjects of were included in the benchmark. 
 The demographic information per condition is in the following table.
 
@@ -18,6 +52,21 @@ The demographic information per condition is in the following table.
 |       N(female) |    259(108) |         120(56) |        50(12) |           49(21) |      40(19) |
 | Age Mean(s.d.)  |   33.3(9.3) |      31.7 (8.8) |    36.5 (8.9) |       35.3 (9.0) | 32.1 (10.4) |
 |       Age Range |      21--50 |          21--50 |        22--49 |           21--50 |      21--50 |
+
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import warnings
+warnings.filterwarnings("ignore")
+import pandas as pd
+from myst_nb import glue
+
+from fmriprep_denoise.visualization import tables
+desc = tables.lazy_report('ds000030')
+
+glue("ds000030_desc", desc) 
+```
 
 ## fMRI data preprocessing
 

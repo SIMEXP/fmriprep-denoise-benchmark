@@ -12,6 +12,25 @@ from fmriprep_denoise.visualization import utils
 
 path_root = Path(__file__).parents[2] / "inputs"
 
+def plot_motion_overview():
+    datasets = ["ds000228", "ds000030"]
+    fig = plt.figure(figsize=(7, 5))
+    axs = fig.subplots(1, 2, sharey=True)
+    for dataset, ax in zip(datasets, axs):
+        file = f'dataset-{dataset}_desc-movement_phenotype.tsv'
+        path_fd = path_root / f"dataset-{dataset}" / file
+        df = pd.read_csv(path_fd, header=[0], index_col=0, sep='\t')
+        _, participants_groups, _ = utils._get_participants_groups(dataset)
+        participants_groups.name = 'group'
+        df = pd.concat([df, participants_groups], axis=1, join='inner')
+        sns.barplot(y='mean_framewise_displacement',
+                    x='group',
+                    data=df,
+                    ax=ax)
+        ax.set_title(f'{dataset} ($N={df.shape[0]}$)')
+    fig.suptitle("Mean framewise displacement per sub-sample")
+    return fig
+
 
 def plot_motion_resid(dataset, atlas_name=None, dimension=None, group='full_sample'):
     # One cannot use specidic dimension but use wild card in atlas
@@ -173,25 +192,6 @@ def plot_dof_overview(plot_info):
         df = df.melt()
         _dof_report(dataset, ax, df, plot_info)
     axs[1].legend(bbox_to_anchor=(1.6, 1))
-    return fig
-
-
-def plot_motion_overview():
-    datasets = ["ds000228", "ds000030"]
-    fig = plt.figure(figsize=(5, 5))
-    axs = fig.subplots(1, 2, sharey=True)
-    for dataset, ax in zip(datasets, axs):
-        file = f'dataset-{dataset}_desc-movement_phenotype.tsv'
-        path_fd = path_root / f"dataset-{dataset}" / file
-        df = pd.read_csv(path_fd, header=[0], index_col=0, sep='\t')
-        _, participants_groups, _ = utils._get_participants_groups(dataset)
-        participants_groups.name = 'group'
-        df = pd.concat([df, participants_groups], axis=1, join='inner')
-        sns.barplot(y='mean_framewise_displacement',
-                    x='group',
-                    data=df,
-                    ax=ax)
-        ax.set_title(dataset)
     return fig
 
 def plot_dof_dataset(dataset, plot_info):
