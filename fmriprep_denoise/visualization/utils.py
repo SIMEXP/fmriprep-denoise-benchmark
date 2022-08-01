@@ -32,7 +32,7 @@ palette_dict = {name: c for c, name in zip(palette[1:], GRID_LOCATION.values())}
 
 # download data
 def repo2data_path():
-    data_req_path = Path(__file__).parents[2] / "data_requirement.json"
+    data_req_path = Path(__file__).parents[2] / "binder" / "data_requirement.json"
     repo2data = Repo2Data(str(data_req_path))
     data_path = repo2data.install()
     return Path(data_path[0])
