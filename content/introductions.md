@@ -1,3 +1,17 @@
+---
+jupytext:
+  formats: ipynb,md:myst
+  text_representation:
+    extension: .md
+    format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.11.5
+kernelspec:
+  display_name: Python 3 (ipykernel)
+  language: python
+  name: python3
+---
+
 # Introductions
 
 <!-- We all know denosing is important now. And we cannot understand brain activity without it. -->
@@ -76,3 +90,15 @@ We selected two datasets from OpenNeuro,
 one with adult and child samples, and the other with psychiatric conditions.
 The benchmark will assess the differences in strategies, as well as the impact on different type of samples.
 The research will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.  
+
+```{code-cell} ipython3
+# install the data if running locally, or points to cached data if running on neurolibre
+from pathlib import Path
+from repo2data.repo2data import Repo2Data
+
+data_req_path = Path("..") / "binder" / "data_requirement.json"
+# download data
+repo2data = Repo2Data(str(data_req_path))
+data_path = repo2data.install()
+print(data_path)
+```

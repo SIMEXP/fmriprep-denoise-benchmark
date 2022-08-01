@@ -36,7 +36,7 @@ import pandas as pd
 from myst_nb import glue
 
 from fmriprep_denoise.visualization import tables
-desc = tables.lazy_report('ds000228')
+desc = tables.lazy_demographic('ds000228')
 
 glue("ds000228_desc", desc)
 ```
@@ -57,13 +57,7 @@ The demographic information per condition is in the following table.
 ```{code-cell} ipython3
 :tags: [hide-input]
 
-import warnings
-warnings.filterwarnings("ignore")
-import pandas as pd
-from myst_nb import glue
-
-from fmriprep_denoise.visualization import tables
-desc = tables.lazy_report('ds000030')
+desc = tables.lazy_demographic('ds000030')
 
 glue("ds000030_desc", desc) 
 ```

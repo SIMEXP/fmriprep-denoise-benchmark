@@ -4,6 +4,7 @@ import pandas as pd
 import seaborn as sns
 
 from scipy.stats import zscore, spearmanr
+from repo2data.repo2data import Repo2Data
 
 from fmriprep_denoise.features import (partial_correlation, fdr,
                                        calculate_median_absolute,
@@ -24,11 +25,17 @@ GRID_LOCATION = {
     (2, 3): 'aroma+gsr',
 }
 
-path_root = Path(__file__).parents[2] / "inputs"
-
 
 palette = sns.color_palette("Paired", n_colors=12)
 palette_dict = {name: c for c, name in zip(palette[1:], GRID_LOCATION.values())}
+
+
+# download data
+def repo2data_path():
+    data_req_path = Path(__file__).parents[2] / "binder" / "data_requirement.json"
+    repo2data = Repo2Data(str(data_req_path))
+    data_path = repo2data.install()
+    return Path(data_path[0])
 
 
 def _get_palette(order):
@@ -41,8 +48,8 @@ def _get_participants_groups(dataset):
     group_info_column = "Child_Adult" if dataset == "ds000228" else "diagnosis"
 
     # read the degrees of freedom info as reference for subjects
-    path_dof = path_root / "metrics" / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
-    path_participants = path_root / dataset / 'participants.tsv'
+    path_dof = repo2data_path() / "metrics" / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+    path_participants = repo2data_path() / dataset / 'participants.tsv'
 
     confounds_phenotype = pd.read_csv(path_dof, header=[0, 1], index_col=0, sep='\t')
     subjects = confounds_phenotype.index
@@ -55,7 +62,7 @@ def _get_participants_groups(dataset):
 def _get_connectome_metric_paths(dataset, metric, atlas_name, dimension):
     atlas_name = "*" if isinstance(atlas_name, type(None)) else atlas_name
     dimension = "*" if isinstance(atlas_name, type(None)) or isinstance(dimension, type(None)) else dimension
-    files = list(path_root.glob(f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_{metric}.tsv"))
+    files = list(repo2data_path().glob(f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_{metric}.tsv"))
     if not files:
         raise FileNotFoundError("No file matching the supplied arguments:"
                                 f"atlas_name={atlas_name}, "

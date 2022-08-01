@@ -33,7 +33,7 @@ import seaborn as sns
 from fmriprep_denoise.visualization import utils
 from myst_nb import glue
 
-path_root = Path.cwd().parents[0] / "inputs"
+path_root = utils.repo2data_path()
 
 datasets = ["ds000228", "ds000030"]
 
