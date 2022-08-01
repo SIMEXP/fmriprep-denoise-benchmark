@@ -60,7 +60,7 @@ and provide benchmarks of different strategies using functional connectivity gen
 The main tool is a part of 
 [`nilearn`](https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds) [@nilearn].
 
-![A graphical representation of tools and methods implemented in NiMARE.\label{top_level_fig}](./content/images/api_summary.png)
+![Overview of API.\label{top_level_fig}](./content/images/api_summary.svg)
 
 # Acknowledgements
 
