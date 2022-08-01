@@ -10,8 +10,8 @@ parts:
     - file: methods.md
     - file: results.md
       sections:
-      # - file: ds000228.md
-      - file: ds000030.md
+      # - file: report_ds000228.md
+      - file: report_ds000030.md
     - file: discussions.md
     - file: references.md
   - caption: Appendices and supplemental material
