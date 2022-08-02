@@ -8,10 +8,13 @@ import seaborn as sns
 from fmriprep_denoise.visualization import utils
 
 
-path_root = Path(__file__).parents[2] / "inputs"
+path_root = utils.repo2data_path()
 
 
-def lazy_report(dataset):
+def lazy_demographic(dataset):
+    """
+    Very lazy report of demographic information
+    """
     df, groups = _get_descriptive_data(dataset)
     full = df.describe()['age']
     full.name = 'full sample'

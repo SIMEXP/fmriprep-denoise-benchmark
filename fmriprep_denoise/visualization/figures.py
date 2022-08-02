@@ -1,4 +1,3 @@
-from pathlib import Path
 import numpy as np
 import pandas as pd
 
@@ -10,7 +9,8 @@ from fmriprep_denoise.features import get_atlas_pairwise_distance
 from fmriprep_denoise.visualization import utils
 
 
-path_root = Path(__file__).parents[2] / "inputs"
+path_root = utils.repo2data_path()
+
 
 def plot_motion_overview():
     datasets = ["ds000228", "ds000030"]
