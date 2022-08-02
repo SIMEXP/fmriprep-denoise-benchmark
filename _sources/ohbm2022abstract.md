@@ -1,18 +1,16 @@
 ---
 jupytext:
-  formats: ipynb,md:myst
+  formats: md:myst
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.5
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: [hide-input, hide-output]
 import warnings
 warnings.filterwarnings("ignore")
@@ -28,6 +26,21 @@ dimension = 400
 ```
 
 # OHBM 2022 abstract - submitted text
+
+The preliminary results will be presented at OHBM 2022 as a poster. 
+Please find poster number `WTh570`.
+
+Find the presenter at the 
+[virtual poster session](https://event.fourwaves.com/ohbm-2022/abstracts/d49d130b-7f83-4c87-92f4-e1a8e319502b)
+on __Wednesday, June 8, 2022, 8:30 PM GMT + 1__.
+
+At Glasgow, please contact the presenter on [Twitter](https://twitter.com/HaoTingW713) to schedule a time to chat,
+or come to see the presenter on __Wednesday, June 22, 2022, 12:45 PM__ at the poster hall.
+
+```{image} ./images/ohbm2022_abstract_head.png
+:alt: poster
+:align: center
+```
 
 ## Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs
 
@@ -93,7 +106,7 @@ No denoise strategy removed the correlation with motion captured by mean framewi
 `compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series. 
 Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`.
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: ["hide-input", "remove-output"]
 fig = figures.plot_motion_resid(dataset, atlas_name, dimension)
 glue("ohbm-qcfc-fig", fig, display=False)
@@ -108,7 +121,7 @@ glue("ohbm-qcfc-fig", fig, display=False)
 
 Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity. 
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: ["hide-input", "remove-output"]
 
 fig = figures.plot_distance_dependence(dataset, atlas_name, dimension)
@@ -126,7 +139,7 @@ All strategies increased the overall network modularity compared to the `baselin
 GSR-based strategies improved the network modularity compared to their conunterparts.
 The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity.
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: ["hide-input", "remove-output"]
 
 fig = figures.plot_network_modularity(dataset, atlas_name, dimension)
@@ -145,7 +158,9 @@ This evaluation is implemented in a fully reproducible jupyter book framework, a
 This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.                 
 
 
-### References
+:::{dropdown} References on this page
+
 ```{bibliography}
 :filter: docname in docnames
 ```
+:::

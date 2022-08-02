@@ -1,13 +1,11 @@
 ---
 jupytext:
-  formats: ipynb,md:myst
+  formats: md:myst
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.5
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -27,7 +25,7 @@ and 122 children subjects
 For more information for the dataset please refers to {cite:t}`richardson_development_2018`.
 
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: [hide-input]
 
 import warnings
@@ -36,7 +34,8 @@ import pandas as pd
 from myst_nb import glue
 
 from fmriprep_denoise.visualization import tables
-desc = tables.lazy_report('ds000228')
+desc = tables.lazy_demographic('ds000228')
+desc = desc.set_table_attributes('style="font-size: 10px"')
 
 glue("ds000228_desc", desc)
 ```
@@ -45,25 +44,22 @@ Dataset `ds000030` includes multiple tasks collected on subjects of a variety of
 The current analysis only focused on the resting state scans.
 Scans with an instrumental artifact (flagged under column `ghost_NoGhost` in `particiapnts.tsv`) were excluded from the analysis pipeline.
 259 out of 272 subjects of were included in the benchmark. 
-The demographic information per condition is in the following table.
+The demographic information per condition is in {numref}`table-ds000030`.
 
+```{table} Demographic information of ds000030
+:name: table-ds000030
 |                 | Full sample | Healthy control | Schizophrenia | Bipolar disorder |     ADHD    |
 |----------------:|------------:|----------------:|--------------:|-----------------:|------------:|
 |       N(female) |    259(108) |         120(56) |        50(12) |           49(21) |      40(19) |
 | Age Mean(s.d.)  |   33.3(9.3) |      31.7 (8.8) |    36.5 (8.9) |       35.3 (9.0) | 32.1 (10.4) |
 |       Age Range |      21--50 |          21--50 |        22--49 |           21--50 |      21--50 |
+```
 
-
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: [hide-input]
 
-import warnings
-warnings.filterwarnings("ignore")
-import pandas as pd
-from myst_nb import glue
-
-from fmriprep_denoise.visualization import tables
-desc = tables.lazy_report('ds000030')
+desc = tables.lazy_demographic('ds000030')
+desc = desc.set_table_attributes('style="font-size: 10px"')
 
 glue("ds000030_desc", desc) 
 ```
@@ -109,7 +105,7 @@ Schaefer 1000 parcels atlas was excluded as some regions would be dropped after 
 - Multiresolution Intrinsic Segmentation Template (MIST) {cite:p}`urchs_mist_2019`: 7, 12, 20, 36, 64, 122, 197, 325, 444, "ROI" (210 parcels, 122 split by the midline)
 - DiFuMo atlas {cite:p}`difumo_2020`: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)
 
-Process involved here are implemented through nilearn {cite:p}`nilearn_2014`.
+Process involved here are implemented through nilearn {cite:p}`nilearn`.
 Time series were extracted using `nilearn.maskers.NiftiLabelsMasker` and `nilearn.maskers.NiftiMapsMasker`. 
 Connectomes were calculated using Pearson's Correlations, implemented through `nilearn.connectome.ConnectivityMeasure`.
 
@@ -180,8 +176,10 @@ We evaluated common confound regression strategies that are possible through fMR
 Subjects with high motion, indicated by less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold, were excluded from all analysis. 
 The connectome generated from high-pass filtered time series were served as a comparison baseline.
 Confound variables were accessed using API `load_confounds_strategy`.
-The detailed 11 strategies and a full breakdown of parameters used under the hood is presented in the table below.
+The detailed 11 strategies and a full breakdown of parameters used under the hood is presented in {numref}`table-strategies`.
 
+```{table} Denoising strategies 
+:name: table-strategies
 | strategy        | image                          | `high_pass` | `motion` | `wm_csf` | `global_signal` | `scrub` | `fd_thresh` | `compcor`       | `n_compcor` | `ica_aroma` | `demean` |
 |-----------------|--------------------------------|-------------|----------|----------|-----------------|---------|-------------|-----------------|-------------|-------------|----------|
 | baseline        | `desc-preproc_bold`            | `True`      | N/A      | N/A      | N/A             | N/A     | N/A         | N/A             | N/A         | N/A         | `True`   |
@@ -195,6 +193,7 @@ The detailed 11 strategies and a full breakdown of parameters used under the hoo
 | compcor6        | `desc-preproc_bold`            | `True`      | `full`   | N/A      | N/A             | N/A     | N/A         | `anat_combined` | `6 `        | N/A         | `True`   |
 | aroma           | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | N/A             | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
 | aroma+gsr       | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | `basic`         | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
+```
 
 ## Denoising evaluation measures
 
@@ -244,3 +243,10 @@ with age and sex as covariates.
 
 [^1]: When resampling 1000 parcel version of the Schaefer atlas to match the preprocessed data, 
 some subjects will miss a parcel. 
+
+:::{dropdown} References on this page
+
+```{bibliography}
+:filter: docname in docnames
+```
+:::

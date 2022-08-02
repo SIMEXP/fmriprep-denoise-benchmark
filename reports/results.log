@@ -17,47 +17,108 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-import warnings
-warnings.filterwarnings("ignore")
+from statsmodels.stats.weightstats import ttest_ind
 
-from pathlib import Path
-import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from fmriprep_denoise.visualization import utils
-from myst_nb import glue
-
-path_root = Path.cwd().parents[0] / "inputs"
-
-datasets = ["ds000228", "ds000030"]
-
-fig = plt.figure(figsize=(7, 5))
-axs = fig.subplots(1, 2, sharey=True)
-for dataset, ax in zip(datasets, axs):
-    file = f"dataset-{dataset}_desc-movement_phenotype.tsv"
-    path_fd = path_root / f"dataset-{dataset}" / file
-    df = pd.read_csv(path_fd, header=[0], index_col=0, sep="\t")
-    _, participants_groups, _ = utils._get_participants_groups(dataset)
-    participants_groups.name = 'Groups'
-    df = pd.concat([df, participants_groups], axis=1, join='inner')
-    mean_fd = df['mean_framewise_displacement'].mean()
-    sd_fd = df['mean_framewise_displacement'].std()
-    df = df.rename(columns={'mean_framewise_displacement': "Mean Framewise Displacement (mm)"})
-    sns.boxplot(y='Mean Framewise Displacement (mm)',
-                x='Groups',
-                data=df,
-                ax=ax)
-    ax.set_title(f"{dataset}\n(Mean{u"\u00B1"}SD={mean_fd:.2f}{u"\u00B1"}{sd_fd:.2f} $N={df.shape[0]}$)")
-# fig.suptitle("Mean framewise displacement per sub-sample")
-
-glue("meanFD-fig", fig, display=False)
+dataset = "ds000228"
+file = f"dataset-{dataset}_desc-movement_phenotype.tsv"
+path_fd = path_root / f"dataset-{dataset}" / file
+data = pd.read_csv(path_fd, header=[0], index_col=0, sep="\t")
+_, participants_groups, _ = utils._get_participants_groups(dataset)
+participants_groups.name = 'Groups'
+data = pd.concat([data['mean_framewise_displacement'], participants_groups], axis=1, join='inner')
+cat1 = data[data['Groups']=='child']
+cat2 = data[data['Groups']=='adult']
+t_stats, pval, df = ttest_ind(cat1.values, 
+                              cat2.values,
+                              usevar='unequal')
+glue(f"{dataset}_t", t_stats)
+glue(f"{dataset}_p", pval)
+glue(f"{dataset}_df", df)
+glue(f"{dataset}_child_mean", cat1['mean_framewise_displacement'].mean())
+glue(f"{dataset}_child_sd", cat1['mean_framewise_displacement'].std())
+glue(f"{dataset}_adult_mean", cat2['mean_framewise_displacement'].mean())
+glue(f"{dataset}_adult_sd", cat2['mean_framewise_displacement'].std())
 ------------------
 
-[0;36m  File [0;32m"/tmp/ipykernel_113009/1609952511.py"[0;36m, line [0;32m32[0m
-[0;31m    ax.set_title(f"{dataset}\n(Mean{u"\u00B1"}SD={mean_fd:.2f}{u"\u00B1"}{sd_fd:.2f} $N={df.shape[0]}$)")[0m
-[0m                                                                                                         ^[0m
-[0;31mSyntaxError[0m[0;31m:[0m unexpected character after line continuation character
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mTypeError[0m                                 Traceback (most recent call last)
+[0;32m/tmp/ipykernel_55258/3189656275.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     10[0m [0mcat1[0m [0;34m=[0m [0mdata[0m[0;34m[[0m[0mdata[0m[0;34m[[0m[0;34m'Groups'[0m[0;34m][0m[0;34m==[0m[0;34m'child'[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
+[1;32m     11[0m [0mcat2[0m [0;34m=[0m [0mdata[0m[0;34m[[0m[0mdata[0m[0;34m[[0m[0;34m'Groups'[0m[0;34m][0m[0;34m==[0m[0;34m'adult'[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 12[0;31m t_stats, pval, df = ttest_ind(cat1.values, 
+[0m[1;32m     13[0m                               [0mcat2[0m[0;34m.[0m[0mvalues[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     14[0m                               usevar='unequal')
 
-SyntaxError: unexpected character after line continuation character (1609952511.py, line 32)
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36mttest_ind[0;34m(x1, x2, alternative, usevar, weights, value)[0m
+[1;32m   1336[0m         [0mDescrStatsW[0m[0;34m([0m[0mx2[0m[0;34m,[0m [0mweights[0m[0;34m=[0m[0mweights[0m[0;34m[[0m[0;36m1[0m[0;34m][0m[0;34m,[0m [0mddof[0m[0;34m=[0m[0;36m0[0m[0;34m)[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1337[0m     )
+[0;32m-> 1338[0;31m     tstat, pval, dof = cm.ttest_ind(
+[0m[1;32m   1339[0m         [0malternative[0m[0;34m=[0m[0malternative[0m[0;34m,[0m [0musevar[0m[0;34m=[0m[0musevar[0m[0;34m,[0m [0mvalue[0m[0;34m=[0m[0mvalue[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1340[0m     )
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36mttest_ind[0;34m(self, alternative, usevar, value)[0m
+[1;32m   1058[0m             [0mdof[0m [0;34m=[0m [0md1[0m[0;34m.[0m[0mnobs[0m [0;34m-[0m [0;36m1[0m [0;34m+[0m [0md2[0m[0;34m.[0m[0mnobs[0m [0;34m-[0m [0;36m1[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1059[0m         [0;32melif[0m [0musevar[0m [0;34m==[0m [0;34m"unequal"[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 1060[0;31m             [0mstdm[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mstd_meandiff_separatevar[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   1061[0m             [0mdof[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0mdof_satt[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m   1062[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/pandas/_libs/properties.pyx[0m in [0;36mpandas._libs.properties.CachedProperty.__get__[0;34m()[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36mstd_meandiff_separatevar[0;34m(self)[0m
+[1;32m    977[0m         [0md1[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0md1[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    978[0m         [0md2[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0md2[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 979[0;31m         [0;32mreturn[0m [0mnp[0m[0;34m.[0m[0msqrt[0m[0;34m([0m[0md1[0m[0;34m.[0m[0m_var[0m [0;34m/[0m [0;34m([0m[0md1[0m[0;34m.[0m[0mnobs[0m [0;34m-[0m [0;36m1[0m[0;34m)[0m [0;34m+[0m [0md2[0m[0;34m.[0m[0m_var[0m [0;34m/[0m [0;34m([0m[0md2[0m[0;34m.[0m[0mnobs[0m [0;34m-[0m [0;36m1[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    980[0m [0;34m[0m[0m
+[1;32m    981[0m     [0;34m@[0m[0mcache_readonly[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/pandas/_libs/properties.pyx[0m in [0;36mpandas._libs.properties.CachedProperty.__get__[0;34m()[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36m_var[0;34m(self)[0m
+[1;32m    188[0m         [0mused[0m [0;32mfor[0m [0mstatistical[0m [0mtests[0m [0;32mwith[0m [0mcontrolled[0m [0mddof[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    189[0m         """
+[0;32m--> 190[0;31m         [0;32mreturn[0m [0mself[0m[0;34m.[0m[0msumsquares[0m [0;34m/[0m [0mself[0m[0;34m.[0m[0msum_weights[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    191[0m [0;34m[0m[0m
+[1;32m    192[0m     [0;34m@[0m[0mcache_readonly[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/pandas/_libs/properties.pyx[0m in [0;36mpandas._libs.properties.CachedProperty.__get__[0;34m()[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36msumsquares[0;34m(self)[0m
+[1;32m    143[0m     [0;32mdef[0m [0msumsquares[0m[0;34m([0m[0mself[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    144[0m         [0;34m"""weighted sum of squares of demeaned data"""[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 145[0;31m         [0;32mreturn[0m [0mnp[0m[0;34m.[0m[0mdot[0m[0;34m([0m[0;34m([0m[0mself[0m[0;34m.[0m[0mdemeaned[0m [0;34m**[0m [0;36m2[0m[0;34m)[0m[0;34m.[0m[0mT[0m[0;34m,[0m [0mself[0m[0;34m.[0m[0mweights[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    146[0m [0;34m[0m[0m
+[1;32m    147[0m     [0;31m# need memoize instead of cache decorator[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/pandas/_libs/properties.pyx[0m in [0;36mpandas._libs.properties.CachedProperty.__get__[0;34m()[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36mdemeaned[0;34m(self)[0m
+[1;32m    138[0m     [0;32mdef[0m [0mdemeaned[0m[0;34m([0m[0mself[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    139[0m         [0;34m"""data with weighted mean subtracted"""[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 140[0;31m         [0;32mreturn[0m [0mself[0m[0;34m.[0m[0mdata[0m [0;34m-[0m [0mself[0m[0;34m.[0m[0mmean[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    141[0m [0;34m[0m[0m
+[1;32m    142[0m     [0;34m@[0m[0mcache_readonly[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/pandas/_libs/properties.pyx[0m in [0;36mpandas._libs.properties.CachedProperty.__get__[0;34m()[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36mmean[0;34m(self)[0m
+[1;32m    133[0m     [0;32mdef[0m [0mmean[0m[0;34m([0m[0mself[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    134[0m         [0;34m"""weighted mean of data"""[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 135[0;31m         [0;32mreturn[0m [0mself[0m[0;34m.[0m[0msum[0m [0;34m/[0m [0mself[0m[0;34m.[0m[0msum_weights[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    136[0m [0;34m[0m[0m
+[1;32m    137[0m     [0;34m@[0m[0mcache_readonly[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/pandas/_libs/properties.pyx[0m in [0;36mpandas._libs.properties.CachedProperty.__get__[0;34m()[0m
+
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/statsmodels/stats/weightstats.py[0m in [0;36msum[0;34m(self)[0m
+[1;32m    128[0m     [0;32mdef[0m [0msum[0m[0;34m([0m[0mself[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    129[0m         [0;34m"""weighted sum of data"""[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 130[0;31m         [0;32mreturn[0m [0mnp[0m[0;34m.[0m[0mdot[0m[0;34m([0m[0mself[0m[0;34m.[0m[0mdata[0m[0;34m.[0m[0mT[0m[0;34m,[0m [0mself[0m[0;34m.[0m[0mweights[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    131[0m [0;34m[0m[0m
+[1;32m    132[0m     [0;34m@[0m[0mcache_readonly[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m<__array_function__ internals>[0m in [0;36mdot[0;34m(*args, **kwargs)[0m
+
+[0;31mTypeError[0m: can't multiply sequence by non-int of type 'float'
+TypeError: can't multiply sequence by non-int of type 'float'
 

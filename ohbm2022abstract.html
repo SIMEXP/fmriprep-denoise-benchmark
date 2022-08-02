@@ -4,8 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>OHBM 2022 abstract - submitted text &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
     
   <!-- Loaded before other Sphinx assets -->
@@ -105,13 +104,13 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="index.html">
-                    Overview
+                    Abstract
                 </a>
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Paper
+  Research report
  </span>
 </p>
 <ul class="nav bd-sidenav">
@@ -136,7 +135,7 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="ds000030.html">
+    <a class="reference internal" href="report_ds000030.html">
      ds000030
     </a>
    </li>
@@ -148,8 +147,8 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="references.html">
-   References
+  <a class="reference internal" href="contributions.html">
+   Contributions
   </a>
  </li>
 </ul>
@@ -434,11 +433,6 @@ title="Print to PDF"
      Conclusions
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#references">
-     References
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -502,11 +496,6 @@ title="Print to PDF"
      Conclusions
     </a>
    </li>
-   <li class="toc-h3 nav-item toc-entry">
-    <a class="reference internal nav-link" href="#references">
-     References
-    </a>
-   </li>
   </ul>
  </li>
 </ul>
@@ -534,26 +523,46 @@ title="Print to PDF"
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>---- repo2data starting ----
+/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/repo2data
+Config from file :
+/home/haoting/projects/fmriprep-denoise-benchmark/binder/data_requirement.json
+Destination:
+../inputs/fmrieprep-denoise-paper
+
+Info : ../inputs/fmrieprep-denoise-paper already downloaded
+</pre></div>
 </div>
-<section class="tex2jax_ignore mathjax_ignore" id="ohbm-2022-abstract-submitted-text">
+</div>
+</div>
+<div class="tex2jax_ignore mathjax_ignore section" id="ohbm-2022-abstract-submitted-text">
 <h1>OHBM 2022 abstract - submitted text<a class="headerlink" href="#ohbm-2022-abstract-submitted-text" title="Permalink to this headline">#</a></h1>
-<section id="impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs">
+<p>The preliminary results will be presented at OHBM 2022 as a poster.
+Please find poster number <code class="docutils literal notranslate"><span class="pre">WTh570</span></code>.</p>
+<p>Find the presenter at the
+<a class="reference external" href="https://event.fourwaves.com/ohbm-2022/abstracts/d49d130b-7f83-4c87-92f4-e1a8e319502b">virtual poster session</a>
+on <strong>Wednesday, June 8, 2022, 8:30 PM GMT + 1</strong>.</p>
+<p>At Glasgow, please contact the presenter on <a class="reference external" href="https://twitter.com/HaoTingW713">Twitter</a> to schedule a time to chat,
+or come to see the presenter on <strong>Wednesday, June 22, 2022, 12:45 PM</strong> at the poster hall.</p>
+<img alt="poster" class="align-center" src="_images/ohbm2022_abstract_head.png" />
+<div class="section" id="impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs">
 <h2>Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs<a class="headerlink" href="#impact-of-confound-removal-strategies-on-functional-connectivity-generated-from-fmriprep-outputs" title="Permalink to this headline">#</a></h2>
-<p>H-T Wang<a class="footnote-reference brackets" href="#id85" id="id1">1</a>, S L Meisler<a class="footnote-reference brackets" href="#id86" id="id2">2</a><a class="footnote-reference brackets" href="#id87" id="id3">3</a>, H Shamarke, F Paugam<a class="footnote-reference brackets" href="#id85" id="id4">1</a><a class="footnote-reference brackets" href="#id88" id="id5">4</a>, N Gensollen<a class="footnote-reference brackets" href="#id89" id="id6">5</a>, B Thirion<a class="footnote-reference brackets" href="#id89" id="id7">5</a>, C Markiewicz<a class="footnote-reference brackets" href="#id90" id="id8">6</a>, P Bellec<a class="footnote-reference brackets" href="#id85" id="id9">1</a><a class="footnote-reference brackets" href="#id91" id="id10">7</a></p>
-<section id="introduction">
+<p>H-T Wang<a class="footnote-reference brackets" href="#id84" id="id1">1</a>, S L Meisler<a class="footnote-reference brackets" href="#id85" id="id2">2</a><a class="footnote-reference brackets" href="#id86" id="id3">3</a>, H Shamarke, F Paugam<a class="footnote-reference brackets" href="#id84" id="id4">1</a><a class="footnote-reference brackets" href="#id87" id="id5">4</a>, N Gensollen<a class="footnote-reference brackets" href="#id88" id="id6">5</a>, B Thirion<a class="footnote-reference brackets" href="#id88" id="id7">5</a>, C Markiewicz<a class="footnote-reference brackets" href="#id89" id="id8">6</a>, P Bellec<a class="footnote-reference brackets" href="#id84" id="id9">1</a><a class="footnote-reference brackets" href="#id90" id="id10">7</a></p>
+<div class="section" id="introduction">
 <h3>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">#</a></h3>
 <p>Selecting an optimal denoising strategy is a key issue when processing fMRI data.
-The popular software fMRIPrep <span id="id11">[<a class="reference internal" href="references.html#id13">Esteban <em>et al.</em>, 2020</a>]</span> aims to standardize fMRI preprocessing,
+The popular software fMRIPrep <span id="id11">[<a class="reference internal" href="#id36">Esteban <em>et al.</em>, 2020</a>]</span> aims to standardize fMRI preprocessing,
 but users are still offered a wide range of confound regressors to choose from to denoise data.
 Without a good understanding of the literature or the fMRIPrep documentation,
 users can select suboptimal strategies.
 Current work aims to provide a useful reference for fMRIPrep users by systematically evaluating the impact of different confound regression strategies,
 and by contrasting the results with past literature based on alternative preprocessing software.</p>
-</section>
-<section id="methods">
+</div>
+<div class="section" id="methods">
 <h3>Methods<a class="headerlink" href="#methods" title="Permalink to this headline">#</a></h3>
-<p>We selected dataset ds000228 <span id="id12">[<a class="reference internal" href="references.html#id28">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
-Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id13">[<a class="reference internal" href="references.html#id29">Schaefer <em>et al.</em>, 2017</a>]</span>.
+<p>We selected dataset ds000228 <span id="id12">[<a class="reference internal" href="#id50">Richardson <em>et al.</em>, 2018</a>]</span> on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code>.
+Time series were extracted using the Schaefer 7 network atlas with 400 ROIs <span id="id13">[<a class="reference internal" href="#id51">Schaefer <em>et al.</em>, 2017</a>]</span>.
 We applied the denoising strategies listed in the table below using fMRIPrep-generated confounds.
 Subjects with less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold were excluded from all analysis.
 We also calculated the connectome from high-pass filtered time series as a comparison baseline.</p>
@@ -693,22 +702,22 @@ We also calculated the connectome from high-pass filtered time series as a compa
 </tr>
 </tbody>
 </table>
-<p>We used three metrics <span id="id14">[<a class="reference internal" href="references.html#id17">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id15">[<a class="reference internal" href="references.html#id19">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
+<p>We used three metrics <span id="id14">[<a class="reference internal" href="#id40">Ciric <em>et al.</em>, 2017</a>]</span>, <span id="id15">[<a class="reference internal" href="#id42">Parkes <em>et al.</em>, 2018</a>]</span> to evaluate the denoising results:</p>
 <ol class="simple">
-<li><p>Quality control / functional connectivity (QCFC <span id="id16">[<a class="reference internal" href="references.html#id24">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
-<li><p>Distance-dependent effects of motion on connectivity <span id="id17">[<a class="reference internal" href="references.html#id15">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
-<li><p>Network modularity <span id="id18">[<a class="reference internal" href="references.html#id22">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
+<li><p>Quality control / functional connectivity (QCFC <span id="id16">[<a class="reference internal" href="#id46">Power <em>et al.</em>, 2015</a>]</span>): partial correlation between motion and connectivity with age and sex as covariates. We control for multiple comparisons with false positive rate correction.</p></li>
+<li><p>Distance-dependent effects of motion on connectivity <span id="id17">[<a class="reference internal" href="#id38">Power <em>et al.</em>, 2012</a>]</span>: correlation between node-wise Euclidean distance and QC-FC.</p></li>
+<li><p>Network modularity <span id="id18">[<a class="reference internal" href="#id44">Satterthwaite <em>et al.</em>, 2012</a>]</span>: graph community detection based on Louvain method, implemented in the Brain Connectome Toolbox.</p></li>
 </ol>
-</section>
-<section id="results">
+</div>
+<div class="section" id="results">
 <h3>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h3>
-<section id="qc-fc-and-distance-dependent-effect">
+<div class="section" id="qc-fc-and-distance-dependent-effect">
 <h4>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">#</a></h4>
 <p>No denoise strategy removed the correlation with motion captured by mean framewise displacement.
 <code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> reduced the correlation between connectivity edges and mean framewise displacement.
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id19">[<a class="reference internal" href="references.html#id24">Power <em>et al.</em>, 2015</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing+gsr</span></code> performed the best, as seen in previous work <span id="id19">[<a class="reference internal" href="#id46">Power <em>et al.</em>, 2015</a>]</span>.
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code>, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="references.html#id17">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="references.html#id19">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="#id40">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="#id42">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
@@ -717,13 +726,13 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </div>
 </div>
 </div>
-<figure class="align-default" id="ohbm-qcfc-fig" style="width: 800px">
+<div class="figure align-default" id="ohbm-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/ohbm2022abstract_2_0.png" src="_images/ohbm2022abstract_2_0.png" />
+<img alt="_images/ohbm2022abstract_2_1.png" src="_images/ohbm2022abstract_2_1.png" />
 </div>
-</figure>
-</section>
-<section id="distance-dependent-effects-of-motion-on-connectivity">
+</div>
+</div>
+<div class="section" id="distance-dependent-effects-of-motion-on-connectivity">
 <h4>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">#</a></h4>
 <p>Consistent with the literature, <code class="docutils literal notranslate"><span class="pre">aroma</span></code> reduces the distance dependency of motion on connectivity.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
@@ -734,13 +743,13 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </div>
 </div>
 </div>
-<figure class="align-default" id="ohbm-dist-fig" style="width: 800px">
+<div class="figure align-default" id="ohbm-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/ohbm2022abstract_4_0.png" src="_images/ohbm2022abstract_4_0.png" />
+<img alt="_images/ohbm2022abstract_4_1.png" src="_images/ohbm2022abstract_4_1.png" />
 </div>
-</figure>
-</section>
-<section id="network-modularity">
+</div>
+</div>
+<div class="section" id="network-modularity">
 <h4>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">#</a></h4>
 <p>All strategies increased the overall network modularity compared to the <code class="docutils literal notranslate"><span class="pre">baseline</span></code>, with scrubbing based methods performing the best out of all.
 GSR-based strategies improved the network modularity compared to their conunterparts.
@@ -753,76 +762,81 @@ The correlation between modularity quality and motion for each denoising approac
 </div>
 </div>
 </div>
-<figure class="align-default" id="ohbm-network-fig" style="width: 800px">
+<div class="figure align-default" id="ohbm-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/ohbm2022abstract_6_0.png" src="_images/ohbm2022abstract_6_0.png" />
+<img alt="_images/ohbm2022abstract_6_1.png" src="_images/ohbm2022abstract_6_1.png" />
 </div>
-</figure>
-</section>
-</section>
-<section id="conclusions">
+</div>
+</div>
+</div>
+<div class="section" id="conclusions">
 <h3>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this headline">#</a></h3>
 <p>We replicated previous findings demonstrating the usefulness of standard denoising strategies (compcor, aroma, etc.).
-However, results involving global signal regression methods systematically contradict the literature<span id="id22">[<a class="reference internal" href="references.html#id17">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id23">[<a class="reference internal" href="references.html#id19">Parkes <em>et al.</em>, 2018</a>]</span>.
+However, results involving global signal regression methods systematically contradict the literature<span id="id22">[<a class="reference internal" href="#id40">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id23">[<a class="reference internal" href="#id42">Parkes <em>et al.</em>, 2018</a>]</span>.
 This evaluation is implemented in a fully reproducible jupyter book framework, and it can be applied to evaluate denoising strategies for future fMRIPrep release.
 This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.</p>
-</section>
-<section id="references">
-<h3>References<a class="headerlink" href="#references" title="Permalink to this headline">#</a></h3>
-<p id="id24"><dl class="citation">
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+References on this page<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text" id="id24"><dl class="citation">
 <dt class="label" id="id40"><span class="brackets">CWP+17</span><span class="fn-backref">(<a href="#id14">1</a>,<a href="#id20">2</a>,<a href="#id22">3</a>)</span></dt>
-<dd><p>Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. <em>NeuroImage</em>, 154(1):174–187, July 2017. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.03.020">doi:10.1016/j.neuroimage.2017.03.020</a>.</p>
+<dd><p class="sd-card-text">Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. <em>NeuroImage</em>, 154(1):174–187, July 2017. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.03.020">doi:10.1016/j.neuroimage.2017.03.020</a>.</p>
 </dd>
 <dt class="label" id="id36"><span class="brackets"><a class="fn-backref" href="#id11">EMG+20</a></span></dt>
-<dd><p>Oscar Esteban, Christopher J. Markiewicz, Mathias Goncalves, Elizabeth DuPre, James D. Kent, Rastko Ciric, Ross W. Blair, Russell A. Poldrack, and Krzysztof J. Gorgolewski. Fmriprep: a robust preprocessing pipeline for functional mri. June 2020. URL: <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">https://doi.org/10.5281/zenodo.3876458</a>, <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">doi:10.5281/zenodo.3876458</a>.</p>
+<dd><p class="sd-card-text">Oscar Esteban, Christopher J. Markiewicz, Mathias Goncalves, Elizabeth DuPre, James D. Kent, Rastko Ciric, Ross W. Blair, Russell A. Poldrack, and Krzysztof J. Gorgolewski. Fmriprep: a robust preprocessing pipeline for functional mri. June 2020. URL: <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">https://doi.org/10.5281/zenodo.3876458</a>, <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">doi:10.5281/zenodo.3876458</a>.</p>
 </dd>
 <dt class="label" id="id42"><span class="brackets">PFYF18</span><span class="fn-backref">(<a href="#id15">1</a>,<a href="#id21">2</a>,<a href="#id23">3</a>)</span></dt>
-<dd><p>Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. <em>NeuroImage</em>, 171:415–436, May 2018. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.12.073">doi:10.1016/j.neuroimage.2017.12.073</a>.</p>
+<dd><p class="sd-card-text">Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. <em>NeuroImage</em>, 171:415–436, May 2018. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.12.073">doi:10.1016/j.neuroimage.2017.12.073</a>.</p>
 </dd>
 <dt class="label" id="id38"><span class="brackets"><a class="fn-backref" href="#id17">PBS+12</a></span></dt>
-<dd><p>Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. <em>NeuroImage</em>, 59(3):2142–2154, 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.10.018">doi:10.1016/j.neuroimage.2011.10.018</a>.</p>
+<dd><p class="sd-card-text">Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. <em>NeuroImage</em>, 59(3):2142–2154, 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.10.018">doi:10.1016/j.neuroimage.2011.10.018</a>.</p>
 </dd>
-<dt class="label" id="id47"><span class="brackets">PSP15</span><span class="fn-backref">(<a href="#id16">1</a>,<a href="#id19">2</a>)</span></dt>
-<dd><p>Jonathan D. Power, Bradley L. Schlaggar, and Steven E. Petersen. Recent progress and outstanding issues in motion correction in resting state fMRI. <em>NeuroImage</em>, 105:536–551, January 2015. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2014.10.044">doi:10.1016/j.neuroimage.2014.10.044</a>.</p>
+<dt class="label" id="id46"><span class="brackets">PSP15</span><span class="fn-backref">(<a href="#id16">1</a>,<a href="#id19">2</a>)</span></dt>
+<dd><p class="sd-card-text">Jonathan D. Power, Bradley L. Schlaggar, and Steven E. Petersen. Recent progress and outstanding issues in motion correction in resting state fMRI. <em>NeuroImage</em>, 105:536–551, January 2015. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2014.10.044">doi:10.1016/j.neuroimage.2014.10.044</a>.</p>
 </dd>
-<dt class="label" id="id51"><span class="brackets"><a class="fn-backref" href="#id12">RLRNS18</a></span></dt>
-<dd><p>Hilary Richardson, Grace Lisandrelli, Alexa Riobueno-Naylor, and Rebecca Saxe. Development of the social brain from age three to twelve years. <em>Nature Communications</em>, 9(1):1027, March 2018. <a class="reference external" href="https://doi.org/10.1038/s41467-018-03399-2">doi:10.1038/s41467-018-03399-2</a>.</p>
+<dt class="label" id="id50"><span class="brackets"><a class="fn-backref" href="#id12">RLRNS18</a></span></dt>
+<dd><p class="sd-card-text">Hilary Richardson, Grace Lisandrelli, Alexa Riobueno-Naylor, and Rebecca Saxe. Development of the social brain from age three to twelve years. <em>Nature Communications</em>, 9(1):1027, March 2018. <a class="reference external" href="https://doi.org/10.1038/s41467-018-03399-2">doi:10.1038/s41467-018-03399-2</a>.</p>
 </dd>
-<dt class="label" id="id45"><span class="brackets"><a class="fn-backref" href="#id18">SWL+12</a></span></dt>
-<dd><p>Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. <em>NeuroImage</em>, 60(1):623–632, March 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.12.063">doi:10.1016/j.neuroimage.2011.12.063</a>.</p>
+<dt class="label" id="id44"><span class="brackets"><a class="fn-backref" href="#id18">SWL+12</a></span></dt>
+<dd><p class="sd-card-text">Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. <em>NeuroImage</em>, 60(1):623–632, March 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.12.063">doi:10.1016/j.neuroimage.2011.12.063</a>.</p>
 </dd>
-<dt class="label" id="id52"><span class="brackets"><a class="fn-backref" href="#id13">SKG+17</a></span></dt>
-<dd><p>Alexander Schaefer, Ru Kong, Evan M. Gordon, Timothy O. Laumann, Xi-Nian Zuo, Avram J. Holmes, Simon B. Eickhoff, and B.T. Thomas Yeo. Local-global parcellation of the human cerebral cortex from intrinsic functional connectivity mri. <em>Cerebral Cortex</em>, pages 1–20, 2017. <a class="reference external" href="https://doi.org/10.1093/cercor/bhx179">doi:10.1093/cercor/bhx179</a>.</p>
+<dt class="label" id="id51"><span class="brackets"><a class="fn-backref" href="#id13">SKG+17</a></span></dt>
+<dd><p class="sd-card-text">Alexander Schaefer, Ru Kong, Evan M. Gordon, Timothy O. Laumann, Xi-Nian Zuo, Avram J. Holmes, Simon B. Eickhoff, and B.T. Thomas Yeo. Local-global parcellation of the human cerebral cortex from intrinsic functional connectivity mri. <em>Cerebral Cortex</em>, pages 1–20, 2017. <a class="reference external" href="https://doi.org/10.1093/cercor/bhx179">doi:10.1093/cercor/bhx179</a>.</p>
 </dd>
 </dl>
 </p>
-<hr class="footnotes docutils" />
+</div>
+</details><hr class="footnotes docutils" />
 <dl class="footnote brackets">
-<dt class="label" id="id85"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id4">2</a>,<a href="#id9">3</a>)</span></dt>
+<dt class="label" id="id84"><span class="brackets">1</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id4">2</a>,<a href="#id9">3</a>)</span></dt>
 <dd><p>Centre de recherche de l’institut Universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada</p>
 </dd>
-<dt class="label" id="id86"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
+<dt class="label" id="id85"><span class="brackets"><a class="fn-backref" href="#id2">2</a></span></dt>
 <dd><p>Harvard University, MA, USA</p>
 </dd>
-<dt class="label" id="id87"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
+<dt class="label" id="id86"><span class="brackets"><a class="fn-backref" href="#id3">3</a></span></dt>
 <dd><p>Massachusetts Institute of Technology, MA, USA</p>
 </dd>
-<dt class="label" id="id88"><span class="brackets"><a class="fn-backref" href="#id5">4</a></span></dt>
+<dt class="label" id="id87"><span class="brackets"><a class="fn-backref" href="#id5">4</a></span></dt>
 <dd><p>Computer Science and Operations Research Department, Université de Montréal, Montréal, Québec, Canada</p>
 </dd>
-<dt class="label" id="id89"><span class="brackets">5</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id7">2</a>)</span></dt>
+<dt class="label" id="id88"><span class="brackets">5</span><span class="fn-backref">(<a href="#id6">1</a>,<a href="#id7">2</a>)</span></dt>
 <dd><p>Inria, CEA, Université Paris-Saclay, Paris, France</p>
 </dd>
-<dt class="label" id="id90"><span class="brackets"><a class="fn-backref" href="#id8">6</a></span></dt>
+<dt class="label" id="id89"><span class="brackets"><a class="fn-backref" href="#id8">6</a></span></dt>
 <dd><p>Department of Psychology, Stanford University, Stanford, United States</p>
 </dd>
-<dt class="label" id="id91"><span class="brackets"><a class="fn-backref" href="#id10">7</a></span></dt>
+<dt class="label" id="id90"><span class="brackets"><a class="fn-backref" href="#id10">7</a></span></dt>
 <dd><p>Psychology Department, Université de Montréal, Montréal, Québec, Canada</p>
 </dd>
 </dl>
-</section>
-</section>
-</section>
+</div>
+</div>
+</div>
 
     <script type="text/x-thebe-config">
     {
@@ -865,7 +879,7 @@ This software may also be useful for researchers to select the most suitable str
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Hao-Ting Wang<br/>
+    By Hao-Ting Wang, Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec<br/>
   
       &copy; Copyright 2022.<br/>
 </p>

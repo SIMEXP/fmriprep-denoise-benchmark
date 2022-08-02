@@ -4,8 +4,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Results &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
     
   <!-- Loaded before other Sphinx assets -->
@@ -49,7 +48,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="ds000030" href="ds000030.html" />
+    <link rel="next" title="ds000030" href="report_ds000030.html" />
     <link rel="prev" title="Methods" href="methods.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -106,13 +105,13 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="index.html">
-                    Overview
+                    Abstract
                 </a>
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading">
  <span class="caption-text">
-  Paper
+  Research report
  </span>
 </p>
 <ul class="current nav bd-sidenav">
@@ -137,7 +136,7 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
-    <a class="reference internal" href="ds000030.html">
+    <a class="reference internal" href="report_ds000030.html">
      ds000030
     </a>
    </li>
@@ -149,8 +148,8 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="references.html">
-   References
+  <a class="reference internal" href="contributions.html">
+   Contributions
   </a>
  </li>
 </ul>
@@ -452,9 +451,9 @@ title="Print to PDF"
                 
               <div>
                 
-  <section class="tex2jax_ignore mathjax_ignore" id="results">
+  <div class="tex2jax_ignore mathjax_ignore section" id="results">
 <h1>Results<a class="headerlink" href="#results" title="Permalink to this headline">#</a></h1>
-<section id="level-of-motion-in-samples-quitified-by-mean-framewise-displacement">
+<div class="section" id="level-of-motion-in-samples-quitified-by-mean-framewise-displacement">
 <h2>Level of motion in samples quitified by mean framewise displacement<a class="headerlink" href="#level-of-motion-in-samples-quitified-by-mean-framewise-displacement" title="Permalink to this headline">#</a></h2>
 <p>We will firstly characterise motion through the mean framewise displacement of each sample and the sub-groups.
 This report will serve as a reference point for understanding the remainder of the results.</p>
@@ -471,7 +470,7 @@ This report will serve as a reference point for understanding the remainder of t
 <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
-<span class="n">path_root</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">cwd</span><span class="p">()</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="s2">&quot;inputs&quot;</span>
+<span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">repo2data_path</span><span class="p">()</span>
 
 <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ds000228&quot;</span><span class="p">,</span> <span class="s2">&quot;ds000030&quot;</span><span class="p">]</span>
 
@@ -499,19 +498,17 @@ This report will serve as a reference point for understanding the remainder of t
 </div>
 </div>
 </div>
-<figure class="align-default" id="tbl-meanfd-fig" style="width: 800px">
+<div class="figure align-default" id="tbl-meanfd-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_1_0.png" src="_images/results_1_0.png" />
+<img alt="_images/results_1_1.png" src="_images/results_1_1.png" />
 </div>
-<figcaption>
-<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Mean framewise displacement of each dataset .
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Mean framewise displacement of each dataset.
 We found the pattern described in the literature:
 young subjects has higher motion comparing to adults,
 and differences in different psychiatric groups.</span><a class="headerlink" href="#tbl-meanfd-fig" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-</section>
-<section id="the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
+</div>
+</div>
+<div class="section" id="the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
 <h2>The loss in temporal degrees of freedom in different strategies<a class="headerlink" href="#the-loss-in-temporal-degrees-of-freedom-in-different-strategies" title="Permalink to this headline">#</a></h2>
 <p>The common analysis and denoising methods are based on linear reagression.
 Using more nuisance regressors can capture additional sources of noise-related variance in the data and thus improve denoising.
@@ -550,10 +547,10 @@ This is an important point to consider along side the denoising performance.</p>
 </div>
 </div>
 <p>When selecting denoising strategy, the loss in degrees of freedom <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code> used the least amount of regressors.
-In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="references.html#id17">2017</a>]</span>, the equivalent <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
+In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="#id20">2017</a>]</span>, the equivalent <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
 However, we did not obser this advantage in the two datasets shown in this benchmark.
 The reason potentially lies in the implementation of ICA-AROMA.
-ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="references.html#id51">Pruim <em>et al.</em>, 2015</a>]</span>.
+ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="#id53">Pruim <em>et al.</em>, 2015</a>]</span>.
 The two datasets used in the current benchmark both contained subjects with behaviours deviating from the healthy controls.
 <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is comprised of adult healthy controls and children.
 <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes healthy controls and subjects with three different psychiatric conditions.</p>
@@ -561,98 +558,106 @@ The two datasets used in the current benchmark both contained subjects with beha
 The <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">srubbing</span></code>-based strategy and <code class="docutils literal notranslate"><span class="pre">compcor6</span></code> are the strategy with a fixed number of degree of freedom loss.
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.</p>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="d7846342-9079-419c-a558-0a46b796f47d" name="e1f4a6cc-ac09-4320-af25-ad8c5258fbfd" type="radio">
-</input><label class="sd-tab-label" for="d7846342-9079-419c-a558-0a46b796f47d">
+<input checked="checked" id="45c0ff0b-f594-4f38-a1ce-62fe2444fd6f" name="7074f2b0-6863-4ddb-870f-81bec026b632" type="radio">
+</input><label class="sd-tab-label" for="45c0ff0b-f594-4f38-a1ce-62fe2444fd6f">
 Overview</label><div class="sd-tab-content docutils">
-<figure class="align-default" id="tbl-dof-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="_images/results_3_0.png" src="_images/results_3_0.png" />
-</div>
-<figcaption>
-<p><span class="caption-number">Fig. 2 </span><span class="caption-text">Loss in temporal degrees of freedom in full sample of each dataset.</span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
-</div>
-<input id="d9bb9567-0a14-4986-a180-9fd05e6044a2" name="e1f4a6cc-ac09-4320-af25-ad8c5258fbfd" type="radio">
-</input><label class="sd-tab-label" for="d9bb9567-0a14-4986-a180-9fd05e6044a2">
-ds000228</label><div class="sd-tab-content docutils">
-<figure class="align-default" id="tbl-dof-ds000228-fig" style="width: 800px">
+<div class="figure align-default" id="tbl-dof-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="_images/results_3_1.png" src="_images/results_3_1.png" />
 </div>
-<figcaption>
-<p><span class="caption-number">Fig. 3 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-dof-ds000228-fig" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Loss in temporal degrees of freedom in full sample of each dataset.</span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
 </div>
-<input id="2cee8591-9a9e-4976-9cdf-a000cd20112a" name="e1f4a6cc-ac09-4320-af25-ad8c5258fbfd" type="radio">
-</input><label class="sd-tab-label" for="2cee8591-9a9e-4976-9cdf-a000cd20112a">
-ds000030</label><div class="sd-tab-content docutils">
-<figure class="align-default" id="tbl-dof-ds000030-fig" style="width: 800px">
+</div>
+<input id="25e5698f-888b-4d47-b525-bd8678a1f2b9" name="7074f2b0-6863-4ddb-870f-81bec026b632" type="radio">
+</input><label class="sd-tab-label" for="25e5698f-888b-4d47-b525-bd8678a1f2b9">
+ds000228</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-dof-ds000228-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_3_2.png" src="_images/results_3_2.png" />
+<img alt="_images/results_3_3.png" src="_images/results_3_3.png" />
 </div>
-<figcaption>
-<p><span class="caption-number">Fig. 4 </span><span class="caption-text">Loss in temporal degrees of freedom break down by diagnostics.</span><a class="headerlink" href="#tbl-dof-ds000030-fig" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-dof-ds000228-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<input id="468a2fdd-d4ad-42d8-9588-f31ded0440c2" name="7074f2b0-6863-4ddb-870f-81bec026b632" type="radio">
+</input><label class="sd-tab-label" for="468a2fdd-d4ad-42d8-9588-f31ded0440c2">
+ds000030</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-dof-ds000030-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="_images/results_3_5.png" src="_images/results_3_5.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Loss in temporal degrees of freedom break down by diagnostics.</span><a class="headerlink" href="#tbl-dof-ds000030-fig" title="Permalink to this image">#</a></p>
+</div>
 </div>
 </div>
 <p>To compare the loss in number of volumes from scrubbing base strategy across datasets,
 we calculate the proportion of volume loss to number of volumes in a full scan.
 <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> includes child subjects and shows higher loss in volumes comparing to <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> with adult subjects only.
-In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, the trend of volume scrubbed comparing adults and children fits the observation shown in literature <span id="id3">[<a class="reference internal" href="references.html#id22">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
+In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, the trend of volume scrubbed comparing adults and children fits the observation shown in literature <span id="id3">[<a class="reference internal" href="#id24">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
 In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the schizophrania group shows the highest amount of volumes scrubbed, followed by the biolar group, and comparable results betwee the control group and ADHD group.
 With a stringent 0.2 mm threashold, groups with high motion will loose on average close to half of the volumes.</p>
 <!-- The figure below can be further trimmed down. -->
 <div class="sd-tab-set docutils">
-<input checked="checked" id="2864e648-6c76-4d6b-a738-f5d7e417b46d" name="7edd55d5-e9fe-4703-8da3-8ee6fd77ed51" type="radio">
-</input><label class="sd-tab-label" for="2864e648-6c76-4d6b-a738-f5d7e417b46d">
+<input checked="checked" id="52a73803-96fa-4f13-b1ef-3cf4d7df72a6" name="ba668169-1834-492d-bbdc-cc3356052276" type="radio">
+</input><label class="sd-tab-label" for="52a73803-96fa-4f13-b1ef-3cf4d7df72a6">
 Overview</label><div class="sd-tab-content docutils">
-<figure class="align-default" id="tbl-scrubbing-fig" style="width: 800px">
+<div class="figure align-default" id="tbl-scrubbing-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_3_4.png" src="_images/results_3_4.png" />
+<img alt="_images/results_3_7.png" src="_images/results_3_7.png" />
 </div>
-<figcaption>
-<p><span class="caption-number">Fig. 5 </span><span class="caption-text">Loss in number of volumes in full sample of each dataset.</span><a class="headerlink" href="#tbl-scrubbing-fig" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">Loss in number of volumes in full sample of each dataset.</span><a class="headerlink" href="#tbl-scrubbing-fig" title="Permalink to this image">#</a></p>
 </div>
-<input id="7e642907-d4d6-4deb-8ccf-9ba9a2788fbf" name="7edd55d5-e9fe-4703-8da3-8ee6fd77ed51" type="radio">
-</input><label class="sd-tab-label" for="7e642907-d4d6-4deb-8ccf-9ba9a2788fbf">
+</div>
+<input id="0f155bdb-beb8-43a0-97e1-77f13ab3bf23" name="ba668169-1834-492d-bbdc-cc3356052276" type="radio">
+</input><label class="sd-tab-label" for="0f155bdb-beb8-43a0-97e1-77f13ab3bf23">
 ds000228</label><div class="sd-tab-content docutils">
-<figure class="align-default" id="tbl-scrubbing-ds000228-fig" style="width: 800px">
+<div class="figure align-default" id="tbl-scrubbing-ds000228-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_3_6.png" src="_images/results_3_6.png" />
+<img alt="_images/results_3_10.png" src="_images/results_3_10.png" />
 </div>
-<figcaption>
-<p><span class="caption-number">Fig. 6 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-scrubbing-ds000228-fig" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-scrubbing-ds000228-fig" title="Permalink to this image">#</a></p>
 </div>
-<input id="3377d1f9-1478-487f-acf7-76b710169c48" name="7edd55d5-e9fe-4703-8da3-8ee6fd77ed51" type="radio">
-</input><label class="sd-tab-label" for="3377d1f9-1478-487f-acf7-76b710169c48">
+</div>
+<input id="a894bff8-ae2c-4742-b181-c005525f1fa0" name="ba668169-1834-492d-bbdc-cc3356052276" type="radio">
+</input><label class="sd-tab-label" for="a894bff8-ae2c-4742-b181-c005525f1fa0">
 ds000030</label><div class="sd-tab-content docutils">
-<figure class="align-default" id="tbl-scrubbing-ds000030-fig" style="width: 800px">
+<div class="figure align-default" id="tbl-scrubbing-ds000030-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="_images/results_3_8.png" src="_images/results_3_8.png" />
+<img alt="_images/results_3_13.png" src="_images/results_3_13.png" />
 </div>
-<figcaption>
-<p><span class="caption-number">Fig. 7 </span><span class="caption-text">Loss in number of volumes break down by diagnostics.</span><a class="headerlink" href="#tbl-scrubbing-ds000030-fig" title="Permalink to this image">#</a></p>
-</figcaption>
-</figure>
+<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Loss in number of volumes break down by diagnostics.</span><a class="headerlink" href="#tbl-scrubbing-ds000030-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-</section>
-<section id="comparisons-on-the-impacts-of-strategies-on-connectomes">
+</div>
+</div>
+<div class="section" id="comparisons-on-the-impacts-of-strategies-on-connectomes">
 <h2>Comparisons on the impacts of strategies on connectomes<a class="headerlink" href="#comparisons-on-the-impacts-of-strategies-on-connectomes" title="Permalink to this headline">#</a></h2>
 <p>The trend of benchmaker metrics does not differ amongst the choice of atlases.
 However, we can see variance within the parcellation scheme MIST and DiFuMo.
 The variance comes from different resolution of the same parcellation scheme, epecially with low parcel counts.</p>
-</section>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+References on this page<div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text" id="id4"><dl class="citation">
+<dt class="label" id="id20"><span class="brackets"><a class="fn-backref" href="#id1">CWP+17</a></span></dt>
+<dd><p class="sd-card-text">Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. <em>NeuroImage</em>, 154(1):174–187, July 2017. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2017.03.020">doi:10.1016/j.neuroimage.2017.03.020</a>.</p>
+</dd>
+<dt class="label" id="id53"><span class="brackets"><a class="fn-backref" href="#id2">PMvR+15</a></span></dt>
+<dd><p class="sd-card-text">Raimon H. R. Pruim, Maarten Mennes, Daan van Rooij, Alberto Llera, Jan K. Buitelaar, and Christian F. Beckmann. Ica-AROMA: a robust ICA-based strategy for removing motion artifacts from fmri data. <em>NeuroImage</em>, 112(Supplement C):267–277, 2015. URL: <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S1053811915001822">http://www.sciencedirect.com/science/article/pii/S1053811915001822</a>, <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2015.02.064">doi:10.1016/j.neuroimage.2015.02.064</a>.</p>
+</dd>
+<dt class="label" id="id24"><span class="brackets"><a class="fn-backref" href="#id3">SWL+12</a></span></dt>
+<dd><p class="sd-card-text">Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. <em>NeuroImage</em>, 60(1):623–632, March 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.12.063">doi:10.1016/j.neuroimage.2011.12.063</a>.</p>
+</dd>
+</dl>
+</p>
+</div>
+</details></div>
 <div class="toctree-wrapper compound">
 </div>
-</section>
+</div>
 
     <script type="text/x-thebe-config">
     {
@@ -688,7 +693,7 @@ The variance comes from different resolution of the same parcellation scheme, ep
             <p class="prev-next-title">Methods</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="ds000030.html" title="next page">
+    <a class='right-next' id="next-link" href="report_ds000030.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
         <p class="prev-next-title">ds000030</p>
@@ -702,7 +707,7 @@ The variance comes from different resolution of the same parcellation scheme, ep
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Hao-Ting Wang<br/>
+    By Hao-Ting Wang, Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec<br/>
   
       &copy; Copyright 2022.<br/>
 </p>

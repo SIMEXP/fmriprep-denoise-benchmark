@@ -20,19 +20,31 @@ nbclient.exceptions.CellExecutionError: An error occurred while executing the fo
 import warnings
 warnings.filterwarnings("ignore")
 import pandas as pd
+from myst_nb import glue
+
 from fmriprep_denoise.visualization import tables
-desc = tabels.lazy_report('ds000228')
-desc
+desc = tables.lazy_demographic('ds000228')
+desc = desc.set_table_attributes('style="font-size: 10px"')
+
+glue("ds000228_desc", desc)
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mNameError[0m                                 Traceback (most recent call last)
-[0;32m/tmp/ipykernel_126346/3269205586.py[0m in [0;36m<module>[0;34m[0m
-[1;32m      3[0m [0;32mimport[0m [0mpandas[0m [0;32mas[0m [0mpd[0m[0;34m[0m[0;34m[0m[0m
-[1;32m      4[0m [0;32mfrom[0m [0mfmriprep_denoise[0m[0;34m.[0m[0mvisualization[0m [0;32mimport[0m [0mtables[0m[0;34m[0m[0;34m[0m[0m
-[0;32m----> 5[0;31m [0mdesc[0m [0;34m=[0m [0mtabels[0m[0;34m.[0m[0mlazy_report[0m[0;34m([0m[0;34m'ds000228'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m      6[0m [0mdesc[0m[0;34m[0m[0;34m[0m[0m
+[0;31mAttributeError[0m                            Traceback (most recent call last)
+[0;32m/tmp/ipykernel_50957/1108816109.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      6[0m [0;32mfrom[0m [0mfmriprep_denoise[0m[0;34m.[0m[0mvisualization[0m [0;32mimport[0m [0mtables[0m[0;34m[0m[0;34m[0m[0m
+[1;32m      7[0m [0mdesc[0m [0;34m=[0m [0mtables[0m[0;34m.[0m[0mlazy_demographic[0m[0;34m([0m[0;34m'ds000228'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;32m----> 8[0;31m [0mdesc[0m [0;34m=[0m [0mdesc[0m[0;34m.[0m[0mset_table_attributes[0m[0;34m([0m[0;34m'style="font-size: 10px"'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      9[0m [0;34m[0m[0m
+[1;32m     10[0m [0mglue[0m[0;34m([0m[0;34m"ds000228_desc"[0m[0;34m,[0m [0mdesc[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 
-[0;31mNameError[0m: name 'tabels' is not defined
-NameError: name 'tabels' is not defined
+[0;32m~/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/pandas/core/generic.py[0m in [0;36m__getattr__[0;34m(self, name)[0m
+[1;32m   5485[0m         ):
+[1;32m   5486[0m             [0;32mreturn[0m [0mself[0m[0;34m[[0m[0mname[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 5487[0;31m         [0;32mreturn[0m [0mobject[0m[0;34m.[0m[0m__getattribute__[0m[0;34m([0m[0mself[0m[0;34m,[0m [0mname[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   5488[0m [0;34m[0m[0m
+[1;32m   5489[0m     [0;32mdef[0m [0m__setattr__[0m[0;34m([0m[0mself[0m[0;34m,[0m [0mname[0m[0;34m:[0m [0mstr[0m[0;34m,[0m [0mvalue[0m[0;34m)[0m [0;34m->[0m [0;32mNone[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mAttributeError[0m: 'DataFrame' object has no attribute 'set_table_attributes'
+AttributeError: 'DataFrame' object has no attribute 'set_table_attributes'
 
