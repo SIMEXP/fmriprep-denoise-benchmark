@@ -1,13 +1,11 @@
 ---
 jupytext:
-  formats: ipynb,md:myst
+  formats: md:myst
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.5
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -19,7 +17,7 @@ kernelspec:
 We will firstly characterise motion through the mean framewise displacement of each sample and the sub-groups. 
 This report will serve as a reference point for understanding the remainder of the results.
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: [hide-input, remove-output]
 
 import warnings
@@ -76,7 +74,7 @@ Using more nuisance regressors can capture additional sources of noise-related v
 However, this comes at the expense of a loss of temporal degrees of freedom for statistical inference in furthe analysies.
 This is an important point to consider along side the denoising performance.
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: [hide-input, remove-output]
 import warnings
 warnings.filterwarnings("ignore")

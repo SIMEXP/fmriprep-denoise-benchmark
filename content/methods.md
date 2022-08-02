@@ -1,13 +1,11 @@
 ---
 jupytext:
-  formats: ipynb,md:myst
+  formats: md:myst
   text_representation:
     extension: .md
     format_name: myst
-    format_version: 0.13
-    jupytext_version: 1.11.5
 kernelspec:
-  display_name: Python 3 (ipykernel)
+  display_name: Python 3
   language: python
   name: python3
 ---
@@ -27,7 +25,7 @@ and 122 children subjects
 For more information for the dataset please refers to {cite:t}`richardson_development_2018`.
 
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: [hide-input]
 
 import warnings
@@ -54,7 +52,7 @@ The demographic information per condition is in the following table.
 |       Age Range |      21--50 |          21--50 |        22--49 |           21--50 |      21--50 |
 
 
-```{code-cell} ipython3
+```{code-cell} python3
 :tags: [hide-input]
 
 desc = tables.lazy_demographic('ds000030')
