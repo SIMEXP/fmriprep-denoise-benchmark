@@ -15,4 +15,4 @@ templateflow==0.7.2
 jupyter-book==0.13.0
 jupytext==1.14.1
 repo2data==2.7.0
--e ..
+-e .
