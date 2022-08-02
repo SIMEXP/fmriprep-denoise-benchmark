@@ -58,3 +58,11 @@ Surface based atlas provides less variance across different resolutions.
 The current software will be maintained along with the release of fMRIprep.
 The code base used in this paper provides a great foundation for generating reports on dataset for post-fMRIPrep processing. 
 The reports on these two dataset will be able to regenerate the for the future release of fMRIprep.
+
+
+:::{dropdown} References on this page
+
+```{bibliography}
+:filter: docname in docnames
+```
+:::

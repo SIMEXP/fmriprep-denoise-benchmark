@@ -12,17 +12,10 @@ kernelspec:
 
 # Results
 
-## Level of motion in samples quitified by mean framewise displacement
-
-We will firstly characterise motion through the mean framewise displacement of each sample and the sub-groups. 
-This report will serve as a reference point for understanding the remainder of the results.
-
 ```{code-cell} python3
 :tags: [hide-input, remove-output]
-
 import warnings
 warnings.filterwarnings("ignore")
-
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -32,18 +25,88 @@ from fmriprep_denoise.visualization import utils
 from myst_nb import glue
 
 path_root = utils.repo2data_path()
+```
 
-datasets = ["ds000228", "ds000030"]
+## Level of motion in samples quitified by mean framewise displacement
+
+```{code-cell}python3
+:tags: [hide-input, remove-output]
+
+from statsmodels.stats.weightstats import ttest_ind
+
+for_plotting = {}
+
+dataset = "ds000228"
+file = f"dataset-{dataset}_desc-movement_phenotype.tsv"
+path_fd = path_root / f"dataset-{dataset}" / file
+data = pd.read_csv(path_fd, header=[0], index_col=0, sep="\t")
+_, participants_groups, _ = utils._get_participants_groups(dataset)
+participants_groups.name = 'Groups'
+data = pd.concat([data, participants_groups], axis=1, join='inner')
+cat1 = data[data['Groups']=='child']
+cat2 = data[data['Groups']=='adult']
+t_stats, pval, df = ttest_ind(cat1['mean_framewise_displacement'], 
+                              cat2['mean_framewise_displacement'],
+                              usevar='unequal')
+glue(f"{dataset}_t", t_stats)
+glue(f"{dataset}_p", pval)
+glue(f"{dataset}_df", df)
+glue(f"{dataset}_child_mean", cat1['mean_framewise_displacement'].mean())
+glue(f"{dataset}_child_sd", cat1['mean_framewise_displacement'].std())
+glue(f"{dataset}_adult_mean", cat2['mean_framewise_displacement'].mean())
+glue(f"{dataset}_adult_sd", cat2['mean_framewise_displacement'].std())
+
+for_plotting.update({dataset: data})
+```
+
+We will firstly characterise motion through the mean framewise displacement of each sample and the sub-groups. 
+This report will serve as a reference point for understanding the remainder of the results.
+There was a significant difference in motion during the scan captured by mean framewise displacement between the 
+child (M = {glue:text}`ds000228_child_mean:.2f`, SD = {glue:text}`ds000228_child_sd:.2f`) 
+and adult (M = {glue:text}`ds000228_adult_mean:.2f`, SD = {glue:text}`ds000228_adult_sd:.2f`) sample, 
+t({glue:text}`ds000228_df:.2f`) = {glue:text}`ds000228_t:.2f`, p = {glue:text}`ds000228_p:.3f`,
+This is consistent with the existing literature.
+
+
+```{code-cell}python3
+:tags: [hide-input, remove-output]
+
+dataset = "ds000030"
+file = f"dataset-{dataset}_desc-movement_phenotype.tsv"
+path_fd = path_root / f"dataset-{dataset}" / file
+data = pd.read_csv(path_fd, header=[0], index_col=0, sep="\t")
+_, participants_groups, groups = utils._get_participants_groups(dataset)
+participants_groups.name = 'Groups'
+data = pd.concat([data['mean_framewise_displacement'], participants_groups], axis=1, join='inner')
+baseline = data[data['Groups']=='CONTROL']
+for group in groups:
+    compare = data[data['Groups']==group]
+    glue(f"{dataset}_{group}_mean", compare['mean_framewise_displacement'].mean())
+    glue(f"{dataset}_{group}_sd", compare['mean_framewise_displacement'].std())
+
+    if group != 'CONTROL':
+        t_stats, pval, df = ttest_ind(baseline['mean_framewise_displacement'], 
+                                      compare['mean_framewise_displacement'],
+                                      usevar='unequal')
+        glue(f"{dataset}_t_{group}", t_stats)
+        glue(f"{dataset}_p_{group}", pval)
+        glue(f"{dataset}_df_{group}", df)
+
+for_plotting.update({dataset: data})
+```
+In `ds000030`, the only patient group shows a difference comparing to the 
+control (M = {glue:text}`ds000030_CONTROL_mean:.2f`, SD = {glue:text}`ds000030_CONTROL_sd:.2f`)
+is the schizophrania group (M = {glue:text}`ds000030_SCHZ_mean:.2f`, SD = {glue:text}`ds000030_SCHZ_sd:.2f`; t({glue:text}`ds000030_df_SCHZ:.2f`) = {glue:text}`ds000030_t_SCHZ:.2f`, p = {glue:text}`ds000030_p_SCHZ:.3f`). 
+There was no difference between the control and ADHD group(M = {glue:text}`ds000030_ADHD_mean:.2f`, SD = {glue:text}`ds000030_ADHD_sd:.2f`; t({glue:text}`ds000030_df_ADHD:.2f`) = {glue:text}`ds000030_t_ADHD:.2f`, p = {glue:text}`ds000030_p_ADHD:.3f`), 
+or the bipolar group (M = {glue:text}`ds000030_BIPOLAR_mean:.2f`, SD = {glue:text}`ds000030_BIPOLAR_sd:.2f`; t({glue:text}`ds000030_df_BIPOLAR:.2f`) = {glue:text}`ds000030_t_BIPOLAR:.2f`, p = {glue:text}`ds000030_p_BIPOLAR:.3f`).
+
+```{code-cell} python3
+:tags: [hide-input, remove-output]
 
 fig = plt.figure(figsize=(7, 5))
 axs = fig.subplots(1, 2, sharey=True)
-for dataset, ax in zip(datasets, axs):
-    file = f"dataset-{dataset}_desc-movement_phenotype.tsv"
-    path_fd = path_root / f"dataset-{dataset}" / file
-    df = pd.read_csv(path_fd, header=[0], index_col=0, sep="\t")
-    _, participants_groups, _ = utils._get_participants_groups(dataset)
-    participants_groups.name = 'Groups'
-    df = pd.concat([df, participants_groups], axis=1, join='inner')
+for dataset, ax in zip(for_plotting, axs):
+    df = for_plotting[dataset]
     mean_fd = df['mean_framewise_displacement'].mean()
     sd_fd = df['mean_framewise_displacement'].std()
     df = df.rename(columns={'mean_framewise_displacement': "Mean Framewise Displacement (mm)"})
@@ -66,6 +129,7 @@ We found the pattern described in the literature:
 young subjects has higher motion comparing to adults, 
 and differences in different psychiatric groups.  
 ```
+
 
 ## The loss in temporal degrees of freedom in different strategies
 
@@ -196,3 +260,10 @@ Loss in number of volumes break down by diagnostics.
 The trend of benchmaker metrics does not differ amongst the choice of atlases.
 However, we can see variance within the parcellation scheme MIST and DiFuMo.
 The variance comes from different resolution of the same parcellation scheme, epecially with low parcel counts.
+
+:::{dropdown} References on this page
+
+```{bibliography}
+:filter: docname in docnames
+```
+:::

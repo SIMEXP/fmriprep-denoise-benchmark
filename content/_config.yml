@@ -2,7 +2,8 @@
 # Learn more at https://jupyterbook.org/customize/config.html
 
 title: Benchmark denoising strategies on fMRIPrep outputs
-author: Hao-Ting Wang
+author: Hao-Ting Wang, Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec
+copyright: "2022"
 logo: logo.png
 only_build_toc_files: true
 

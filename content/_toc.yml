@@ -4,17 +4,21 @@
 format: jb-book
 root: index.md
 parts:
-  - caption: Paper
+  - caption: Research report
     chapters:
-    - file: introductions.md
-    - file: methods.md
-    - file: results.md
+    - file: research_report/introductions.md
+    - file: research_report/methods.md
+    - file: research_report/results.md
       sections:
-      # - file: report_ds000228.md
-      - file: report_ds000030.md
-    - file: discussions.md
-    - file: references.md
+      # - file: research_report/report_ds000228.md
+      - file: research_report/report_ds000030.md
+    - file: research_report/discussions.md
+    - file: research_report/contributions.md
   - caption: Appendices and supplemental material
     chapters:
-    - file: CITATION.md
-    - file: ohbm2022abstract.md
+    - file: supplementary_materials/CITATION.md
+    - file: supplementary_materials/ohbm2022abstract.md
+    - file: supplementary_materials/walkthrough.md
+      sections:
+      - file: supplementary_materials/setup.md
+      - file: supplementary_materials/build_book.md

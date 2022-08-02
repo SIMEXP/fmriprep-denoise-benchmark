@@ -264,3 +264,9 @@ In this atlas there's only one parcellation scheme.
 
 ````
 `````
+:::{dropdown} References on this page
+
+```{bibliography}
+:filter: docname in docnames
+```
+:::

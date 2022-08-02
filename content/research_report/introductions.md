@@ -88,3 +88,10 @@ We selected two datasets from OpenNeuro,
 one with adult and child samples, and the other with psychiatric conditions.
 The benchmark will assess the differences in strategies, as well as the impact on different type of samples.
 The research will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.  
+
+:::{dropdown} References on this page
+
+```{bibliography}
+:filter: docname in docnames
+```
+:::

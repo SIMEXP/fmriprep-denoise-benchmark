@@ -37,6 +37,7 @@ def repo2data_path():
     data_path = repo2data.install()
     return Path(data_path[0])
 
+path_root = repo2data_path()
 
 def _get_palette(order):
     return [palette_dict[item] for item in order]
@@ -48,8 +49,8 @@ def _get_participants_groups(dataset):
     group_info_column = "Child_Adult" if dataset == "ds000228" else "diagnosis"
 
     # read the degrees of freedom info as reference for subjects
-    path_dof = repo2data_path() / "metrics" / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
-    path_participants = repo2data_path() / dataset / 'participants.tsv'
+    path_dof = path_root / "metrics" / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+    path_participants = path_root / dataset / 'participants.tsv'
 
     confounds_phenotype = pd.read_csv(path_dof, header=[0, 1], index_col=0, sep='\t')
     subjects = confounds_phenotype.index
@@ -62,7 +63,7 @@ def _get_participants_groups(dataset):
 def _get_connectome_metric_paths(dataset, metric, atlas_name, dimension):
     atlas_name = "*" if isinstance(atlas_name, type(None)) else atlas_name
     dimension = "*" if isinstance(atlas_name, type(None)) or isinstance(dimension, type(None)) else dimension
-    files = list(repo2data_path().glob(f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_{metric}.tsv"))
+    files = list(path_root.glob(f"metrics/dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_{metric}.tsv"))
     if not files:
         raise FileNotFoundError("No file matching the supplied arguments:"
                                 f"atlas_name={atlas_name}, "

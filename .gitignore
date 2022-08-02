@@ -1,7 +1,6 @@
 # input 
 inputs/*
 tmp/
-results/*.png
 
 # HCP
 logs/

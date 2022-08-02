@@ -27,6 +27,21 @@ dimension = 400
 
 # OHBM 2022 abstract - submitted text
 
+The preliminary results will be presented at OHBM 2022 as a poster. 
+Please find poster number `WTh570`.
+
+Find the presenter at the 
+[virtual poster session](https://event.fourwaves.com/ohbm-2022/abstracts/d49d130b-7f83-4c87-92f4-e1a8e319502b)
+on __Wednesday, June 8, 2022, 8:30 PM GMT + 1__.
+
+At Glasgow, please contact the presenter on [Twitter](https://twitter.com/HaoTingW713) to schedule a time to chat,
+or come to see the presenter on __Wednesday, June 22, 2022, 12:45 PM__ at the poster hall.
+
+```{image} ../images/ohbm2022_abstract_head.png
+:alt: poster
+:align: center
+```
+
 ## Impact of confound removal strategies on functional connectivity generated from fMRIPrep outputs
 
 H-T Wang[^1], S L Meisler[^2][^3], H Shamarke, F Paugam[^1][^4], N Gensollen[^5], B Thirion[^5], C Markiewicz[^6], P Bellec[^1][^7]
@@ -143,7 +158,9 @@ This evaluation is implemented in a fully reproducible jupyter book framework, a
 This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.                 
 
 
-### References
+:::{dropdown} References on this page
+
 ```{bibliography}
 :filter: docname in docnames
 ```
+:::
