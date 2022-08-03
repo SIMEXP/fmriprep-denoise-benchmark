@@ -46,6 +46,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="ds000030" href="report_ds000030.html" />
@@ -478,16 +480,15 @@ title="Print to PDF"
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">utils</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">utils</span><span class="p">,</span> <span class="n">figures</span>
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
-
-<span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">repo2data_path</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
@@ -500,71 +501,61 @@ title="Print to PDF"
 
 <span class="n">for_plotting</span> <span class="o">=</span> <span class="p">{}</span>
 
-<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000228&quot;</span>
-<span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_desc-movement_phenotype.tsv&quot;</span>
-<span class="n">path_fd</span> <span class="o">=</span> <span class="n">path_root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">/</span> <span class="n">file</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_fd</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">participants_groups</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">_get_participants_groups</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">participants_groups</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Groups&#39;</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">,</span> <span class="n">participants_groups</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
-<span class="n">cat1</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Groups&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;child&#39;</span><span class="p">]</span>
-<span class="n">cat2</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Groups&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;adult&#39;</span><span class="p">]</span>
-<span class="n">t_stats</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">cat1</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">],</span> 
-                              <span class="n">cat2</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">],</span>
-                              <span class="n">usevar</span><span class="o">=</span><span class="s1">&#39;unequal&#39;</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_t&quot;</span><span class="p">,</span> <span class="n">t_stats</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_p&quot;</span><span class="p">,</span> <span class="n">pval</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_df&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_child_mean&quot;</span><span class="p">,</span> <span class="n">cat1</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_child_sd&quot;</span><span class="p">,</span> <span class="n">cat1</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_adult_mean&quot;</span><span class="p">,</span> <span class="n">cat2</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_adult_sd&quot;</span><span class="p">,</span> <span class="n">cat2</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-
-<span class="n">for_plotting</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">dataset</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
+<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">]</span>
+<span class="n">baseline_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adult&#39;</span><span class="p">,</span> <span class="s1">&#39;CONTROL&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">baseline_group</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">baseline_groups</span><span class="p">):</span>
+    <span class="n">data</span><span class="p">,</span> <span class="n">groups</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">load_meanfd_groups</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
+    <span class="n">baseline</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Groups&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">baseline_group</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="n">compare</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Groups&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">group</span><span class="p">]</span>
+        <span class="n">glue</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">_mean&#39;</span><span class="p">,</span>
+            <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">glue</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">_sd&#39;</span><span class="p">,</span>
+            <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">(),</span>
+        <span class="p">)</span>
+        <span class="n">glue</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">_n&#39;</span><span class="p">,</span>
+            <span class="n">compare</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">group</span> <span class="o">!=</span> <span class="n">baseline_group</span><span class="p">:</span>
+            <span class="n">t_stats</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span>
+                <span class="n">baseline</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">],</span>
+                <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">],</span>
+                <span class="n">usevar</span><span class="o">=</span><span class="s1">&#39;unequal&#39;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_t_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">t_stats</span><span class="p">)</span>
+            <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_p_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">pval</span><span class="p">)</span>
+            <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_df_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+    <span class="n">for_plotting</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">dataset</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
 </pre></div>
 </div>
 </div>
 </div>
 <p>We will firstly characterise motion through the mean framewise displacement of each sample and the sub-groups.
 This report will serve as a reference point for understanding the remainder of the results.
-There was a significant difference in motion during the scan captured by mean framewise displacement between the
-child (M = <span class="pasted-text">0.37</span>, SD = <span class="pasted-text">0.29</span>)
-and adult (M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.09</span>) sample,
-t(<span class="pasted-text">148.75</span>) = <span class="pasted-text">5.99</span>, p = <span class="pasted-text">0.000</span>,
-This is consistent with the existing literature.</p>
-<div class="cell tag_hide-input tag_remove-output docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000030&quot;</span>
-<span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_desc-movement_phenotype.tsv&quot;</span>
-<span class="n">path_fd</span> <span class="o">=</span> <span class="n">path_root</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">&quot;</span> <span class="o">/</span> <span class="n">file</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_fd</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">index_col</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="n">_</span><span class="p">,</span> <span class="n">participants_groups</span><span class="p">,</span> <span class="n">groups</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">_get_participants_groups</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span>
-<span class="n">participants_groups</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s1">&#39;Groups&#39;</span>
-<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">([</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">],</span> <span class="n">participants_groups</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">join</span><span class="o">=</span><span class="s1">&#39;inner&#39;</span><span class="p">)</span>
-<span class="n">baseline</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Groups&#39;</span><span class="p">]</span><span class="o">==</span><span class="s1">&#39;CONTROL&#39;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
-    <span class="n">compare</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;Groups&#39;</span><span class="p">]</span><span class="o">==</span><span class="n">group</span><span class="p">]</span>
-    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">_mean&quot;</span><span class="p">,</span> <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">())</span>
-    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">_sd&quot;</span><span class="p">,</span> <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">())</span>
-
-    <span class="k">if</span> <span class="n">group</span> <span class="o">!=</span> <span class="s1">&#39;CONTROL&#39;</span><span class="p">:</span>
-        <span class="n">t_stats</span><span class="p">,</span> <span class="n">pval</span><span class="p">,</span> <span class="n">df</span> <span class="o">=</span> <span class="n">ttest_ind</span><span class="p">(</span><span class="n">baseline</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">],</span> 
-                                      <span class="n">compare</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">],</span>
-                                      <span class="n">usevar</span><span class="o">=</span><span class="s1">&#39;unequal&#39;</span><span class="p">)</span>
-        <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_t_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">t_stats</span><span class="p">)</span>
-        <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_p_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">pval</span><span class="p">)</span>
-        <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_df_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
-
-<span class="n">for_plotting</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">dataset</span><span class="p">:</span> <span class="n">data</span><span class="p">})</span>
-</pre></div>
-</div>
-</div>
-</div>
-<p>In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the only patient group shows a difference comparing to the
-control (M = <span class="pasted-text">0.17</span>, SD = <span class="pasted-text">0.14</span>)
-is the schizophrania group (M = <span class="pasted-text">0.26</span>, SD = <span class="pasted-text">0.19</span>; t(<span class="pasted-text">69.42</span>) = <span class="pasted-text">-3.22</span>, p = <span class="pasted-text">0.002</span>).
-There was no difference between the control and ADHD group(M = <span class="pasted-text">0.15</span>, SD = <span class="pasted-text">0.09</span>; t(<span class="pasted-text">98.26</span>) = <span class="pasted-text">0.97</span>, p = <span class="pasted-text">0.334</span>),
-or the bipolar group (M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.11</span>; t(<span class="pasted-text">106.73</span>) = <span class="pasted-text">-1.10</span>, p = <span class="pasted-text">0.272</span>).</p>
+In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, there was a significant difference in motion during the scan captured by mean framewise displacement
+between the child
+(M = <span class="pasted-text">0.37</span>, SD = <span class="pasted-text">0.29</span>, n = <span class="pasted-text">122</span>)
+and adult sample
+(M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.09</span>, n = <span class="pasted-text">33</span>,
+t(<span class="pasted-text">148.75</span>) = <span class="pasted-text">-5.99</span>, p = <span class="pasted-text">0.000</span>,
+This is consistent with the existing literature.
+In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the only patient group shows a difference comparing to the
+control
+(M = <span class="pasted-text">0.17</span>, SD = <span class="pasted-text">0.14</span>, n = <span class="pasted-text">120</span>)
+is the schizophrania group
+(M = <span class="pasted-text">0.26</span>, SD = <span class="pasted-text">0.19</span>, n = <span class="pasted-text">50</span>;
+t(<span class="pasted-text">69.42</span>) = <span class="pasted-text">-3.22</span>, p = <span class="pasted-text">0.002</span>).
+There was no difference between the control and ADHD group
+(M = <span class="pasted-text">0.15</span>, SD = <span class="pasted-text">0.09</span>, n = <span class="pasted-text">40</span>;
+t(<span class="pasted-text">98.26</span>) = <span class="pasted-text">0.97</span>, p = <span class="pasted-text">0.334</span>),
+or the bipolar group
+(M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.11</span>, n = <span class="pasted-text">49</span>;
+t(<span class="pasted-text">106.73</span>) = <span class="pasted-text">-1.10</span>, p = <span class="pasted-text">0.272</span>).
+In conclusion, adult samples has lower mean framewise displacement than a youth sample.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
@@ -573,148 +564,102 @@ or the bipolar group (M = <span class="pasted-text">0.19</span>, SD = <span clas
     <span class="n">df</span> <span class="o">=</span> <span class="n">for_plotting</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
     <span class="n">mean_fd</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
     <span class="n">sd_fd</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
-    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">:</span> <span class="s2">&quot;Mean Framewise Displacement (mm)&quot;</span><span class="p">})</span>
-    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Mean Framewise Displacement (mm)&#39;</span><span class="p">,</span>
-                <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Groups&#39;</span><span class="p">,</span>
-                <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
-    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="se">\n</span><span class="s2">Mean</span><span class="se">\u00B1</span><span class="s2">SD=</span><span class="si">{</span><span class="n">mean_fd</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\u00B1</span><span class="si">{</span><span class="n">sd_fd</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s2">$N=</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">{</span>
+            <span class="s1">&#39;mean_framewise_displacement&#39;</span><span class="p">:</span> <span class="s1">&#39;Mean Framewise Displacement (mm)&#39;</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Mean Framewise Displacement (mm)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="se">\n</span><span class="s1">Mean</span><span class="se">\u00B1</span><span class="s1">SD=</span><span class="si">{</span><span class="n">mean_fd</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="se">\u00B1</span><span class="si">{</span><span class="n">sd_fd</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s1">$N=</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">$&#39;</span>
+    <span class="p">)</span>
 <span class="c1"># fig.suptitle(&quot;Mean framewise displacement per sub-sample&quot;)</span>
 
-<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;meanFD-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s1">&#39;meanFD-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="figure align-default" id="tbl-meanfd-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="../_images/results_7_0.png" src="../_images/results_7_0.png" />
+<img alt="../_images/results_5_0.png" src="../_images/results_5_0.png" />
 </div>
 <p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Mean framewise displacement of each dataset.
-We found the pattern described in the literature:
-young subjects has higher motion comparing to adults,
-and differences in different psychiatric groups.</span><a class="headerlink" href="#tbl-meanfd-fig" title="Permalink to this image">#</a></p>
+We found young subjects has higher motion comparing to adults,
+which is consistent with the pattern described in the literature.
+Amongst psychiatric conditiontions, only the schizophrania group shows difference to the control group.</span><a class="headerlink" href="#tbl-meanfd-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
 <div class="section" id="the-loss-in-temporal-degrees-of-freedom-in-different-strategies">
 <h2>The loss in temporal degrees of freedom in different strategies<a class="headerlink" href="#the-loss-in-temporal-degrees-of-freedom-in-different-strategies" title="Permalink to this headline">#</a></h2>
 <p>The common analysis and denoising methods are based on linear reagression.
 Using more nuisance regressors can capture additional sources of noise-related variance in the data and thus improve denoising.
-However, this comes at the expense of a loss of temporal degrees of freedom for statistical inference in furthe analysies.
+However, this comes at the expense of a loss of temporal degrees of freedom for statistical inference in further analysis.
 This is an important point to consider along side the denoising performance.</p>
+<p>In fMRIPrep, high-pass filtering is done through discrete cosine-basis regressors,
+labled as <code class="docutils literal notranslate"><span class="pre">cosine_*</span></code> in fMRIPrep confounds output.
+In the following section, the number of discrete cosine-basis regressor will be denoted as <span class="math notranslate nohighlight">\(c\)</span>.
+Depending on the length of the scan, the number of discrete cosine-basis regressors can differ (<span class="math notranslate nohighlight">\(c_{ds000228}=4\)</span>, <span class="math notranslate nohighlight">\(c_{ds000030}=3\)</span>).
+The <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">srubbing</span></code>-based strategy are the strategy with a fixed number of degree of freedom loss.
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.
+In theory, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code> should also report a fixed number of degree of freedom loss.
+However, fMRIPrep outputs the compcor compoenents based on the 50% variance cut-off.
+For some subjects the number of components could be lower than 6, hence the variability.</p>
+<p>In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="#id20">2017</a>]</span>, the equivalent <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with
+a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
+However, we did not observe this advantage is limited to sample with relatively low motion (i.e. adults).
+When selecting denoising strategy,
+The two datasets used in the current benchmark both contained subjects with behaviours deviating from the healthy controls.
+<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is comprised of adult healthy controls and children.
+<code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes healthy controls and subjects with three different psychiatric conditions.
+the loss in degrees of freedom <code class="docutils literal notranslate"><span class="pre">simple</span></code> (<span class="math notranslate nohighlight">\(26 + c\)</span>) and <code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code> (<span class="math notranslate nohighlight">\(27 + c\)</span>) used the least amount of regressors in the general population.
+Certain sub-sample uses less regressors with the <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies.
+The reason potentially lies in the implementation of ICA-AROMA.
+ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="#id53">Pruim <em>et al.</em>, 2015</a>]</span>.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
-
-<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
-
-
-<span class="n">plot_info</span> <span class="o">=</span> <span class="s1">&#39;dof&#39;</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_overview</span><span class="p">(</span><span class="n">plot_info</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;dof-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ds000228&quot;</span><span class="p">,</span> <span class="s2">&quot;ds000030&quot;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plot_info</span><span class="p">)</span>
-    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;dof-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">plot_info</span> <span class="o">=</span> <span class="s1">&#39;scrubbing&#39;</span>
-
-<span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_overview</span><span class="p">(</span><span class="n">plot_info</span><span class="p">)</span>
-<span class="n">glue</span><span class="p">(</span><span class="s2">&quot;scrubbing-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-<span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ds000228&quot;</span><span class="p">,</span> <span class="s2">&quot;ds000030&quot;</span><span class="p">]</span>
-<span class="k">for</span> <span class="n">dataset</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">:</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_dataset</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">plot_info</span><span class="p">)</span>
-    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;scrubbing-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span><span class="p">,</span> <span class="n">ds_groups</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_dof_dataset</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dof-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ds</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">ds_groups</span><span class="p">:</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;group-order_</span><span class="si">{</span><span class="n">ds</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">group</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
-<p>When selecting denoising strategy, the loss in degrees of freedom <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code> used the least amount of regressors.
-In <span id="id1">Ciric <em>et al.</em> [<a class="reference internal" href="#id20">2017</a>]</span>, the equivalent <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> strategies were reported with a lower magnitude of loss in temporal degrees of freedom than <code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> or <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategies.
-However, we did not obser this advantage in the two datasets shown in this benchmark.
-The reason potentially lies in the implementation of ICA-AROMA.
-ICA-AROMA uses pretrained model on healthy subjects to select noise components <span id="id2">[<a class="reference internal" href="#id53">Pruim <em>et al.</em>, 2015</a>]</span>.
-The two datasets used in the current benchmark both contained subjects with behaviours deviating from the healthy controls.
-<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is comprised of adult healthy controls and children.
-<code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes healthy controls and subjects with three different psychiatric conditions.</p>
-<p>The figures showed the number of regressors used at different stage of denoising.
-The <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">srubbing</span></code>-based strategy and <code class="docutils literal notranslate"><span class="pre">compcor6</span></code> are the strategy with a fixed number of degree of freedom loss.
-<code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.</p>
-<div class="sd-tab-set docutils">
-<input checked="checked" id="6da13b36-d663-4222-b0e1-5b6b376a9512" name="cd4b76c7-28fe-471e-9367-67fdcbd8377e" type="radio">
-</input><label class="sd-tab-label" for="6da13b36-d663-4222-b0e1-5b6b376a9512">
-Overview</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-dof-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="../_images/results_9_1.png" src="../_images/results_9_1.png" />
+<img alt="../_images/results_7_0.png" src="../_images/results_7_0.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Loss in temporal degrees of freedom in full sample of each dataset.</span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
-</div>
-</div>
-<input id="3ef754ab-6902-4ba5-86e6-b3d9239037d6" name="cd4b76c7-28fe-471e-9367-67fdcbd8377e" type="radio">
-</input><label class="sd-tab-label" for="3ef754ab-6902-4ba5-86e6-b3d9239037d6">
-ds000228</label><div class="sd-tab-content docutils">
-<div class="figure align-default" id="tbl-dof-ds000228-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/results_9_2.png" src="../_images/results_9_2.png" />
-</div>
-<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-dof-ds000228-fig" title="Permalink to this image">#</a></p>
-</div>
-</div>
-<input id="7729e1ea-67d2-48f3-a84d-0f8220372e60" name="cd4b76c7-28fe-471e-9367-67fdcbd8377e" type="radio">
-</input><label class="sd-tab-label" for="7729e1ea-67d2-48f3-a84d-0f8220372e60">
-ds000030</label><div class="sd-tab-content docutils">
-<div class="figure align-default" id="tbl-dof-ds000030-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/results_9_3.png" src="../_images/results_9_3.png" />
-</div>
-<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Loss in temporal degrees of freedom break down by diagnostics.</span><a class="headerlink" href="#tbl-dof-ds000030-fig" title="Permalink to this image">#</a></p>
-</div>
-</div>
+<p class="caption"><span class="caption-number">Fig. 2 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.
+The variability is broken down by groups.
+From the lightest hue to the darkes, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is:
+<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['child',</span> <span class="pre">'adult']</span></code></span>
+From the lightest hue to the darkes, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> is:
+<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['ADHD',</span> <span class="pre">'BIPOLAR',</span> <span class="pre">'SCHZ',</span> <span class="pre">'CONTROL']</span></code></span></span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
 </div>
 <p>To compare the loss in number of volumes from scrubbing base strategy across datasets,
 we calculate the proportion of volume loss to number of volumes in a full scan.
 <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> includes child subjects and shows higher loss in volumes comparing to <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> with adult subjects only.
 In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, the trend of volume scrubbed comparing adults and children fits the observation shown in literature <span id="id3">[<a class="reference internal" href="#id24">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
-In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the schizophrania group shows the highest amount of volumes scrubbed, followed by the biolar group, and comparable results betwee the control group and ADHD group.
-With a stringent 0.2 mm threashold, groups with high motion will loose on average close to half of the volumes.</p>
-<!-- The figure below can be further trimmed down. -->
-<div class="sd-tab-set docutils">
-<input checked="checked" id="5a169a59-d645-4868-98c3-dc90987e782c" name="f3237b13-22d7-45e8-9656-d07f95ad87cc" type="radio">
-</input><label class="sd-tab-label" for="5a169a59-d645-4868-98c3-dc90987e782c">
-Overview</label><div class="sd-tab-content docutils">
+In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the schizophrania group shows the highest amount of volumes scrubbed,
+followed by the bipolar group, and comparable results between the control group and ADHD group.
+With a stringent 0.2 mm threshold, groups with high motion will loose on average close to half of the volumes.</p>
+<div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_vol_scrubbed_dataset</span><span class="p">()</span>
+<span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;scrubbing-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
 <div class="figure align-default" id="tbl-scrubbing-fig" style="width: 800px">
 <div class="cell_output docutils container">
-<img alt="../_images/results_9_5.png" src="../_images/results_9_5.png" />
+<img alt="../_images/results_9_0.png" src="../_images/results_9_0.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">Loss in number of volumes in full sample of each dataset.</span><a class="headerlink" href="#tbl-scrubbing-fig" title="Permalink to this image">#</a></p>
-</div>
-</div>
-<input id="63c78ccb-f099-4f58-9964-460bf8b2b4c6" name="f3237b13-22d7-45e8-9656-d07f95ad87cc" type="radio">
-</input><label class="sd-tab-label" for="63c78ccb-f099-4f58-9964-460bf8b2b4c6">
-ds000228</label><div class="sd-tab-content docutils">
-<div class="figure align-default" id="tbl-scrubbing-ds000228-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/results_9_7.png" src="../_images/results_9_7.png" />
-</div>
-<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups.</span><a class="headerlink" href="#tbl-scrubbing-ds000228-fig" title="Permalink to this image">#</a></p>
-</div>
-</div>
-<input id="61d247bd-a91b-447f-9af3-7d9d1c0daeb2" name="f3237b13-22d7-45e8-9656-d07f95ad87cc" type="radio">
-</input><label class="sd-tab-label" for="61d247bd-a91b-447f-9af3-7d9d1c0daeb2">
-ds000030</label><div class="sd-tab-content docutils">
-<div class="figure align-default" id="tbl-scrubbing-ds000030-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/results_9_9.png" src="../_images/results_9_9.png" />
-</div>
-<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Loss in number of volumes break down by diagnostics.</span><a class="headerlink" href="#tbl-scrubbing-ds000030-fig" title="Permalink to this image">#</a></p>
-</div>
-</div>
+<p class="caption"><span class="caption-number">Fig. 3 </span><span class="caption-text">Loss in number of volumes break down by groups.</span><a class="headerlink" href="#tbl-scrubbing-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
 <div class="section" id="comparisons-on-the-impacts-of-strategies-on-connectomes">

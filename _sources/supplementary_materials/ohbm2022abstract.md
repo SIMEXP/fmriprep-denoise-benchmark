@@ -1,36 +1,38 @@
 ---
 jupytext:
-  formats: md:myst
   text_representation:
     extension: .md
     format_name: myst
+    format_version: 0.13
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3
   language: python
   name: python3
 ---
 
-```{code-cell} python3
+```{code-cell}
 :tags: [hide-input, hide-output]
+
 import warnings
-warnings.filterwarnings("ignore")
+
+warnings.filterwarnings('ignore')
 from fmriprep_denoise.visualization import figures
 from myst_nb import glue
 
 
 # Load metric data
-dataset = "ds000228"
-atlas_name = "schaefer7networks"
+dataset = 'ds000228'
+atlas_name = 'schaefer7networks'
 dimension = 400
-
 ```
 
 # OHBM 2022 abstract - submitted text
 
-The preliminary results will be presented at OHBM 2022 as a poster. 
+The preliminary results will be presented at OHBM 2022 as a poster.
 Please find poster number `WTh570`.
 
-Find the presenter at the 
+Find the presenter at the
 [virtual poster session](https://event.fourwaves.com/ohbm-2022/abstracts/d49d130b-7f83-4c87-92f4-e1a8e319502b)
 on __Wednesday, June 8, 2022, 8:30 PM GMT + 1__.
 
@@ -62,20 +64,20 @@ H-T Wang[^1], S L Meisler[^2][^3], H Shamarke, F Paugam[^1][^4], N Gensollen[^5]
 
 ### Introduction
 
-Selecting an optimal denoising strategy is a key issue when processing fMRI data. 
-The popular software fMRIPrep {cite:p}`esteban_fmriprep_2020` aims to standardize fMRI preprocessing, 
-but users are still offered a wide range of confound regressors to choose from to denoise data. 
-Without a good understanding of the literature or the fMRIPrep documentation, 
-users can select suboptimal strategies. 
-Current work aims to provide a useful reference for fMRIPrep users by systematically evaluating the impact of different confound regression strategies, 
-and by contrasting the results with past literature based on alternative preprocessing software.    
+Selecting an optimal denoising strategy is a key issue when processing fMRI data.
+The popular software fMRIPrep {cite:p}`esteban_fmriprep_2020` aims to standardize fMRI preprocessing,
+but users are still offered a wide range of confound regressors to choose from to denoise data.
+Without a good understanding of the literature or the fMRIPrep documentation,
+users can select suboptimal strategies.
+Current work aims to provide a useful reference for fMRIPrep users by systematically evaluating the impact of different confound regression strategies,
+and by contrasting the results with past literature based on alternative preprocessing software.
 
 ### Methods
 
-We selected dataset ds000228 {cite:p}`richardson_development_2018` on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option `--use-aroma`. 
-Time series were extracted using the Schaefer 7 network atlas with 400 ROIs {cite:p}`schaefer_local-global_2017`. 
-We applied the denoising strategies listed in the table below using fMRIPrep-generated confounds. 
-Subjects with less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold were excluded from all analysis. 
+We selected dataset ds000228 {cite:p}`richardson_development_2018` on OpenNeuro, which we preprocessed with fMRIPrep LTS20.2.1 using option `--use-aroma`.
+Time series were extracted using the Schaefer 7 network atlas with 400 ROIs {cite:p}`schaefer_local-global_2017`.
+We applied the denoising strategies listed in the table below using fMRIPrep-generated confounds.
+Subjects with less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold were excluded from all analysis.
 We also calculated the connectome from high-pass filtered time series as a comparison baseline.
 
 
@@ -100,16 +102,17 @@ We used three metrics {cite:p}`ciric_benchmarking_2017`, {cite:p}`parkes_evaluat
 
 #### QC-FC and distance-dependent effect
 
-No denoise strategy removed the correlation with motion captured by mean framewise displacement. 
-`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement. 
-`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`. 
-`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series. 
+No denoise strategy removed the correlation with motion captured by mean framewise displacement.
+`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement.
+`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`.
+`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
 Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`.
 
-```{code-cell} python3
-:tags: ["hide-input", "remove-output"]
+```{code-cell}
+:tags: [hide-input, remove-output]
+
 fig = figures.plot_motion_resid(dataset, atlas_name, dimension)
-glue("ohbm-qcfc-fig", fig, display=False)
+glue('ohbm-qcfc-fig', fig, display=False)
 ```
 
 ```{glue:figure} ohbm-qcfc-fig
@@ -119,13 +122,13 @@ glue("ohbm-qcfc-fig", fig, display=False)
 
 #### Distance-dependent effects of motion on connectivity
 
-Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity. 
+Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.
 
-```{code-cell} python3
-:tags: ["hide-input", "remove-output"]
+```{code-cell}
+:tags: [hide-input, remove-output]
 
 fig = figures.plot_distance_dependence(dataset, atlas_name, dimension)
-glue("ohbm-dist-fig", fig, display=False)
+glue('ohbm-dist-fig', fig, display=False)
 ```
 
 ```{glue:figure} ohbm-dist-fig
@@ -135,16 +138,17 @@ glue("ohbm-dist-fig", fig, display=False)
 
 #### Network modularity
 
-All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all. 
+All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all.
 GSR-based strategies improved the network modularity compared to their conunterparts.
 The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity.
 
-```{code-cell} python3
-:tags: ["hide-input", "remove-output"]
+```{code-cell}
+:tags: [hide-input, remove-output]
 
 fig = figures.plot_network_modularity(dataset, atlas_name, dimension)
-glue("ohbm-network-fig", fig, display=False)
+glue('ohbm-network-fig', fig, display=False)
 ```
+
 ```{glue:figure} ohbm-network-fig
 :figwidth: 800px
 :name: "ohbm-network-fig"
@@ -153,9 +157,9 @@ glue("ohbm-network-fig", fig, display=False)
 ### Conclusions
 
 We replicated previous findings demonstrating the usefulness of standard denoising strategies (compcor, aroma, etc.).
-However, results involving global signal regression methods systematically contradict the literature{cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. 
-This evaluation is implemented in a fully reproducible jupyter book framework, and it can be applied to evaluate denoising strategies for future fMRIPrep release. 
-This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.                 
+However, results involving global signal regression methods systematically contradict the literature{cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`.
+This evaluation is implemented in a fully reproducible jupyter book framework, and it can be applied to evaluate denoising strategies for future fMRIPrep release.
+This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.
 
 
 :::{dropdown} References on this page

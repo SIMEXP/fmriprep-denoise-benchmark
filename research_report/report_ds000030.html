@@ -531,26 +531,27 @@ title="Print to PDF"
 <h1>ds000030<a class="headerlink" href="#ds000030" title="Permalink to this headline">#</a></h1>
 <div class="section" id="qc-fc-and-distance-dependent-effect">
 <h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">#</a></h2>
-<!-- 
-No denoise strategy removed the correlation with motion captured by mean framewise displacement. 
-`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement. 
-`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`. 
-`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series. 
+<!--
+No denoise strategy removed the correlation with motion captured by mean framewise displacement.
+`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement.
+`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`.
+`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
 Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. --><div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
 <span class="c1"># Load metric data</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000030&quot;</span>
-<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mist&quot;</span><span class="p">,</span> <span class="s2">&quot;difumo&quot;</span><span class="p">,</span> <span class="s2">&quot;schaefer7networks&quot;</span><span class="p">,</span> <span class="s2">&quot;gordon333&quot;</span><span class="p">]</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000030&#39;</span>
+<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mist&#39;</span><span class="p">,</span> <span class="s1">&#39;difumo&#39;</span><span class="p">,</span> <span class="s1">&#39;schaefer7networks&#39;</span><span class="p">,</span> <span class="s1">&#39;gordon333&#39;</span><span class="p">]</span>
 <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;full_sample&#39;</span><span class="p">,</span> <span class="s1">&#39;CONTROL&#39;</span><span class="p">,</span> <span class="s1">&#39;SCHZ&#39;</span><span class="p">,</span> <span class="s1">&#39;BIPOLAR&#39;</span><span class="p">,</span> <span class="s1">&#39;ADHD&#39;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
-  <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
-    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">)</span>
-    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s2">_qcfc-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">)</span>
+        <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_qcfc-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -558,49 +559,49 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 <div class="section" id="full-sample">
 <h3>Full sample<a class="headerlink" href="#full-sample" title="Permalink to this headline">#</a></h3>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="9a017086-a2c1-469b-8860-c0660cca1dfb" name="2c91c2d4-0759-4691-9fe1-c09cfada61ed" type="radio">
-</input><label class="sd-tab-label" for="9a017086-a2c1-469b-8860-c0660cca1dfb">
+<input checked="checked" id="440e88be-556b-48a0-ad9e-4022ac967e9d" name="b8438a56-d3b3-4458-a60c-b4b95724b6a3" type="radio">
+</input><label class="sd-tab-label" for="440e88be-556b-48a0-ad9e-4022ac967e9d">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-full-sample-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_1.png" src="../_images/report_ds000030_1_1.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000030-full-sample-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="a8de5bb3-5ccd-416f-953f-5104abb04a77" name="2c91c2d4-0759-4691-9fe1-c09cfada61ed" type="radio">
-</input><label class="sd-tab-label" for="a8de5bb3-5ccd-416f-953f-5104abb04a77">
+<input id="e78bb7c2-a10d-427c-a0d2-95def097a8ce" name="b8438a56-d3b3-4458-a60c-b4b95724b6a3" type="radio">
+</input><label class="sd-tab-label" for="e78bb7c2-a10d-427c-a0d2-95def097a8ce">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-full-sample-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_6.png" src="../_images/report_ds000030_1_6.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-full-sample-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="bebe5244-91f1-4982-b5fa-43fecd504d92" name="2c91c2d4-0759-4691-9fe1-c09cfada61ed" type="radio">
-</input><label class="sd-tab-label" for="bebe5244-91f1-4982-b5fa-43fecd504d92">
+<input id="86a29592-37ed-43c3-9d2c-418bdef7b560" name="b8438a56-d3b3-4458-a60c-b4b95724b6a3" type="radio">
+</input><label class="sd-tab-label" for="86a29592-37ed-43c3-9d2c-418bdef7b560">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-full-sample-schaefer7networks-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_11.png" src="../_images/report_ds000030_1_11.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-full-sample-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="0a5e42f4-cff7-457a-9805-6f55c45c0cb9" name="2c91c2d4-0759-4691-9fe1-c09cfada61ed" type="radio">
-</input><label class="sd-tab-label" for="0a5e42f4-cff7-457a-9805-6f55c45c0cb9">
+<input id="58a4f8c8-e90c-433f-aae8-6b822a63a376" name="b8438a56-d3b3-4458-a60c-b4b95724b6a3" type="radio">
+</input><label class="sd-tab-label" for="58a4f8c8-e90c-433f-aae8-6b822a63a376">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-full-sample-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_16.png" src="../_images/report_ds000030_1_16.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-full-sample-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
@@ -609,49 +610,49 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 <div class="section" id="healthy-control">
 <h3>Healthy control<a class="headerlink" href="#healthy-control" title="Permalink to this headline">#</a></h3>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="51353bf6-c5a6-482a-86c3-a3405fbf173a" name="38fc46e6-a2bf-4c03-84ee-92911414712c" type="radio">
-</input><label class="sd-tab-label" for="51353bf6-c5a6-482a-86c3-a3405fbf173a">
+<input checked="checked" id="9f878813-ebc6-42c3-8eeb-40b651ae0745" name="42a06fe1-c60a-4c17-9dbd-f08ef0947bc0" type="radio">
+</input><label class="sd-tab-label" for="9f878813-ebc6-42c3-8eeb-40b651ae0745">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_2.png" src="../_images/report_ds000030_1_2.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000030-control-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="9776851d-01a5-4827-af2b-904af6f52d5e" name="38fc46e6-a2bf-4c03-84ee-92911414712c" type="radio">
-</input><label class="sd-tab-label" for="9776851d-01a5-4827-af2b-904af6f52d5e">
+<input id="cfdd4b8a-0e53-4caa-be11-1666d33c5180" name="42a06fe1-c60a-4c17-9dbd-f08ef0947bc0" type="radio">
+</input><label class="sd-tab-label" for="cfdd4b8a-0e53-4caa-be11-1666d33c5180">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_7.png" src="../_images/report_ds000030_1_7.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-control-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="f53b07c7-6aad-4684-95de-75844054f023" name="38fc46e6-a2bf-4c03-84ee-92911414712c" type="radio">
-</input><label class="sd-tab-label" for="f53b07c7-6aad-4684-95de-75844054f023">
+<input id="967b7469-15ab-4b94-aa76-4f2c32340ddb" name="42a06fe1-c60a-4c17-9dbd-f08ef0947bc0" type="radio">
+</input><label class="sd-tab-label" for="967b7469-15ab-4b94-aa76-4f2c32340ddb">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-schaefer7networks-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_12.png" src="../_images/report_ds000030_1_12.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+<p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-control-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="934b6113-c123-475e-8f70-c41bddc7d1b9" name="38fc46e6-a2bf-4c03-84ee-92911414712c" type="radio">
-</input><label class="sd-tab-label" for="934b6113-c123-475e-8f70-c41bddc7d1b9">
+<input id="863f38e7-d77a-44fb-af87-1c0e0d48c72c" name="42a06fe1-c60a-4c17-9dbd-f08ef0947bc0" type="radio">
+</input><label class="sd-tab-label" for="863f38e7-d77a-44fb-af87-1c0e0d48c72c">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_17.png" src="../_images/report_ds000030_1_17.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-control-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
@@ -660,49 +661,49 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 <div class="section" id="schz">
 <h3>SCHZ<a class="headerlink" href="#schz" title="Permalink to this headline">#</a></h3>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="628eb89b-b7ff-4c46-bb99-59db1fcc1356" name="0cfdb979-070c-419f-a4df-4247822bccd9" type="radio">
-</input><label class="sd-tab-label" for="628eb89b-b7ff-4c46-bb99-59db1fcc1356">
+<input checked="checked" id="4cd1fa42-98b4-42fe-a244-ac46a02d6924" name="462b0aa2-b2fc-4a4c-a0c9-2e5e74c24aeb" type="radio">
+</input><label class="sd-tab-label" for="4cd1fa42-98b4-42fe-a244-ac46a02d6924">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-schz-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_3.png" src="../_images/report_ds000030_1_3.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000030-schz-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="50f46fd4-1584-4631-92c6-9e75a229db8a" name="0cfdb979-070c-419f-a4df-4247822bccd9" type="radio">
-</input><label class="sd-tab-label" for="50f46fd4-1584-4631-92c6-9e75a229db8a">
+<input id="3dff1110-c0df-4b36-b056-c4a9b16ab3f2" name="462b0aa2-b2fc-4a4c-a0c9-2e5e74c24aeb" type="radio">
+</input><label class="sd-tab-label" for="3dff1110-c0df-4b36-b056-c4a9b16ab3f2">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-schz-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_8.png" src="../_images/report_ds000030_1_8.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-schz-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="ea580ae4-9e17-4b0c-9de7-97534c9dfd84" name="0cfdb979-070c-419f-a4df-4247822bccd9" type="radio">
-</input><label class="sd-tab-label" for="ea580ae4-9e17-4b0c-9de7-97534c9dfd84">
+<input id="654603dc-1e45-443b-8798-09d2cdb9a7fb" name="462b0aa2-b2fc-4a4c-a0c9-2e5e74c24aeb" type="radio">
+</input><label class="sd-tab-label" for="654603dc-1e45-443b-8798-09d2cdb9a7fb">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-schz-schaefer7networks-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_13.png" src="../_images/report_ds000030_1_13.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-schz-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="94ea61a6-6918-4ff6-84b7-f3569679014f" name="0cfdb979-070c-419f-a4df-4247822bccd9" type="radio">
-</input><label class="sd-tab-label" for="94ea61a6-6918-4ff6-84b7-f3569679014f">
+<input id="96e07f20-1bfc-45ce-985f-382275a4cdd5" name="462b0aa2-b2fc-4a4c-a0c9-2e5e74c24aeb" type="radio">
+</input><label class="sd-tab-label" for="96e07f20-1bfc-45ce-985f-382275a4cdd5">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-schz-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_18.png" src="../_images/report_ds000030_1_18.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-schz-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
@@ -711,49 +712,49 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 <div class="section" id="bipolar">
 <h3>BIPOLAR<a class="headerlink" href="#bipolar" title="Permalink to this headline">#</a></h3>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="c5d8f375-cd54-443d-b918-27df8cff1370" name="a6d023ad-afe2-4c34-a2d3-ad927e20f8dd" type="radio">
-</input><label class="sd-tab-label" for="c5d8f375-cd54-443d-b918-27df8cff1370">
+<input checked="checked" id="c4e3b8db-f8f3-4161-a490-2fbe7aca7a30" name="fff9d2ee-dc8c-4ba1-b189-879bd4562361" type="radio">
+</input><label class="sd-tab-label" for="c4e3b8db-f8f3-4161-a490-2fbe7aca7a30">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-bipolar-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_4.png" src="../_images/report_ds000030_1_4.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p class="caption"><span class="caption-number">Fig. 16 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000030-bipolar-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="8b7b3a8f-4931-4731-b92b-2d83c96621b2" name="a6d023ad-afe2-4c34-a2d3-ad927e20f8dd" type="radio">
-</input><label class="sd-tab-label" for="8b7b3a8f-4931-4731-b92b-2d83c96621b2">
+<input id="f6e3995b-ac6a-4e33-8770-406caa75bc6d" name="fff9d2ee-dc8c-4ba1-b189-879bd4562361" type="radio">
+</input><label class="sd-tab-label" for="f6e3995b-ac6a-4e33-8770-406caa75bc6d">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-bipolar-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_9.png" src="../_images/report_ds000030_1_9.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+<p class="caption"><span class="caption-number">Fig. 17 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-bipolar-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="0829aecf-e69d-4081-a03e-5c7037de7ce1" name="a6d023ad-afe2-4c34-a2d3-ad927e20f8dd" type="radio">
-</input><label class="sd-tab-label" for="0829aecf-e69d-4081-a03e-5c7037de7ce1">
+<input id="05e841cb-ccef-4273-bc82-e548499047d4" name="fff9d2ee-dc8c-4ba1-b189-879bd4562361" type="radio">
+</input><label class="sd-tab-label" for="05e841cb-ccef-4273-bc82-e548499047d4">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-bipolar-schaefer7networks-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_14.png" src="../_images/report_ds000030_1_14.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+<p class="caption"><span class="caption-number">Fig. 18 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-bipolar-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="b48da3f2-e941-4cf2-b07c-0785dc993900" name="a6d023ad-afe2-4c34-a2d3-ad927e20f8dd" type="radio">
-</input><label class="sd-tab-label" for="b48da3f2-e941-4cf2-b07c-0785dc993900">
+<input id="95c23069-4dc8-47a9-a2e9-de6fb15c73eb" name="fff9d2ee-dc8c-4ba1-b189-879bd4562361" type="radio">
+</input><label class="sd-tab-label" for="95c23069-4dc8-47a9-a2e9-de6fb15c73eb">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-bipolar-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_19.png" src="../_images/report_ds000030_1_19.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+<p class="caption"><span class="caption-number">Fig. 19 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-bipolar-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
@@ -762,49 +763,49 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 <div class="section" id="adhd">
 <h3>ADHD<a class="headerlink" href="#adhd" title="Permalink to this headline">#</a></h3>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="a2513662-11cb-4ce3-8492-aecadbb5b53d" name="b7bf46e9-7dcc-4cb7-a683-7511324d914f" type="radio">
-</input><label class="sd-tab-label" for="a2513662-11cb-4ce3-8492-aecadbb5b53d">
+<input checked="checked" id="ab715759-866f-4cde-b887-cad42931a229" name="62e658c6-6c5c-435f-af88-9cae8e84c502" type="radio">
+</input><label class="sd-tab-label" for="ab715759-866f-4cde-b887-cad42931a229">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-adhd-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_5.png" src="../_images/report_ds000030_1_5.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p class="caption"><span class="caption-number">Fig. 20 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000030-adhd-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="ea3d8dd9-4e7d-454d-a49f-204a5bf07e63" name="b7bf46e9-7dcc-4cb7-a683-7511324d914f" type="radio">
-</input><label class="sd-tab-label" for="ea3d8dd9-4e7d-454d-a49f-204a5bf07e63">
+<input id="b8ead572-20bb-4039-938a-a6448bf43c9b" name="62e658c6-6c5c-435f-af88-9cae8e84c502" type="radio">
+</input><label class="sd-tab-label" for="b8ead572-20bb-4039-938a-a6448bf43c9b">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-adhd-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_10.png" src="../_images/report_ds000030_1_10.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 25 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+<p class="caption"><span class="caption-number">Fig. 21 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-adhd-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="0be471ce-d67b-40a7-93bc-f09a6e5f6706" name="b7bf46e9-7dcc-4cb7-a683-7511324d914f" type="radio">
-</input><label class="sd-tab-label" for="0be471ce-d67b-40a7-93bc-f09a6e5f6706">
+<input id="a5c742fa-80d8-413b-989a-189fccbfbc99" name="62e658c6-6c5c-435f-af88-9cae8e84c502" type="radio">
+</input><label class="sd-tab-label" for="a5c742fa-80d8-413b-989a-189fccbfbc99">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-adhd-schaefer7networks-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_15.png" src="../_images/report_ds000030_1_15.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 26 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+<p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-adhd-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="8e51ee48-3b8a-4e5b-b6fb-7923636f1e98" name="b7bf46e9-7dcc-4cb7-a683-7511324d914f" type="radio">
-</input><label class="sd-tab-label" for="8e51ee48-3b8a-4e5b-b6fb-7923636f1e98">
+<input id="33f2bed0-205c-4e7b-809e-527e40f83463" name="62e658c6-6c5c-435f-af88-9cae8e84c502" type="radio">
+</input><label class="sd-tab-label" for="33f2bed0-205c-4e7b-809e-527e40f83463">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-adhd-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_1_20.png" src="../_images/report_ds000030_1_20.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 27 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+<p class="caption"><span class="caption-number">Fig. 23 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-adhd-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
@@ -816,63 +817,64 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 <!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  --><div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
 <span class="c1"># Load metric data</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000030&quot;</span>
-<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;difumo&quot;</span><span class="p">,</span> <span class="s2">&quot;mist&quot;</span><span class="p">,</span> <span class="s2">&quot;schaefer7networks&quot;</span><span class="p">,</span> <span class="s2">&quot;gordon333&quot;</span><span class="p">]</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000030&#39;</span>
+<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;difumo&#39;</span><span class="p">,</span> <span class="s1">&#39;mist&#39;</span><span class="p">,</span> <span class="s1">&#39;schaefer7networks&#39;</span><span class="p">,</span> <span class="s1">&#39;gordon333&#39;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
-  <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_distance_dependence</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">)</span>
-  <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s2">_dist-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_distance_dependence</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">)</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_dist-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="08502499-7407-49cd-bb8a-5054c9d4d3cd" name="b9de056f-eeaf-426d-b6d0-73b4ca45f4fa" type="radio">
-</input><label class="sd-tab-label" for="08502499-7407-49cd-bb8a-5054c9d4d3cd">
+<input checked="checked" id="a5bd589e-4f88-43ef-803f-06bca894a385" name="6830f802-9418-49ca-8a84-6687e3dac40c" type="radio">
+</input><label class="sd-tab-label" for="a5bd589e-4f88-43ef-803f-06bca894a385">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-mist-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_3_1.png" src="../_images/report_ds000030_3_1.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 28 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with MIST atlas.
+<p class="caption"><span class="caption-number">Fig. 24 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000030-mist-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="d34810ba-20a8-410d-9af9-295518d51e1c" name="b9de056f-eeaf-426d-b6d0-73b4ca45f4fa" type="radio">
-</input><label class="sd-tab-label" for="d34810ba-20a8-410d-9af9-295518d51e1c">
+<input id="63a756b6-313d-4d50-9c88-accca88881d9" name="6830f802-9418-49ca-8a84-6687e3dac40c" type="radio">
+</input><label class="sd-tab-label" for="63a756b6-313d-4d50-9c88-accca88881d9">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-difumo-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_3_0.png" src="../_images/report_ds000030_3_0.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 29 </span><span class="caption-text">TBA</span><a class="headerlink" href="#tbl-ds000030-difumo-dist-fig" title="Permalink to this image">#</a></p>
+<p class="caption"><span class="caption-number">Fig. 25 </span><span class="caption-text">TBA</span><a class="headerlink" href="#tbl-ds000030-difumo-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="438af1b2-9ccc-4931-bc05-cc58d629cffa" name="b9de056f-eeaf-426d-b6d0-73b4ca45f4fa" type="radio">
-</input><label class="sd-tab-label" for="438af1b2-9ccc-4931-bc05-cc58d629cffa">
+<input id="b433ed91-043c-4d2a-97c8-778c4e396803" name="6830f802-9418-49ca-8a84-6687e3dac40c" type="radio">
+</input><label class="sd-tab-label" for="b433ed91-043c-4d2a-97c8-778c4e396803">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-schaefer7networks-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_3_2.png" src="../_images/report_ds000030_3_2.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 30 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
+<p class="caption"><span class="caption-number">Fig. 26 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="8ce8ca6d-839a-488c-a15e-9f325c265f4c" name="b9de056f-eeaf-426d-b6d0-73b4ca45f4fa" type="radio">
-</input><label class="sd-tab-label" for="8ce8ca6d-839a-488c-a15e-9f325c265f4c">
+<input id="1a11859e-34f1-4e50-9fa4-3b855db7bc18" name="6830f802-9418-49ca-8a84-6687e3dac40c" type="radio">
+</input><label class="sd-tab-label" for="1a11859e-34f1-4e50-9fa4-3b855db7bc18">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-gordon333-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_3_3.png" src="../_images/report_ds000030_3_3.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 31 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
+<p class="caption"><span class="caption-number">Fig. 27 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-gordon333-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
@@ -880,38 +882,39 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 </div>
 <div class="section" id="network-modularity">
 <h2>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">#</a></h2>
-<!-- 
-All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all. 
+<!--
+All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all.
 GSR-based strategies improved the network modularity compared to their conunterparts.
 The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity. --><div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
 <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
 <span class="c1"># Load metric data</span>
-<span class="n">dataset</span> <span class="o">=</span> <span class="s2">&quot;ds000030&quot;</span>
-<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;mist&quot;</span><span class="p">,</span> <span class="s2">&quot;difumo&quot;</span><span class="p">,</span> <span class="s2">&quot;schaefer7networks&quot;</span><span class="p">,</span> <span class="s2">&quot;gordon333&quot;</span><span class="p">]</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000030&#39;</span>
+<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mist&#39;</span><span class="p">,</span> <span class="s1">&#39;difumo&#39;</span><span class="p">,</span> <span class="s1">&#39;schaefer7networks&#39;</span><span class="p">,</span> <span class="s1">&#39;gordon333&#39;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
-  <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">by_group</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-  <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s2">_network-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-  <span class="n">figs</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">by_group</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-  <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figs</span><span class="p">):</span>
-      <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s2">_network-</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">-fig&quot;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">by_group</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_network-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">figs</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">by_group</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figs</span><span class="p">):</span>
+        <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_network-</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="52a7775f-4eba-4c39-8bc3-7f8e4a6c5257" name="f9713dc3-4347-4957-a5f4-ca9b4988af43" type="radio">
-</input><label class="sd-tab-label" for="52a7775f-4eba-4c39-8bc3-7f8e4a6c5257">
+<input checked="checked" id="30277d4c-cff0-413e-a9c4-dab646e74112" name="092ffd59-4f79-4110-83ce-fc8a65d4effe" type="radio">
+</input><label class="sd-tab-label" for="30277d4c-cff0-413e-a9c4-dab646e74112">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-mist-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_5_0.png" src="../_images/report_ds000030_5_0.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 32 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+<p class="caption"><span class="caption-number">Fig. 28 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000030-mist-network-fig" title="Permalink to this image">#</a></p>
@@ -937,14 +940,14 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 </div>
 </div>
 </div>
-<input id="da471f43-17f9-47bc-ab16-7bda7d4fb03b" name="f9713dc3-4347-4957-a5f4-ca9b4988af43" type="radio">
-</input><label class="sd-tab-label" for="da471f43-17f9-47bc-ab16-7bda7d4fb03b">
+<input id="e228d056-fec1-4dd3-9faa-000a47090ad8" name="092ffd59-4f79-4110-83ce-fc8a65d4effe" type="radio">
+</input><label class="sd-tab-label" for="e228d056-fec1-4dd3-9faa-000a47090ad8">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-difumo-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_5_5.png" src="../_images/report_ds000030_5_5.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 33 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+<p class="caption"><span class="caption-number">Fig. 29 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-difumo-network-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-difumo-network-1-fig" style="width: 800px">
@@ -968,14 +971,14 @@ Each data point represent different resolution.</span><a class="headerlink" href
 </div>
 </div>
 </div>
-<input id="b38a344b-80be-48e9-bcca-82e4dab2a627" name="f9713dc3-4347-4957-a5f4-ca9b4988af43" type="radio">
-</input><label class="sd-tab-label" for="b38a344b-80be-48e9-bcca-82e4dab2a627">
+<input id="9a098a59-2a71-4a20-821b-e6442d731d60" name="092ffd59-4f79-4110-83ce-fc8a65d4effe" type="radio">
+</input><label class="sd-tab-label" for="9a098a59-2a71-4a20-821b-e6442d731d60">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-schaefer7networks-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_5_10.png" src="../_images/report_ds000030_5_10.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 34 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+<p class="caption"><span class="caption-number">Fig. 30 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-schaefer7networks-network-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schaefer7networks-network-1-fig" style="width: 800px">
@@ -999,14 +1002,14 @@ Each data point represent different resolution.</span><a class="headerlink" href
 </div>
 </div>
 </div>
-<input id="45b646ff-1050-4d0e-8e5a-182f98ebde7f" name="f9713dc3-4347-4957-a5f4-ca9b4988af43" type="radio">
-</input><label class="sd-tab-label" for="45b646ff-1050-4d0e-8e5a-182f98ebde7f">
+<input id="686a798e-3387-49d0-96a4-3880b37d7d7a" name="092ffd59-4f79-4110-83ce-fc8a65d4effe" type="radio">
+</input><label class="sd-tab-label" for="686a798e-3387-49d0-96a4-3880b37d7d7a">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-gordon333-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
 <img alt="../_images/report_ds000030_5_15.png" src="../_images/report_ds000030_5_15.png" />
 </div>
-<p class="caption"><span class="caption-number">Fig. 35 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+<p class="caption"><span class="caption-number">Fig. 31 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-gordon333-network-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-gordon333-network-1-fig" style="width: 800px">
