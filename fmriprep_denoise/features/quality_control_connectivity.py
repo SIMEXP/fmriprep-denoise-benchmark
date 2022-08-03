@@ -11,11 +11,10 @@ def calculate_median_absolute(x):
 
 
 def fdr(x, alpha=0.05, method='fdr_bh'):
-    '''
-    Apply FDR correction to a pandas.Series p-value object
-    '''
-    res, _, _, _ = multitest.multipletests(x, alpha=alpha,
-                                           method=method)
+    """
+    Apply FDR correction to a pandas.Series p-value object.
+    """
+    res, _, _, _ = multitest.multipletests(x, alpha=alpha, method=method)
     return res
 
 
@@ -78,7 +77,8 @@ def qcfc(movement, connectomes, covarates=None):
         metric = partial_correlation(
             connectomes[edge_id].values,
             connectomes['mean_framewise_displacement'].values,
-            connectomes[cov_names].values)
+            connectomes[cov_names].values,
+        )
         qcfc_edge.append(metric)
 
     return qcfc_edge

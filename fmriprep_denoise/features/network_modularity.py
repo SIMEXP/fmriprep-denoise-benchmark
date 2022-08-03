@@ -7,7 +7,7 @@ from math import sqrt
 def louvain_modularity(vect):
     vect = np.array(vect)
     n = vect.shape[-1]
-    n_columns = int((sqrt(8 * n + 1) - 1.) / 2) + 1  # no diagnal
+    n_columns = int((sqrt(8 * n + 1) - 1.0) / 2) + 1  # no diagnal
 
     full_graph = vec_to_sym_matrix(vect, diagonal=np.ones(n_columns))
     _, modularity = compute_commuity(full_graph, num_opt=100)

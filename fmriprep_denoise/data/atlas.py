@@ -12,31 +12,31 @@ from sklearn.utils import Bunch
 ATLAS_METADATA = {
     'schaefer7networks': {
         'atlas': 'Schaefer2018',
-        'template': "MNI152NLin2009cAsym",
+        'template': 'MNI152NLin2009cAsym',
         'resolution': 2,
         'dimensions': [100, 200, 300, 400, 500, 600, 800],
     },
-    'mist':{
+    'mist': {
         'atlas': 'MIST',
-        'template': "MNI152NLin2009bSym",
+        'template': 'MNI152NLin2009bSym',
         'resolution': 3,
-        'dimensions' : [7, 12, 20, 36, 64, 122, 197, 325, 444, "ROI"],
+        'dimensions': [7, 12, 20, 36, 64, 122, 197, 325, 444, 'ROI'],
     },
     'difumo': {
         'atlas': 'DiFuMo',
-        'template': "MNI152NLin2009cAsym",
+        'template': 'MNI152NLin2009cAsym',
         'resolution': 2,
         'dimensions': [64, 128, 256, 512, 1024],
     },
     'gordon333': {
         'atlas': 'gordon',
-        'template': "MNI152NLin6Asym",
+        'template': 'MNI152NLin6Asym',
         'resolution': 3,
         'dimensions': [333],
-    }
+    },
 }
 
-# Include retreival of these data in README
+# Include retrieval of these data in README
 
 
 def fetch_atlas_path(atlas_name, dimension):
@@ -54,7 +54,8 @@ def fetch_atlas_path(atlas_name, dimension):
 
     description_keywords : dict
         Keys and values to fill in description_pattern.
-        For valid keys check relevant ATLAS_METADATA[atlas_name]['description_pattern'].
+        For valid keys check relevant
+        ATLAS_METADATA[atlas_name]['description_pattern'].
 
     Return
     ------
@@ -67,7 +68,7 @@ def fetch_atlas_path(atlas_name, dimension):
         type : str
             'dseg' (for NiftiLabelsMasker) or 'probseg' (for NiftiMapsMasker)
     """
-    tf_dir = Path(__file__).parents[2] / "inputs" / "custome_templateflow"
+    tf_dir = Path(__file__).parents[2] / 'inputs' / 'custome_templateflow'
     os.environ['TEMPLATEFLOW_HOME'] = str(tf_dir.resolve())
 
     import templateflow
@@ -77,30 +78,33 @@ def fetch_atlas_path(atlas_name, dimension):
     parameters = {
         'atlas': cur_atlas_meta['atlas'],
         'resolution': f"{cur_atlas_meta['resolution']:02d}",
-        'extension': ".nii.gz"
+        'extension': '.nii.gz',
     }
     if atlas_name == 'schaefer7networks':
-        parameters['desc'] = f"{dimension}Parcels7Networks"
+        parameters['desc'] = f'{dimension}Parcels7Networks'
     elif atlas_name == 'difumo':
-        parameters['desc'] = f"{dimension}dimensionsSegmented"
+        parameters['desc'] = f'{dimension}dimensionsSegmented'
     else:
         parameters['desc'] = str(dimension)
-    img_path = templateflow.api.get(cur_atlas_meta['template'],
-                                    raise_empty=True, **parameters)
+    img_path = templateflow.api.get(
+        cur_atlas_meta['template'], raise_empty=True, **parameters
+    )
     img_path = str(img_path)
     if atlas_name == 'schaefer7networks':
         parameters.pop('resolution')
-    parameters['extension'] = ".tsv"
-    label_path = templateflow.api.get(cur_atlas_meta['template'],
-                                      raise_empty=True, **parameters)
-    labels = pd.read_csv(label_path, delimiter="\t")
+    parameters['extension'] = '.tsv'
+    label_path = templateflow.api.get(
+        cur_atlas_meta['template'], raise_empty=True, **parameters
+    )
+    labels = pd.read_csv(label_path, delimiter='\t')
     atlas_type = img_path.split('_')[-1].split('.nii.gz')[0]
 
     return Bunch(maps=img_path, labels=labels, type=atlas_type)
 
 
-def create_atlas_masker(atlas_name, dimension, subject_mask, detrend=True,
-                        nilearn_cache=""):
+def create_atlas_masker(
+    atlas_name, dimension, subject_mask, detrend=True, nilearn_cache=''
+):
     """Create masker given metadata.
     Parameters
     ----------
@@ -111,11 +115,13 @@ def create_atlas_masker(atlas_name, dimension, subject_mask, detrend=True,
     labels = list(range(1, atlas.labels.shape[0] + 1))
 
     if atlas.type == 'dseg':
-        masker = NiftiLabelsMasker(atlas.maps, labels=labels,
-                                   mask_img=subject_mask, detrend=detrend)
+        masker = NiftiLabelsMasker(
+            atlas.maps, labels=labels, mask_img=subject_mask, detrend=detrend
+        )
     elif atlas.type == 'probseg':
-        masker = NiftiMapsMasker(atlas.maps,
-                                 mask_img=subject_mask, detrend=detrend)
+        masker = NiftiMapsMasker(
+            atlas.maps, mask_img=subject_mask, detrend=detrend
+        )
     if nilearn_cache:
         masker = masker.set_params(memory=nilearn_cache, memory_level=1)
 

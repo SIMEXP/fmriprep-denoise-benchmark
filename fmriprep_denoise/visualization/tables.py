@@ -22,7 +22,7 @@ def lazy_demographic(dataset):
 
     desc = [full]
     for g in groups:
-        sub_group = df[df['groups']==g].describe()['age']
+        sub_group = df[df['groups'] == g].describe()['age']
         sub_group.name = g
         print(f"n female in {g}: {df.loc[df['groups']==g,'gender'].sum()}")
         desc.append(sub_group)
@@ -33,7 +33,11 @@ def lazy_demographic(dataset):
 def _get_descriptive_data(dataset):
     """Get the data frame of all descriptive data needed for a dataset."""
     # load basic data
-    movements = path_root / f"dataset-{dataset}" / f'dataset-{dataset}_desc-movement_phenotype.tsv'
+    movements = (
+        path_root
+        / f'dataset-{dataset}'
+        / f'dataset-{dataset}_desc-movement_phenotype.tsv'
+    )
     movements = pd.read_csv(movements, index_col=0, sep='\t')
     _, participants_groups, groups = utils._get_participants_groups(dataset)
     participants_groups.name = 'groups'

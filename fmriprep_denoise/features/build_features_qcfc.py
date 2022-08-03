@@ -6,44 +6,44 @@ from pathlib import Path
 from multiprocessing import Pool
 
 from fmriprep_denoise.data.fmriprep import get_prepro_strategy
-from fmriprep_denoise.features.derivatives import (compute_connectome, check_extraction)
-from fmriprep_denoise.features import qcfc, louvain_modularity
+from fmriprep_denoise.features.derivatives import (
+    compute_connectome,
+    check_extraction,
+)
+from fmriprep_denoise.features import qcfc
 
 
 # another very bad special case handling
-group_info_column = {
-        'ds000228': 'Child_Adult',
-        'ds000030':  'diagnosis'
-    }
+group_info_column = {'ds000228': 'Child_Adult', 'ds000030': 'diagnosis'}
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
-        description="Generate denoise metric based on denoising strategies.",
+        description='Generate denoise metric based on denoising strategies.',
     )
     parser.add_argument(
-        "input_path",
-        action="store",
+        'input_path',
+        action='store',
         type=str,
-        help="input path for .gz dataset."
+        help='input path for .gz dataset.',
     )
     parser.add_argument(
-        "output_path",
-        action="store",
+        'output_path',
+        action='store',
         type=str,
-        help="output path for metrics."
+        help='output path for metrics.',
     )
     parser.add_argument(
-        "--atlas",
-        action="store",
+        '--atlas',
+        action='store',
         type=str,
-        help="Atlas name (schaefer7networks, mist, difumo, gordon333)"
+        help='Atlas name (schaefer7networks, mist, difumo, gordon333)',
     )
     parser.add_argument(
-        "--dimension",
-        action="store",
-        help="Number of ROI. See meta data of each atlas to get valid inputs.",
+        '--dimension',
+        action='store',
+        help='Number of ROI. See meta data of each atlas to get valid inputs.',
     )
     return parser.parse_args()
 
@@ -55,7 +55,7 @@ def main():
     input_gz = Path(args.input_path)
     atlas = args.atlas
     dimension = args.dimension
-    output_path = Path(args.output_path) / "metrics"
+    output_path = Path(args.output_path) / 'metrics'
     output_path.mkdir(exist_ok=True)
 
     extracted_path = check_extraction(input_gz, extracted_path_root=None)
@@ -67,21 +67,25 @@ def main():
     metric_qcfc, metric_mod = [], []
     for strategy_name in strategy_names.keys():
         print(strategy_name)
-        file_pattern = f"atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}"
+        file_pattern = f'atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}'
 
-        connectome, phenotype = compute_connectome(atlas, extracted_path,
-                                                   dataset, file_pattern)
-        print("\tLoaded connectome...")
-        metric = qcfc(phenotype.loc[:, 'mean_framewise_displacement'],
-                      connectome,
-                      phenotype.loc[:, ['age', 'gender']])
+        connectome, phenotype = compute_connectome(
+            atlas, extracted_path, dataset, file_pattern
+        )
+        print('\tLoaded connectome...')
+        metric = qcfc(
+            phenotype.loc[:, 'mean_framewise_displacement'],
+            connectome,
+            phenotype.loc[:, ['age', 'gender']],
+        )
         metric = pd.DataFrame(metric)
-        columns = [('full_sample', f'{strategy_name}_{col}')
-                   for col in metric.columns]
+        columns = [
+            ('full_sample', f'{strategy_name}_{col}') for col in metric.columns
+        ]
         columns = pd.MultiIndex.from_tuples(columns)
         metric.columns = columns
         metric_qcfc.append(metric)
-        print("\tQC-FC...")
+        print('\tQC-FC...')
 
         # QC-FC by group
         groups = phenotype['groups'].unique()
@@ -90,20 +94,24 @@ def main():
             group_mask = phenotype['groups'] == group
             # make sure values are numerical
             subgroup = phenotype[group_mask].index
-            metric = qcfc(phenotype.loc[subgroup, 'mean_framewise_displacement'],
-                          connectome.loc[subgroup, :],
-                          phenotype.loc[subgroup, ['age', 'gender']])
+            metric = qcfc(
+                phenotype.loc[subgroup, 'mean_framewise_displacement'],
+                connectome.loc[subgroup, :],
+                phenotype.loc[subgroup, ['age', 'gender']],
+            )
             metric = pd.DataFrame(metric)
-            metric.columns = [(group, f'{strategy_name}_{col}')
-                                for col in metric.columns]
+            metric.columns = [
+                (group, f'{strategy_name}_{col}') for col in metric.columns
+            ]
             metric_qcfc.append(metric)
 
     metric_qcfc = pd.concat(metric_qcfc, axis=1)
     metric_qcfc.to_csv(
         output_path
-        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv",
+        / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv',
         sep='\t',
     )
 
-if __name__ == "__main__":
+
+if __name__ == '__main__':
     main()
