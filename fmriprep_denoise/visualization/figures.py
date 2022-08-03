@@ -2,6 +2,7 @@ import numpy as np
 import pandas as pd
 
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import seaborn as sns
 
 from fmriprep_denoise.features import get_atlas_pairwise_distance
@@ -12,26 +13,27 @@ from fmriprep_denoise.visualization import utils
 path_root = utils.repo2data_path()
 
 
-def plot_motion_overview():
-    datasets = ['ds000228', 'ds000030']
-    fig = plt.figure(figsize=(7, 5))
-    axs = fig.subplots(1, 2, sharey=True)
-    for dataset, ax in zip(datasets, axs):
-        file = f'dataset-{dataset}_desc-movement_phenotype.tsv'
-        path_fd = path_root / f'dataset-{dataset}' / file
-        df = pd.read_csv(path_fd, header=[0], index_col=0, sep='\t')
-        _, participants_groups, _ = utils._get_participants_groups(dataset)
-        participants_groups.name = 'group'
-        df = pd.concat([df, participants_groups], axis=1, join='inner')
-        sns.barplot(y='mean_framewise_displacement', x='group', data=df, ax=ax)
-        ax.set_title(f'{dataset} ($N={df.shape[0]}$)')
-    fig.suptitle('Mean framewise displacement per sub-sample')
-    return fig
-
-
 def plot_motion_resid(
     dataset, atlas_name=None, dimension=None, group='full_sample'
 ):
+    """
+    Dirty and quick plot for residual motion impact on functional connectivity.
+
+    Parameters
+    ----------
+    dataset : str
+        Dataset ID.
+
+    atlas_name : None or str
+        Atlas name.
+
+    dimension : None or str or int
+        Dimension of the atlas.
+
+    group : str
+        Default to full sampe ('full_sample'), or string value under the
+        dataset's groups column.
+    """
     # One cannot use specific dimension but use wild card in atlas
     metric = 'qcfc'
     files_qcfc, labels = utils._get_connectome_metric_paths(
@@ -240,103 +242,105 @@ def _plot_network_modularity(
     return fig
 
 
-def plot_dof_overview(plot_info):
+def plot_dof_dataset():
+
     datasets = ['ds000228', 'ds000030']
-    fig = plt.figure(figsize=(11, 5))
+
+    fig = plt.figure(constrained_layout=True, figsize=(11, 5))
     axs = fig.subplots(1, 2, sharey=True)
-    for dataset, ax in zip(datasets, axs):
-        file = f'dataset-{dataset}_desc-confounds_phenotype.tsv'
-        path_dof = path_root / 'metrics' / file
-        df = pd.read_csv(path_dof, header=[0, 1], index_col=0, sep='\t')
-        df = df.melt()
-        _dof_report(dataset, ax, df, plot_info)
-    axs[1].legend(bbox_to_anchor=(1.6, 1))
-    return fig
-
-
-def plot_dof_dataset(dataset, plot_info):
-
-    (
-        confounds_phenotype,
-        participant_groups,
-        groups,
-    ) = utils._get_participants_groups(dataset)
-
-    # this is lazy
-    if dataset == 'ds000228':
-        fig = plt.figure(figsize=(11, 5))
-        axs = fig.subplots(1, 2, sharey=True)
-        legend_loc = 1
-    else:
-        fig = plt.figure(figsize=(11, 11))
-        axs = fig.subplots(2, 2, sharey=True, sharex=True)
-        legend_loc = (0, 1)
-
-    for group, ax in zip(groups, axs.flat):
-        cur_dof = confounds_phenotype[participant_groups == group].melt()
-        title = f'{dataset}-{group}'
-        _dof_report(title, ax, cur_dof, plot_info)
-    axs[legend_loc].legend(bbox_to_anchor=(1.6, 1))
-    return fig
-
-
-def _dof_report(title, ax, df, plot_info):
-
-    if plot_info == 'dof':
-        df.columns = ['Strategy', 'type', 'Number of regressors']
+    ds_groups = []
+    for ax, dataset in zip(axs, datasets):
+        (
+            confounds_phenotype,
+            participant_groups,
+            groups,
+            ) = utils._get_participants_groups(dataset)
+        ds_groups.append((dataset, groups))
+        participant_groups = participant_groups.to_frame()
+        participant_groups = participant_groups.reset_index(
+            col_fill='participant_id'
+            )
+        confounds_phenotype.index = pd.MultiIndex.from_frame(participant_groups)
+        confounds_phenotype = confounds_phenotype.reset_index()
+        confounds_phenotype = confounds_phenotype.melt(
+            id_vars=['index', 'groups'],
+            var_name=['strategy', 'type'],
+            )
         sns.barplot(
-            y='Strategy',
-            x='Number of regressors',
-            data=df[df['type'] == 'compcor'],
-            ci=95,
-            color='blue',
-            ax=ax,
-            label='CompCor \nregressors',
-        )
+            x='value', y='strategy',
+            data=confounds_phenotype[confounds_phenotype['type'] == 'compcor'],
+            hue='groups', hue_order=groups,
+            ci=95, color='blue', linewidth=1, edgecolor='blue', ax=ax)
         sns.barplot(
-            y='Strategy',
-            x='Number of regressors',
-            data=df[df['type'] == 'aroma'],
-            ci=95,
-            color='orange',
-            ax=ax,
-            label='ICA-AROMA \npartial regressors',
-        )
+            x='value', y='strategy',
+            data=confounds_phenotype[confounds_phenotype['type'] == 'aroma'],
+            hue='groups', hue_order=groups,
+            ci=95, color='orange', linewidth=1, edgecolor='orange', ax=ax)
         sns.barplot(
-            y='Strategy',
-            x='Number of regressors',
-            data=df[df['type'] == 'fixed_regressors'],
-            color='darkgrey',
-            ax=ax,
-            label='Head motion and \ntissue signal',
-        )
+            x='value', y='strategy',
+            data=confounds_phenotype[confounds_phenotype['type'] == 'fixed_regressors'],
+            hue='groups', hue_order=groups,
+            ci=95, palette=['darkgrey', 'darkgrey'], linewidth=1, edgecolor='darkgrey', ax=ax)
         sns.barplot(
-            y='Strategy',
-            x='Number of regressors',
-            data=df[df['type'] == 'high_pass'],
-            ax=ax,
-            color='grey',
-            label='Discrete cosine-basis \nregressors',
-        )
-        ax.set_title(title)
+            x='value', y='strategy',
+            data=confounds_phenotype[confounds_phenotype['type'] == 'high_pass'],
+            hue='groups', hue_order=groups,
+            ci=95, palette=['grey', 'grey'], linewidth=1, edgecolor='grey', ax=ax)
         ax.set_xlim(0, 80)
+        ax.set_xlabel('Number of regressors')
+        ax.set_title(dataset)
+        # manually create legend
+        ax.get_legend().remove()
 
-    elif plot_info == 'scrubbing':
-        df.columns = [
-            'Strategy',
-            'type',
-            'Proportion of removed volumes to scan length',
-        ]
+    colors = ['blue', 'orange', 'darkgrey', 'grey']
+    labels = ['CompCor \nregressors',
+            'ICA-AROMA \npartial regressors',
+            'Head motion and \ntissue signal',
+            'Discrete cosine-basis \nregressors']
+    handles = [mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)]
+    axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
+    return fig, ds_groups
+
+
+def plot_vol_scrubbed_dataset():
+    datasets = ['ds000228', 'ds000030']
+
+    fig = plt.figure(constrained_layout=True, figsize=(11, 5))
+    axs = fig.subplots(1, 2, sharey=True)
+
+    for ax, dataset in zip(axs, datasets):
+        (
+            confounds_phenotype,
+            participant_groups,
+            groups,
+            ) = utils._get_participants_groups(dataset)
+        participant_groups = participant_groups.to_frame()
+        participant_groups = participant_groups.reset_index(
+            col_fill='participant_id'
+            )
+        confounds_phenotype.index = pd.MultiIndex.from_frame(participant_groups)
+        selected = [col
+                    for col, strategy in zip(
+                        confounds_phenotype.columns,
+                        confounds_phenotype.columns.get_level_values(0))
+                    if 'scrub' in strategy]
+        confounds_phenotype = confounds_phenotype.loc[:, selected]
+        confounds_phenotype = confounds_phenotype.reset_index()
+        confounds_phenotype = confounds_phenotype.melt(
+            id_vars=['index', 'groups'],
+            var_name=['strategy', 'type'],
+            )
+
         sns.barplot(
-            y='Strategy',
-            x='Proportion of removed volumes to scan length',
-            data=df[df['type'] == 'excised_vol_proportion'],
-            ci=95,
-            palette=['darkgrey'] * 7 + ['orange', 'orange'] + ['blue', 'blue'],
-            ax=ax,
-        )
-        ax.set_title(title)
+            x='value', y='strategy',
+            data=confounds_phenotype[confounds_phenotype['type'] == 'excised_vol_proportion'],
+            hue='groups', hue_order=groups,
+            ci=95, ax=ax)
         ax.set_xlim(0, 1)
+        ax.set_xlabel('Proportion of removed volumes to scan length')
+        ax.set_title(dataset)
+    return fig
+
 
 
 def _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc):

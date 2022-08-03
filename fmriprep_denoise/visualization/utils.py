@@ -45,7 +45,14 @@ def repo2data_path():
     return Path(data_path[0])
 
 
-path_root = repo2data_path()
+def get_data_root():
+    default_path = (
+        Path(__file__).parents[2] / 'inputs' / 'fmrieprep-denoise-paper'
+    )
+    return default_path if default_path.exists() else repo2data_path()
+
+
+path_root = get_data_root()
 
 
 def load_meanfd_groups(dataset):
@@ -84,11 +91,12 @@ def _get_participants_groups(dataset):
     )
     subjects = confounds_phenotype.index
 
-    participants_groups = pd.read_csv(
+    participant_groups = pd.read_csv(
         path_participants, index_col=0, sep='\t'
     ).loc[subjects, group_info_column]
-    groups = participants_groups.unique().tolist()
-    return confounds_phenotype, participants_groups, groups
+    participant_groups.name = 'groups'
+    groups = participant_groups.unique().tolist()
+    return confounds_phenotype, participant_groups, groups
 
 
 def _get_connectome_metric_paths(dataset, metric, atlas_name, dimension):

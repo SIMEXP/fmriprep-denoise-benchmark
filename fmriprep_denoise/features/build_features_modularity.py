@@ -10,7 +10,7 @@ from fmriprep_denoise.features.derivatives import (
     compute_connectome,
     check_extraction,
 )
-from fmriprep_denoise.features import qcfc, louvain_modularity
+from fmriprep_denoise.features import louvain_modularity
 
 
 # another very bad special case handling
