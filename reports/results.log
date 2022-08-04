@@ -17,21 +17,33 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-fig, groups = figures.plot_dof_dataset()
-glue(f'dof-fig', fig, display=False)
-for group in groups:
-    d, g = group
-    glue(f'group-order_{d}', g, display=False)
+fig = plt.figure(figsize=(7, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(for_plotting, axs):
+    df = for_plotting[dataset]
+    mean_fd = df['mean_framewise_displacement'].mean()
+    sd_fd = df['mean_framewise_displacement'].std()
+    df = df.rename(
+        columns={
+            'mean_framewise_displacement': 'Mean Framewise Displacement (mm)'
+            'groups': 'Groups'
+        }
+    )
+    sns.boxplot(
+        y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax
+    )
+    ax.set_title(
+        f'{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$'
+    )
+# fig.suptitle("Mean framewise displacement per sub-sample")
+
+glue('meanFD-fig', fig, display=False)
 ------------------
 
-[0;31m---------------------------------------------------------------------------[0m
-[0;31mValueError[0m                                Traceback (most recent call last)
-[0;32m/tmp/ipykernel_60252/1429411138.py[0m in [0;36m<module>[0;34m[0m
-[1;32m      2[0m [0mglue[0m[0;34m([0m[0;34mf'dof-fig'[0m[0;34m,[0m [0mfig[0m[0;34m,[0m [0mdisplay[0m[0;34m=[0m[0;32mFalse[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m      3[0m [0;32mfor[0m [0mgroup[0m [0;32min[0m [0mgroups[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
-[0;32m----> 4[0;31m     [0md[0m[0;34m,[0m [0mg[0m [0;34m=[0m [0mgroup[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m      5[0m     [0mglue[0m[0;34m([0m[0;34mf'group-order_{d}'[0m[0;34m,[0m [0mg[0m[0;34m,[0m [0mdisplay[0m[0;34m=[0m[0;32mFalse[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0;36m  File [0;32m"/tmp/ipykernel_19211/2111046509.py"[0;36m, line [0;32m10[0m
+[0;31m    'groups': 'Groups'[0m
+[0m            ^[0m
+[0;31mSyntaxError[0m[0;31m:[0m invalid syntax
 
-[0;31mValueError[0m: too many values to unpack (expected 2)
-ValueError: too many values to unpack (expected 2)
+SyntaxError: invalid syntax (2111046509.py, line 10)
 

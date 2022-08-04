@@ -65,7 +65,7 @@ H-T Wang[^1], S L Meisler[^2][^3], H Shamarke, F Paugam[^1][^4], N Gensollen[^5]
 ### Introduction
 
 Selecting an optimal denoising strategy is a key issue when processing fMRI data.
-The popular software fMRIPrep {cite:p}`esteban_fmriprep_2020` aims to standardize fMRI preprocessing,
+The popular software fMRIPrep {cite:p}`fmriprep1` aims to standardize fMRI preprocessing,
 but users are still offered a wide range of confound regressors to choose from to denoise data.
 Without a good understanding of the literature or the fMRIPrep documentation,
 users can select suboptimal strategies.
@@ -160,11 +160,3 @@ We replicated previous findings demonstrating the usefulness of standard denoisi
 However, results involving global signal regression methods systematically contradict the literature{cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`.
 This evaluation is implemented in a fully reproducible jupyter book framework, and it can be applied to evaluate denoising strategies for future fMRIPrep release.
 This software may also be useful for researchers to select the most suitable strategy and produce denoising benchmarks for their own dataset.
-
-
-:::{dropdown} References on this page
-
-```{bibliography}
-:filter: docname in docnames
-```
-:::

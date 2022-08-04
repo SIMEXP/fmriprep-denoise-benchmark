@@ -1,0 +1,813 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ds000228 &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="ds000030" href="report_ds000030.html" />
+    <link rel="prev" title="Results" href="results.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint">⚠️This is a working draft for discussion and feedback!⚠️</div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Benchmark denoising strategies on fMRIPrep outputs</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Abstract
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Research report
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introductions.html">
+   Introductions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="methods.html">
+   Methods
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="results.html">
+   Results
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     ds000228
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="report_ds000030.html">
+     ds000030
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="discussions.html">
+   Discussions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contributions.html">
+   Contributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Appendices and supplemental material
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/CITATION.html">
+   fMRIPrep preprocessing details
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html">
+   OHBM 2022 abstract - submitted text
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../supplementary_materials/walkthrough.html">
+   Code documentation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../supplementary_materials/setup.html">
+     Setup of this project
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../supplementary_materials/build_book.html">
+     Rebuild the book
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/SIMEXP/fmriprep-denoise-benchmark/main?urlpath=tree/content/research_report/report_ds000228.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Fresearch_report/report_ds000228.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/research_report/report_ds000228.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download notebook file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-code"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="../_sources/research_report/report_ds000228.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#qc-fc-and-distance-dependent-effect">
+   QC-FC and distance-dependent effect
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity">
+   Distance-dependent effects of motion on connectivity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#network-modularity">
+   Network modularity
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>ds000228</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#qc-fc-and-distance-dependent-effect">
+   QC-FC and distance-dependent effect
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distance-dependent-effects-of-motion-on-connectivity">
+   Distance-dependent effects of motion on connectivity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#network-modularity">
+   Network modularity
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="ds000228">
+<h1>ds000228<a class="headerlink" href="#ds000228" title="Permalink to this headline">#</a></h1>
+<div class="section" id="qc-fc-and-distance-dependent-effect">
+<h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">#</a></h2>
+<!--
+No denoise strategy removed the correlation with motion captured by mean framewise displacement.
+`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement.
+`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`.
+`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
+Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. --><div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="c1"># Load metric data</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000228&#39;</span>
+<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mist&#39;</span><span class="p">,</span> <span class="s1">&#39;difumo&#39;</span><span class="p">,</span> <span class="s1">&#39;schaefer7networks&#39;</span><span class="p">,</span> <span class="s1">&#39;gordon333&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">)</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_qcfc-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="475467b2-b54c-4c4a-8cc8-9439e53991a4" name="2c89d47c-e309-4f26-8f36-3f3ff50c419a" type="radio">
+</input><label class="sd-tab-label" for="475467b2-b54c-4c4a-8cc8-9439e53991a4">
+MIST</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-mist-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_1_1.png" src="../_images/report_ds000228_1_1.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-qcfc-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<input id="c83c9b0b-4402-4813-9840-78e4f5769bef" name="2c89d47c-e309-4f26-8f36-3f3ff50c419a" type="radio">
+</input><label class="sd-tab-label" for="c83c9b0b-4402-4813-9840-78e4f5769bef">
+DiFuMo</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-difumo-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_1_2.png" src="../_images/report_ds000228_1_2.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 5 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<input id="38479087-1ed0-4c31-9016-4e8e1499aad5" name="2c89d47c-e309-4f26-8f36-3f3ff50c419a" type="radio">
+</input><label class="sd-tab-label" for="38479087-1ed0-4c31-9016-4e8e1499aad5">
+Schaefer 7 Networks</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-schaefer7networks-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_1_3.png" src="../_images/report_ds000228_1_3.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<input id="09a8dfa0-9f1e-40c1-9acf-c057f819d7a3" name="2c89d47c-e309-4f26-8f36-3f3ff50c419a" type="radio">
+</input><label class="sd-tab-label" for="09a8dfa0-9f1e-40c1-9acf-c057f819d7a3">
+Gordon 333 parcels</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-gordon333-qcfc-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_1_4.png" src="../_images/report_ds000228_1_4.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="distance-dependent-effects-of-motion-on-connectivity">
+<h2>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">#</a></h2>
+<!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  --><div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="c1"># Load metric data</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000228&#39;</span>
+<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;difumo&#39;</span><span class="p">,</span> <span class="s1">&#39;mist&#39;</span><span class="p">,</span> <span class="s1">&#39;schaefer7networks&#39;</span><span class="p">,</span> <span class="s1">&#39;gordon333&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_distance_dependence</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">)</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_dist-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="43a1e92a-a103-4c4c-9585-26e5dc967384" name="78955357-c214-4775-a50e-a622e66c8460" type="radio">
+</input><label class="sd-tab-label" for="43a1e92a-a103-4c4c-9585-26e5dc967384">
+MIST</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-mist-dist-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_3_1.png" src="../_images/report_ds000228_3_1.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 8 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-dist-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<input id="5dfed712-906a-4903-8366-c09b0ac3874c" name="78955357-c214-4775-a50e-a622e66c8460" type="radio">
+</input><label class="sd-tab-label" for="5dfed712-906a-4903-8366-c09b0ac3874c">
+DiFuMo</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-difumo-dist-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_3_0.png" src="../_images/report_ds000228_3_0.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 9 </span><span class="caption-text">TBA</span><a class="headerlink" href="#tbl-ds000228-difumo-dist-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<input id="32cab091-3bb8-41ac-9013-1e64ee616b02" name="78955357-c214-4775-a50e-a622e66c8460" type="radio">
+</input><label class="sd-tab-label" for="32cab091-3bb8-41ac-9013-1e64ee616b02">
+Schaefer 7 Networks</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-schaefer7networks-dist-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_3_2.png" src="../_images/report_ds000228_3_2.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 10 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<input id="82be542a-3c43-408d-8a5d-3e483fb23764" name="78955357-c214-4775-a50e-a622e66c8460" type="radio">
+</input><label class="sd-tab-label" for="82be542a-3c43-408d-8a5d-3e483fb23764">
+Gordon 333 parcels</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-gordon333-dist-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_3_3.png" src="../_images/report_ds000228_3_3.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 11 </span><span class="caption-text">Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
+In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-dist-fig" title="Permalink to this image">#</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="section" id="network-modularity">
+<h2>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">#</a></h2>
+<!--
+All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all.
+GSR-based strategies improved the network modularity compared to their conunterparts.
+The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity. --><div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+<span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
+
+<span class="c1"># Load metric data</span>
+<span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000228&#39;</span>
+<span class="n">atlases</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;mist&#39;</span><span class="p">,</span> <span class="s1">&#39;difumo&#39;</span><span class="p">,</span> <span class="s1">&#39;schaefer7networks&#39;</span><span class="p">,</span> <span class="s1">&#39;gordon333&#39;</span><span class="p">]</span>
+<span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">by_group</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_network-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">figs</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas</span><span class="p">,</span> <span class="n">by_group</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">fig</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">figs</span><span class="p">):</span>
+        <span class="n">glue</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">atlas</span><span class="si">}</span><span class="s1">_network-</span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s1">-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="sd-tab-set docutils">
+<input checked="checked" id="a7fa37e3-b02f-4910-9f31-4365760bb715" name="d1b81ee0-6b35-46b4-a551-e61a61fe61b5" type="radio">
+</input><label class="sd-tab-label" for="a7fa37e3-b02f-4910-9f31-4365760bb715">
+MIST</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-mist-network-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_0.png" src="../_images/report_ds000228_5_0.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-network-fig" title="Permalink to this image">#</a></p>
+</div>
+<div class="figure align-default" id="tbl-ds000228-mist-network-1-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_1.png" src="../_images/report_ds000228_5_1.png" />
+</div>
+</div>
+<div class="figure align-default" id="tbl-ds000228-mist-network-2-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_2.png" src="../_images/report_ds000228_5_2.png" />
+</div>
+</div>
+</div>
+<input id="69757b47-232d-4fb7-86b8-c1886cc2aa6e" name="d1b81ee0-6b35-46b4-a551-e61a61fe61b5" type="radio">
+</input><label class="sd-tab-label" for="69757b47-232d-4fb7-86b8-c1886cc2aa6e">
+DiFuMo</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-difumo-network-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_3.png" src="../_images/report_ds000228_5_3.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Residual effect of motion on connectomes generated with DiFuMo atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-difumo-network-fig" title="Permalink to this image">#</a></p>
+</div>
+<div class="figure align-default" id="tbl-ds000228-difumo-network-1-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_4.png" src="../_images/report_ds000228_5_4.png" />
+</div>
+</div>
+<div class="figure align-default" id="tbl-ds000228-difumo-network-2-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_5.png" src="../_images/report_ds000228_5_5.png" />
+</div>
+</div>
+</div>
+<input id="e564dd1f-7333-4681-9ed5-c69f68a0a82b" name="d1b81ee0-6b35-46b4-a551-e61a61fe61b5" type="radio">
+</input><label class="sd-tab-label" for="e564dd1f-7333-4681-9ed5-c69f68a0a82b">
+Schaefer 7 Networks</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-schaefer7networks-network-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_6.png" src="../_images/report_ds000228_5_6.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-schaefer7networks-network-fig" title="Permalink to this image">#</a></p>
+</div>
+<div class="figure align-default" id="tbl-ds000228-schaefer7networks-network-1-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_7.png" src="../_images/report_ds000228_5_7.png" />
+</div>
+</div>
+<div class="figure align-default" id="tbl-ds000228-schaefer7networks-network-2-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_8.png" src="../_images/report_ds000228_5_8.png" />
+</div>
+</div>
+</div>
+<input id="63a0691d-5601-4d69-8a1c-fa5f83c2d078" name="d1b81ee0-6b35-46b4-a551-e61a61fe61b5" type="radio">
+</input><label class="sd-tab-label" for="63a0691d-5601-4d69-8a1c-fa5f83c2d078">
+Gordon 333 parcels</label><div class="sd-tab-content docutils">
+<div class="figure align-default" id="tbl-ds000228-gordon333-network-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_9.png" src="../_images/report_ds000228_5_9.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 15 </span><span class="caption-text">Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000228-gordon333-network-fig" title="Permalink to this image">#</a></p>
+</div>
+<div class="figure align-default" id="tbl-ds000228-gordon333-network-1-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_10.png" src="../_images/report_ds000228_5_10.png" />
+</div>
+</div>
+<div class="figure align-default" id="tbl-ds000228-gordon333-network-2-fig" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/report_ds000228_5_11.png" src="../_images/report_ds000228_5_11.png" />
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./research_report"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="results.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Results</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="report_ds000030.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">ds000030</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Hao-Ting Wang, Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

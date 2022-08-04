@@ -136,6 +136,11 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="report_ds000228.html">
+     ds000228
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="report_ds000030.html">
      ds000030
     </a>
@@ -150,6 +155,11 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="contributions.html">
    Contributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
   </a>
  </li>
 </ul>
@@ -431,17 +441,17 @@ title="Print to PDF"
 <h1>Introductions<a class="headerlink" href="#introductions" title="Permalink to this headline">#</a></h1>
 <!-- We all know denosing is important now. And we cannot understand brain activity without it. -->
 <p>Amongst functional magnetic resonance imaging (fMRI) acquisition protocols,
-resting state fMRI has become a tool of choice to explore human brain function in healthy and diseased populations <span id="id1">[<a class="reference internal" href="#id22">Biswal <em>et al.</em>, 2010</a>]</span>.
-Especially, functional connectivity <span id="id2">[<a class="reference internal" href="#id23">Sporns <em>et al.</em>, 2004</a>]</span> measure derived from resting state fMRI is a popular choice to characterize the neural basis of <!-- any suggestions of some newer paper to cite is good -->
-cognitive function <span id="id3">[<a class="reference internal" href="#id24">Finn <em>et al.</em>, 2015</a>]</span>,
-aging <span id="id4">[<a class="reference internal" href="#id26">Andrews-Hanna <em>et al.</em>, 2007</a>]</span>,
-and pathology <span id="id5">[<a class="reference internal" href="#id25">Woodward and Cascio, 2015</a>]</span>.
-The raise in the popularity of resting state fMRI also highlights the challenges and gap in the analytic approach <span id="id6">[<a class="reference internal" href="#id27">Cole <em>et al.</em>, 2010</a>]</span>.
+resting state fMRI has become a tool of choice to explore human brain function in healthy and diseased populations <span id="id1">[<a class="reference internal" href="references.html#id2">Biswal <em>et al.</em>, 2010</a>]</span>.
+Especially, functional connectivity <span id="id2">[<a class="reference internal" href="references.html#id3">Sporns <em>et al.</em>, 2004</a>]</span> measure derived from resting state fMRI is a popular choice to characterize the neural basis of <!-- any suggestions of some newer paper to cite is good -->
+cognitive function <span id="id3">[<a class="reference internal" href="references.html#id4">Finn <em>et al.</em>, 2015</a>]</span>,
+aging <span id="id4">[<a class="reference internal" href="references.html#id6">Andrews-Hanna <em>et al.</em>, 2007</a>]</span>,
+and pathology <span id="id5">[<a class="reference internal" href="references.html#id5">Woodward and Cascio, 2015</a>]</span>.
+The raise in the popularity of resting state fMRI also highlights the challenges and gap in the analytic approach <span id="id6">[<a class="reference internal" href="references.html#id7">Cole <em>et al.</em>, 2010</a>]</span>.
 Distortion introduced by non-neuronal sources,
-such as head motion, scanner noise, cardiac and repiratory artifacts <span id="id7">[<a class="reference internal" href="#id29">Murphy <em>et al.</em>, 2013</a>, <a class="reference internal" href="#id28">Rogers <em>et al.</em>, 2007</a>]</span>,
-known as confounds or nuisance regressors, pose a major challenge in functional connectivity analysis <span id="id8">[<a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html#id44">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
-When functional connectivity is contaminated with motion, it can lead to altered network structure <span id="id9">[<a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html#id38">Power <em>et al.</em>, 2012</a>]</span>.
-The impact of head motion on younger subjects and neurologic/psychiatric patientsis frequently reported <span id="id10">[<a class="reference internal" href="#id30">Makowski <em>et al.</em>, 2019</a>, <a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html#id44">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
+such as head motion, scanner noise, cardiac and repiratory artifacts <span id="id7">[<a class="reference internal" href="references.html#id9">Murphy <em>et al.</em>, 2013</a>, <a class="reference internal" href="references.html#id8">Rogers <em>et al.</em>, 2007</a>]</span>,
+known as confounds or nuisance regressors, pose a major challenge in functional connectivity analysis <span id="id8">[<a class="reference internal" href="references.html#id20">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
+When functional connectivity is contaminated with motion, it can lead to altered network structure <span id="id9">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>.
+The impact of head motion on younger subjects and neurologic/psychiatric patientsis frequently reported <span id="id10">[<a class="reference internal" href="references.html#id10">Makowski <em>et al.</em>, 2019</a>, <a class="reference internal" href="references.html#id20">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
 Hence, reducing the impact of confounds, known as denosing,
 is an major compoenent of the workflow for to ensure the quality of analysis.</p>
 <!-- Classes of nuisance regressors - like how load_confounds separate them -->
@@ -449,20 +459,20 @@ is an major compoenent of the workflow for to ensure the quality of analysis.</p
 <div class="section" id="types-of-noise-regressors">
 <h2>Types of noise regressors<a class="headerlink" href="#types-of-noise-regressors" title="Permalink to this headline">#</a></h2>
 <p>To minimize impact of confounds,
-the most common method in functional connectivity analysis is performing a linear regression using the nuisance regressors to model the signals <span id="id11">[<a class="reference internal" href="#id31">Friston <em>et al.</em>, 1994</a>]</span>.
+the most common method in functional connectivity analysis is performing a linear regression using the nuisance regressors to model the signals <span id="id11">[<a class="reference internal" href="references.html#id11">Friston <em>et al.</em>, 1994</a>]</span>.
 The residual of the linear regression will be the denoised signal for the subsequent analysis.
 The nuisance regressors are separated into a few classes, capturing different type of non-neuronal noises.
 <strong>Temporal high-pass filtering</strong> accounts low-frequency signal drifts introduced by <em>physiological and scanner noise sources</em>.
-<strong>Head motion</strong> is captured by <em>6 rigid-body motion parameters</em> (3 translations and 3 rotation)  estimated relative to a reference image <span id="id12">[<a class="reference internal" href="#id32">Friston <em>et al.</em>, 1996</a>]</span>.
-<strong>Non-grey matter tissue signal</strong>, including <em>white matter</em> and <em>cerebrospinal fluid</em>, are unlikely to include signal related to neuronal activity <span id="id13">[<a class="reference internal" href="methods.html#id42">Fox <em>et al.</em>, 2005</a>]</span>.
+<strong>Head motion</strong> is captured by <em>6 rigid-body motion parameters</em> (3 translations and 3 rotation)  estimated relative to a reference image <span id="id12">[<a class="reference internal" href="references.html#id12">Friston <em>et al.</em>, 1996</a>]</span>.
+<strong>Non-grey matter tissue signal</strong>, including <em>white matter</em> and <em>cerebrospinal fluid</em>, are unlikely to include signal related to neuronal activity <span id="id13">[<a class="reference internal" href="references.html#id13">Fox <em>et al.</em>, 2005</a>]</span>.
 They are captured by averaging signal within the anatomically-derived masks.
-<strong>Global signal</strong> is calculated by averaging signal within the <em>full brain</em> mask <span id="id14">[<a class="reference internal" href="methods.html#id42">Fox <em>et al.</em>, 2005</a>]</span>.
-All these four classes of regressors can be expanded to their first temporal derivatives and their quadratic terms <span id="id15">[<a class="reference internal" href="#id40">Satterthwaite <em>et al.</em>, 2013</a>]</span>.
-Principle componenet based method <strong>CompCor</strong> <span id="id16">[<a class="reference internal" href="methods.html#id44">Behzadi <em>et al.</em>, 2007</a>]</span> extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity.
-Independent component analysis based method, <strong>ICA-FIX</strong> <span id="id17">[<a class="reference internal" href="#id71">Salimi-Khorshidi <em>et al.</em>, 2014</a>]</span> and <strong>ICA-AROMA</strong> <span id="id18">[<a class="reference internal" href="results.html#id53">Pruim <em>et al.</em>, 2015</a>]</span>,
+<strong>Global signal</strong> is calculated by averaging signal within the <em>full brain</em> mask <span id="id14">[<a class="reference internal" href="references.html#id13">Fox <em>et al.</em>, 2005</a>]</span>.
+All these four classes of regressors can be expanded to their first temporal derivatives and their quadratic terms <span id="id15">[<a class="reference internal" href="references.html#id19">Satterthwaite <em>et al.</em>, 2013</a>]</span>.
+Principle componenet based method <strong>CompCor</strong> <span id="id16">[<a class="reference internal" href="references.html#id15">Behzadi <em>et al.</em>, 2007</a>]</span> extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity.
+Independent component analysis based method, <strong>ICA-FIX</strong> <span id="id17">[<a class="reference internal" href="references.html#id50">Salimi-Khorshidi <em>et al.</em>, 2014</a>]</span> and <strong>ICA-AROMA</strong> <span id="id18">[<a class="reference internal" href="references.html#id49">Pruim <em>et al.</em>, 2015</a>]</span>,
 estimate independent component time series related to head-motion through a data-driven classifier (ICA-FIX) or a pre-trained model (ICA-AROMA).
 Different strategy has there own strength and benefits and often involves combining a few classes of regressors described above.
-These regressors are regressed out from the signal after basic processing steps (see fMRIprep <span id="id19">[<a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html#id36">Esteban <em>et al.</em>, 2020</a>]</span>) with linear regression.
+These regressors are regressed out from the signal after basic processing steps (see fMRIprep <span id="id19">[<a class="reference internal" href="references.html#id31">Esteban <em>et al.</em>, 2018</a>]</span>) with linear regression.
 All the subsequent analysis performs on the redisual signal after the regression step.</p>
 </div>
 <div class="section" id="implementation-of-denoising-step">
@@ -478,7 +488,7 @@ it’s not uncommon for users wanting to adding parameters other than the native
 In the FSL example, if user wants to use unsupported strategy, such as CompCor,
 they will have to calculate the regressors and inject to the workflow manually.</p>
 <!-- Question: should we compare some other software? ie. niak and cpac has a more flexible approach, but still lock user-in  -->
-<p>Recent rise of minimal preprocessing pipelines fMRIPrep <span id="id20">[<a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html#id36">Esteban <em>et al.</em>, 2020</a>]</span> has address the confound regressor issue from a different angle.
+<p>Recent rise of minimal preprocessing pipelines fMRIPrep <span id="id20">[<a class="reference internal" href="references.html#id31">Esteban <em>et al.</em>, 2018</a>]</span> has address the confound regressor issue from a different angle.
 fMRIprep aims to standardize the established steps of fMRI preprocessing, including registration, slice timing correction, motion correction, and distortion correction.
 Their approach leaves the choice of denoising and spatial smoothing to users.
 Instead of generating a small subset of confound regressors, fMRIPrep calculate a wide range of noise regressors that can be extracted from the fMRI data.
@@ -503,75 +513,7 @@ We selected two datasets from OpenNeuro,
 one with adult and child samples, and the other with psychiatric conditions.
 The benchmark will assess the differences in strategies, as well as the impact on different type of samples.
 The research will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.</p>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
-<summary class="sd-summary-title sd-card-header">
-References on this page<div class="sd-summary-down docutils">
-<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
-<div class="sd-summary-up docutils">
-<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
-</summary><div class="sd-summary-content sd-card-body docutils">
-<p class="sd-card-text" id="id21"><dl class="citation">
-<dt class="label" id="id26"><span class="brackets"><a class="fn-backref" href="#id4">AHSV+07</a></span></dt>
-<dd><p class="sd-card-text">Jessica R. Andrews-Hanna, Abraham Z. Snyder, Justin L. Vincent, Cindy Lustig, Denise Head, Marcus E. Raichle, and Randy L. Buckner. Disruption of Large-Scale Brain Systems in Advanced Aging. <em>Neuron</em>, 56(5):924–935, December 2007. <a class="reference external" href="https://doi.org/10.1016/j.neuron.2007.10.038">doi:10.1016/j.neuron.2007.10.038</a>.</p>
-</dd>
-<dt class="label" id="id36"><span class="brackets"><a class="fn-backref" href="#id16">BRLL07</a></span></dt>
-<dd><p class="sd-card-text">Yashar Behzadi, Khaled Restom, Joy Liau, and Thomas T. Liu. A component based noise correction method (compcor) for bold and perfusion based fmri. <em>NeuroImage</em>, 37(1):90–101, 2007. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2007.04.042">doi:10.1016/j.neuroimage.2007.04.042</a>.</p>
-</dd>
-<dt class="label" id="id22"><span class="brackets"><a class="fn-backref" href="#id1">BMZ+10</a></span></dt>
-<dd><p class="sd-card-text">Bharat B. Biswal, Maarten Mennes, Xi-Nian Zuo, Suril Gohel, Clare Kelly, Steve M. Smith, Christian F. Beckmann, Jonathan S. Adelstein, Randy L. Buckner, Stan Colcombe, Anne-Marie Dogonowski, Monique Ernst, Damien Fair, Michelle Hampson, Matthew J. Hoptman, James S. Hyde, Vesa J. Kiviniemi, Rolf Kötter, Shi-Jiang Li, Ching-Po Lin, Mark J. Lowe, Clare Mackay, David J. Madden, Kristoffer H. Madsen, Daniel S. Margulies, Helen S. Mayberg, Katie McMahon, Christopher S. Monk, Stewart H. Mostofsky, Bonnie J. Nagel, James J. Pekar, Scott J. Peltier, Steven E. Petersen, Valentin Riedl, Serge A. R. B. Rombouts, Bart Rypma, Bradley L. Schlaggar, Sein Schmidt, Rachael D. Seidler, Greg J. Siegle, Christian Sorg, Gao-Jun Teng, Juha Veijola, Arno Villringer, Martin Walter, Lihong Wang, Xu-Chu Weng, Susan Whitfield-Gabrieli, Peter Williamson, Christian Windischberger, Yu-Feng Zang, Hong-Ying Zhang, F. Xavier Castellanos, and Michael P. Milham. Toward discovery science of human brain function. <em>Proceedings of the National Academy of Sciences</em>, 107(10):4734–4739, 2010. <a class="reference external" href="https://doi.org/10.1073/pnas.0911855107">doi:10.1073/pnas.0911855107</a>.</p>
-</dd>
-<dt class="label" id="id27"><span class="brackets"><a class="fn-backref" href="#id6">CSB10</a></span></dt>
-<dd><p class="sd-card-text">David M. Cole, Stephen M. Smith, and Christian F. Beckmann. Advances and pitfalls in the analysis and interpretation of resting-state FMRI data. <em>Frontiers in Systems Neuroscience</em>, 4:8, 2010. <a class="reference external" href="https://doi.org/10.3389/fnsys.2010.00008">doi:10.3389/fnsys.2010.00008</a>.</p>
-</dd>
-<dt class="label" id="id33"><span class="brackets">EMG+20</span><span class="fn-backref">(<a href="#id19">1</a>,<a href="#id20">2</a>)</span></dt>
-<dd><p class="sd-card-text">Oscar Esteban, Christopher J. Markiewicz, Mathias Goncalves, Elizabeth DuPre, James D. Kent, Rastko Ciric, Ross W. Blair, Russell A. Poldrack, and Krzysztof J. Gorgolewski. Fmriprep: a robust preprocessing pipeline for functional mri. June 2020. URL: <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">https://doi.org/10.5281/zenodo.3876458</a>, <a class="reference external" href="https://doi.org/10.5281/zenodo.3876458">doi:10.5281/zenodo.3876458</a>.</p>
-</dd>
-<dt class="label" id="id24"><span class="brackets"><a class="fn-backref" href="#id3">FSS+15</a></span></dt>
-<dd><p class="sd-card-text">Emily S. Finn, Xilin Shen, Dustin Scheinost, Monica D. Rosenberg, Jessica Huang, Marvin M Chun, Xenophon Papademetris, R Todd Constable, R. Todd Constable, and R Todd Constable. Functional connectome fingerprinting: identifying individuals using patterns of brain connectivity. <em>Nature Neuroscience</em>, 18(October):1–11, October 2015. <a class="reference external" href="https://doi.org/10.1038/nn.4135">doi:10.1038/nn.4135</a>.</p>
-</dd>
-<dt class="label" id="id34"><span class="brackets">FSV+05</span><span class="fn-backref">(<a href="#id13">1</a>,<a href="#id14">2</a>)</span></dt>
-<dd><p class="sd-card-text">Michael D. Fox, Abraham Z. Snyder, Justin L. Vincent, Maurizio Corbetta, David C. Van Essen, and Marcus E. Raichle. The human brain is intrinsically organized into dynamic, anticorrelated functional networks. <em>Proceedings of the National Academy of Sciences</em>, 102(27):9673–9678, 2005. <a class="reference external" href="https://doi.org/10.1073/pnas.0504136102">doi:10.1073/pnas.0504136102</a>.</p>
-</dd>
-<dt class="label" id="id31"><span class="brackets"><a class="fn-backref" href="#id11">FHW+94</a></span></dt>
-<dd><p class="sd-card-text">Karl J. Friston, A. P. Holmes, K. J. Worsley, J. ‐P Poline, Chris D Frith, and R. S.J. J Frackowiak. Statistical parametric maps in functional imaging: A general linear approach. <em>Human Brain Mapping</em>, 2(4):189–210, January 1994. <a class="reference external" href="https://doi.org/10.1002/hbm.460020402">doi:10.1002/hbm.460020402</a>.</p>
-</dd>
-<dt class="label" id="id32"><span class="brackets"><a class="fn-backref" href="#id12">FWH+96</a></span></dt>
-<dd><p class="sd-card-text">Karl J. Friston, Steven Williams, Robert Howard, Richard S. J. Frackowiak, and Robert Turner. Movement-Related effects in fMRI time-series. <em>Magnetic Resonance in Medicine</em>, 35(3):346–355, 1996. <a class="reference external" href="https://doi.org/10.1002/mrm.1910350312">doi:10.1002/mrm.1910350312</a>.</p>
-</dd>
-<dt class="label" id="id30"><span class="brackets"><a class="fn-backref" href="#id10">MLE19</a></span></dt>
-<dd><p class="sd-card-text">Carolina Makowski, Martin Lepage, and Alan C. Evans. Head motion: the dirty little secret of neuroimaging in psychiatry. <em>Journal of Psychiatry and Neuroscience</em>, 44(1):62–68, January 2019. <a class="reference external" href="https://doi.org/10.1503/jpn.180022">doi:10.1503/jpn.180022</a>.</p>
-</dd>
-<dt class="label" id="id29"><span class="brackets"><a class="fn-backref" href="#id7">MBB13</a></span></dt>
-<dd><p class="sd-card-text">Kevin Murphy, Rasmus M. Birn, and Peter A. Bandettini. Resting-state fmri confounds and cleanup. <em>NeuroImage</em>, 80:349–359, 2013. Mapping the Connectome. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2013.04.001">doi:10.1016/j.neuroimage.2013.04.001</a>.</p>
-</dd>
-<dt class="label" id="id35"><span class="brackets"><a class="fn-backref" href="#id9">PBS+12</a></span></dt>
-<dd><p class="sd-card-text">Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. <em>NeuroImage</em>, 59(3):2142–2154, 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.10.018">doi:10.1016/j.neuroimage.2011.10.018</a>.</p>
-</dd>
-<dt class="label" id="id70"><span class="brackets"><a class="fn-backref" href="#id18">PMvR+15</a></span></dt>
-<dd><p class="sd-card-text">Raimon H. R. Pruim, Maarten Mennes, Daan van Rooij, Alberto Llera, Jan K. Buitelaar, and Christian F. Beckmann. Ica-AROMA: a robust ICA-based strategy for removing motion artifacts from fmri data. <em>NeuroImage</em>, 112(Supplement C):267–277, 2015. URL: <a class="reference external" href="http://www.sciencedirect.com/science/article/pii/S1053811915001822">http://www.sciencedirect.com/science/article/pii/S1053811915001822</a>, <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2015.02.064">doi:10.1016/j.neuroimage.2015.02.064</a>.</p>
-</dd>
-<dt class="label" id="id28"><span class="brackets"><a class="fn-backref" href="#id7">RMNG07</a></span></dt>
-<dd><p class="sd-card-text">Baxter P. Rogers, Victoria L. Morgan, Allen T. Newton, and John C. Gore. Assessing Functional Connectivity in the Human Brain by FMRI. <em>Magnetic resonance imaging</em>, 25(10):1347–1357, December 2007. <a class="reference external" href="https://doi.org/10.1016/j.mri.2007.03.007">doi:10.1016/j.mri.2007.03.007</a>.</p>
-</dd>
-<dt class="label" id="id71"><span class="brackets"><a class="fn-backref" href="#id17">SKDB+14</a></span></dt>
-<dd><p class="sd-card-text">Gholamreza Salimi-Khorshidi, Gwenaëlle Douaud, Christian F. Beckmann, Matthew F. Glasser, Ludovica Griffanti, and Stephen M. Smith. Automatic denoising of functional MRI data: Combining independent component analysis and hierarchical fusion of classifiers. <em>NeuroImage</em>, 90:449–468, April 2014. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2013.11.046">doi:10.1016/j.neuroimage.2013.11.046</a>.</p>
-</dd>
-<dt class="label" id="id40"><span class="brackets"><a class="fn-backref" href="#id15">SEG+13</a></span></dt>
-<dd><p class="sd-card-text">Theodore D. Satterthwaite, Mark A. Elliott, Raphael T. Gerraty, Kosha Ruparel, James Loughead, Monica E. Calkins, Simon B. Eickhoff, Hakon Hakonarson, Ruben C. Gur, Raquel E. Gur, and Daniel H. Wolf. An improved framework for confound regression and filtering for control of motion artifact in the preprocessing of resting-state functional connectivity data. <em>NeuroImage</em>, 64:240–256, 2013. <a class="reference external" href="https://doi.org/https://doi.org/10.1016/j.neuroimage.2012.08.052">doi:https://doi.org/10.1016/j.neuroimage.2012.08.052</a>.</p>
-</dd>
-<dt class="label" id="id41"><span class="brackets">SWL+12</span><span class="fn-backref">(<a href="#id8">1</a>,<a href="#id10">2</a>)</span></dt>
-<dd><p class="sd-card-text">Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. <em>NeuroImage</em>, 60(1):623–632, March 2012. <a class="reference external" href="https://doi.org/10.1016/j.neuroimage.2011.12.063">doi:10.1016/j.neuroimage.2011.12.063</a>.</p>
-</dd>
-<dt class="label" id="id23"><span class="brackets"><a class="fn-backref" href="#id2">SCKH04</a></span></dt>
-<dd><p class="sd-card-text">Olaf Sporns, Dante R. Chialvo, Marcus Kaiser, and Claus C. Hilgetag. Organization, development and function of complex brain networks. <em>Trends in Cognitive Sciences</em>, 8(9):418–425, September 2004. <a class="reference external" href="https://doi.org/10.1016/j.tics.2004.07.008">doi:10.1016/j.tics.2004.07.008</a>.</p>
-</dd>
-<dt class="label" id="id25"><span class="brackets"><a class="fn-backref" href="#id5">WC15</a></span></dt>
-<dd><p class="sd-card-text">Neil D. Woodward and Carissa J. Cascio. Resting-state functional connectivity in psychiatric disorders. <em>JAMA psychiatry</em>, 72(8):743–744, August 2015. <a class="reference external" href="https://doi.org/10.1001/jamapsychiatry.2015.0484">doi:10.1001/jamapsychiatry.2015.0484</a>.</p>
-</dd>
-</dl>
-</p>
 </div>
-</details></div>
 </div>
 
     <script type="text/x-thebe-config">

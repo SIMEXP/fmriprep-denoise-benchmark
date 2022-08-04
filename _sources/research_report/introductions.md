@@ -34,7 +34,7 @@ Principle componenet based method __CompCor__ {cite:p}`behzadi_compcor_2007` ext
 Independent component analysis based method, __ICA-FIX__ {cite:p}`salimi-khorshidi_automatic_2014` and __ICA-AROMA__ {cite:p}`aroma`,
 estimate independent component time series related to head-motion through a data-driven classifier (ICA-FIX) or a pre-trained model (ICA-AROMA).
 Different strategy has there own strength and benefits and often involves combining a few classes of regressors described above.
-These regressors are regressed out from the signal after basic processing steps (see fMRIprep {cite:p}`esteban_fmriprep_2020`) with linear regression.
+These regressors are regressed out from the signal after basic processing steps (see fMRIprep {cite:p}`fmriprep1`) with linear regression.
 All the subsequent analysis performs on the redisual signal after the regression step.
 
 ## Implementation of denoising step
@@ -51,7 +51,7 @@ In the FSL example, if user wants to use unsupported strategy, such as CompCor,
 they will have to calculate the regressors and inject to the workflow manually.
 <!-- Question: should we compare some other software? ie. niak and cpac has a more flexible approach, but still lock user-in  -->
 
-Recent rise of minimal preprocessing pipelines fMRIPrep {cite:p}`esteban_fmriprep_2020` has address the confound regressor issue from a different angle.
+Recent rise of minimal preprocessing pipelines fMRIPrep {cite:p}`fmriprep1` has address the confound regressor issue from a different angle.
 fMRIprep aims to standardize the established steps of fMRI preprocessing, including registration, slice timing correction, motion correction, and distortion correction.
 Their approach leaves the choice of denoising and spatial smoothing to users.
 Instead of generating a small subset of confound regressors, fMRIPrep calculate a wide range of noise regressors that can be extracted from the fMRI data.
@@ -75,11 +75,4 @@ with the aim to maximise the exposure of the API to the larger Python fMRI commu
 We selected two datasets from OpenNeuro,
 one with adult and child samples, and the other with psychiatric conditions.
 The benchmark will assess the differences in strategies, as well as the impact on different type of samples.
-The research will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset.
-
-:::{dropdown} References on this page
-
-```{bibliography}
-:filter: docname in docnames
-```
-:::
+The research will provide a useful reference for fMRIPrep users by systematically evaluating the impact of common denoising strategies and select the best approach for their dataset. 
