@@ -25,9 +25,9 @@ jobs:
         pip install -r  binder/requirements.txt
     - name: Download data with repo2data
       run: |
-        cd binder
+        cd content/research_report
         repo2data -r  data_requirement.json
-        cd ..
+        cd ../..
     # Build the page
     - name: Build the book
       run: |
