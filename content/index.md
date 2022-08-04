@@ -23,11 +23,4 @@ and provide benchmarks of different strategies using functional connectivity gen
 The main tool is a part of
 [`nilearn`](https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds) {cite:p}`nilearn`.
 
-
-:::{dropdown} References on this page
-
-```{bibliography}
-:filter: docname in docnames
-:labelprefix: A
-```
-:::
+Keywords: fMRIPrep, nilearn, nuisance regressor, resting-state fMRI, functional connectivity, benchmark 
