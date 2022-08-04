@@ -3,6 +3,7 @@ name: deploy-book
 # Only run this when the main branch changes
 on:
   push:
+  pull_request:
     branches:
     - main 
 
