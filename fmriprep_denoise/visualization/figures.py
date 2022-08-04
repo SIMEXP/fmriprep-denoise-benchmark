@@ -254,38 +254,72 @@ def plot_dof_dataset():
             confounds_phenotype,
             participant_groups,
             groups,
-            ) = utils._get_participants_groups(dataset)
+        ) = utils._get_participants_groups(dataset)
         ds_groups.append((dataset, groups))
         participant_groups = participant_groups.to_frame()
         participant_groups = participant_groups.reset_index(
             col_fill='participant_id'
-            )
-        confounds_phenotype.index = pd.MultiIndex.from_frame(participant_groups)
+        )
+        confounds_phenotype.index = pd.MultiIndex.from_frame(
+            participant_groups
+        )
         confounds_phenotype = confounds_phenotype.reset_index()
         confounds_phenotype = confounds_phenotype.melt(
             id_vars=['index', 'groups'],
             var_name=['strategy', 'type'],
-            )
+        )
         sns.barplot(
-            x='value', y='strategy',
+            x='value',
+            y='strategy',
             data=confounds_phenotype[confounds_phenotype['type'] == 'compcor'],
-            hue='groups', hue_order=groups,
-            ci=95, color='blue', linewidth=1, edgecolor='blue', ax=ax)
+            hue='groups',
+            hue_order=groups,
+            ci=95,
+            color='blue',
+            linewidth=1,
+            edgecolor='blue',
+            ax=ax,
+        )
         sns.barplot(
-            x='value', y='strategy',
+            x='value',
+            y='strategy',
             data=confounds_phenotype[confounds_phenotype['type'] == 'aroma'],
-            hue='groups', hue_order=groups,
-            ci=95, color='orange', linewidth=1, edgecolor='orange', ax=ax)
+            hue='groups',
+            hue_order=groups,
+            ci=95,
+            color='orange',
+            linewidth=1,
+            edgecolor='orange',
+            ax=ax,
+        )
         sns.barplot(
-            x='value', y='strategy',
-            data=confounds_phenotype[confounds_phenotype['type'] == 'fixed_regressors'],
-            hue='groups', hue_order=groups,
-            ci=95, palette=['darkgrey', 'darkgrey'], linewidth=1, edgecolor='darkgrey', ax=ax)
+            x='value',
+            y='strategy',
+            data=confounds_phenotype[
+                confounds_phenotype['type'] == 'fixed_regressors'
+            ],
+            hue='groups',
+            hue_order=groups,
+            ci=95,
+            palette=['darkgrey', 'darkgrey'],
+            linewidth=1,
+            edgecolor='darkgrey',
+            ax=ax,
+        )
         sns.barplot(
-            x='value', y='strategy',
-            data=confounds_phenotype[confounds_phenotype['type'] == 'high_pass'],
-            hue='groups', hue_order=groups,
-            ci=95, palette=['grey', 'grey'], linewidth=1, edgecolor='grey', ax=ax)
+            x='value',
+            y='strategy',
+            data=confounds_phenotype[
+                confounds_phenotype['type'] == 'high_pass'
+            ],
+            hue='groups',
+            hue_order=groups,
+            ci=95,
+            palette=['grey', 'grey'],
+            linewidth=1,
+            edgecolor='grey',
+            ax=ax,
+        )
         ax.set_xlim(0, 80)
         ax.set_xlabel('Number of regressors')
         ax.set_title(dataset)
@@ -293,11 +327,15 @@ def plot_dof_dataset():
         ax.get_legend().remove()
 
     colors = ['blue', 'orange', 'darkgrey', 'grey']
-    labels = ['CompCor \nregressors',
-            'ICA-AROMA \npartial regressors',
-            'Head motion and \ntissue signal',
-            'Discrete cosine-basis \nregressors']
-    handles = [mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)]
+    labels = [
+        'CompCor \nregressors',
+        'ICA-AROMA \npartial regressors',
+        'Head motion and \ntissue signal',
+        'Discrete cosine-basis \nregressors',
+    ]
+    handles = [
+        mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)
+    ]
     axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
     return fig, ds_groups
 
@@ -313,28 +351,39 @@ def plot_vol_scrubbed_dataset():
             confounds_phenotype,
             participant_groups,
             groups,
-            ) = utils._get_participants_groups(dataset)
+        ) = utils._get_participants_groups(dataset)
         participant_groups = participant_groups.to_frame()
         participant_groups = participant_groups.reset_index(
             col_fill='participant_id'
+        )
+        confounds_phenotype.index = pd.MultiIndex.from_frame(
+            participant_groups
+        )
+        selected = [
+            col
+            for col, strategy in zip(
+                confounds_phenotype.columns,
+                confounds_phenotype.columns.get_level_values(0),
             )
-        confounds_phenotype.index = pd.MultiIndex.from_frame(participant_groups)
-        selected = [col
-                    for col, strategy in zip(
-                        confounds_phenotype.columns,
-                        confounds_phenotype.columns.get_level_values(0))
-                    if 'scrub' in strategy]
+            if 'scrub' in strategy
+        ]
         confounds_phenotype = confounds_phenotype.loc[:, selected]
         confounds_phenotype = confounds_phenotype.reset_index()
         confounds_phenotype = confounds_phenotype.melt(
             id_vars=['index', 'groups'],
             var_name=['strategy', 'type'],
-            )
+        )
 
         sns.boxplot(
-            x='value', y='strategy',
-            data=confounds_phenotype[confounds_phenotype['type'] == 'excised_vol_proportion'],
-            hue='groups', hue_order=groups, ax=ax)
+            x='value',
+            y='strategy',
+            data=confounds_phenotype[
+                confounds_phenotype['type'] == 'excised_vol_proportion'
+            ],
+            hue='groups',
+            hue_order=groups,
+            ax=ax,
+        )
         ax.set_xlabel('Proportion of removed volumes to scan length')
         ax.set_title(dataset)
     return fig

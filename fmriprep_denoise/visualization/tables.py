@@ -12,7 +12,9 @@ path_root = utils.repo2data_path()
 fd2label = {0.5: 'scrubbing.5', 0.2: 'scrubbing.2'}
 
 
-def lazy_demographic(dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None):
+def lazy_demographic(
+    dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None
+):
     """
     Very lazy report of demographic information
     """
@@ -21,7 +23,9 @@ def lazy_demographic(dataset, gross_fd=None, fd_thresh=None, proportion_thresh=N
             'We did not generate metric with scrubbing threshold set at'
             f'framewise displacement = {fd_thresh} mm.'
         )
-    df, groups = get_descriptive_data(dataset, gross_fd, fd_thresh, proportion_thresh)
+    df, groups = get_descriptive_data(
+        dataset, gross_fd, fd_thresh, proportion_thresh
+    )
     full = df.describe()['age']
     full.name = 'full sample'
     print(f"n female: {df['gender'].sum()}")
@@ -36,7 +40,9 @@ def lazy_demographic(dataset, gross_fd=None, fd_thresh=None, proportion_thresh=N
     return pd.concat(desc, axis=1)
 
 
-def get_descriptive_data(dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None):
+def get_descriptive_data(
+    dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None
+):
     """Get the data frame of all descriptive data needed for a dataset."""
     if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
         raise ValueError(
@@ -66,7 +72,7 @@ def get_descriptive_data(dataset, gross_fd=None, fd_thresh=None, proportion_thre
 
     if fd_thresh is not None and proportion_thresh is not None:
         scrub_label = (fd2label[fd_thresh], 'excised_vol_proportion')
-        keep_scrub = confounds_phenotype[scrub_label]<= proportion_thresh
+        keep_scrub = confounds_phenotype[scrub_label] <= proportion_thresh
         keep_scrub = confounds_phenotype.index[keep_scrub]
     else:
         keep_scrub = confounds_phenotype.index
