@@ -20,7 +20,7 @@
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
@@ -34,10 +34,13 @@
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
-    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
     <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
@@ -46,8 +49,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Results" href="results.html" />
@@ -579,13 +582,13 @@ title="Print to PDF"
 <h2>Datasets<a class="headerlink" href="#datasets" title="Permalink to this headline">#</a></h2>
 <!-- need to revise the demographic information -->
 <p>We selected two datasets on OpenNeuro for the current analysis:
-<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id25">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id24">Bilder <em>et al.</em>, 2020</a>]</span>.
+<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> <span id="id1">[<a class="reference internal" href="references.html#id25" title="Hilary Richardson, Grace Lisandrelli, Alexa Riobueno-Naylor, and Rebecca Saxe. &quot;mri data of 3-12 year old children and adults during viewing of a short animated film&quot;. 2019. doi:10.18112/openneuro.ds000228.v1.1.0.">Richardson <em>et al.</em>, 2019</a>]</span> and <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> <span id="id2">[<a class="reference internal" href="references.html#id24" title="R Bilder, R Poldrack, T Cannon, E London, N Freimer, E Congdon, K Karlsgodt, and F Sabb. &quot;ucla consortium for neuropsychiatric phenomics la5c study&quot;. 2020. doi:10.18112/openneuro.ds000030.v1.0.0.">Bilder <em>et al.</em>, 2020</a>]</span>.
 Dataset <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> (<span class="math notranslate nohighlight">\(N=155\)</span>) contains fMRI scans of participants watching a silent version of Pixar animated movie “Partly Cloudy”.
 The dataset includes 33 adult subjects
 (<span class="math notranslate nohighlight">\(Mean_{age}=24.8\)</span>, <span class="math notranslate nohighlight">\(SD_{age}=5.3\)</span>, <span class="math notranslate nohighlight">\(range_{age}: 18-39\)</span>; <span class="math notranslate nohighlight">\(n_{female}=20\)</span>)
 and 122 children subjects
 (<span class="math notranslate nohighlight">\(Mean_{age}=6.7\)</span>, <span class="math notranslate nohighlight">\(SD_{age}=2.3\)</span>, <span class="math notranslate nohighlight">\(range_{age}: 3.5-12\)</span>; <span class="math notranslate nohighlight">\(n_{female}=64\)</span>)
-For more information for the dataset please refers to <span id="id3">Richardson <em>et al.</em> [<a class="reference internal" href="references.html#id26">2018</a>]</span>.</p>
+For more information for the dataset please refers to <span id="id3">Richardson <em>et al.</em> [<a class="reference internal" href="references.html#id26" title="Hilary Richardson, Grace Lisandrelli, Alexa Riobueno-Naylor, and Rebecca Saxe. Development of the social brain from age three to twelve years. Nature Communications, 9(1):1027, March 2018. doi:10.1038/s41467-018-03399-2.">2018</a>]</span>.</p>
 <div class="cell tag_hide-input docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
@@ -605,7 +608,7 @@ For more information for the dataset please refers to <span id="id3">Richardson 
 </div>
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>---- repo2data starting ----
-/home/haoting/.virtualenvs/connectome_confounds/lib/python3.8/site-packages/repo2data
+/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/repo2data
 Config from file :
 /home/haoting/projects/fmriprep-denoise-benchmark/binder/data_requirement.json
 Destination:
@@ -619,7 +622,7 @@ n female in adult: 20.0
 </div>
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_fab1f_" style="font-size: 10px">
+<table id="T_499c7_" style="font-size: 10px">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
@@ -630,52 +633,52 @@ n female in adult: 20.0
   </thead>
   <tbody>
     <tr>
-      <th id="T_fab1f_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_fab1f_row0_col0" class="data row0 col0" >155.000000</td>
-      <td id="T_fab1f_row0_col1" class="data row0 col1" >122.000000</td>
-      <td id="T_fab1f_row0_col2" class="data row0 col2" >33.000000</td>
+      <th id="T_499c7_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_499c7_row0_col0" class="data row0 col0" >155.000000</td>
+      <td id="T_499c7_row0_col1" class="data row0 col1" >122.000000</td>
+      <td id="T_499c7_row0_col2" class="data row0 col2" >33.000000</td>
     </tr>
     <tr>
-      <th id="T_fab1f_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_fab1f_row1_col0" class="data row1 col0" >10.555189</td>
-      <td id="T_fab1f_row1_col1" class="data row1 col1" >6.709461</td>
-      <td id="T_fab1f_row1_col2" class="data row1 col2" >24.772727</td>
+      <th id="T_499c7_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_499c7_row1_col0" class="data row1 col0" >10.555189</td>
+      <td id="T_499c7_row1_col1" class="data row1 col1" >6.709461</td>
+      <td id="T_499c7_row1_col2" class="data row1 col2" >24.772727</td>
     </tr>
     <tr>
-      <th id="T_fab1f_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_fab1f_row2_col0" class="data row2 col0" >8.071957</td>
-      <td id="T_fab1f_row2_col1" class="data row2 col1" >2.330938</td>
-      <td id="T_fab1f_row2_col2" class="data row2 col2" >5.308521</td>
+      <th id="T_499c7_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_499c7_row2_col0" class="data row2 col0" >8.071957</td>
+      <td id="T_499c7_row2_col1" class="data row2 col1" >2.330938</td>
+      <td id="T_499c7_row2_col2" class="data row2 col2" >5.308521</td>
     </tr>
     <tr>
-      <th id="T_fab1f_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_fab1f_row3_col0" class="data row3 col0" >3.518138</td>
-      <td id="T_fab1f_row3_col1" class="data row3 col1" >3.518138</td>
-      <td id="T_fab1f_row3_col2" class="data row3 col2" >18.000000</td>
+      <th id="T_499c7_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_499c7_row3_col0" class="data row3 col0" >3.518138</td>
+      <td id="T_499c7_row3_col1" class="data row3 col1" >3.518138</td>
+      <td id="T_499c7_row3_col2" class="data row3 col2" >18.000000</td>
     </tr>
     <tr>
-      <th id="T_fab1f_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_fab1f_row4_col0" class="data row4 col0" >5.300000</td>
-      <td id="T_fab1f_row4_col1" class="data row4 col1" >4.895210</td>
-      <td id="T_fab1f_row4_col2" class="data row4 col2" >21.000000</td>
+      <th id="T_499c7_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_499c7_row4_col0" class="data row4 col0" >5.300000</td>
+      <td id="T_499c7_row4_col1" class="data row4 col1" >4.895210</td>
+      <td id="T_499c7_row4_col2" class="data row4 col2" >21.000000</td>
     </tr>
     <tr>
-      <th id="T_fab1f_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_fab1f_row5_col0" class="data row5 col0" >7.680000</td>
-      <td id="T_fab1f_row5_col1" class="data row5 col1" >5.980000</td>
-      <td id="T_fab1f_row5_col2" class="data row5 col2" >23.000000</td>
+      <th id="T_499c7_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_499c7_row5_col0" class="data row5 col0" >7.680000</td>
+      <td id="T_499c7_row5_col1" class="data row5 col1" >5.980000</td>
+      <td id="T_499c7_row5_col2" class="data row5 col2" >23.000000</td>
     </tr>
     <tr>
-      <th id="T_fab1f_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_fab1f_row6_col0" class="data row6 col0" >10.975000</td>
-      <td id="T_fab1f_row6_col1" class="data row6 col1" >8.397500</td>
-      <td id="T_fab1f_row6_col2" class="data row6 col2" >28.000000</td>
+      <th id="T_499c7_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_499c7_row6_col0" class="data row6 col0" >10.975000</td>
+      <td id="T_499c7_row6_col1" class="data row6 col1" >8.397500</td>
+      <td id="T_499c7_row6_col2" class="data row6 col2" >28.000000</td>
     </tr>
     <tr>
-      <th id="T_fab1f_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_fab1f_row7_col0" class="data row7 col0" >39.000000</td>
-      <td id="T_fab1f_row7_col1" class="data row7 col1" >12.300000</td>
-      <td id="T_fab1f_row7_col2" class="data row7 col2" >39.000000</td>
+      <th id="T_499c7_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_499c7_row7_col0" class="data row7 col0" >39.000000</td>
+      <td id="T_499c7_row7_col1" class="data row7 col1" >12.300000</td>
+      <td id="T_499c7_row7_col2" class="data row7 col2" >39.000000</td>
     </tr>
   </tbody>
 </table>
@@ -740,7 +743,7 @@ n female in CONTROL: 56.0
 </div>
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_63641_" style="font-size: 10px">
+<table id="T_48727_" style="font-size: 10px">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
@@ -753,68 +756,68 @@ n female in CONTROL: 56.0
   </thead>
   <tbody>
     <tr>
-      <th id="T_63641_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_63641_row0_col0" class="data row0 col0" >259.000000</td>
-      <td id="T_63641_row0_col1" class="data row0 col1" >40.000000</td>
-      <td id="T_63641_row0_col2" class="data row0 col2" >49.000000</td>
-      <td id="T_63641_row0_col3" class="data row0 col3" >50.000000</td>
-      <td id="T_63641_row0_col4" class="data row0 col4" >120.000000</td>
+      <th id="T_48727_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_48727_row0_col0" class="data row0 col0" >259.000000</td>
+      <td id="T_48727_row0_col1" class="data row0 col1" >40.000000</td>
+      <td id="T_48727_row0_col2" class="data row0 col2" >49.000000</td>
+      <td id="T_48727_row0_col3" class="data row0 col3" >50.000000</td>
+      <td id="T_48727_row0_col4" class="data row0 col4" >120.000000</td>
     </tr>
     <tr>
-      <th id="T_63641_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_63641_row1_col0" class="data row1 col0" >33.347490</td>
-      <td id="T_63641_row1_col1" class="data row1 col1" >32.050000</td>
-      <td id="T_63641_row1_col2" class="data row1 col2" >35.285714</td>
-      <td id="T_63641_row1_col3" class="data row1 col3" >36.460000</td>
-      <td id="T_63641_row1_col4" class="data row1 col4" >31.691667</td>
+      <th id="T_48727_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_48727_row1_col0" class="data row1 col0" >33.347490</td>
+      <td id="T_48727_row1_col1" class="data row1 col1" >32.050000</td>
+      <td id="T_48727_row1_col2" class="data row1 col2" >35.285714</td>
+      <td id="T_48727_row1_col3" class="data row1 col3" >36.460000</td>
+      <td id="T_48727_row1_col4" class="data row1 col4" >31.691667</td>
     </tr>
     <tr>
-      <th id="T_63641_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_63641_row2_col0" class="data row2 col0" >9.305064</td>
-      <td id="T_63641_row2_col1" class="data row2 col1" >10.409439</td>
-      <td id="T_63641_row2_col2" class="data row2 col2" >9.027735</td>
-      <td id="T_63641_row2_col3" class="data row2 col3" >8.878339</td>
-      <td id="T_63641_row2_col4" class="data row2 col4" >8.827760</td>
+      <th id="T_48727_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_48727_row2_col0" class="data row2 col0" >9.305064</td>
+      <td id="T_48727_row2_col1" class="data row2 col1" >10.409439</td>
+      <td id="T_48727_row2_col2" class="data row2 col2" >9.027735</td>
+      <td id="T_48727_row2_col3" class="data row2 col3" >8.878339</td>
+      <td id="T_48727_row2_col4" class="data row2 col4" >8.827760</td>
     </tr>
     <tr>
-      <th id="T_63641_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_63641_row3_col0" class="data row3 col0" >21.000000</td>
-      <td id="T_63641_row3_col1" class="data row3 col1" >21.000000</td>
-      <td id="T_63641_row3_col2" class="data row3 col2" >21.000000</td>
-      <td id="T_63641_row3_col3" class="data row3 col3" >22.000000</td>
-      <td id="T_63641_row3_col4" class="data row3 col4" >21.000000</td>
+      <th id="T_48727_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_48727_row3_col0" class="data row3 col0" >21.000000</td>
+      <td id="T_48727_row3_col1" class="data row3 col1" >21.000000</td>
+      <td id="T_48727_row3_col2" class="data row3 col2" >21.000000</td>
+      <td id="T_48727_row3_col3" class="data row3 col3" >22.000000</td>
+      <td id="T_48727_row3_col4" class="data row3 col4" >21.000000</td>
     </tr>
     <tr>
-      <th id="T_63641_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_63641_row4_col0" class="data row4 col0" >25.000000</td>
-      <td id="T_63641_row4_col1" class="data row4 col1" >23.750000</td>
-      <td id="T_63641_row4_col2" class="data row4 col2" >26.000000</td>
-      <td id="T_63641_row4_col3" class="data row4 col3" >29.000000</td>
-      <td id="T_63641_row4_col4" class="data row4 col4" >24.000000</td>
+      <th id="T_48727_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_48727_row4_col0" class="data row4 col0" >25.000000</td>
+      <td id="T_48727_row4_col1" class="data row4 col1" >23.750000</td>
+      <td id="T_48727_row4_col2" class="data row4 col2" >26.000000</td>
+      <td id="T_48727_row4_col3" class="data row4 col3" >29.000000</td>
+      <td id="T_48727_row4_col4" class="data row4 col4" >24.000000</td>
     </tr>
     <tr>
-      <th id="T_63641_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_63641_row5_col0" class="data row5 col0" >32.000000</td>
-      <td id="T_63641_row5_col1" class="data row5 col1" >28.000000</td>
-      <td id="T_63641_row5_col2" class="data row5 col2" >36.000000</td>
-      <td id="T_63641_row5_col3" class="data row5 col3" >37.500000</td>
-      <td id="T_63641_row5_col4" class="data row5 col4" >28.500000</td>
+      <th id="T_48727_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_48727_row5_col0" class="data row5 col0" >32.000000</td>
+      <td id="T_48727_row5_col1" class="data row5 col1" >28.000000</td>
+      <td id="T_48727_row5_col2" class="data row5 col2" >36.000000</td>
+      <td id="T_48727_row5_col3" class="data row5 col3" >37.500000</td>
+      <td id="T_48727_row5_col4" class="data row5 col4" >28.500000</td>
     </tr>
     <tr>
-      <th id="T_63641_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_63641_row6_col0" class="data row6 col0" >41.000000</td>
-      <td id="T_63641_row6_col1" class="data row6 col1" >40.000000</td>
-      <td id="T_63641_row6_col2" class="data row6 col2" >43.000000</td>
-      <td id="T_63641_row6_col3" class="data row6 col3" >43.750000</td>
-      <td id="T_63641_row6_col4" class="data row6 col4" >39.250000</td>
+      <th id="T_48727_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_48727_row6_col0" class="data row6 col0" >41.000000</td>
+      <td id="T_48727_row6_col1" class="data row6 col1" >40.000000</td>
+      <td id="T_48727_row6_col2" class="data row6 col2" >43.000000</td>
+      <td id="T_48727_row6_col3" class="data row6 col3" >43.750000</td>
+      <td id="T_48727_row6_col4" class="data row6 col4" >39.250000</td>
     </tr>
     <tr>
-      <th id="T_63641_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_63641_row7_col0" class="data row7 col0" >50.000000</td>
-      <td id="T_63641_row7_col1" class="data row7 col1" >50.000000</td>
-      <td id="T_63641_row7_col2" class="data row7 col2" >50.000000</td>
-      <td id="T_63641_row7_col3" class="data row7 col3" >49.000000</td>
-      <td id="T_63641_row7_col4" class="data row7 col4" >50.000000</td>
+      <th id="T_48727_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_48727_row7_col0" class="data row7 col0" >50.000000</td>
+      <td id="T_48727_row7_col1" class="data row7 col1" >50.000000</td>
+      <td id="T_48727_row7_col2" class="data row7 col2" >50.000000</td>
+      <td id="T_48727_row7_col3" class="data row7 col3" >49.000000</td>
+      <td id="T_48727_row7_col4" class="data row7 col4" >50.000000</td>
     </tr>
   </tbody>
 </table>
@@ -843,10 +846,10 @@ n female in CONTROL: 56.0
 <div class="section" id="time-series-extraction-and-connectome-generation">
 <h2>Time series extraction and connectome generation<a class="headerlink" href="#time-series-extraction-and-connectome-generation" title="Permalink to this headline">#</a></h2>
 <p>We extract time series with regions of interest (ROI) defined by the following atlases:
-Gordon atlas <span id="id4">[<a class="reference internal" href="references.html#id29">Gordon <em>et al.</em>, 2014</a>]</span>,
-Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="references.html#id27">Schaefer <em>et al.</em>, 2017</a>]</span>,
-Multiresolution Intrinsic Segmentation Template (MIST) <span id="id6">[<a class="reference internal" href="references.html#id30">Urchs <em>et al.</em>, 2019</a>]</span>,
-and Dictionary of Functional Modes (DiFuMo)<span id="id7">[<a class="reference internal" href="references.html#id28">Dadi <em>et al.</em>, 2020</a>]</span>.
+Gordon atlas <span id="id4">[<a class="reference internal" href="references.html#id29" title="Evan M. Gordon, Timothy O. Laumann, Babatunde Adeyemo, Jeremy F. Huckins, William M. Kelley, and Steven E. Petersen. Generation and Evaluation of a Cortical Area Parcellation from Resting-State Correlations. Cerebral Cortex, 26(1):288-303, 10 2014. doi:10.1093/cercor/bhu239.">Gordon <em>et al.</em>, 2014</a>]</span>,
+Schaefer 7 network atlas <span id="id5">[<a class="reference internal" href="references.html#id27" title="Alexander Schaefer, Ru Kong, Evan M. Gordon, Timothy O. Laumann, Xi-Nian Zuo, Avram J. Holmes, Simon B. Eickhoff, and B.T. Thomas Yeo. Local-global parcellation of the human cerebral cortex from intrinsic functional connectivity mri. Cerebral Cortex, pages 1–20, 2017. doi:10.1093/cercor/bhx179.">Schaefer <em>et al.</em>, 2017</a>]</span>,
+Multiresolution Intrinsic Segmentation Template (MIST) <span id="id6">[<a class="reference internal" href="references.html#id30" title="Sebastian Urchs, Jonathan Armoza, Clara Moreau, Yassine Benhajali, Jolène St-Aubin, Pierre Orban, and Pierre Bellec. Mist: a multi-resolution parcellation of functional brain networks. MNI Open Research, 1(3):3, 2019.">Urchs <em>et al.</em>, 2019</a>]</span>,
+and Dictionary of Functional Modes (DiFuMo)<span id="id7">[<a class="reference internal" href="references.html#id28" title="Kamalaker Dadi, Gaël Varoquaux, Antonia Machlouzarides-Shalit, Krzysztof J. Gorgolewski, Demian Wassermann, Bertrand Thirion, and Arthur Mensch. Fine-grain atlases of functional modes for fmri analysis. NeuroImage, 221:117126, 2020. doi:10.1016/j.neuroimage.2020.117126.">Dadi <em>et al.</em>, 2020</a>]</span>.
 All atlases were resampled to the resolution of the preprocessed functional data.</p>
 <p>Further ROI extraction was done on DiFuMo and MIST,
 because area under the same label can be networks with disjointed regions.
@@ -857,10 +860,10 @@ Schaefer 1000 parcels atlas was excluded as some regions would be dropped after 
 <ul class="simple">
 <li><p>Gordon atlas: 333</p></li>
 <li><p>Schaefer atlas: 100, 200, 300, 400, 500, 600, 800<a class="footnote-reference brackets" href="#id28" id="id8">1</a></p></li>
-<li><p>Multiresolution Intrinsic Segmentation Template (MIST) <span id="id9">[<a class="reference internal" href="references.html#id30">Urchs <em>et al.</em>, 2019</a>]</span>: 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 split by the midline)</p></li>
-<li><p>DiFuMo atlas <span id="id10">[<a class="reference internal" href="references.html#id28">Dadi <em>et al.</em>, 2020</a>]</span>: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)</p></li>
+<li><p>Multiresolution Intrinsic Segmentation Template (MIST) <span id="id9">[<a class="reference internal" href="references.html#id30" title="Sebastian Urchs, Jonathan Armoza, Clara Moreau, Yassine Benhajali, Jolène St-Aubin, Pierre Orban, and Pierre Bellec. Mist: a multi-resolution parcellation of functional brain networks. MNI Open Research, 1(3):3, 2019.">Urchs <em>et al.</em>, 2019</a>]</span>: 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 split by the midline)</p></li>
+<li><p>DiFuMo atlas <span id="id10">[<a class="reference internal" href="references.html#id28" title="Kamalaker Dadi, Gaël Varoquaux, Antonia Machlouzarides-Shalit, Krzysztof J. Gorgolewski, Demian Wassermann, Bertrand Thirion, and Arthur Mensch. Fine-grain atlases of functional modes for fmri analysis. NeuroImage, 221:117126, 2020. doi:10.1016/j.neuroimage.2020.117126.">Dadi <em>et al.</em>, 2020</a>]</span>: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)</p></li>
 </ul>
-<p>Process involved here are implemented through nilearn <span id="id11">[<a class="reference internal" href="references.html#id53">Abraham <em>et al.</em>, 2014</a>]</span>.
+<p>Process involved here are implemented through nilearn <span id="id11">[<a class="reference internal" href="references.html#id53" title="Alexandre Abraham, Fabian Pedregosa, Michael Eickenberg, Philippe Gervais, Andreas Mueller, Jean Kossaifi, Alexandre Gramfort, Bertrand Thirion, and Gael Varoquaux. Machine learning for neuroimaging with scikit-learn. Frontiers in Neuroinformatics, 2014. doi:10.3389/fninf.2014.00014.">Abraham <em>et al.</em>, 2014</a>]</span>.
 Time series were extracted using <code class="docutils literal notranslate"><span class="pre">nilearn.maskers.NiftiLabelsMasker</span></code> and <code class="docutils literal notranslate"><span class="pre">nilearn.maskers.NiftiMapsMasker</span></code>.
 Connectomes were calculated using Pearson’s Correlations, implemented through <code class="docutils literal notranslate"><span class="pre">nilearn.connectome.ConnectivityMeasure</span></code>.</p>
 </div>
@@ -898,19 +901,19 @@ The implementation will only support fMRIPrep functional derivative directory fr
 <li><p><code class="docutils literal notranslate"><span class="pre">derivatives</span></code>: original signal and temporal derivative (2 * n parameters)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>:  original signal + temporal derivatives + quadratic terms + quadratic terms temporal derivatives (4 * n parameters)</p></li>
 </ul>
-<p><code class="docutils literal notranslate"><span class="pre">scrub</span></code> generates mask to exclude volumes with excessive motion <span id="id12">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>.
+<p><code class="docutils literal notranslate"><span class="pre">scrub</span></code> generates mask to exclude volumes with excessive motion <span id="id12">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.
 Two types of parameters can be used to determined volumes to be excluded.</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">fd_threshold</span></code>: set the head motion cut-off value determined by framewise displacement approach <span id="id13">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">std_dvars_threshold</span></code>: set the head motion cut-off value determined by the standard deviation of root mean square approach <span id="id14">[<a class="reference internal" href="references.html#id21">Jenkinson <em>et al.</em>, 2002</a>, <a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">fd_threshold</span></code>: set the head motion cut-off value determined by framewise displacement approach <span id="id13">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std_dvars_threshold</span></code>: set the head motion cut-off value determined by the standard deviation of root mean square approach <span id="id14">[<a class="reference internal" href="references.html#id21" title="Mark Jenkinson, Peter Bannister, Michael Brady, and Stephen Smith. Improved optimization for the robust and accurate linear registration and motion correction of brain images. NeuroImage, 17(2):825-841, 2002. doi:https://doi.org/10.1006/nimg.2002.1132.">Jenkinson <em>et al.</em>, 2002</a>, <a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
 </ul>
-<p>The CompCor <span id="id15">[<a class="reference internal" href="references.html#id15">Behzadi <em>et al.</em>, 2007</a>]</span> approach has two associated parameters</p>
+<p>The CompCor <span id="id15">[<a class="reference internal" href="references.html#id15" title="Yashar Behzadi, Khaled Restom, Joy Liau, and Thomas T. Liu. A component based noise correction method (compcor) for bold and perfusion based fmri. NeuroImage, 37(1):90-101, 2007. doi:10.1016/j.neuroimage.2007.04.042.">Behzadi <em>et al.</em>, 2007</a>]</span> approach has two associated parameters</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">compcor</span></code> allows users to select components generated by the temporal approach,
 or the anatomical approach with specific details for the mask used in noise signal extraction.</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">n_compcor</span></code> retrieves the number of principle components to retrieve.</p></li>
 </ul>
-<p>For the ICA-based approach, fMRIPrep implemented ICA-AROMA <span id="id16">[<a class="reference internal" href="references.html#id49">Pruim <em>et al.</em>, 2015</a>]</span>.
+<p>For the ICA-based approach, fMRIPrep implemented ICA-AROMA <span id="id16">[<a class="reference internal" href="references.html#id49" title="Raimon H. R. Pruim, Maarten Mennes, Daan van Rooij, Alberto Llera, Jan K. Buitelaar, and Christian F. Beckmann. Ica-AROMA: a robust ICA-based strategy for removing motion artifacts from fmri data. NeuroImage, 112(Supplement C):267-277, 2015. URL: http://www.sciencedirect.com/science/article/pii/S1053811915001822, doi:10.1016/j.neuroimage.2015.02.064.">Pruim <em>et al.</em>, 2015</a>]</span>.
 User must manually enable ICA-AROMA with flag <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code> when using fMRIPrep.
 The parameter <code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code> allows two approaches:</p>
 <ol class="simple">
@@ -921,10 +924,10 @@ The parameter <code class="docutils literal notranslate"><span class="pre">ica_a
 <div class="section" id="pre-defined-strategies">
 <h3>Pre-defined strategies<a class="headerlink" href="#pre-defined-strategies" title="Permalink to this headline">#</a></h3>
 <p><code class="docutils literal notranslate"><span class="pre">load_confounds_strategy</span></code> provides an interface to select confounds based on past literature with limited parameters for user customisation:
-<code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id17">[<a class="reference internal" href="references.html#id13">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters, and tissue signal),
-<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id18">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
-<code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id19">[<a class="reference internal" href="references.html#id15">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
-and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id20">[<a class="reference internal" href="references.html#id49">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising, and tissue signal).
+<code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id17">[<a class="reference internal" href="references.html#id13" title="Michael D. Fox, Abraham Z. Snyder, Justin L. Vincent, Maurizio Corbetta, David C. Van Essen, and Marcus E. Raichle. The human brain is intrinsically organized into dynamic, anticorrelated functional networks. Proceedings of the National Academy of Sciences, 102(27):9673-9678, 2005. doi:10.1073/pnas.0504136102.">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id18">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id19">[<a class="reference internal" href="references.html#id15" title="Yashar Behzadi, Khaled Restom, Joy Liau, and Thomas T. Liu. A component based noise correction method (compcor) for bold and perfusion based fmri. NeuroImage, 37(1):90-101, 2007. doi:10.1016/j.neuroimage.2007.04.042.">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
+and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id20">[<a class="reference internal" href="references.html#id49" title="Raimon H. R. Pruim, Maarten Mennes, Daan van Rooij, Alberto Llera, Jan K. Buitelaar, and Christian F. Beckmann. Ica-AROMA: a robust ICA-based strategy for removing motion artifacts from fmri data. NeuroImage, 112(Supplement C):267-277, 2015. URL: http://www.sciencedirect.com/science/article/pii/S1053811915001822, doi:10.1016/j.neuroimage.2015.02.064.">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising, and tissue signal).
 All strategies but <code class="docutils literal notranslate"><span class="pre">compcor</span></code> provides an option to add global signal to the confound regressors.</p>
 </div>
 <div class="section" id="examined-strategies">
@@ -1109,12 +1112,12 @@ Click to see <a class="reference internal" href="#table-strategies"><span class=
 <div class="section" id="denoising-evaluation-measures">
 <h2>Denoising evaluation measures<a class="headerlink" href="#denoising-evaluation-measures" title="Permalink to this headline">#</a></h2>
 <p>We used selected metrics described in the previous literature to evaluate the denoising results
-<span id="id21">[<a class="reference internal" href="references.html#id16">Ciric <em>et al.</em>, 2017</a>, <a class="reference internal" href="references.html#id18">Parkes <em>et al.</em>, 2018</a>]</span>.
+<span id="id21">[<a class="reference internal" href="references.html#id16" title="Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. NeuroImage, 154(1):174–187, July 2017. doi:10.1016/j.neuroimage.2017.03.020.">Ciric <em>et al.</em>, 2017</a>, <a class="reference internal" href="references.html#id18" title="Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. NeuroImage, 171:415–436, May 2018. doi:10.1016/j.neuroimage.2017.12.073.">Parkes <em>et al.</em>, 2018</a>]</span>.
 Motion related metrics are centred around framewise displacement.
 Framewise displacement (FD) indexes the movement of the head from one volume to the next.
 The movement includes the transitions on the three axes (<span class="math notranslate nohighlight">\(x\)</span>, <span class="math notranslate nohighlight">\(y\)</span>, <span class="math notranslate nohighlight">\(z\)</span>) and the respective rotation (<span class="math notranslate nohighlight">\(\alpha\)</span>, <span class="math notranslate nohighlight">\(\beta_t\)</span>, <span class="math notranslate nohighlight">\(\gamma\)</span>).
-Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id22">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>.
-fMRIPrep genetates the FD based on the formula proposed in <span id="id23">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>.
+Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm <span id="id22">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.
+fMRIPrep genetates the FD based on the formula proposed in <span id="id23">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.
 The FD at each time point <span class="math notranslate nohighlight">\(t\)</span> is expressed as:</p>
 <div class="math notranslate nohighlight">
 \[
@@ -1124,7 +1127,7 @@ The FD at each time point <span class="math notranslate nohighlight">\(t\)</span
 <p>The details of each measures are explained as followed.</p>
 <div class="section" id="quality-control-functional-connectivity-qc-fc">
 <h3>Quality control / functional connectivity (QC-FC)<a class="headerlink" href="#quality-control-functional-connectivity-qc-fc" title="Permalink to this headline">#</a></h3>
-<p>QC-FC <span id="id24">[<a class="reference internal" href="references.html#id22">Power <em>et al.</em>, 2015</a>]</span> quantifies the correlation between mean FD and functional connectivity.
+<p>QC-FC <span id="id24">[<a class="reference internal" href="references.html#id22" title="Jonathan D. Power, Bradley L. Schlaggar, and Steven E. Petersen. Recent progress and outstanding issues in motion correction in resting state fMRI. NeuroImage, 105:536–551, January 2015. doi:10.1016/j.neuroimage.2014.10.044.">Power <em>et al.</em>, 2015</a>]</span> quantifies the correlation between mean FD and functional connectivity.
 This is calculated by a partial correlation between mean FD and connectivity with age and sex as covariates.
 The denoising methods should aim to reduce the QC-FC value.
 The significants values reported are control for multiple comparisons with false positive rate correction.</p>
@@ -1132,7 +1135,7 @@ The significants values reported are control for multiple comparisons with false
 <div class="section" id="distance-dependent-effects-of-motion-on-connectivity">
 <h3>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">#</a></h3>
 <p>To determine the residual distance-dependence of subject movement,
-we first calculate the Euclidean distance between the centers of mass of ecah pair of parcels <span id="id25">[<a class="reference internal" href="references.html#id14">Power <em>et al.</em>, 2012</a>]</span>.
+we first calculate the Euclidean distance between the centers of mass of ecah pair of parcels <span id="id25">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.
 We then correlated the distance separating each pair of parcels and the associated QC-FC correlation of the edge connecting those parcels.
 Closer parcels generally exhibiting greater impact of motion on connectivity.
 We expect to see a general trend of negative correlation to no correlation after confound regression.</p>
@@ -1142,8 +1145,8 @@ We expect to see a general trend of negative correlation to no correlation after
 <p>Confound regressors has the potential to remove real signal in addition to motion-related noise.
 In order to evaluate this possibility, we computed modularity quality,
 an explicit quantification of the degree to which there are structured sub-networks in a given network,
-in this case the de-noised connectome <span id="id26">[<a class="reference internal" href="references.html#id20">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
-Modularity quality is quantified by graph community detection based on Louvain method <span id="id27">[<a class="reference internal" href="references.html#id23">Rubinov and Sporns, 2010</a>]</span>,
+in this case the de-noised connectome <span id="id26">[<a class="reference internal" href="references.html#id20" title="Theodore D. Satterthwaite, Daniel H. Wolf, James Loughead, Kosha Ruparel, Mark A. Elliott, Hakonarson Hakon, Ruben C. Gur, and Raquel E. Gur. Impact of In-Scanner Head Motion on Multiple Measures of Functional Connectivity: Relevance for Studies of Neurodevelopment in Youth. NeuroImage, 60(1):623–632, March 2012. doi:10.1016/j.neuroimage.2011.12.063.">Satterthwaite <em>et al.</em>, 2012</a>]</span>.
+Modularity quality is quantified by graph community detection based on Louvain method <span id="id27">[<a class="reference internal" href="references.html#id23" title="Mikail Rubinov and Olaf Sporns. Complex network measures of brain connectivity: uses and interpretations. NeuroImage, 52(3):1059-1069, 2010. doi:10.1016/j.neuroimage.2009.10.003.">Rubinov and Sporns, 2010</a>]</span>,
 implemented in the Brain Connectome Toolbox.
 If confound regression and censoring were removing real signal in addition to motion-related noise,
 we expect that modularity would decline.
