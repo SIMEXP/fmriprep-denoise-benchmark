@@ -18,9 +18,26 @@ however the impact of the denoising strategies has yet to be evaluated on the po
 The confound output of fMRIPrep presented the users with a range of possible nusianse regressors.
 While users are benifted from a wide selection of regressors,
 without understanding of the literature one can pick a combination of regressors that reintroduce noise to the signal.
-Current work aims to introduce an application programming interface (API) to standardise fMRIPrep confounds retrieval,
+Current work aims to introduce an application programming interface (API) implemented in
+[`nilearn`](https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds) {cite:p}`nilearn`
+to standardise fMRIPrep confounds retrieval from the confounds outputs,
 and provide benchmarks of different strategies using functional connectivity generated from resting state data.
-The main tool is a part of
-[`nilearn`](https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds) {cite:p}`nilearn`.
+We compared the connectomes generated from a set of different atlases and compare 4 classes of denoising strategies against the high-pass filtered data:
+head motion and tissue signal (`simple`), scrubbing (`scrubbing`), CompCor (`compcor`), and ICA-AROMA (`ica_aroma`).
+Furthermore, the benchmarks were performed on two datasets openly available on OpenNeuro, covering different age group and psychiartic conditions: 
+`ds000228` (child and adult), and 
+`ds000030` (healthy control, ADHD, bipolar, and schizophrania). 
+We investigated the loss of temporal degrees of freedom of each strategy, and three functional connectivity based metrics:
+quality control / functional connectivity (QC-FC),
+distance-dependent effects of motion on connectivity, and
+denoised outcome on network modularity. 
+<!-- results -->
+<!-- conclusion -->
 
-Keywords: fMRIPrep, nilearn, nuisance regressor, resting-state fMRI, functional connectivity, benchmark 
+**{fa}`key` Keywords:** 
+`reproducibility`, 
+`fMRIPrep`, 
+`nilearn`, 
+`nuisance regressor`, 
+`resting-state fMRI`, 
+`functional connectivity`

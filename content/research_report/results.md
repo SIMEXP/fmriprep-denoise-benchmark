@@ -203,7 +203,7 @@ We can see the trend is similar to mean framewise displacement result.
 ```
 
 ## Comparisons on the impacts of strategies on connectomes
-<!-- Please advice on the threashold here -->
+<!-- Please advice on the threshold here -->
 <!-- stiengent -->
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -216,7 +216,7 @@ glue('proportion_thresh', proportion_thresh * 100)
 ```
 
 To evaluate the impact of denoising strategy on connectomes, 
-we will exlcude subjects with high motion , 
+we will exclude subjects with high motion , 
 defined by the following criteria adopted from  {cite:p}`parkes_evaluation_2018`: 
 mean framewise displacement > {glue:}`gross_meanfd` mm, 
 {glue:}`proportion_thresh`% of volumes removed while scrubbing 
@@ -338,7 +338,7 @@ glue('meanFD_cleaned-fig', fig, display=False)
 :figwidth: 800px
 :name: "tbl:meanFD_cleaned-fig"
 ```
-
+<!-- need to filter and regenerate the metrics -->
 <!-- The trend of benchmaker metrics does not differ amongst the choice of atlases.
 However, we can see variance within the parcellation scheme MIST and DiFuMo.
 The variance comes from different resolution of the same parcellation scheme, epecially with low parcel counts.
