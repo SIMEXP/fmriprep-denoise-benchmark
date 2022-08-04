@@ -26,7 +26,7 @@ jobs:
     - name: Download data with repo2data
       run: |
         cd content/research_report
-        repo2data -r  data_requirement.json
+        repo2data -r  ../../binder/data_requirement.json
         cd ../..
     # Build the page
     - name: Build the book
