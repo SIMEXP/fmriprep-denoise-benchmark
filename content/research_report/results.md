@@ -24,7 +24,7 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from fmriprep_denoise.visualization import utils, figures
+from fmriprep_denoise.visualization import figures, tables
 from myst_nb import glue
 ```
 
@@ -40,10 +40,10 @@ for_plotting = {}
 datasets = ['ds000228', 'ds000030']
 baseline_groups = ['adult', 'CONTROL']
 for dataset, baseline_group in zip(datasets, baseline_groups):
-    data, groups = utils.load_meanfd_groups(dataset)
-    baseline = data[data['Groups'] == baseline_group]
+    data, groups = tables.get_descriptive_data(dataset)
+    baseline = data[data['groups'] == baseline_group]
     for group in groups:
-        compare = data[data['Groups'] == group]
+        compare = data[data['groups'] == group]
         glue(
             f'{dataset}_{group}_mean',
             compare['mean_framewise_displacement'].mean(),
@@ -102,7 +102,8 @@ for dataset, ax in zip(for_plotting, axs):
     sd_fd = df['mean_framewise_displacement'].std()
     df = df.rename(
         columns={
-            'mean_framewise_displacement': 'Mean Framewise Displacement (mm)'
+            'mean_framewise_displacement': 'Mean Framewise Displacement (mm)',
+            'groups': 'Groups'
         }
     )
     sns.boxplot(
@@ -179,11 +180,12 @@ From the lightest hue to the darkes, the order of the group in `ds000030` is:
 To compare the loss in number of volumes from scrubbing base strategy across datasets,
 we calculate the proportion of volume loss to number of volumes in a full scan.
 `ds000228` includes child subjects and shows higher loss in volumes comparing to `ds000030` with adult subjects only.
-In `ds000228`, the trend of volume scrubbed comparing adults and children fits the observation shown in literature {cite:p}`satterthwaite_impact_2012`.
-In `ds000030`, the schizophrania group shows the highest amount of volumes scrubbed,
+This is consistent with the trend in the difference in mean framewise displacement,
+and it fits the observation shown in literature {cite:p}`satterthwaite_impact_2012`.
+In `ds000030`, we see the similar trend mirroring the mean framewise displacemnt results.
+The schizophrania group shows the highest amount of volumes scrubbed,
 followed by the bipolar group, and comparable results between the control group and ADHD group.
 With a stringent 0.2 mm threshold, groups with high motion will loose on average close to half of the volumes. 
-
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -195,19 +197,149 @@ glue(f'scrubbing-fig', fig, display=False)
 :figwidth: 800px
 :name: "tbl:scrubbing-fig"
 
-Loss in number of volumes break down by groups.
-```
+Loss in number of volumes in proportion to the full length of the scan, break down by groups in each dataset.
+We can see the trend is similar to mean framewise displacement result. 
 
+```
 
 ## Comparisons on the impacts of strategies on connectomes
+<!-- Please advice on the threashold here -->
+<!-- stiengent -->
+```{code-cell}
+:tags: [hide-input, remove-output]
+gross_meanfd = 0.25
+fd_thresh = 0.2
+proportion_thresh = 0.8
+glue('gross_meanfd', gross_meanfd)
+glue('fd_thresh', fd_thresh)
+glue('proportion_thresh', proportion_thresh * 100)
+```
 
-The trend of benchmaker metrics does not differ amongst the choice of atlases.
+To evaluate the impact of denoising strategy on connectomes, 
+we will exlcude subjects with high motion , 
+defined by the following criteria adopted from  {cite:p}`parkes_evaluation_2018`: 
+mean framewise displacement > {glue:}`gross_meanfd` mm, 
+{glue:}`proportion_thresh`% of volumes removed while scrubbing 
+with a {glue:}`fd_thresh` mm threshold.
+
+```{code-cell}
+:tags: [hide-input]
+desc = tables.lazy_demographic('ds000228', gross_meanfd, fd_thresh, proportion_thresh)
+desc = desc.style.set_table_attributes('style="font-size: 12px"')
+
+glue('ds000228_scrubbed_desc', desc) 
+```
+
+```{code-cell}
+:tags: [hide-input]
+from fmriprep_denoise.visualization import tables
+
+desc = tables.lazy_demographic('ds000030', gross_meanfd, fd_thresh, proportion_thresh)
+desc = desc.style.set_table_attributes('style="font-size: 12px"')
+
+glue('ds000030_scrubbed_desc', desc) 
+```
+
+
+```{code-cell}
+:tags: [hide-input, remove-output]
+
+from statsmodels.stats.weightstats import ttest_ind
+
+for_plotting = {}
+
+datasets = ['ds000228', 'ds000030']
+baseline_groups = ['adult', 'CONTROL']
+for dataset, baseline_group in zip(datasets, baseline_groups):
+    data, groups = tables.get_descriptive_data(dataset, gross_meanfd, fd_thresh, proportion_thresh)
+    baseline = data[data['groups'] == baseline_group]
+    for group in groups:
+        compare = data[data['groups'] == group]
+        glue(
+            f'{dataset}_{group}_mean_qc',
+            compare['mean_framewise_displacement'].mean(),
+        )
+        glue(
+            f'{dataset}_{group}_sd_qc',
+            compare['mean_framewise_displacement'].std(),
+        )
+        glue(
+            f'{dataset}_{group}_n_qc',
+            compare.shape[0],
+        )
+        if group != baseline_group:
+            t_stats, pval, df = ttest_ind(
+                baseline['mean_framewise_displacement'],
+                compare['mean_framewise_displacement'],
+                usevar='unequal',
+            )
+            glue(f'{dataset}_t_{group}_qc', t_stats)
+            glue(f'{dataset}_p_{group}_qc', pval)
+            glue(f'{dataset}_df_{group}_qc', df)
+    for_plotting.update({dataset: data})
+```
+
+We will firstly characterise motion through the mean framewise displacement of each sample and the sub-groups.
+This report will serve as a reference point for understanding the remainder of the results.
+In `ds000228`, there was a significant difference in motion during the scan captured by mean framewise displacement 
+between the child 
+(M = {glue:text}`ds000228_child_mean_qc:.2f`, SD = {glue:text}`ds000228_child_sd_qc:.2f`, n = {glue:text}`ds000228_child_n_qc:i`)
+and adult sample
+(M = {glue:text}`ds000228_adult_mean_qc:.2f`, SD = {glue:text}`ds000228_adult_sd_qc:.2f`, n = {glue:text}`ds000228_adult_n_qc:i`,
+t({glue:text}`ds000228_df_child_qc:.2f`) = {glue:text}`ds000228_t_child_qc:.2f`, p = {glue:text}`ds000228_p_child_qc:.3f`,
+This is consistent with the existing literature.
+In `ds000030`, the only patient group shows a difference comparing to the
+control 
+(M = {glue:text}`ds000030_CONTROL_mean_qc:.2f`, SD = {glue:text}`ds000030_CONTROL_sd_qc:.2f`, n = {glue:text}`ds000030_CONTROL_n_qc:i`)
+is the schizophrania group 
+(M = {glue:text}`ds000030_SCHZ_mean_qc:.2f`, SD = {glue:text}`ds000030_SCHZ_sd_qc:.2f`, n = {glue:text}`ds000030_SCHZ_n_qc:i`;
+t({glue:text}`ds000030_df_SCHZ_qc:.2f`) = {glue:text}`ds000030_t_SCHZ_qc:.2f`, p = {glue:text}`ds000030_p_SCHZ_qc:.3f`).
+There was no difference between the control and ADHD group
+(M = {glue:text}`ds000030_ADHD_mean_qc:.2f`, SD = {glue:text}`ds000030_ADHD_sd:.2f`, n = {glue:text}`ds000030_ADHD_n_qc:i`;
+t({glue:text}`ds000030_df_ADHD_qc:.2f`) = {glue:text}`ds000030_t_ADHD_qc:.2f`, p = {glue:text}`ds000030_p_ADHD_qc:.3f`),
+or the bipolar group 
+(M = {glue:text}`ds000030_BIPOLAR_mean_qc:.2f`, SD = {glue:text}`ds000030_BIPOLAR_sd_qc:.2f`, n = {glue:text}`ds000030_BIPOLAR_n_qc:i`;
+t({glue:text}`ds000030_df_BIPOLAR_qc:.2f`) = {glue:text}`ds000030_t_BIPOLAR_qc:.2f`, p = {glue:text}`ds000030_p_BIPOLAR_qc:.3f`).
+In conclusion, adult samples has lower mean framewise displacement than a youth sample.
+
+```{code-cell}
+:tags: [hide-input, remove-output]
+
+datasets = ['ds000228', 'ds000030']
+for dataset in datasets:
+    data, _ = tables.get_descriptive_data(dataset, gross_meanfd, fd_thresh, proportion_thresh)
+    for_plotting.update({dataset: data})
+
+
+fig = plt.figure(figsize=(7, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(for_plotting, axs):
+    df = for_plotting[dataset]
+    mean_fd = df['mean_framewise_displacement'].mean()
+    sd_fd = df['mean_framewise_displacement'].std()
+    df = df.rename(
+        columns={
+            'mean_framewise_displacement': 'Mean Framewise Displacement (mm)',
+            'groups': 'Groups'
+        }
+    )
+    sns.boxplot(
+        y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax
+    )
+    ax.set_title(
+        f'{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$'
+    )
+# fig.suptitle("Mean framewise displacement per sub-sample")
+
+glue('meanFD_cleaned-fig', fig, display=False)
+```
+
+```{glue:figure} meanFD_cleaned-fig
+:figwidth: 800px
+:name: "tbl:meanFD_cleaned-fig"
+```
+
+<!-- The trend of benchmaker metrics does not differ amongst the choice of atlases.
 However, we can see variance within the parcellation scheme MIST and DiFuMo.
 The variance comes from different resolution of the same parcellation scheme, epecially with low parcel counts.
-
-:::{dropdown} References on this page
-
-```{bibliography}
-:filter: docname in docnames
-```
-:::
+-->

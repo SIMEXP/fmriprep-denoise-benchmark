@@ -28,5 +28,6 @@ The main tool is a part of
 
 ```{bibliography}
 :filter: docname in docnames
+:labelprefix: A
 ```
 :::

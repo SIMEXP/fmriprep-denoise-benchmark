@@ -175,10 +175,11 @@ All strategies but `compcor` provides an option to add global signal to the conf
 ### Examined strategies
 
 We evaluated common confound regression strategies that are possible through fMRIPrep generated confound regressors.
-Subjects with high motion, indicated by less than 80% of remaining volumes after scrubbing with a 0.5 mm threshold, were excluded from all analysis.
 The connectome generated from high-pass filtered time series were served as a comparison baseline.
 Confound variables were accessed using API `load_confounds_strategy`.
 The detailed 11 strategies and a full breakdown of parameters used under the hood is presented in {numref}`table-strategies`.
+
+:::{dropdown} Click to see {numref}`table-strategies`
 
 ```{table} Denoising strategies
 :name: table-strategies
@@ -196,10 +197,12 @@ The detailed 11 strategies and a full breakdown of parameters used under the hoo
 | aroma           | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | N/A             | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
 | aroma+gsr       | `desc-smoothAROMAnonaggr_bold` | `True`      | N/A      | `basic`  | `basic`         | N/A     | N/A         | N/A             | N/A         | `full`      | `True`   |
 ```
+:::
 
 ## Denoising evaluation measures
 
-We used three metrics {cite:p}`ciric_benchmarking_2017`, {cite:p}`parkes_evaluation_2018` described in the previous literature to evaluate the denoising results.
+We used selected metrics described in the previous literature to evaluate the denoising results
+{cite:p}`ciric_benchmarking_2017,parkes_evaluation_2018`.
 Motion related metrics are centred around framewise displacement.
 Framewise displacement (FD) indexes the movement of the head from one volume to the next.
 The movement includes the transitions on the three axes ($x$, $y$, $z$) and the respective rotation ($\alpha$, $\beta_t$, $\gamma$).
@@ -245,10 +248,3 @@ with age and sex as covariates.
 
 [^1]: When resampling 1000 parcel version of the Schaefer atlas to match the preprocessed data,
 some subjects will miss a parcel.
-
-:::{dropdown} References on this page
-
-```{bibliography}
-:filter: docname in docnames
-```
-:::

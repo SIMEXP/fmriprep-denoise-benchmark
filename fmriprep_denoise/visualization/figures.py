@@ -331,16 +331,13 @@ def plot_vol_scrubbed_dataset():
             var_name=['strategy', 'type'],
             )
 
-        sns.barplot(
+        sns.boxplot(
             x='value', y='strategy',
             data=confounds_phenotype[confounds_phenotype['type'] == 'excised_vol_proportion'],
-            hue='groups', hue_order=groups,
-            ci=95, ax=ax)
-        ax.set_xlim(0, 1)
+            hue='groups', hue_order=groups, ax=ax)
         ax.set_xlabel('Proportion of removed volumes to scan length')
         ax.set_title(dataset)
     return fig
-
 
 
 def _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc):

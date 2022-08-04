@@ -9,13 +9,19 @@ from fmriprep_denoise.visualization import utils
 
 
 path_root = utils.repo2data_path()
+fd2label = {0.5: 'scrubbing.5', 0.2: 'scrubbing.2'}
 
 
-def lazy_demographic(dataset):
+def lazy_demographic(dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None):
     """
     Very lazy report of demographic information
     """
-    df, groups = _get_descriptive_data(dataset)
+    if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
+        raise ValueError(
+            'We did not generate metric with scrubbing threshold set at'
+            f'framewise displacement = {fd_thresh} mm.'
+        )
+    df, groups = get_descriptive_data(dataset, gross_fd, fd_thresh, proportion_thresh)
     full = df.describe()['age']
     full.name = 'full sample'
     print(f"n female: {df['gender'].sum()}")
@@ -30,8 +36,13 @@ def lazy_demographic(dataset):
     return pd.concat(desc, axis=1)
 
 
-def _get_descriptive_data(dataset):
+def get_descriptive_data(dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None):
     """Get the data frame of all descriptive data needed for a dataset."""
+    if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
+        raise ValueError(
+            'We did not generate metric with scrubbing threshold set at'
+            f'framewise displacement = {fd_thresh} mm.'
+        )
     # load basic data
     movements = (
         path_root
@@ -39,8 +50,27 @@ def _get_descriptive_data(dataset):
         / f'dataset-{dataset}_desc-movement_phenotype.tsv'
     )
     movements = pd.read_csv(movements, index_col=0, sep='\t')
-    _, participants_groups, groups = utils._get_participants_groups(dataset)
-    participants_groups.name = 'groups'
-    df = pd.concat([movements, participants_groups], axis=1)
-    df = df.rename(columns={'mean_framewise_displacement': 'mean FD'})
+
+    (
+        confounds_phenotype,
+        participant_groups,
+        groups,
+    ) = utils._get_participants_groups(dataset)
+    participant_groups.name = 'groups'
+
+    if gross_fd is not None:
+        keep_gross_fd = movements['mean_framewise_displacement'] <= gross_fd
+        keep_gross_fd = movements.index[keep_gross_fd]
+    else:
+        keep_gross_fd = movements.index
+
+    if fd_thresh is not None and proportion_thresh is not None:
+        scrub_label = (fd2label[fd_thresh], 'excised_vol_proportion')
+        keep_scrub = confounds_phenotype[scrub_label]<= proportion_thresh
+        keep_scrub = confounds_phenotype.index[keep_scrub]
+    else:
+        keep_scrub = confounds_phenotype.index
+    mask_motion = keep_gross_fd.intersection(keep_scrub)
+    participant_groups = participant_groups.loc[mask_motion]
+    df = pd.concat([movements, participant_groups], axis=1, join='inner')
     return df, groups
