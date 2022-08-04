@@ -25,13 +25,16 @@ jobs:
         pip install -r  binder/requirements.txt
     - name: Download data with repo2data
       run: |
-        repo2data -r  binder/data_requirement.json
+        cd binder
+        repo2data -r  data_requirement.json
+        cd ..
     # Build the page
     - name: Build the book
       run: |
         jupyter-book build content/
     # Push the book's HTML to github-pages
     - name: GitHub Pages action
+      if: ${{ success() && github.event_name == 'push' }}
       uses: peaceiris/actions-gh-pages@v3.6.1
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
