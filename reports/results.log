@@ -1,0 +1,46 @@
+Traceback (most recent call last):
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/asyncio/base_events.py", line 587, in run_until_complete
+    return future.result()
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/nbclient/client.py", line 664, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import warnings
+
+warnings.filterwarnings('ignore')
+from pathlib import Path
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+import seaborn as sns
+from fmriprep_denoise.visualization import figures, tables
+from myst_nb import glue
+------------------
+
+Traceback [0;36m(most recent call last)[0m:
+
+  File [1;32m"/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/IPython/core/interactiveshell.py"[0m, line [1;32m3553[0m, in [1;35mrun_code[0m
+    exec(code_obj, self.user_global_ns, self.user_ns)
+
+[0;36m  File [0;32m"/tmp/ipykernel_2163/2442399571.py"[0;36m, line [0;32m9[0;36m, in [0;35m<module>[0;36m[0m
+[0;31m    from fmriprep_denoise.visualization import figures, tables[0m
+
+[0;36m  File [0;32m"/home/runner/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/figures.py"[0;36m, line [0;32m131[0m
+[0;31m    if cur_strategy := utils.GRID_LOCATION.get((i, j), False):[0m
+[0m                     ^[0m
+[0;31mSyntaxError[0m[0;31m:[0m invalid syntax
+
+SyntaxError: invalid syntax (figures.py, line 131)
+

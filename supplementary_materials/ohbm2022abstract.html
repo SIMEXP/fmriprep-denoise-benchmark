@@ -561,14 +561,18 @@ title="Print to PDF"
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>---- repo2data starting ----
-/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/repo2data
-Config from file :
-/home/haoting/projects/fmriprep-denoise-benchmark/binder/data_requirement.json
-Destination:
-../../inputs/fmrieprep-denoise-paper
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
 
-Info : ../../inputs/fmrieprep-denoise-paper already downloaded
+  <span class="n">File</span> <span class="s2">&quot;/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/IPython/core/interactiveshell.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">3553</span><span class="p">,</span> <span class="ow">in</span> <span class="n">run_code</span>
+    <span class="n">exec</span><span class="p">(</span><span class="n">code_obj</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_global_ns</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_ns</span><span class="p">)</span>
+
+  <span class="n">File</span> <span class="s2">&quot;/tmp/ipykernel_2187/1595949606.py&quot;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">4</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+
+<span class="gt">  File</span><span class="nn"> &quot;/home/runner/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/figures.py&quot;</span><span class="gt">, line </span><span class="mi">131</span>
+    <span class="k">if</span> <span class="n">cur_strategy</span> <span class="o">:=</span> <span class="n">utils</span><span class="o">.</span><span class="n">GRID_LOCATION</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">),</span> <span class="kc">False</span><span class="p">):</span>
+                     <span class="o">^</span>
+<span class="ne">SyntaxError</span>: invalid syntax
 </pre></div>
 </div>
 </div>
@@ -764,9 +768,6 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </div>
 </div>
 <div class="figure align-default" id="ohbm-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/ohbm2022abstract_2_0.png" src="../_images/ohbm2022abstract_2_0.png" />
-</div>
 </div>
 </div>
 <div class="section" id="distance-dependent-effects-of-motion-on-connectivity">
@@ -781,9 +782,6 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </div>
 </div>
 <div class="figure align-default" id="ohbm-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/ohbm2022abstract_4_0.png" src="../_images/ohbm2022abstract_4_0.png" />
-</div>
 </div>
 </div>
 <div class="section" id="network-modularity">
@@ -800,9 +798,6 @@ The correlation between modularity quality and motion for each denoising approac
 </div>
 </div>
 <div class="figure align-default" id="ohbm-network-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/ohbm2022abstract_6_0.png" src="../_images/ohbm2022abstract_6_0.png" />
-</div>
 </div>
 </div>
 </div>
