@@ -10,10 +10,13 @@ STRATEGY_FILE = 'benchmark_strategies.json'
 
 PHENOTYPE_INFO = {
     'ds000228': {
-        'columns': ['Age', 'Gender'],
-        'replace': {'Age': 'age', 'Gender': 'gender'},
+        'columns': ['Age', 'Gender', 'Child_Adult'],
+        'replace': {'Age': 'age', 'Gender': 'gender', 'Child_Adult': 'groups'},
     },
-    'ds000030': {'columns': ['age', 'gender']},
+    'ds000030': {
+        'columns': ['age', 'gender', 'diagnosis'],
+        'replace': {'diagnosis': 'groups'},
+    },
 }
 
 

@@ -7,7 +7,6 @@ from pathlib import Path
 from fmriprep_denoise.data.fmriprep import (
     get_prepro_strategy,
     fetch_fmriprep_derivative,
-    generate_movement_summary,
 )
 from fmriprep_denoise.data.timeseries import generate_timeseries_per_dimension
 
@@ -82,14 +81,6 @@ def main():
 
     ts_output = output_root / f'atlas-{atlas_name}'
     ts_output.mkdir(exist_ok=True, parents=True)
-
-    if not Path(
-        ts_output / f'dataset-{dataset_name}_desc-movement_phenotype.tsv'
-    ).is_file():
-        full_data = fetch_fmriprep_derivative(
-            dataset_name, participant_tsv, fmriprep_path, fmriprep_specifier
-        )
-        generate_movement_summary(dataset_name, full_data, output_root)
 
     benchmark_strategies = get_prepro_strategy(strategy_name)
     data_aroma = fetch_fmriprep_derivative(

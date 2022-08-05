@@ -8,6 +8,7 @@ from fmriprep_denoise.data.timeseries import get_confounds
 from fmriprep_denoise.data.fmriprep import (
     get_prepro_strategy,
     fetch_fmriprep_derivative,
+    generate_movement_summary,
 )
 
 
@@ -55,9 +56,24 @@ def main():
     participant_tsv = Path(args.participants_tsv)
     output_root = Path(args.output_path)
 
-    path_dof = Path(
-        output_root / f'dataset-{dataset_name}_desc-confounds_phenotype.tsv'
+    path_movement = Path(
+        output_root
+        / f'dataset-{dataset_name}'
+        / f'dataset-{dataset_name}_desc-movement_phenotype.tsv'
     )
+
+    path_dof = Path(
+        output_root
+        / f'dataset-{dataset_name}'
+        / f'dataset-{dataset_name}_desc-confounds_phenotype.tsv'
+    )
+
+    if not path_movement.is_file():
+        full_data = fetch_fmriprep_derivative(
+            dataset_name, participant_tsv, fmriprep_path, fmriprep_specifier
+        )
+        generate_movement_summary(dataset_name, full_data, output_root)
+
     if not path_dof.is_file():
         benchmark_strategies = get_prepro_strategy()
         data_aroma = fetch_fmriprep_derivative(
