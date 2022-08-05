@@ -624,87 +624,98 @@ DOI: 10.5281/zenodo.6941758
 Total size: 3067.3 MB
 
 Link: https://zenodo.org/api/files/740fdfb0-6cc4-456a-a53b-a5f9fa15e634/fmriprep-denoise_inputs.tar.gz   size: 3067.3 MB
-  Download error. Original link: https://zenodo.org/api/files/740fdfb0-6cc4-456a-a53b-a5f9fa15e634/fmriprep-denoise_inputs.tar.gz
-  Too many errors.
-  Download is aborted.
+
+Checksum is correct. (afef2c523a639441b1d2db709e256a08)
+All files have been downloaded.
 </pre></div>
 </div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">CalledProcessError</span><span class="g g-Whitespace">                        </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1974</span><span class="o">/</span><span class="mf">1930556031.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> 
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">tables</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> 
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">lazy_demographic</span><span class="p">(</span><span class="s1">&#39;ds000228&#39;</span><span class="p">)</span>
-
-<span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep_denoise</span><span class="o">/</span><span class="n">visualization</span><span class="o">/</span><span class="n">tables</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> 
-<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> 
-<span class="g g-Whitespace">     </span><span class="mi">10</span> 
-
-<span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep_denoise</span><span class="o">/</span><span class="n">visualization</span><span class="o">/</span><span class="n">utils</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span> 
-<span class="g g-Whitespace">     </span><span class="mi">54</span> 
-<span class="ne">---&gt; </span><span class="mi">55</span> <span class="n">path_root</span> <span class="o">=</span> <span class="n">get_data_root</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span> 
-<span class="g g-Whitespace">     </span><span class="mi">57</span> 
-
-<span class="nn">~/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/utils.py</span> in <span class="ni">get_data_root</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span>         <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="s1">&#39;inputs&#39;</span> <span class="o">/</span> <span class="s1">&#39;fmrieprep-denoise-paper&#39;</span>
-<span class="g g-Whitespace">     </span><span class="mi">51</span>     <span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">52</span>     <span class="k">return</span> <span class="n">default_path</span> <span class="k">if</span> <span class="n">default_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="n">repo2data_path</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span> 
-<span class="g g-Whitespace">     </span><span class="mi">54</span> 
-
-<span class="nn">~/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/utils.py</span> in <span class="ni">repo2data_path</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span>     <span class="n">repo2data</span> <span class="o">=</span> <span class="n">Repo2Data</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data_req_path</span><span class="p">))</span>
-<span class="ne">---&gt; </span><span class="mi">44</span>     <span class="n">data_path</span> <span class="o">=</span> <span class="n">repo2data</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span> 
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">install</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">103</span>         <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span>             <span class="n">ret</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Repo2DataChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">,</span>
-<span class="ne">--&gt; </span><span class="mi">105</span>                                    <span class="bp">self</span><span class="o">.</span><span class="n">_use_server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_path</span><span class="p">)</span><span class="o">.</span><span class="n">install</span><span class="p">()]</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span> 
-<span class="g g-Whitespace">    </span><span class="mi">107</span>         <span class="k">return</span> <span class="n">ret</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">install</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">333</span>                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dst_path</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">334</span>             <span class="c1"># Downloading with the right method, depending on the src type</span>
-<span class="ne">--&gt; </span><span class="mi">335</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_scan_dl_type</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">336</span>             <span class="c1"># If needed, decompression of the data</span>
-<span class="g g-Whitespace">    </span><span class="mi">337</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_archive_decompress</span><span class="p">()</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">_scan_dl_type</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">313</span>         <span class="c1"># or from zenodo ?</span>
-<span class="g g-Whitespace">    </span><span class="mi">314</span>         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*?(10\.\d</span><span class="si">{4}</span><span class="s2">/zenodo).*?&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]):</span>
-<span class="ne">--&gt; </span><span class="mi">315</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_zenodo_download</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">316</span>         <span class="c1"># or osf</span>
-<span class="g g-Whitespace">    </span><span class="mi">317</span>         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*?(https://osf.io).*?&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]):</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">_zenodo_download</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">253</span>         <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">254</span>             <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
-<span class="ne">--&gt; </span><span class="mi">255</span>                 <span class="p">[</span><span class="s1">&#39;zenodo_get&#39;</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dst_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]])</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span>         <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: zenodo_get does not appear to be installed&quot;</span><span class="p">)</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/subprocess.py</span> in <span class="ni">check_call</span><span class="nt">(*popenargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">361</span>         <span class="k">if</span> <span class="n">cmd</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">362</span>             <span class="n">cmd</span> <span class="o">=</span> <span class="n">popenargs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="ne">--&gt; </span><span class="mi">363</span>         <span class="k">raise</span> <span class="n">CalledProcessError</span><span class="p">(</span><span class="n">retcode</span><span class="p">,</span> <span class="n">cmd</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span>     <span class="k">return</span> <span class="mi">0</span>
-<span class="g g-Whitespace">    </span><span class="mi">365</span> 
-
-<span class="ne">CalledProcessError</span>: Command &#39;[&#39;zenodo_get&#39;, &#39;-o&#39;, &#39;../../inputs/fmrieprep-denoise-paper&#39;, &#39;10.5281/zenodo.6941758&#39;]&#39; returned non-zero exit status 1.
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>patool: Extracting ../../inputs/fmrieprep-denoise-paper/md5sums.txt ...
 </pre></div>
 </div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>patool: Extracting ../../inputs/fmrieprep-denoise-paper/fmriprep-denoise_inputs.tar.gz ...
+patool: running /usr/bin/tar --extract -z --file ../../inputs/fmrieprep-denoise-paper/fmriprep-denoise_inputs.tar.gz --directory ../../inputs/fmrieprep-denoise-paper
+</pre></div>
 </div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>patool: ... ../../inputs/fmrieprep-denoise-paper/fmriprep-denoise_inputs.tar.gz extracted to `../../inputs/fmrieprep-denoise-paper&#39;.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Info : fmriprep-denoise_inputs.tar.gz Decompressed
+---- repo2data starting ----
+/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data
+Config from file :
+/home/runner/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/binder/data_requirement.json
+Destination:
+../../inputs/fmrieprep-denoise-paper
+
+Info : ../../inputs/fmrieprep-denoise-paper already downloaded
+n female: 84.0
+n female in child: 64.0
+n female in adult: 20.0
+</pre></div>
+</div>
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_a827a_" style="font-size: 10px">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th class="col_heading level0 col0" >full sample</th>
+      <th class="col_heading level0 col1" >child</th>
+      <th class="col_heading level0 col2" >adult</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_a827a_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_a827a_row0_col0" class="data row0 col0" >155.000000</td>
+      <td id="T_a827a_row0_col1" class="data row0 col1" >122.000000</td>
+      <td id="T_a827a_row0_col2" class="data row0 col2" >33.000000</td>
+    </tr>
+    <tr>
+      <th id="T_a827a_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_a827a_row1_col0" class="data row1 col0" >10.555189</td>
+      <td id="T_a827a_row1_col1" class="data row1 col1" >6.709461</td>
+      <td id="T_a827a_row1_col2" class="data row1 col2" >24.772727</td>
+    </tr>
+    <tr>
+      <th id="T_a827a_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_a827a_row2_col0" class="data row2 col0" >8.071957</td>
+      <td id="T_a827a_row2_col1" class="data row2 col1" >2.330938</td>
+      <td id="T_a827a_row2_col2" class="data row2 col2" >5.308521</td>
+    </tr>
+    <tr>
+      <th id="T_a827a_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_a827a_row3_col0" class="data row3 col0" >3.518138</td>
+      <td id="T_a827a_row3_col1" class="data row3 col1" >3.518138</td>
+      <td id="T_a827a_row3_col2" class="data row3 col2" >18.000000</td>
+    </tr>
+    <tr>
+      <th id="T_a827a_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_a827a_row4_col0" class="data row4 col0" >5.300000</td>
+      <td id="T_a827a_row4_col1" class="data row4 col1" >4.895210</td>
+      <td id="T_a827a_row4_col2" class="data row4 col2" >21.000000</td>
+    </tr>
+    <tr>
+      <th id="T_a827a_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_a827a_row5_col0" class="data row5 col0" >7.680000</td>
+      <td id="T_a827a_row5_col1" class="data row5 col1" >5.980000</td>
+      <td id="T_a827a_row5_col2" class="data row5 col2" >23.000000</td>
+    </tr>
+    <tr>
+      <th id="T_a827a_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_a827a_row6_col0" class="data row6 col0" >10.975000</td>
+      <td id="T_a827a_row6_col1" class="data row6 col1" >8.397500</td>
+      <td id="T_a827a_row6_col2" class="data row6 col2" >28.000000</td>
+    </tr>
+    <tr>
+      <th id="T_a827a_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_a827a_row7_col0" class="data row7 col0" >39.000000</td>
+      <td id="T_a827a_row7_col1" class="data row7 col1" >12.300000</td>
+      <td id="T_a827a_row7_col2" class="data row7 col2" >39.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <p>Dataset <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
 The current analysis only focused on the resting state scans.
@@ -755,6 +766,95 @@ The demographic information per condition is in <a class="reference internal" hr
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>n female: 108.0
+n female in ADHD: 19.0
+n female in BIPOLAR: 21.0
+n female in SCHZ: 12.0
+n female in CONTROL: 56.0
+</pre></div>
+</div>
+<div class="output text_html"><style type="text/css">
+</style>
+<table id="T_260a3_" style="font-size: 10px">
+  <thead>
+    <tr>
+      <th class="blank level0" >&nbsp;</th>
+      <th class="col_heading level0 col0" >full sample</th>
+      <th class="col_heading level0 col1" >ADHD</th>
+      <th class="col_heading level0 col2" >BIPOLAR</th>
+      <th class="col_heading level0 col3" >SCHZ</th>
+      <th class="col_heading level0 col4" >CONTROL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_260a3_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_260a3_row0_col0" class="data row0 col0" >259.000000</td>
+      <td id="T_260a3_row0_col1" class="data row0 col1" >40.000000</td>
+      <td id="T_260a3_row0_col2" class="data row0 col2" >49.000000</td>
+      <td id="T_260a3_row0_col3" class="data row0 col3" >50.000000</td>
+      <td id="T_260a3_row0_col4" class="data row0 col4" >120.000000</td>
+    </tr>
+    <tr>
+      <th id="T_260a3_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_260a3_row1_col0" class="data row1 col0" >33.347490</td>
+      <td id="T_260a3_row1_col1" class="data row1 col1" >32.050000</td>
+      <td id="T_260a3_row1_col2" class="data row1 col2" >35.285714</td>
+      <td id="T_260a3_row1_col3" class="data row1 col3" >36.460000</td>
+      <td id="T_260a3_row1_col4" class="data row1 col4" >31.691667</td>
+    </tr>
+    <tr>
+      <th id="T_260a3_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_260a3_row2_col0" class="data row2 col0" >9.305064</td>
+      <td id="T_260a3_row2_col1" class="data row2 col1" >10.409439</td>
+      <td id="T_260a3_row2_col2" class="data row2 col2" >9.027735</td>
+      <td id="T_260a3_row2_col3" class="data row2 col3" >8.878339</td>
+      <td id="T_260a3_row2_col4" class="data row2 col4" >8.827760</td>
+    </tr>
+    <tr>
+      <th id="T_260a3_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_260a3_row3_col0" class="data row3 col0" >21.000000</td>
+      <td id="T_260a3_row3_col1" class="data row3 col1" >21.000000</td>
+      <td id="T_260a3_row3_col2" class="data row3 col2" >21.000000</td>
+      <td id="T_260a3_row3_col3" class="data row3 col3" >22.000000</td>
+      <td id="T_260a3_row3_col4" class="data row3 col4" >21.000000</td>
+    </tr>
+    <tr>
+      <th id="T_260a3_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_260a3_row4_col0" class="data row4 col0" >25.000000</td>
+      <td id="T_260a3_row4_col1" class="data row4 col1" >23.750000</td>
+      <td id="T_260a3_row4_col2" class="data row4 col2" >26.000000</td>
+      <td id="T_260a3_row4_col3" class="data row4 col3" >29.000000</td>
+      <td id="T_260a3_row4_col4" class="data row4 col4" >24.000000</td>
+    </tr>
+    <tr>
+      <th id="T_260a3_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_260a3_row5_col0" class="data row5 col0" >32.000000</td>
+      <td id="T_260a3_row5_col1" class="data row5 col1" >28.000000</td>
+      <td id="T_260a3_row5_col2" class="data row5 col2" >36.000000</td>
+      <td id="T_260a3_row5_col3" class="data row5 col3" >37.500000</td>
+      <td id="T_260a3_row5_col4" class="data row5 col4" >28.500000</td>
+    </tr>
+    <tr>
+      <th id="T_260a3_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_260a3_row6_col0" class="data row6 col0" >41.000000</td>
+      <td id="T_260a3_row6_col1" class="data row6 col1" >40.000000</td>
+      <td id="T_260a3_row6_col2" class="data row6 col2" >43.000000</td>
+      <td id="T_260a3_row6_col3" class="data row6 col3" >43.750000</td>
+      <td id="T_260a3_row6_col4" class="data row6 col4" >39.250000</td>
+    </tr>
+    <tr>
+      <th id="T_260a3_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_260a3_row7_col0" class="data row7 col0" >50.000000</td>
+      <td id="T_260a3_row7_col1" class="data row7 col1" >50.000000</td>
+      <td id="T_260a3_row7_col2" class="data row7 col2" >50.000000</td>
+      <td id="T_260a3_row7_col3" class="data row7 col3" >49.000000</td>
+      <td id="T_260a3_row7_col4" class="data row7 col4" >50.000000</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 <div class="section" id="fmri-data-preprocessing">
