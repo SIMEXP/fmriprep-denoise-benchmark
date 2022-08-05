@@ -12,8 +12,8 @@
 OUTPUT="/home/${USER}/scratch/giga_timeseries/dataset-ds000228"
 fmriprep_path="/home/${USER}/scratch/ds000228/1643916303/fmriprep"
 participants_tsv="/home/${USER}/scratch/ds000228/participants.tsv"
-source /home/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
-cd /home/${USER}/projects/def-pbellec/${USER}/fmriprep-denoise-benchmark/
+source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
+cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 
 
 subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID} + 1))s/sub-(\S*)\>.*/\1/gp" ${participants_tsv} )
