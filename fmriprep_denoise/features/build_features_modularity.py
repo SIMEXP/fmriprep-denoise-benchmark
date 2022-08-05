@@ -9,6 +9,7 @@ from fmriprep_denoise.data.fmriprep import get_prepro_strategy
 from fmriprep_denoise.features.derivatives import (
     compute_connectome,
     check_extraction,
+    get_qc_criteria,
 )
 from fmriprep_denoise.features import louvain_modularity
 
@@ -45,6 +46,12 @@ def parse_args():
         action='store',
         help='Number of ROI. See meta data of each atlas to get valid inputs.',
     )
+    parser.add_argument(
+        '--qc',
+        action='store',
+        default=None,
+        help='Automatic motion QC thresholds.',
+    )
     return parser.parse_args()
 
 
@@ -63,19 +70,24 @@ def main():
     dataset = extracted_path.name.split('-')[-1]
 
     strategy_names = get_prepro_strategy(None)
+    motion_qc = get_qc_criteria(args.qc)
 
-    metric_qcfc, metric_mod = [], []
+    metric_mod = []
     for strategy_name in strategy_names.keys():
         print(strategy_name)
         file_pattern = f'atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}'
 
         connectome, phenotype = compute_connectome(
-            atlas, extracted_path, dataset, file_pattern
+            atlas,
+            extracted_path,
+            dataset,
+            file_pattern,
+            gross_fd=motion_qc['gross_fd'],
+            fd_thresh=motion_qc['fd_thresh'],
+            proportion_thresh=motion_qc['proportion_thresh'],
         )
         print('\tLoaded connectome...')
-        with Pool(30) as pool:
-            qs = pool.map(louvain_modularity, connectome.values.tolist())
-
+        qs = [louvain_modularity(vect) for vect in connectome.values.tolist()]
         modularity = pd.DataFrame(
             qs, columns=[strategy_name], index=connectome.index
         )

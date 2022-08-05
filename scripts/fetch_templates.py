@@ -27,10 +27,23 @@ def verify_gordon():
         )
 
 
-def calculate_difumo_centroids():
-    from fmriprep_denoise.features.distance_dependency import get_difumo_centroids
+def download_difumo():
+    """Download to nilearn_data"""
+    import nilearn.datasets
+    difumo_path = Path(__file__).parent / "difumo_segmentation" / "data" / "raw"
     for d in [64, 128, 256, 512, 1024]:
-        get_difumo_centroids(d)
+        for r in [2, 3]:
+            nilearn.datasets.fetch_atlas_difumo(
+                    dimension=d, resolution_mm=r, data_dir=str(difumo_path))
+
+def download_mist():
+    """Download to nilearn_data"""
+    import nilearn.datasets
+    difumo_path = Path(__file__).parent / "difumo_segmentation" / "data" / "raw"
+    for d in [64, 128, 256, 512, 1024]:
+        for r in [2, 3]:
+            nilearn.datasets.fetch_atlas_difumo(
+                    dimension=d, resolution_mm=r, data_dir=str(difumo_path))
 
 
 def main():

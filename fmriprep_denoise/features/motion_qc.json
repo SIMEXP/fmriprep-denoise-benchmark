@@ -1,0 +1,12 @@
+{
+    "stringent":{
+        "gross_fd": 0.25,
+        "fd_thresh": 0.2, 
+        "proportion_thresh": 0.8
+    },
+    "minimal":{
+        "gross_fd": 0.55,
+        "fd_thresh": null, 
+        "proportion_thresh": null
+    } 
+}
