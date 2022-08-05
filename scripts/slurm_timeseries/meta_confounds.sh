@@ -5,7 +5,7 @@
 #SBATCH --time=6:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/meta_confounds.out
-#SBATCH --error=logsmeta_confounds.err
+#SBATCH --error=logs/meta_confounds.err
 #SBATCH --cpus-per-task=4
 #SBATCH --mem=8G 
 

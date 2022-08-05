@@ -54,17 +54,16 @@ def main():
     fmriprep_specifier = args.specifier
     fmriprep_path = Path(args.fmriprep_path)
     participant_tsv = Path(args.participants_tsv)
-    output_root = Path(args.output_path)
+    output_root = Path(args.output_path) / f'dataset-{dataset_name}'
 
+    output_root.mkdir(exist_ok=True, parents=True)
     path_movement = Path(
         output_root
-        / f'dataset-{dataset_name}'
         / f'dataset-{dataset_name}_desc-movement_phenotype.tsv'
     )
 
     path_dof = Path(
         output_root
-        / f'dataset-{dataset_name}'
         / f'dataset-{dataset_name}_desc-confounds_phenotype.tsv'
     )
 
@@ -139,8 +138,9 @@ def main():
                     info[sub].update(stats)
                 else:
                     info[sub] = stats
-
-        pd.DataFrame.from_dict(info, orient='index').to_csv(path_dof, sep='\t')
+        confounds_stats = pd.DataFrame.from_dict(info, orient='index')
+        confounds_stats = confounds_stats.sort_index()
+        confounds_stats.to_csv(path_dof, sep='\t')
 
 
 if __name__ == '__main__':
