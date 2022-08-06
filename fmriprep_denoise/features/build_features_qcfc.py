@@ -106,7 +106,6 @@ def main():
         # QC-FC by group
         groups = phenotype['groups'].unique()
         for group in groups:
-            print(group)
             group_mask = phenotype['groups'] == group
             # make sure values are numerical
             subgroup = phenotype[group_mask].index

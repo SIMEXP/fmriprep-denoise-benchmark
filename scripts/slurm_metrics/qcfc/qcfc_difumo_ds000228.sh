@@ -9,7 +9,7 @@
 #SBATCH --array=0-3
 
 
-OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
+OUTPUT="inputs/fmrieprep-denoise-metrics"
 DIMENSIONS=(64 128 256 512)
 source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 

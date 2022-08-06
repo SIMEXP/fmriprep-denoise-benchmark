@@ -9,7 +9,7 @@
 #SBATCH --array=0-9
 
 
-OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
+OUTPUT="inputs/fmrieprep-denoise-metrics"
 DIMENSIONS=(7 12 20 36 64 122 197 325 444 ROI)
 DATASET=ds000228
 

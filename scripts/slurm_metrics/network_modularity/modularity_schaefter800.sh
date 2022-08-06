@@ -9,7 +9,7 @@
 #SBATCH --array=0-1
 
 
-OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
+OUTPUT="inputs/fmrieprep-denoise-metrics"
 source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 DATASET=(ds000030 ds000228)
 

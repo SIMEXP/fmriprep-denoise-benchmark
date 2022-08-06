@@ -134,7 +134,6 @@ def _load_valid_timeseries(
             raise ValueError('Found more than one valid file.' f'{file_path}')
         file_path = file_path[0]
         if file_path.stat().st_size > 1:
-            print(subject)
             ts = pd.read_csv(file_path, sep='\t', header=0)
             valid_ids.append(subject)
             valid_ts.append(ts.values)

@@ -6,7 +6,7 @@
 git submodule update --init --recursive
 
 # install the project
-pip install -e .
+pip install -r binder/requirements.txt
 
 python scripts/fetch_templates.py
 

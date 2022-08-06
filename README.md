@@ -14,8 +14,9 @@ The aim is to evaluate the impact of denoising strategy on functional connectivi
   The metrics are here:
   [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.6941758.svg)](https://doi.org/10.5281/zenodo.6941758)
 
-- Custom code is located in `fmriprep_denoise/`. Installable through `pip install -e .`
-- Preprocessing SLURM scripts are in `script/`
+- Custom code is located in `fmriprep_denoise/`. 
+
+- Preprocessing SLURM scripts are in `script/` 
 
 
 ## Poster

@@ -8,7 +8,7 @@
 #SBATCH --mem=8G 
 
 
-OUTPUT="/home/${USER}/scratch/fmriprep-denoise-benchmark"
+OUTPUT="inputs/fmrieprep-denoise-metrics"
 
 source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 
