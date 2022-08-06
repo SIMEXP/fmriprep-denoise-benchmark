@@ -143,12 +143,13 @@ def _get_output_info(strategy_name, output, data, atlas_spec):
 
 
 def _check_exclusion(reduced_confounds, sample_mask):
+    """For scrubbing based strategy, check if regression can be performed."""
     if sample_mask is not None:
-        kept_vol = len(sample_mask) / reduced_confounds.shape[0]
-        remove = 1 - kept_vol
+        kept_vol = len(sample_mask)
     else:
-        remove = 0
-    remove = remove > 0.2
+        kept_vol = reduced_confounds.shape[0]
+    # more noise regressors than volume
+    remove = kept_vol < reduced_confounds.shape[1]
     return remove
 
 
