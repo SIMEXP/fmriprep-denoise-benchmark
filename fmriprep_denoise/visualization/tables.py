@@ -8,12 +8,11 @@ import seaborn as sns
 from fmriprep_denoise.visualization import utils
 
 
-path_root = utils.repo2data_path()
 fd2label = {0.5: 'scrubbing.5', 0.2: 'scrubbing.2'}
 
 
 def lazy_demographic(
-    dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """
     Very lazy report of demographic information
@@ -24,7 +23,7 @@ def lazy_demographic(
             f'framewise displacement = {fd_thresh} mm.'
         )
     df, groups = get_descriptive_data(
-        dataset, gross_fd, fd_thresh, proportion_thresh
+        dataset, path_root, gross_fd, fd_thresh, proportion_thresh
     )
     full = df.describe()['age']
     full.name = 'full sample'
@@ -41,7 +40,7 @@ def lazy_demographic(
 
 
 def get_descriptive_data(
-    dataset, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """Get the data frame of all descriptive data needed for a dataset."""
     if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
@@ -61,7 +60,7 @@ def get_descriptive_data(
         confounds_phenotype,
         participant_groups,
         groups,
-    ) = utils._get_participants_groups(dataset)
+    ) = utils._get_participants_groups(dataset, path_root)
     participant_groups.name = 'groups'
 
     if gross_fd is not None:
@@ -78,5 +77,5 @@ def get_descriptive_data(
         keep_scrub = confounds_phenotype.index
     mask_motion = keep_gross_fd.intersection(keep_scrub)
     participant_groups = participant_groups.loc[mask_motion]
-    df = pd.concat([movements, participant_groups], axis=1, join='inner')
+    df = movements.loc[participant_groups.index, :]
     return df, groups

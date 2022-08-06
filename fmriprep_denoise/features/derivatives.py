@@ -64,10 +64,10 @@ def compute_connectome(
     pandas.DataFrame, pandas.DataFrame
         Flatten connectomes and phenotypes.
     """
-    phenotype = tables.get_descriptive_data(
+    phenotype, _ = tables.get_descriptive_data(
         dataset, path_root, gross_fd, fd_thresh, proportion_thresh
     )
-    participant_id = phenotype.index.to_list()
+    participant_id = phenotype.index.tolist()
     valid_ids, valid_ts = _load_valid_timeseries(
         atlas, extracted_path, participant_id, file_pattern
     )
@@ -134,6 +134,7 @@ def _load_valid_timeseries(
             raise ValueError('Found more than one valid file.' f'{file_path}')
         file_path = file_path[0]
         if file_path.stat().st_size > 1:
+            print(subject)
             ts = pd.read_csv(file_path, sep='\t', header=0)
             valid_ids.append(subject)
             valid_ts.append(ts.values)

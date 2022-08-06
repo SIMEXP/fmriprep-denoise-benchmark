@@ -47,15 +47,12 @@ def repo2data_path():
 
 def get_data_root():
     default_path = (
-        Path(__file__).parents[2] / 'inputs' / 'fmrieprep-denoise-paper'
+        Path(__file__).parents[2] / 'inputs' / 'fmrieprep-denoise-metrics'
     )
     return default_path if default_path.exists() else repo2data_path()
 
 
-path_root = get_data_root()
-
-
-def load_meanfd_groups(dataset):
+def load_meanfd_groups(dataset, path_root):
     file = f'dataset-{dataset}_desc-movement_phenotype.tsv'
     path_fd = path_root / f'dataset-{dataset}' / file
     data = pd.read_csv(path_fd, header=[0], index_col=0, sep='\t')
@@ -73,7 +70,7 @@ def _get_palette(order):
     return [palette_dict[item] for item in order]
 
 
-def _get_participants_groups(dataset):
+def _get_participants_groups(dataset, path_root):
 
     # need more general solutions here, maybe as a user input?
     group_info_column = 'Child_Adult' if dataset == 'ds000228' else 'diagnosis'
@@ -81,10 +78,14 @@ def _get_participants_groups(dataset):
     # read the degrees of freedom info as reference for subjects
     path_dof = (
         path_root
-        / 'metrics'
+        / f'dataset-{dataset}'
         / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
     )
-    path_participants = path_root / dataset / 'participants.tsv'
+    path_participants = (
+        path_root
+        / f'dataset-{dataset}'
+        / f'dataset-{dataset}_desc-movement_phenotype.tsv'
+    )
 
     confounds_phenotype = pd.read_csv(
         path_dof, header=[0, 1], index_col=0, sep='\t'
@@ -93,13 +94,14 @@ def _get_participants_groups(dataset):
 
     participant_groups = pd.read_csv(
         path_participants, index_col=0, sep='\t'
-    ).loc[subjects, group_info_column]
-    participant_groups.name = 'groups'
+    ).loc[subjects, 'groups']
     groups = participant_groups.unique().tolist()
     return confounds_phenotype, participant_groups, groups
 
 
-def _get_connectome_metric_paths(dataset, metric, atlas_name, dimension):
+def _get_connectome_metric_paths(
+    dataset, metric, atlas_name, dimension, path_root
+):
     atlas_name = '*' if isinstance(atlas_name, type(None)) else atlas_name
     dimension = (
         '*'
@@ -110,7 +112,7 @@ def _get_connectome_metric_paths(dataset, metric, atlas_name, dimension):
     files = list(
         path_root.glob(
             (
-                f'metrics/'
+                f'fmrieprep-denoise-metrics/dataset-{dataset}/'
                 f'dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_'
                 f'{metric}.tsv'
             )

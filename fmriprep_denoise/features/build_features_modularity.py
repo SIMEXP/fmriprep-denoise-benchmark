@@ -62,15 +62,17 @@ def main():
     input_gz = Path(args.input_path)
     atlas = args.atlas
     dimension = args.dimension
-    output_path = Path(args.output_path) / 'metrics'
-    output_path.mkdir(exist_ok=True)
 
     extracted_path = check_extraction(input_gz, extracted_path_root=None)
     print(extracted_path)
     dataset = extracted_path.name.split('-')[-1]
+    path_root = Path(args.output_path).absolute()
+    output_path = path_root / f'dataset-{dataset}'
+    output_path.mkdir(exist_ok=True)
 
     strategy_names = get_prepro_strategy(None)
     motion_qc = get_qc_criteria(args.qc)
+    print(motion_qc)
 
     metric_mod = []
     for strategy_name in strategy_names.keys():
@@ -81,6 +83,7 @@ def main():
             atlas,
             extracted_path,
             dataset,
+            path_root,
             file_pattern,
             gross_fd=motion_qc['gross_fd'],
             fd_thresh=motion_qc['fd_thresh'],

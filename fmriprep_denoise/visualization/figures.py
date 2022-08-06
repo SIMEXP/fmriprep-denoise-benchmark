@@ -10,9 +10,6 @@ from fmriprep_denoise.features import get_atlas_pairwise_distance
 from fmriprep_denoise.visualization import utils
 
 
-path_root = utils.repo2data_path()
-
-
 def plot_motion_resid(
     dataset, atlas_name=None, dimension=None, group='full_sample'
 ):
@@ -177,7 +174,7 @@ def plot_distance_dependence(
 
 
 def plot_network_modularity(
-    dataset, atlas_name=None, dimension=None, by_group=False
+    dataset, path_root, atlas_name=None, dimension=None, by_group=False
 ):
     metric = 'modularity'
     files_network, labels = utils._get_connectome_metric_paths(
