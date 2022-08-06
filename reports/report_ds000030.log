@@ -38,7 +38,7 @@ Traceback [0;36m(most recent call last)[0m:
   File [1;32m"/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/IPython/core/interactiveshell.py"[0m, line [1;32m3553[0m, in [1;35mrun_code[0m
     exec(code_obj, self.user_global_ns, self.user_ns)
 
-[0;36m  File [0;32m"/tmp/ipykernel_2212/1835997507.py"[0;36m, line [0;32m4[0;36m, in [0;35m<module>[0;36m[0m
+[0;36m  File [0;32m"/tmp/ipykernel_2324/1835997507.py"[0;36m, line [0;32m4[0;36m, in [0;35m<module>[0;36m[0m
 [0;31m    from fmriprep_denoise.visualization import figures[0m
 
 [0;36m  File [0;32m"/home/runner/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/figures.py"[0;36m, line [0;32m131[0m
