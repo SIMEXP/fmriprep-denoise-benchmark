@@ -1,4 +1,5 @@
 """Test some private functions."""
+from pathlib import Path
 from fmriprep_denoise.features import derivatives
 import pandas as pd
 import numpy as np
@@ -44,21 +45,14 @@ def test_load_valid_timeseries(tmp_path):
 
 
 @pytest.mark.parametrize(
-    'dataset,message',
+    'strategy_name,fd_thresh',
     [
-        ('ds000030', None),
-        ('ds000228', None),
-        ('notsupported', 'Unsupported dataset'),
+        ('minimal', None),
+        ('stringent', 0.2),
+        (None, None),
     ],
 )
-def test_load_phenotype(dataset, message):
-    """Test phenotype data loader."""
-    if message:
-        with pytest.raises(KeyError) as exc_info:
-            derivatives._load_phenotype(dataset)
-        assert message in exc_info.value.args[0]
-        return
-
-    phenotype = derivatives._load_phenotype(dataset)
-    assert phenotype['gender'].dtypes == 'float64'
-    assert phenotype.shape[1] == 4
+def test_get_qc_criteria(strategy_name, fd_thresh):
+    motion_qc = derivatives.get_qc_criteria(strategy_name)
+    assert type(motion_qc) is dict
+    assert motion_qc['fd_thresh'] == fd_thresh

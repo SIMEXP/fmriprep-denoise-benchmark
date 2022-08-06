@@ -48,7 +48,7 @@ def fetch_fmriprep_derivative(
         Text in a fmriprep file name, in between sub-<subject>_ses-<session>_
         and `space-<template>`.
 
-    subject : string, default None
+    subject : string, or list of string default None
         subject id. If none, return all results.
 
     space : string, default "MNI152NLin2009cAsym"
@@ -77,8 +77,16 @@ def fetch_fmriprep_derivative(
     # images and confound files
     if subject is None:
         subject_dirs = path_fmriprep_derivative.glob('sub-*/')
-    else:
+    elif isinstance(subject, str):
         subject_dirs = path_fmriprep_derivative.glob(f'sub-{subject}/')
+    elif isinstance(subject, list):
+        subject_dirs = []
+        for s in subject:
+            s_path = path_fmriprep_derivative / f'sub-{s}'
+            if s_path.is_dir():
+                subject_dirs.append(s_path)
+    else:
+        raise ValueError('Unsupported input for subject.')
 
     func_img_path, confounds_tsv_path, include_subjects = [], [], []
     for subject_dir in subject_dirs:
@@ -131,8 +139,9 @@ def get_prepro_strategy(strategy_name=None):
     return {strategy_name: benchmark_strategies[strategy_name]}
 
 
-def generate_movement_summary(dataset_name, data, output):
+def generate_movement_summary(data):
     """Generate and save movement stats and phenotype for openneuro datasets.
+
     Parameters
     ----------
 
@@ -141,21 +150,7 @@ def generate_movement_summary(dataset_name, data, output):
 
     data : sklearn.utils.Bunch
         Dataset retrieved through fmriprep_denoise.fetch_fmriprep_derivative
-
-    output : str
-        Output directory.
     """
-    movement = _phenotype_movement(data)
-    movement = movement.sort_index()
-    movement.to_csv(
-        output / f'dataset-{dataset_name}_desc-movement_phenotype.tsv',
-        sep='\t',
-    )
-    print('Generate movement stats.')
-
-
-def _phenotype_movement(data):
-    """Retrieve movement stats and phenotype for openneuro datasets."""
     # get motion QC related metrics from confound files
     group_mean_fd = pd.DataFrame()
     group_mean_fd.index = group_mean_fd.index.set_names('participant_id')
@@ -167,6 +162,7 @@ def _phenotype_movement(data):
 
     # load gender and age as confounds for the developmental dataset
     participants = data.phenotypic.copy()
+
     covar = participants.loc[:, PHENOTYPE_INFO[data.dataset_name]['columns']]
     fix_col_name = PHENOTYPE_INFO[data.dataset_name].get('replace', False)
     if isinstance(fix_col_name, dict):
@@ -175,4 +171,4 @@ def _phenotype_movement(data):
     covar.loc[covar['gender'] == 'M', 'gender'] = 0
     covar['gender'] = covar['gender'].astype('float')
     covar['age'] = covar['age'].astype('float')
-    return pd.concat((group_mean_fd, covar), axis=1)
+    return pd.concat((group_mean_fd, covar), axis=1, join='inner')

@@ -12,13 +12,13 @@
 source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate
 cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 
-python fmriprep_denoise/features/calculate_degrees_of_freedom.py inputs/metrics \
+python fmriprep_denoise/features/calculate_degrees_of_freedom.py inputs/fmrieprep-denoise-metrics \
 	--fmriprep_path=/scratch/${USER}/ds000228/1643916303/fmriprep/ \
 	--dataset_name=ds000228 \
 	--specifier=task-pixar \
 	--participants_tsv /scratch/${USER}/ds000228/participants.tsv
 
-python fmriprep_denoise/features/calculate_degrees_of_freedom.py inputs/metrics \
+python fmriprep_denoise/features/calculate_degrees_of_freedom.py inputs/fmrieprep-denoise-metrics \
 	--fmriprep_path=/scratch/${USER}/ds000030/1651688951/fmriprep/ \
 	--dataset_name=ds000030 \
 	--specifier=task-rest \

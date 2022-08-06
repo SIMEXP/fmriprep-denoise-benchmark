@@ -27,15 +27,16 @@ def get_qc_criteria(strategy_name=None):
 
     if strategy_name is None:
         print('No motion QC.')
-        return
+        return {'gross_fd': None, 'fd_thresh': None, 'proportion_thresh': None}
     (f"Process strategy '{strategy_name}'.")
-    return {strategy_name: qc_strategies[strategy_name]}
+    return qc_strategies[strategy_name]
 
 
 def compute_connectome(
     atlas,
     extracted_path,
     dataset,
+    path_root,
     file_pattern,
     gross_fd=None,
     fd_thresh=None,
@@ -63,6 +64,9 @@ def compute_connectome(
     pandas.DataFrame, pandas.DataFrame
         Flatten connectomes and phenotypes.
     """
+    phenotype = tables.get_descriptive_data(
+        dataset, path_root, gross_fd, fd_thresh, proportion_thresh
+    )
     participant_id = phenotype.index.to_list()
     valid_ids, valid_ts = _load_valid_timeseries(
         atlas, extracted_path, participant_id, file_pattern
@@ -114,37 +118,6 @@ def check_extraction(input_path, extracted_path_root=None):
         with tarfile.open(input_path, 'r:gz') as tar:
             tar.extractall(extracted_path_root)
     return extracted_path
-
-
-def _load_phenotype(dataset, gross_fd, fd_thresh, proportion_thresh):
-    """Get subjects that were processed and passed quality controls."""
-    if dataset not in group_info_column:
-        raise KeyError(f'Unsupported dataset {dataset}')
-
-    # read relevant files
-    path_original_participants_info = inputs / f'{dataset}/participants.tsv'
-
-    phenotype, _ = tables.get_descriptive_data(
-        dataset,
-        gross_fd=gross_fd,
-        fd_thresh=fd_thresh,
-        proportion_thresh=proportion_thresh,
-    )
-
-    participants = pd.read_csv(
-        path_original_participants_info, sep='\t', index_col=0
-    )
-    if dataset == 'ds000030':
-        mask_quality = participants['ghost_NoGhost'] == 'No_ghost'
-        participants = participants[mask_quality]
-    # changen the header to something consistent
-    participant_groups = group_info_column[dataset]
-    participants = participants.rename(columns={participant_groups: 'groups'})
-
-    phenotype = pd.concat(
-        [phenotype, participants['groups']], axis=1, join='inner'
-    )
-    return phenotype.sort_index()
 
 
 def _load_valid_timeseries(
