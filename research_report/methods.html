@@ -607,117 +607,16 @@ For more information for the dataset please refers to <span id="id3">Richardson 
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>---- repo2data starting ----
-/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data
-Config from file :
-/home/runner/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/binder/data_requirement.json
-Destination:
-../../inputs/fmrieprep-denoise-metrics
-
-Info : Starting to download from zenodo 10.5281/zenodo.6941758 ...
-</pre></div>
-</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">KeyboardInterrupt</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_2029</span><span class="o">/</span><span class="mf">1930556031.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> 
-<span class="ne">----&gt; </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">tables</span>
+<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="o">/</span><span class="n">tmp</span><span class="o">/</span><span class="n">ipykernel_1946</span><span class="o">/</span><span class="mf">1930556031.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">tables</span>
 <span class="g g-Whitespace">      </span><span class="mi">8</span> 
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">lazy_demographic</span><span class="p">(</span><span class="s1">&#39;ds000228&#39;</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">9</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">lazy_demographic</span><span class="p">(</span><span class="s1">&#39;ds000228&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">desc</span> <span class="o">=</span> <span class="n">desc</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">set_table_attributes</span><span class="p">(</span><span class="s1">&#39;style=&quot;font-size: 10px&quot;&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> 
 
-<span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep_denoise</span><span class="o">/</span><span class="n">visualization</span><span class="o">/</span><span class="n">tables</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> 
-<span class="ne">----&gt; </span><span class="mi">8</span> <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">utils</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> 
-<span class="g g-Whitespace">     </span><span class="mi">10</span> 
-
-<span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep</span><span class="o">-</span><span class="n">denoise</span><span class="o">-</span><span class="n">benchmark</span><span class="o">/</span><span class="n">fmriprep_denoise</span><span class="o">/</span><span class="n">visualization</span><span class="o">/</span><span class="n">utils</span><span class="o">.</span><span class="n">py</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span> 
-<span class="g g-Whitespace">     </span><span class="mi">54</span> 
-<span class="ne">---&gt; </span><span class="mi">55</span> <span class="n">path_root</span> <span class="o">=</span> <span class="n">get_data_root</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">56</span> 
-<span class="g g-Whitespace">     </span><span class="mi">57</span> 
-
-<span class="nn">~/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/utils.py</span> in <span class="ni">get_data_root</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">50</span>         <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parents</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="s1">&#39;inputs&#39;</span> <span class="o">/</span> <span class="s1">&#39;fmrieprep-denoise-paper&#39;</span>
-<span class="g g-Whitespace">     </span><span class="mi">51</span>     <span class="p">)</span>
-<span class="ne">---&gt; </span><span class="mi">52</span>     <span class="k">return</span> <span class="n">default_path</span> <span class="k">if</span> <span class="n">default_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="k">else</span> <span class="n">repo2data_path</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">53</span> 
-<span class="g g-Whitespace">     </span><span class="mi">54</span> 
-
-<span class="nn">~/work/fmriprep-denoise-benchmark/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/utils.py</span> in <span class="ni">repo2data_path</span><span class="nt">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">42</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">43</span>     <span class="n">repo2data</span> <span class="o">=</span> <span class="n">Repo2Data</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">data_req_path</span><span class="p">))</span>
-<span class="ne">---&gt; </span><span class="mi">44</span>     <span class="n">data_path</span> <span class="o">=</span> <span class="n">repo2data</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">45</span>     <span class="k">return</span> <span class="n">Path</span><span class="p">(</span><span class="n">data_path</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-<span class="g g-Whitespace">     </span><span class="mi">46</span> 
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">install</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">103</span>         <span class="k">else</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">104</span>             <span class="n">ret</span> <span class="o">+=</span> <span class="p">[</span><span class="n">Repo2DataChild</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">,</span>
-<span class="ne">--&gt; </span><span class="mi">105</span>                                    <span class="bp">self</span><span class="o">.</span><span class="n">_use_server</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_path</span><span class="p">)</span><span class="o">.</span><span class="n">install</span><span class="p">()]</span>
-<span class="g g-Whitespace">    </span><span class="mi">106</span> 
-<span class="g g-Whitespace">    </span><span class="mi">107</span>         <span class="k">return</span> <span class="n">ret</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">install</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">333</span>                 <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dst_path</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">334</span>             <span class="c1"># Downloading with the right method, depending on the src type</span>
-<span class="ne">--&gt; </span><span class="mi">335</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_scan_dl_type</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">336</span>             <span class="c1"># If needed, decompression of the data</span>
-<span class="g g-Whitespace">    </span><span class="mi">337</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_archive_decompress</span><span class="p">()</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">_scan_dl_type</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">313</span>         <span class="c1"># or from zenodo ?</span>
-<span class="g g-Whitespace">    </span><span class="mi">314</span>         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*?(10\.\d</span><span class="si">{4}</span><span class="s2">/zenodo).*?&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]):</span>
-<span class="ne">--&gt; </span><span class="mi">315</span>             <span class="bp">self</span><span class="o">.</span><span class="n">_zenodo_download</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">316</span>         <span class="c1"># or osf</span>
-<span class="g g-Whitespace">    </span><span class="mi">317</span>         <span class="k">elif</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s2">&quot;.*?(https://osf.io).*?&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]):</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/site-packages/repo2data/repo2data.py</span> in <span class="ni">_zenodo_download</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">253</span>         <span class="k">try</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">254</span>             <span class="n">subprocess</span><span class="o">.</span><span class="n">check_call</span><span class="p">(</span>
-<span class="ne">--&gt; </span><span class="mi">255</span>                 <span class="p">[</span><span class="s1">&#39;zenodo_get&#39;</span><span class="p">,</span> <span class="s1">&#39;-o&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dst_path</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data_requirement_file</span><span class="p">[</span><span class="s2">&quot;src&quot;</span><span class="p">]])</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span>         <span class="k">except</span> <span class="ne">FileNotFoundError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: zenodo_get does not appear to be installed&quot;</span><span class="p">)</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/subprocess.py</span> in <span class="ni">check_call</span><span class="nt">(*popenargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">356</span>     <span class="n">check_call</span><span class="p">([</span><span class="s2">&quot;ls&quot;</span><span class="p">,</span> <span class="s2">&quot;-l&quot;</span><span class="p">])</span>
-<span class="g g-Whitespace">    </span><span class="mi">357</span>     <span class="sd">&quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">358</span><span class="sd">     retcode = call(*popenargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">359</span><span class="sd">     if retcode:</span>
-<span class="g g-Whitespace">    </span><span class="mi">360</span><span class="sd">         cmd = kwargs.get(&quot;args&quot;)</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/subprocess.py</span> in <span class="ni">call</span><span class="nt">(timeout, *popenargs, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">339</span><span class="sd">     with Popen(*popenargs, **kwargs) as p:</span>
-<span class="g g-Whitespace">    </span><span class="mi">340</span><span class="sd">         try:</span>
-<span class="ne">--&gt; </span><span class="mi">341</span><span class="sd">             return p.wait(timeout=timeout)</span>
-<span class="g g-Whitespace">    </span><span class="mi">342</span><span class="sd">         except:  # Including KeyboardInterrupt, wait handled that.</span>
-<span class="g g-Whitespace">    </span><span class="mi">343</span><span class="sd">             p.kill()</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/subprocess.py</span> in <span class="ni">wait</span><span class="nt">(self, timeout)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1017</span><span class="sd">             endtime = _time() + timeout</span>
-<span class="g g-Whitespace">   </span><span class="mi">1018</span><span class="sd">         try:</span>
-<span class="ne">-&gt; </span><span class="mi">1019</span><span class="sd">             return self._wait(timeout=timeout)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1020</span><span class="sd">         except KeyboardInterrupt:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1021</span><span class="sd">             # https://bugs.python.org/issue25942</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/subprocess.py</span> in <span class="ni">_wait</span><span class="nt">(self, timeout)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1651</span><span class="sd">                         if self.returncode is not None:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1652</span><span class="sd">                             break  # Another thread waited.</span>
-<span class="ne">-&gt; </span><span class="mi">1653</span><span class="sd">                         (pid, sts) = self._try_wait(0)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1654</span><span class="sd">                         # Check the pid and loop as waitpid has been known to</span>
-<span class="g g-Whitespace">   </span><span class="mi">1655</span><span class="sd">                         # return 0 even without WNOHANG in odd situations.</span>
-
-<span class="nn">/opt/hostedtoolcache/Python/3.7.13/x64/lib/python3.7/subprocess.py</span> in <span class="ni">_try_wait</span><span class="nt">(self, wait_flags)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1609</span><span class="sd">             &quot;&quot;&quot;</span><span class="n">All</span> <span class="n">callers</span> <span class="n">to</span> <span class="n">this</span> <span class="n">function</span> <span class="n">MUST</span> <span class="n">hold</span> <span class="bp">self</span><span class="o">.</span><span class="n">_waitpid_lock</span><span class="o">.</span><span class="s2">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1610</span><span class="s2">             try:</span>
-<span class="ne">-&gt; </span><span class="mi">1611</span><span class="s2">                 (pid, sts) = os.waitpid(self.pid, wait_flags)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1612</span><span class="s2">             except ChildProcessError:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1613</span><span class="s2">                 # This happens if SIGCLD is set to be ignored or waiting</span>
-
-<span class="ne">KeyboardInterrupt</span>: 
+<span class="ne">TypeError</span>: lazy_demographic() missing 1 required positional argument: &#39;path_root&#39;
 </pre></div>
 </div>
 </div>
