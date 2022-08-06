@@ -33,19 +33,20 @@ import warnings
 warnings.filterwarnings('ignore')
 import pandas as pd
 from myst_nb import glue
+from fmriprep_denoise.visualization import tables, utils
 
-from fmriprep_denoise.visualization import tables
+path_root = utils.get_data_root()
 
-desc = tables.lazy_demographic('ds000228')
-desc = desc.style.set_table_attributes('style="font-size: 10px"')
+desc = tables.lazy_demographic('ds000228', path_root)
+desc = desc.style.set_table_attributes('style="font-size: 12px"')
 
 glue('ds000228_desc', desc)
 ```
 
 Dataset `ds000030` includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
 The current analysis only focused on the resting state scans.
-Scans with an instrumental artifact (flagged under column `ghost_NoGhost` in `particiapnts.tsv`) were excluded from the analysis pipeline.
-259 out of 272 subjects of were included in the benchmark.
+Scans with an instrumental artifact (flagged under column `ghost_NoGhost` in `particiapnts.tsv`) were also excluded from the analysis pipeline.
+212 out of 272 subjects of were included in the benchmark.
 The demographic information per condition is in {numref}`table-ds000030`.
 
 ```{table} Demographic information of ds000030
@@ -60,8 +61,8 @@ The demographic information per condition is in {numref}`table-ds000030`.
 ```{code-cell}
 :tags: [hide-input]
 
-desc = tables.lazy_demographic('ds000030')
-desc = desc.style.set_table_attributes('style="font-size: 10px"')
+desc = tables.lazy_demographic('ds000030', path_root)
+desc = desc.style.set_table_attributes('style="font-size: 12px"')
 
 glue('ds000030_desc', desc)
 ```
