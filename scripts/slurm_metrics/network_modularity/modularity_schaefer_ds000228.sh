@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=netmod_schaefer_ds000228
-#SBATCH --time=12:00:00
+#SBATCH --time=24:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/netmod_schaefer_ds000228.%a.out
 #SBATCH --error=logs/netmod_schaefer_ds000228.%a.err
