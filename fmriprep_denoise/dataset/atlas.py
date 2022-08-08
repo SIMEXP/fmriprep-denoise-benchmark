@@ -103,7 +103,7 @@ def fetch_atlas_path(atlas_name, dimension):
 
 
 def create_atlas_masker(
-    atlas_name, dimension, subject_mask, detrend=True, standardize= False,
+    atlas_name, dimension, subject_mask, detrend=True, standardize=False,
     nilearn_cache=''
 ):
     """Create masker given metadata.
@@ -113,7 +113,7 @@ def create_atlas_masker(
         Atlas name. Must be a key in ATLAS_METADATA.
     """
     atlas = fetch_atlas_path(atlas_name, dimension)
-    labels = list(range(1, atlas.labels.shape[0] + 1))
+    labels = list(range(atlas.labels.shape[0]))
 
     if atlas.type == 'dseg':
         masker = NiftiLabelsMasker(

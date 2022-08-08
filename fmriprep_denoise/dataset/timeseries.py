@@ -118,8 +118,8 @@ def _generate_raw_timeseries(output, data, atlas_info):
     )
     timeseries_labels = pd.DataFrame(columns=atlas_labels)
     if not rawts_path.is_file():
-
         subject_timeseries = raw_masker.fit_transform(data.func[0])
+        fitted_labels = [int(i) for i in raw_masker.labels_]
         df = pd.DataFrame(subject_timeseries, columns=raw_masker.labels_)
         # make sure missing label were put pack
         df = pd.concat([timeseries_labels, df])
