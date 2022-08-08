@@ -28,6 +28,9 @@ If not otherwise specified, the scripts were executive from the root of the proj
     ```bash
     find scripts/slurm_timeseries/*.sh -type f | while read file; do sbatch $file; done
     ```
+    If you get an error along the line of `Job violates accounting/QOS policy`,
+    Submit batches by dataset.
+
 3. `slurm_metric/slurm_meta_confounds.sh`:
     Create files to determine which subject will enter the next stage for metric generation.
 
