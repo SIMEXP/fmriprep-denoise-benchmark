@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 from scipy.spatial import distance
 
-from fmriprep_denoise.data.atlas import fetch_atlas_path, ATLAS_METADATA
+from fmriprep_denoise.dataset.atlas import fetch_atlas_path, ATLAS_METADATA
 from nilearn.image import index_img
 from nilearn.plotting import find_probabilistic_atlas_cut_coords
 

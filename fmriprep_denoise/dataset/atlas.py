@@ -103,7 +103,8 @@ def fetch_atlas_path(atlas_name, dimension):
 
 
 def create_atlas_masker(
-    atlas_name, dimension, subject_mask, detrend=True, nilearn_cache=''
+    atlas_name, dimension, subject_mask, detrend=True, standardize= False,
+    nilearn_cache=''
 ):
     """Create masker given metadata.
     Parameters
@@ -116,11 +117,13 @@ def create_atlas_masker(
 
     if atlas.type == 'dseg':
         masker = NiftiLabelsMasker(
-            atlas.maps, labels=labels, mask_img=subject_mask, detrend=detrend
+            atlas.maps, labels=labels, mask_img=subject_mask, detrend=detrend,
+            standardize=standardize,
         )
     elif atlas.type == 'probseg':
         masker = NiftiMapsMasker(
-            atlas.maps, mask_img=subject_mask, detrend=detrend
+            atlas.maps, mask_img=subject_mask, detrend=detrend,
+            standardize=standardize,
         )
     if nilearn_cache:
         masker = masker.set_params(memory=nilearn_cache, memory_level=1)

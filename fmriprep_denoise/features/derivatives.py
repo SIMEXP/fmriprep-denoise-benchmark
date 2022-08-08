@@ -48,7 +48,7 @@ def compute_connectome(
     ----------
 
     atlas : str
-        Atlas name matching keys in fmriprep_denoise.data.atlas.ATLAS_METADATA.
+        Atlas name matching keys in fmriprep_denoise.dataset.atlas.ATLAS_METADATA.
 
     extracted_path : pathlib.Path
         Path object to where the time series were saved.

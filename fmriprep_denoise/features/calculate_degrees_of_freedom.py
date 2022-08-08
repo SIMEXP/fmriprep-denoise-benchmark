@@ -4,8 +4,8 @@ from pathlib import Path
 import pandas as pd
 
 
-from fmriprep_denoise.data.timeseries import get_confounds
-from fmriprep_denoise.data.fmriprep import (
+from fmriprep_denoise.dataset.timeseries import get_confounds
+from fmriprep_denoise.dataset.fmriprep import (
     get_prepro_strategy,
     fetch_fmriprep_derivative,
     generate_movement_summary,

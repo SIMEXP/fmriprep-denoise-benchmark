@@ -3,7 +3,7 @@ import pandas as pd
 from nilearn.signal import clean
 from nilearn.interfaces.fmriprep import load_confounds_strategy, load_confounds
 
-from fmriprep_denoise.data.atlas import (
+from fmriprep_denoise.dataset.atlas import (
     create_atlas_masker,
     get_atlas_dimensions,
 )
@@ -92,7 +92,7 @@ def _clean_timeserise_aroma(
         strategy_name, parameters, img
     )
     aroma_masker, _ = create_atlas_masker(
-        atlas_name, dimension, subject_mask, nilearn_cache=''
+        atlas_name, dimension, subject_mask, standardize=True, nilearn_cache=''
     )
     clean_timeseries = aroma_masker.fit_transform(
         img, confounds=reduced_confounds, sample_mask=sample_mask
@@ -118,6 +118,7 @@ def _generate_raw_timeseries(output, data, atlas_info):
     )
     timeseries_labels = pd.DataFrame(columns=atlas_labels)
     if not rawts_path.is_file():
+
         subject_timeseries = raw_masker.fit_transform(data.func[0])
         df = pd.DataFrame(subject_timeseries, columns=raw_masker.labels_)
         # make sure missing label were put pack
@@ -127,6 +128,7 @@ def _generate_raw_timeseries(output, data, atlas_info):
         df = pd.read_csv(rawts_path, header=0, sep='\t')
         subject_timeseries = df.values
     del raw_masker
+
     return subject_timeseries
 
 

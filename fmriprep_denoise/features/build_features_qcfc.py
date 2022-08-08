@@ -5,7 +5,7 @@ import pandas as pd
 from pathlib import Path
 from multiprocessing import Pool
 
-from fmriprep_denoise.data.fmriprep import get_prepro_strategy
+from fmriprep_denoise.dataset.fmriprep import get_prepro_strategy
 from fmriprep_denoise.features.derivatives import (
     compute_connectome,
     check_extraction,

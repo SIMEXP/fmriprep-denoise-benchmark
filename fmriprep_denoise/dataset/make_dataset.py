@@ -4,11 +4,11 @@ Process fMRIPrep outputs to timeseries based on denoising strategy.
 import argparse
 from pathlib import Path
 
-from fmriprep_denoise.data.fmriprep import (
+from fmriprep_denoise.dataset.fmriprep import (
     get_prepro_strategy,
     fetch_fmriprep_derivative,
 )
-from fmriprep_denoise.data.timeseries import generate_timeseries_per_dimension
+from fmriprep_denoise.dataset.timeseries import generate_timeseries_per_dimension
 
 
 def parse_args():

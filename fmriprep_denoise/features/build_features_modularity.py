@@ -5,7 +5,7 @@ import pandas as pd
 from pathlib import Path
 from multiprocessing import Pool
 
-from fmriprep_denoise.data.fmriprep import get_prepro_strategy
+from fmriprep_denoise.dataset.fmriprep import get_prepro_strategy
 from fmriprep_denoise.features.derivatives import (
     compute_connectome,
     check_extraction,
@@ -85,9 +85,7 @@ def main():
             dataset,
             path_root,
             file_pattern,
-            gross_fd=motion_qc['gross_fd'],
-            fd_thresh=motion_qc['fd_thresh'],
-            proportion_thresh=motion_qc['proportion_thresh'],
+            **motion_qc,
         )
         print('\tLoaded connectome...')
         qs = [louvain_modularity(vect) for vect in connectome.values.tolist()]
