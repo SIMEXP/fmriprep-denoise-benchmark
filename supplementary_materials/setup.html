@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Setup of this project &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
+    <title>Setup to run all customised scripts for preprocessing &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -129,8 +129,8 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/discussions.html">
-   Discussions
+  <a class="reference internal" href="../research_report/results.html">
+   Results
   </a>
  </li>
  <li class="toctree-l1">
@@ -167,7 +167,7 @@ const thebe_selector_output = ".output, .cell_output"
   <ul class="current">
    <li class="toctree-l2 current active">
     <a class="current reference internal" href="#">
-     Setup of this project
+     Setup to run all customised scripts for preprocessing
     </a>
    </li>
    <li class="toctree-l2">
@@ -344,7 +344,7 @@ title="Print to PDF"
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Setup of this project</h1>
+                <h1>Setup to run all customised scripts for preprocessing</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
@@ -356,8 +356,50 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="setup-of-this-project">
-<h1>Setup of this project<a class="headerlink" href="#setup-of-this-project" title="Permalink to this headline">#</a></h1>
+  <div class="tex2jax_ignore mathjax_ignore section" id="setup-to-run-all-customised-scripts-for-preprocessing">
+<h1>Setup to run all customised scripts for preprocessing<a class="headerlink" href="#setup-to-run-all-customised-scripts-for-preprocessing" title="Permalink to this headline">#</a></h1>
+<p>The dataset and features requires HPC for the computation.
+Here are scripts we used to process the current project presented in the study.
+If not otherwise specified, the scripts were executive from the root of the project.</p>
+<ol>
+<li><p>Preprocess data with fMRIPrep.
+We generate the slurm files using <a class="reference external" href="https://simexp-documentation.readthedocs.io/en/latest/giga_preprocessing/preprocessing.html">fMRIPrep-slurm</a>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fmriprep-slurm/singularity_run.bash <span class="se">\</span>
+    PATH/TO/BIDS/DATASET <span class="se">\</span>
+    fmriprep <span class="se">\</span>
+    --fmriprep-args<span class="o">=</span><span class="se">\&quot;</span>--use-aroma<span class="se">\&quot;</span> <span class="se">\</span>
+    --email<span class="o">=</span><span class="nv">$SLACK_EMAIL_BOT</span>
+</pre></div>
+</div>
+<p>See here to learn about <a class="reference external" href="https://simexp-documentation.readthedocs.io/en/latest/alliance_canada/hpc.html?highlight=slack#slurm-notifications-on-slack"><code class="docutils literal notranslate"><span class="pre">$SLACK_EMAIL_BOT</span></code></a></p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">setup.sh</span></code>:
+Install all dependencies.
+Download atlases and save them in templateflow competible format.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slurm_timesereis/*.sh</span></code>:
+Extract time series with different atlases.
+The scripts were separated based on different memory requirements.
+Use this line to submit all jobs at once.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/slurm_timeseries/*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+<p>If you get an error along the line of <code class="docutils literal notranslate"><span class="pre">Job</span> <span class="pre">violates</span> <span class="pre">accounting/QOS</span> <span class="pre">policy</span></code>,
+Submit batches by dataset.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slurm_metric/slurm_meta_confounds.sh</span></code>:
+Create files to determine which subject will enter the next stage for metric generation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch scripts/slurm_metric/slurm_meta_confounds.sh
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slurm_metric/*/*.sh</span></code>:
+Caculate metrics on denoising quality per atlas.
+Use this line to submit all jobs at once.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/slurm_metrics/*/*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+</li>
+</ol>
 </div>
 
     <script type="text/x-thebe-config">

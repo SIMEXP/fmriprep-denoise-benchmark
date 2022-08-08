@@ -14,15 +14,14 @@ kernelspec:
 # Methods
 
 ## Datasets
-<!-- need to revise the demographic information -->
 
 We selected two datasets on OpenNeuro for the current analysis:
 `ds000228` {cite:p}`ds000228:1.1.0` and `ds000030` {cite:p}`ds000030:1.0.0`.
-Dataset `ds000228` ($N=155$) contains fMRI scans of participants watching a silent version of Pixar animated movie "Partly Cloudy".
+Dataset `ds000228` (N = 155) contains fMRI scans of participants watching a silent version of Pixar animated movie "Partly Cloudy".
 The dataset includes 33 adult subjects
-($Mean_{age}=24.8$, $SD_{age}=5.3$, $range_{age}: 18-39$; $n_{female}=20$)
+(Age Mean(s.d.) =  24.8(5.3), range = 18--39; 20 female)
 and 122 children subjects
-($Mean_{age}=6.7$, $SD_{age}=2.3$, $range_{age}: 3.5-12$; $n_{female}=64$)
+(Age Mean(s.d.) =  6.7(2.3), range = 3.5--12.3; 64 female)
 For more information for the dataset please refers to {cite:t}`richardson_development_2018`.
 
 ```{code-cell}
@@ -46,15 +45,15 @@ glue('ds000228_desc', desc)
 Dataset `ds000030` includes multiple tasks collected on subjects of a variety of neuropsychiatric diagnostics, including ADHD, bipolar disorder, schizophrenia , and healthy controls.
 The current analysis only focused on the resting state scans.
 Scans with an instrumental artifact (flagged under column `ghost_NoGhost` in `particiapnts.tsv`) were also excluded from the analysis pipeline.
-212 out of 272 subjects of were included in the benchmark.
+212 out of 272 subjects enters the preprocessing stage.
 The demographic information per condition is in {numref}`table-ds000030`.
 
 ```{table} Demographic information of ds000030
 :name: table-ds000030
 |                 | Full sample | Healthy control | Schizophrenia | Bipolar disorder |     ADHD    |
 |----------------:|------------:|----------------:|--------------:|-----------------:|------------:|
-|       N(female) |    259(108) |         120(56) |        50(12) |           49(21) |      40(19) |
-| Age Mean(s.d.)  |   33.3(9.3) |      31.7 (8.8) |    36.5 (8.9) |       35.3 (9.0) | 32.1 (10.4) |
+|       N(female) |     212(98) |         106(54) |         30(8) |           41(19) |      35(17) |
+|  Age Mean(s.d.) |   33.2(9.3) |       31.8(8.9) |    37.2 (9.2) |       34.7 (8.9) | 32.5 (10.2) |
 |       Age Range |      21--50 |          21--50 |        22--49 |           21--50 |      21--50 |
 ```
 
@@ -104,13 +103,34 @@ Gordon and Schaefer atlas both comes with parcels as isolated ROI hence were app
 Schaefer 1000 parcels atlas was excluded as some regions would be dropped after resampling.
 
 - Gordon atlas: 333
-- Schaefer atlas: 100, 200, 300, 400, 500, 600, 800[^1]
+- Schaefer atlas: 100, 200, 300, 400, 500, 600, 800
 - Multiresolution Intrinsic Segmentation Template (MIST) {cite:p}`urchs_mist_2019`: 7, 12, 20, 36, 64, 122, 197, 325, 444, "ROI" (210 parcels, 122 split by the midline)
 - DiFuMo atlas {cite:p}`difumo_2020`: 64 (114), 128 (200), 256 (372), 512 (637), 1024 (1158)
 
 Process involved here are implemented through nilearn {cite:p}`nilearn`.
 Time series were extracted using `nilearn.maskers.NiftiLabelsMasker` and `nilearn.maskers.NiftiMapsMasker`.
 Connectomes were calculated using Pearson's Correlations, implemented through `nilearn.connectome.ConnectivityMeasure`.
+
+
+## Participant exclusion based on motion
+
+We performed data quality control to exclude subjects with exessive motion leading to unusable data.
+The current benchmark uses framewise displacement as the metric to quantify motion.
+Framewise displacement (FD) indexes the movement of the head from one volume to the next.
+The movement includes the transitions on the three axes ($x$, $y$, $z$) and the respective rotation ($\alpha$, $\beta_t$, $\gamma$).
+Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm {cite}`power_scrubbing_2012`.
+fMRIPrep genetates the FD based on the formula proposed in {cite}`power_scrubbing_2012`.
+The FD at each time point $t$ is expressed as:
+
+$$
+\text{FD}_t = |\Delta d_{x,t}| + |\Delta d_{y,t}| +
+|\Delta d_{z,t}| + |\Delta \alpha_t| + |\Delta \beta_t| + |\Delta \gamma_t|
+$$
+
+Based on the gross mean framewise displacement and proportion of volumes excluded based on the scrubbing strategy,
+some subject would have too 
+
+
 
 ## Confound regression strategies
 
@@ -200,23 +220,21 @@ The detailed 11 strategies and a full breakdown of parameters used under the hoo
 ```
 :::
 
-## Denoising evaluation measures
+## Evaluation of the outcome of denoising strategies
 
 We used selected metrics described in the previous literature to evaluate the denoising results
 {cite:p}`ciric_benchmarking_2017,parkes_evaluation_2018`.
-Motion related metrics are centred around framewise displacement.
-Framewise displacement (FD) indexes the movement of the head from one volume to the next.
-The movement includes the transitions on the three axes ($x$, $y$, $z$) and the respective rotation ($\alpha$, $\beta_t$, $\gamma$).
-Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm {cite}`power_scrubbing_2012`.
-fMRIPrep genetates the FD based on the formula proposed in {cite}`power_scrubbing_2012`.
-The FD at each time point $t$ is expressed as:
 
-$$
-\text{FD}_t = |\Delta d_{x,t}| + |\Delta d_{y,t}| +
-|\Delta d_{z,t}| + |\Delta \alpha_t| + |\Delta \beta_t| + |\Delta \gamma_t|
-$$
+### Loss in temporal degrees of freedom
 
-The details of each measures are explained as followed.
+The common analysis and denoising methods are based on linear reagression.
+Using more nuisance regressors can capture additional sources of noise-related variance in the data and thus improve denoising.
+However, this comes at the expense of a loss of temporal degrees of freedom for statistical inference in further analysis.
+This is an important point to consider along side the denoising performance.
+There are two factors constraining the degrees of freedom in the signal: 
+number of volumes in a scan and number of nuisance regressors used during denoising. 
+We calculate the number of regressors used for each strategy.
+For scrubbing-based strategy we further calculate the proportion of volume loss to number of volumes in a scan.
 
 ### Quality control / functional connectivity (QC-FC)
 
@@ -246,6 +264,3 @@ we expect that modularity would decline.
 To understand the extend of correlation between modularity and motion.
 we computed the partial correlation between subjects' modularity values and mean FD,
 with age and sex as covariates.
-
-[^1]: When resampling 1000 parcel version of the Schaefer atlas to match the preprocessed data,
-some subjects will miss a parcel.

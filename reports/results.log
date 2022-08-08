@@ -1,0 +1,39 @@
+Traceback (most recent call last):
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
+    executenb(
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+from fmriprep_denoise.features.derivatives import get_qc_criteria
+
+stringent = get_qc_criteria('stringent')
+glue('gross_meanfd', stringent['gross_meanfd'])
+glue('fd_thresh', stringent['fd_thresh'])
+glue('proportion_thresh', stringent['proportion_thresh'] * 100)
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mKeyError[0m                                  Traceback (most recent call last)
+Input [0;32mIn [6][0m, in [0;36m<cell line: 4>[0;34m()[0m
+[1;32m      1[0m [38;5;28;01mfrom[39;00m [38;5;21;01mfmriprep_denoise[39;00m[38;5;21;01m.[39;00m[38;5;21;01mfeatures[39;00m[38;5;21;01m.[39;00m[38;5;21;01mderivatives[39;00m [38;5;28;01mimport[39;00m get_qc_criteria
+[1;32m      3[0m stringent [38;5;241m=[39m get_qc_criteria([38;5;124m'[39m[38;5;124mstringent[39m[38;5;124m'[39m)
+[0;32m----> 4[0m glue([38;5;124m'[39m[38;5;124mgross_meanfd[39m[38;5;124m'[39m, [43mstringent[49m[43m[[49m[38;5;124;43m'[39;49m[38;5;124;43mgross_meanfd[39;49m[38;5;124;43m'[39;49m[43m][49m)
+[1;32m      5[0m glue([38;5;124m'[39m[38;5;124mfd_thresh[39m[38;5;124m'[39m, stringent[[38;5;124m'[39m[38;5;124mfd_thresh[39m[38;5;124m'[39m])
+[1;32m      6[0m glue([38;5;124m'[39m[38;5;124mproportion_thresh[39m[38;5;124m'[39m, stringent[[38;5;124m'[39m[38;5;124mproportion_thresh[39m[38;5;124m'[39m] [38;5;241m*[39m [38;5;241m100[39m)
+
+[0;31mKeyError[0m: 'gross_meanfd'
+KeyError: 'gross_meanfd'
+
