@@ -1,11 +1,4 @@
-from pathlib import Path
-import numpy as np
 import pandas as pd
-
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-from fmriprep_denoise.visualization import utils
 
 
 fd2label = {0.5: 'scrubbing.5', 0.2: 'scrubbing.2'}
@@ -22,7 +15,7 @@ def lazy_demographic(
             'We did not generate metric with scrubbing threshold set at'
             f'framewise displacement = {fd_thresh} mm.'
         )
-    df, groups = get_descriptive_data(
+    _, df, groups = get_descriptive_data(
         dataset, path_root, gross_fd, fd_thresh, proportion_thresh
     )
     full = df.describe()['age']
@@ -56,12 +49,14 @@ def get_descriptive_data(
     )
     movements = pd.read_csv(movements, index_col=0, sep='\t')
 
-    (
-        confounds_phenotype,
-        participant_groups,
-        groups,
-    ) = utils._get_participants_groups(dataset, path_root)
-    participant_groups.name = 'groups'
+    path_dof = (
+        path_root
+        / f'dataset-{dataset}'
+        / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+    )
+    confounds_phenotype = pd.read_csv(
+        path_dof, header=[0, 1], index_col=0, sep='\t'
+    )
 
     if gross_fd is not None:
         keep_gross_fd = movements['mean_framewise_displacement'] <= gross_fd
@@ -76,6 +71,8 @@ def get_descriptive_data(
     else:
         keep_scrub = confounds_phenotype.index
     mask_motion = keep_gross_fd.intersection(keep_scrub)
-    participant_groups = participant_groups.loc[mask_motion]
-    df = movements.loc[participant_groups.index, :]
-    return df, groups
+
+    groups = movements['groups'].unique().tolist()
+    movements = movements.loc[mask_motion, :]
+    confounds_phenotype = confounds_phenotype.loc[mask_motion, :]
+    return confounds_phenotype, movements, groups

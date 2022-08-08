@@ -12,6 +12,7 @@ from fmriprep_denoise.features import (
     calculate_median_absolute,
     get_atlas_pairwise_distance,
 )
+from fmriprep_denoise.visualization.tables import get_descriptive_data
 
 
 GRID_LOCATION = {
@@ -52,50 +53,19 @@ def get_data_root():
     return default_path if default_path.exists() else repo2data_path()
 
 
-def load_meanfd_groups(dataset, path_root):
-    file = f'dataset-{dataset}_desc-movement_phenotype.tsv'
-    path_fd = path_root / f'dataset-{dataset}' / file
-    data = pd.read_csv(path_fd, header=[0], index_col=0, sep='\t')
-    _, participants_groups, groups = _get_participants_groups(dataset)
-    participants_groups.name = 'Groups'
-    data = pd.concat(
-        [data['mean_framewise_displacement'], participants_groups],
-        axis=1,
-        join='inner',
-    )
-    return data, groups
-
-
 def _get_palette(order):
     return [palette_dict[item] for item in order]
 
 
-def _get_participants_groups(dataset, path_root):
+def _get_participants_groups(
+    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None):
 
-    # need more general solutions here, maybe as a user input?
-    group_info_column = 'Child_Adult' if dataset == 'ds000228' else 'diagnosis'
-
-    # read the degrees of freedom info as reference for subjects
-    path_dof = (
-        path_root
-        / f'dataset-{dataset}'
-        / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+    confounds_phenotype, movements, groups = get_descriptive_data(
+        dataset, path_root,
+        gross_fd=gross_fd, fd_thresh=fd_thresh,
+        proportion_thresh=proportion_thresh
     )
-    path_participants = (
-        path_root
-        / f'dataset-{dataset}'
-        / f'dataset-{dataset}_desc-movement_phenotype.tsv'
-    )
-
-    confounds_phenotype = pd.read_csv(
-        path_dof, header=[0, 1], index_col=0, sep='\t'
-    )
-    subjects = confounds_phenotype.index
-
-    participant_groups = pd.read_csv(
-        path_participants, index_col=0, sep='\t'
-    ).loc[subjects, 'groups']
-    groups = participant_groups.unique().tolist()
+    participant_groups = movements['groups']
     return confounds_phenotype, participant_groups, groups
 
 

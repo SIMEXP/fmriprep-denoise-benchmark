@@ -24,8 +24,11 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from fmriprep_denoise.visualization import figures, tables
+from fmriprep_denoise.visualization import figures, tables, utils
 from myst_nb import glue
+
+
+path_root = utils.get_data_root()
 ```
 
 ## Level of motion in samples quitified by mean framewise displacement
@@ -40,7 +43,7 @@ for_plotting = {}
 datasets = ['ds000228', 'ds000030']
 baseline_groups = ['adult', 'CONTROL']
 for dataset, baseline_group in zip(datasets, baseline_groups):
-    data, groups = tables.get_descriptive_data(dataset)
+    _, data, groups = tables.get_descriptive_data(dataset, path_root)
     baseline = data[data['groups'] == baseline_group]
     for group in groups:
         compare = data[data['groups'] == group]
@@ -158,7 +161,7 @@ ICA-AROMA uses pretrained model on healthy subjects to select noise components {
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-fig, ds_groups = figures.plot_dof_dataset()
+fig, ds_groups = figures.plot_dof_dataset(path_root)
 glue(f'dof-fig', fig, display=False)
 for ds, group in ds_groups:
     glue(f'group-order_{ds}', group, display=False)
@@ -189,7 +192,7 @@ With a stringent 0.2 mm threshold, groups with high motion will loose on average
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-fig = figures.plot_vol_scrubbed_dataset()
+fig = figures.plot_vol_scrubbed_dataset(path_root)
 glue(f'scrubbing-fig', fig, display=False)
 ```
 
@@ -207,24 +210,24 @@ We can see the trend is similar to mean framewise displacement result.
 <!-- stiengent -->
 ```{code-cell}
 :tags: [hide-input, remove-output]
-gross_meanfd = 0.25
-fd_thresh = 0.2
-proportion_thresh = 0.8
-glue('gross_meanfd', gross_meanfd)
-glue('fd_thresh', fd_thresh)
-glue('proportion_thresh', proportion_thresh * 100)
+from fmriprep_denoise.features.derivatives import get_qc_criteria
+
+stringent = get_qc_criteria('stringent')
+glue('gross_fd', stringent['gross_fd'])
+glue('fd_thresh', stringent['fd_thresh'])
+glue('proportion_thresh', stringent['proportion_thresh'] * 100)
 ```
 
 To evaluate the impact of denoising strategy on connectomes, 
 we will exclude subjects with high motion , 
 defined by the following criteria adopted from  {cite:p}`parkes_evaluation_2018`: 
-mean framewise displacement > {glue:}`gross_meanfd` mm, 
-{glue:}`proportion_thresh`% of volumes removed while scrubbing 
+mean framewise displacement > {glue:}`gross_fd` mm, 
+above {glue:}`proportion_thresh`% of volumes removed while scrubbing 
 with a {glue:}`fd_thresh` mm threshold.
 
 ```{code-cell}
 :tags: [hide-input]
-desc = tables.lazy_demographic('ds000228', gross_meanfd, fd_thresh, proportion_thresh)
+desc = tables.lazy_demographic('ds000228', path_root, **stringent)
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
 
 glue('ds000228_scrubbed_desc', desc) 
@@ -234,7 +237,7 @@ glue('ds000228_scrubbed_desc', desc)
 :tags: [hide-input]
 from fmriprep_denoise.visualization import tables
 
-desc = tables.lazy_demographic('ds000030', gross_meanfd, fd_thresh, proportion_thresh)
+desc = tables.lazy_demographic('ds000030', path_root, **stringent)
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
 
 glue('ds000030_scrubbed_desc', desc) 
@@ -251,7 +254,7 @@ for_plotting = {}
 datasets = ['ds000228', 'ds000030']
 baseline_groups = ['adult', 'CONTROL']
 for dataset, baseline_group in zip(datasets, baseline_groups):
-    data, groups = tables.get_descriptive_data(dataset, gross_meanfd, fd_thresh, proportion_thresh)
+    _, data, groups = tables.get_descriptive_data(dataset, path_root, **stringent)
     baseline = data[data['groups'] == baseline_group]
     for group in groups:
         compare = data[data['groups'] == group]
@@ -307,9 +310,8 @@ In conclusion, adult samples has lower mean framewise displacement than a youth 
 
 datasets = ['ds000228', 'ds000030']
 for dataset in datasets:
-    data, _ = tables.get_descriptive_data(dataset, gross_meanfd, fd_thresh, proportion_thresh)
+    _, data, _ = tables.get_descriptive_data(dataset, path_root, **stringent)
     for_plotting.update({dataset: data})
-
 
 fig = plt.figure(figsize=(7, 5))
 axs = fig.subplots(1, 2, sharey=True)
@@ -338,6 +340,44 @@ glue('meanFD_cleaned-fig', fig, display=False)
 :figwidth: 800px
 :name: "tbl:meanFD_cleaned-fig"
 ```
+
+```{code-cell}
+:tags: [hide-input, remove-output]
+fig, ds_groups = figures.plot_dof_dataset(path_root, **stringent)
+glue(f'dof-fig_cleaned', fig, display=False)
+for ds, group in ds_groups:
+    glue(f'group-order_{ds}_cleaned', group, display=False)
+```
+
+```{glue:figure} dof-fig_cleaned
+:figwidth: 800px
+:name: "tbl:dof-fig_cleaned"
+
+Loss in temporal degrees of freedom break down by groups,
+after applying the stringent quality control threashold.
+From the lightest hue to the darkes, the order of the group in `ds000228` is:
+{glue:}`group-order_ds000228_cleaned`
+From the lightest hue to the darkes, the order of the group in `ds000030` is:
+{glue:}`group-order_ds000030_cleaned`
+```
+
+```{code-cell}
+:tags: [hide-input, remove-output]
+fig = figures.plot_vol_scrubbed_dataset(path_root, **stringent)
+glue(f'scrubbing-fig_cleaned', fig, display=False)
+```
+
+```{glue:figure} scrubbing-fig_cleaned
+:figwidth: 800px
+:name: "tbl:scrubbing-fig_cleaned"
+
+Loss in number of volumes in proportion to the full length of the scan, 
+break down by groups in each dataset,
+after applying the stringent quality control threashold.
+We can see the trend is similar to mean framewise displacement result. 
+
+```
+
 <!-- need to filter and regenerate the metrics -->
 <!-- The trend of benchmaker metrics does not differ amongst the choice of atlases.
 However, we can see variance within the parcellation scheme MIST and DiFuMo.

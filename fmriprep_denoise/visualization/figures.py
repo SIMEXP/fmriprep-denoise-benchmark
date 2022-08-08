@@ -193,7 +193,7 @@ def plot_network_modularity(
             dimension, files_network, labels, dataset, movement
         )
 
-    _, participant_groups, groups = utils._get_participants_groups(dataset)
+    _, participant_groups, groups = utils._get_participants_groups(dataset, path_root)
     figs = []
     for group in groups:
         subgroup_movement = movement[participant_groups == group]
@@ -239,7 +239,7 @@ def _plot_network_modularity(
     return fig
 
 
-def plot_dof_dataset():
+def plot_dof_dataset(path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None):
 
     datasets = ['ds000228', 'ds000030']
 
@@ -251,7 +251,10 @@ def plot_dof_dataset():
             confounds_phenotype,
             participant_groups,
             groups,
-        ) = utils._get_participants_groups(dataset)
+        ) = utils._get_participants_groups(dataset, path_root,
+                                           gross_fd=gross_fd,
+                                           fd_thresh=fd_thresh,
+                                           proportion_thresh=proportion_thresh)
         ds_groups.append((dataset, groups))
         participant_groups = participant_groups.to_frame()
         participant_groups = participant_groups.reset_index(
@@ -337,7 +340,7 @@ def plot_dof_dataset():
     return fig, ds_groups
 
 
-def plot_vol_scrubbed_dataset():
+def plot_vol_scrubbed_dataset(path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None):
     datasets = ['ds000228', 'ds000030']
 
     fig = plt.figure(constrained_layout=True, figsize=(11, 5))
@@ -348,7 +351,10 @@ def plot_vol_scrubbed_dataset():
             confounds_phenotype,
             participant_groups,
             groups,
-        ) = utils._get_participants_groups(dataset)
+        ) = utils._get_participants_groups(dataset, path_root,
+                                           gross_fd=gross_fd,
+                                           fd_thresh=fd_thresh,
+                                           proportion_thresh=proportion_thresh)
         participant_groups = participant_groups.to_frame()
         participant_groups = participant_groups.reset_index(
             col_fill='participant_id'
@@ -383,6 +389,7 @@ def plot_vol_scrubbed_dataset():
         )
         ax.set_xlabel('Proportion of removed volumes to scan length')
         ax.set_title(dataset)
+        ax.set_xlim((-0.1, 1.1))
     return fig
 
 

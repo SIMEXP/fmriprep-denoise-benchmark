@@ -64,7 +64,7 @@ def compute_connectome(
     pandas.DataFrame, pandas.DataFrame
         Flatten connectomes and phenotypes.
     """
-    phenotype, _ = tables.get_descriptive_data(
+    _, phenotype, _ = tables.get_descriptive_data(
         dataset, path_root, gross_fd, fd_thresh, proportion_thresh
     )
     participant_id = phenotype.index.tolist()
