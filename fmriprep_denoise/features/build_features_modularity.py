@@ -88,9 +88,15 @@ def main():
             **motion_qc,
         )
         print('\tLoaded connectome...')
-        # qs = [louvain_modularity(vect) for vect in connectome.values.tolist()]
-        with Pool(8) as pool:
-            qs = pool.map(louvain_modularity, connectome.values.tolist())
+
+        if dataset == 'ds000228' and atlas in ['mist', 'schaefer7networks']:
+            if dimension in ['800', '325', '444']:
+                print('\t\tmultiprocesspr not working.')
+                qs = [louvain_modularity(vect) for vect in connectome.values.tolist()]
+        else:
+            with Pool(8) as pool:
+                qs = pool.map(louvain_modularity, connectome.values.tolist())
+
         modularity = pd.DataFrame(
             qs, columns=[strategy_name], index=connectome.index
         )
