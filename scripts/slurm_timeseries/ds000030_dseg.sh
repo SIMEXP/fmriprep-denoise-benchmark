@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=ds000030dseg
-#SBATCH --time=1:00:00
+#SBATCH --time=2:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/ds000030dseg.%a.out
 #SBATCH --error=logs/ds000030dseg.%a.err
@@ -36,5 +36,14 @@ python ./fmriprep_denoise/dataset/make_dataset.py \
     --specifier task-rest \
     --participants_tsv ${participants_tsv} \
     --atlas gordon333 \
+    --subject ${subject} \
+    ${OUTPUT}
+
+python ./fmriprep_denoise/dataset/make_dataset.py \
+    --fmriprep_path ${fmriprep_path} \
+    --dataset_name ds000030 \
+    --specifier task-rest \
+    --participants_tsv ${participants_tsv} \
+    --atlas schaefer7networks \
     --subject ${subject} \
     ${OUTPUT}
