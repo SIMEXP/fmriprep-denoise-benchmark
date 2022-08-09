@@ -12,6 +12,28 @@ from fmriprep_denoise.dataset.atlas import (
 def generate_timeseries_per_dimension(
     atlas_name, output, benchmark_strategies, data_aroma, data
 ):
+    """
+    Get confounds and sample mask.
+
+    Parameters
+    ----------
+
+    atlas_name : str
+        Name of the atlas.
+
+    output : pathlib.Path
+        Output directory for the generated timeseries.
+
+    benchmark_strategies : dict
+        Denoising strategy collection.
+
+    data_aroma : sklearn.utils.Bunch
+        fMRIPRep output collection for functional data corresponding to
+        ICA-AROMA outputs.
+
+    data : sklearn.utils.Bunch
+        fMRIPRep output collection for functional data outputs.
+    """
     dimensions = get_atlas_dimensions(atlas_name)
     for dimension in dimensions:
         print(f'-- {atlas_name}: dimension {dimension} --')
@@ -44,6 +66,26 @@ def generate_timeseries_per_dimension(
 
 
 def get_confounds(strategy_name, parameters, img):
+    """
+    Get confounds and sample mask.
+
+    Parameters
+    ----------
+
+    strategy_name : str
+        Denoise strategy name.
+
+    parameters : dict
+        Denoise parameter passed to load_confounds or load_confounds_strategy.
+
+    img : str
+        Path of the processed functional image to be denoised.
+
+    Returns
+    -------
+    See docs of load_confounds
+
+    """
     if strategy_name == 'baseline':
         reduced_confounds, sample_mask = load_confounds(img, **parameters)
     else:
@@ -62,6 +104,7 @@ def _clean_timeserise_normal(
     output,
     data,
 ):
+    """Denoise timeseries of regular functional processed output."""
     atlas_spec = f'atlas-{atlas_name}_nroi-{dimension}'
     _, img, ts_path = _get_output_info(strategy_name, output, data, atlas_spec)
     reduced_confounds, sample_mask = get_confounds(
@@ -84,6 +127,7 @@ def _clean_timeserise_normal(
 def _clean_timeserise_aroma(
     atlas_name, dimension, strategy_name, parameters, output, data_aroma
 ):
+    """Denoise timeseries of ICA-AROMA processed output."""
     atlas_spec = f'atlas-{atlas_name}_nroi-{dimension}'
     subject_mask, img, ts_path = _get_output_info(
         strategy_name, output, data_aroma, atlas_spec
@@ -102,6 +146,7 @@ def _clean_timeserise_aroma(
 
 
 def _generate_raw_timeseries(output, data, atlas_info):
+    """Generate detrended raw time series for a given atlas map."""
     subject_spec, subject_output, subject_mask = _get_subject_info(
         output, data
     )
@@ -120,7 +165,7 @@ def _generate_raw_timeseries(output, data, atlas_info):
     if not rawts_path.is_file():
         subject_timeseries = raw_masker.fit_transform(data.func[0])
         fitted_labels = [int(i) for i in raw_masker.labels_]
-        df = pd.DataFrame(subject_timeseries, columns=raw_masker.labels_)
+        df = pd.DataFrame(subject_timeseries, columns=fitted_labels)
         # make sure missing label were put pack
         df = pd.concat([timeseries_labels, df])
         df.to_csv(rawts_path, sep='\t', index=False)
@@ -133,6 +178,7 @@ def _generate_raw_timeseries(output, data, atlas_info):
 
 
 def _get_output_info(strategy_name, output, data, atlas_spec):
+    """Generate output path."""
     subject_spec, subject_output, subject_mask = _get_subject_info(
         output, data
     )
@@ -156,6 +202,7 @@ def _check_exclusion(reduced_confounds, sample_mask):
 
 
 def _get_subject_info(output, data):
+    """Generate subject directory and get specifier and EPI mask."""
     img = data.func[0]
 
     subject_spec = data.func[0].split('/')[-1].split('_desc-')[0]

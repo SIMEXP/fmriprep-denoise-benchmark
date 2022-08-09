@@ -38,6 +38,7 @@ palette_dict = {
 
 # download data
 def repo2data_path():
+    """Download data using repo2data."""
     data_req_path = (
         Path(__file__).parents[2] / 'binder' / 'data_requirement.json'
     )
@@ -47,6 +48,7 @@ def repo2data_path():
 
 
 def get_data_root():
+    """Get motion metric data path root."""
     default_path = (
         Path(__file__).parents[2] / 'inputs' / 'fmrieprep-denoise-metrics'
     )
@@ -54,16 +56,22 @@ def get_data_root():
 
 
 def _get_palette(order):
+    """Get colour palette for each strategy in a specific order."""
     return [palette_dict[item] for item in order]
 
 
 def _get_participants_groups(
-    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None):
+    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+):
+    """Get subject group information."""
 
+    # To me deleted if I ever refactor this code.
     confounds_phenotype, movements, groups = get_descriptive_data(
-        dataset, path_root,
-        gross_fd=gross_fd, fd_thresh=fd_thresh,
-        proportion_thresh=proportion_thresh
+        dataset,
+        path_root,
+        gross_fd=gross_fd,
+        fd_thresh=fd_thresh,
+        proportion_thresh=proportion_thresh,
     )
     participant_groups = movements['groups']
     return confounds_phenotype, participant_groups, groups
@@ -72,6 +80,7 @@ def _get_participants_groups(
 def _get_connectome_metric_paths(
     dataset, metric, atlas_name, dimension, path_root
 ):
+    """Load connectome motion metrics with some give labels."""
     atlas_name = '*' if isinstance(atlas_name, type(None)) else atlas_name
     dimension = (
         '*'
@@ -117,6 +126,7 @@ def _get_qcfc_metric(file_path, metric, group):
 
 
 def _get_corr_distance(files_qcfc, labels, group):
+    """Load correlation of QC/FC with node distances."""
     qcfc_per_edge = _get_qcfc_metric(
         files_qcfc, metric='correlation', group=group
     )
@@ -144,6 +154,7 @@ def _get_corr_distance(files_qcfc, labels, group):
 
 
 def _corr_modularity_motion(movement, files_network, labels):
+    """Load correlation of mean FD with network modularity."""
     mean_corr, mean_modularity = [], []
     for file_network, label in zip(files_network, labels):
         modularity = pd.read_csv(file_network, sep='\t', index_col=0)

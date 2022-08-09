@@ -13,6 +13,24 @@ def calculate_median_absolute(x):
 def fdr(x, alpha=0.05, method='fdr_bh'):
     """
     Apply FDR correction to a pandas.Series p-value object.
+
+    Parameters
+    ----------
+
+    x : pandas.Series
+        Uncorrected p-values.
+
+    alpha : float
+        Alpha threshold.
+
+    method : str
+        Mutiple comparison methods.
+        See statsmodels.stats.multitest.multipletests
+
+    Returns
+    -------
+    ndarray, boolean
+        Mask for data passing multiple comparison test.
     """
     res, _, _, _ = multitest.multipletests(x, alpha=alpha, method=method)
     return res
@@ -21,10 +39,19 @@ def fdr(x, alpha=0.05, method='fdr_bh'):
 def partial_correlation(x, y, cov=None):
     """A minimal implementation of partial correlation.
 
-    x, y :
+    Parameters
+    ----------
+    x, y : np.ndarray
         Variable of interest.
-    cov :
+
+    cov : None, np.ndarray
         Variable to be removed from variable of interest.
+        If None, do a normal pearson's correlation.
+
+    Returns
+    -------
+    dict
+        Correlation and p-value.
     """
     if isinstance(cov, np.ndarray):
         beta_cov_x = linalg.lstsq(cov, x)[0]
@@ -48,6 +75,7 @@ def qcfc(movement, connectomes, covarates=None):
 
     Parameters
     ----------
+
     movement: pandas.DataFrame
         Containing header: ["mean_framewise_displacement"]
 
@@ -58,6 +86,12 @@ def qcfc(movement, connectomes, covarates=None):
 
     covariates: pandas.DataFrame or None
         Age", Gender
+
+    Returns
+    -------
+
+    List of dict
+        QC/FC per connectome edge.
     """
     # concatenate information to match by subject id
     edge_ids = connectomes.columns.tolist()

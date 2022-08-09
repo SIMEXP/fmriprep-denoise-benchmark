@@ -118,7 +118,22 @@ def fetch_fmriprep_derivative(
 
 
 def get_prepro_strategy(strategy_name=None):
-    """Select a single preprocessing strategy and associated parameters."""
+    """
+    Select a single preprocessing strategy and associated parameters.
+
+    Parameter
+    ---------
+
+    strategy_name : None or str
+        Name of the denoising strategy. See benchmark_strategies.json.
+        Default to None, returns all strategies.
+
+    Return
+    ------
+
+    dict
+        Denosing strategy parameter to pass to load_confounds.
+    """
     strategy_file = Path(__file__).parent / STRATEGY_FILE
     with open(strategy_file, 'r') as file:
         benchmark_strategies = json.load(file)
@@ -145,11 +160,15 @@ def generate_movement_summary(data):
     Parameters
     ----------
 
-    dataset_name : str
-        Dataset name.
-
     data : sklearn.utils.Bunch
         Dataset retrieved through fmriprep_denoise.fetch_fmriprep_derivative
+
+    Returns
+    -------
+    pandas.DataFrame
+        Participants phenotype reduced to: age, gender, group, motion.
+        Motion is calculated through mean framewise displacement.
+
     """
     # get motion QC related metrics from confound files
     group_mean_fd = pd.DataFrame()

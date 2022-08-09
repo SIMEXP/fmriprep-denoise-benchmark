@@ -8,7 +8,9 @@ from fmriprep_denoise.dataset.fmriprep import (
     get_prepro_strategy,
     fetch_fmriprep_derivative,
 )
-from fmriprep_denoise.dataset.timeseries import generate_timeseries_per_dimension
+from fmriprep_denoise.dataset.timeseries import (
+    generate_timeseries_per_dimension,
+)
 
 
 def parse_args():
@@ -41,7 +43,10 @@ def parse_args():
         '--specifier',
         action='store',
         type=str,
-        help='Text in a fmriprep file name, in between sub-<subject>_ses-<session>_and `space-<template>`.',
+        help=(
+            'Text in a fmriprep file name, in between '
+            'sub-<subject>_ses-<session>_and `space-<template>`.',
+        ),
     )
     parser.add_argument(
         '--participants_tsv',

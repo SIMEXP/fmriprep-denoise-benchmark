@@ -52,11 +52,6 @@ def fetch_atlas_path(atlas_name, dimension):
     dimension : str or int
         Atlas dimension.
 
-    description_keywords : dict
-        Keys and values to fill in description_pattern.
-        For valid keys check relevant
-        ATLAS_METADATA[atlas_name]['description_pattern'].
-
     Return
     ------
     sklearn.utils.Bunch
@@ -103,26 +98,58 @@ def fetch_atlas_path(atlas_name, dimension):
 
 
 def create_atlas_masker(
-    atlas_name, dimension, subject_mask, detrend=True, standardize=False,
-    nilearn_cache=''
+    atlas_name,
+    dimension,
+    subject_mask,
+    detrend=True,
+    standardize=False,
+    nilearn_cache='',
 ):
-    """Create masker given metadata.
+    """
+    Create masker given metadata.
+
     Parameters
     ----------
     atlas_name : str
         Atlas name. Must be a key in ATLAS_METADATA.
+
+    dimension : str or int
+        Atlas dimension.
+
+    subject_mask : pathlib.Path
+        The corresponding brain mask to the subject's processed functional
+        data.
+
+    detrend : bool, default True
+        Pass to the NiftiLabelsMasker / NiftiMapsMasker parameter detrend.
+
+    standardize : bool, default False
+        Pass to the NiftiLabelsMasker / NiftiMapsMasker parameter standardize.
+
+    nilearn_cache : str
+        Path to nilearn cache. Pass to the NiftiLabelsMasker / NiftiMapsMasker.
+
+    Returns
+    -------
+    list
+        Atlas labels
     """
     atlas = fetch_atlas_path(atlas_name, dimension)
     labels = list(range(atlas.labels.shape[0]))
 
     if atlas.type == 'dseg':
         masker = NiftiLabelsMasker(
-            atlas.maps, labels=labels, mask_img=subject_mask, detrend=detrend,
+            atlas.maps,
+            labels=labels,
+            mask_img=subject_mask,
+            detrend=detrend,
             standardize=standardize,
         )
     elif atlas.type == 'probseg':
         masker = NiftiMapsMasker(
-            atlas.maps, mask_img=subject_mask, detrend=detrend,
+            atlas.maps,
+            mask_img=subject_mask,
+            detrend=detrend,
             standardize=standardize,
         )
     if nilearn_cache:
@@ -132,4 +159,5 @@ def create_atlas_masker(
 
 
 def get_atlas_dimensions(atlas_name):
+    """As function name."""
     return ATLAS_METADATA[atlas_name]['dimensions']

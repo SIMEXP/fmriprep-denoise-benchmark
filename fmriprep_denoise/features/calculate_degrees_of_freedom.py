@@ -76,8 +76,11 @@ def main():
         participants = participants[mask_quality].index.tolist()
         subjects = [p.split('-')[-1] for p in participants]
         full_data = fetch_fmriprep_derivative(
-            dataset_name, participant_tsv, fmriprep_path, fmriprep_specifier,
-            subject=subjects
+            dataset_name,
+            participant_tsv,
+            fmriprep_path,
+            fmriprep_specifier,
+            subject=subjects,
         )
     movement = generate_movement_summary(full_data)
     movement = movement.sort_index()

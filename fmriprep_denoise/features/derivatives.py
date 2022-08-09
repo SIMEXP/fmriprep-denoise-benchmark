@@ -14,7 +14,22 @@ group_info_column = {'ds000228': 'Child_Adult', 'ds000030': 'diagnosis'}
 
 
 def get_qc_criteria(strategy_name=None):
-    """Select a single preprocessing strategy and associated parameters."""
+    """
+    Select an automatic quality control strategy and associated parameters.
+
+    Parameter
+    ---------
+
+    strategy_name : None or str
+        Name of the denoising strategy. See motion_qc.json.
+        Default to None, returns all strategies.
+
+    Return
+    ------
+
+    dict
+        Motion quality control parameter to pass to filter subjects.
+    """
     motion_qc_file = Path(__file__).parent / MOTION_QC_FILE
     with open(motion_qc_file, 'r') as file:
         qc_strategies = json.load(file)

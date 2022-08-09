@@ -8,25 +8,46 @@ def lazy_demographic(
     dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """
-    Very lazy report of demographic information
+    Very lazy report of demographic information.
+
+    Parameters
+    ----------
+
+    path_root : pathlib.Path
+        Root of the metrics output.
+
+    gross_fd : None or float
+        Gross mean framewise dispancement threshold.
+
+    fd_thresh : None or float
+        Volume level framewise dispancement threshold.
+
+    proportion_thresh : None or float
+        Proportion of volumes scrubbed threshold.
+
+
+    Returns
+    -------
+
+    pandas.DataFrame
+        Descriptive stats of age and gender.
     """
-    if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
-        raise ValueError(
-            'We did not generate metric with scrubbing threshold set at'
-            f'framewise displacement = {fd_thresh} mm.'
-        )
     _, df, groups = get_descriptive_data(
         dataset, path_root, gross_fd, fd_thresh, proportion_thresh
     )
+    n_female = df['gender'].sum()
+    n_female = pd.Series([n_female], index=['n_female'])
     full = df.describe()['age']
     full.name = 'full sample'
-    print(f"n female: {df['gender'].sum()}")
+    full = pd.concat([full, n_female])
 
     desc = [full]
     for g in groups:
         sub_group = df[df['groups'] == g].describe()['age']
         sub_group.name = g
-        print(f"n female in {g}: {df.loc[df['groups']==g,'gender'].sum()}")
+        n_female = df.loc[df['groups'] == g, 'gender'].sum()
+        n_female = pd.Series([n_female], index=['n_female'])
+        sub_group = pd.concat([full, n_female])
         desc.append(sub_group)
 
     return pd.concat(desc, axis=1)
@@ -35,7 +56,30 @@ def lazy_demographic(
 def get_descriptive_data(
     dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
-    """Get the data frame of all descriptive data needed for a dataset."""
+    """
+    Get the data frame of all descriptive data needed for a dataset.
+    Parameters
+    ----------
+
+    path_root : pathlib.Path
+        Root of the metrics output.
+
+    gross_fd : None or float
+        Gross mean framewise dispancement threshold.
+
+    fd_thresh : None or float
+        Volume level framewise dispancement threshold.
+
+    proportion_thresh : None or float
+        Proportion of volumes scrubbed threshold.
+
+
+    Returns
+    -------
+
+    pandas.DataFrame, pandas.DataFrame, list
+        confounds phenotype, movements,  groups
+    """
     if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
         raise ValueError(
             'We did not generate metric with scrubbing threshold set at'

@@ -9,8 +9,32 @@ from nilearn.image import index_img
 from nilearn.plotting import find_probabilistic_atlas_cut_coords
 
 
-def _compute_pairwise_distance(centroids):
-    """Compute pairwise distance of a given set of centroids and flatten."""
+def get_atlas_pairwise_distance(atlas_name, dimension):
+    """
+    Compute pairwise distance of nodes in the atlas.
+
+    Parameters
+    ----------
+
+    atlas_name : str
+        Atlas name. Must be a key in ATLAS_METADATA.
+
+    dimension : str or int
+        Atlas dimension.
+
+    Returns
+    -------
+
+    pandas.DataFrame
+        Node ID paire and the distnace.
+
+    """
+    if atlas_name == 'gordon333':
+        file_dist = 'atlas-gordon333_nroi-333_desc-distance.tsv'
+        return pd.read_csv(
+            Path(__file__).parent / 'data' / file_dist, sep='\t'
+        )
+    centroids = get_centroid(atlas_name, dimension)
     pairwise_distance = distance.cdist(centroids, centroids)
     labels = range(1, pairwise_distance.shape[0] + 1)
 
@@ -28,17 +52,25 @@ def _compute_pairwise_distance(centroids):
     return pairwise_distance
 
 
-def get_atlas_pairwise_distance(atlas_name, dimension):
-    if atlas_name == 'gordon333':
-        file_dist = 'atlas-gordon333_nroi-333_desc-distance.tsv'
-        return pd.read_csv(
-            Path(__file__).parent / 'data' / file_dist, sep='\t'
-        )
-    return _compute_pairwise_distance(get_centroid(atlas_name, dimension))
-
-
 def get_centroid(atlas_name, dimension):
-    """Load parcel centroid for each atlas."""
+    """
+    Load parcel centroid for each atlas.
+
+    Parameters
+    ----------
+
+    atlas_name : str
+        Atlas name. Must be a key in ATLAS_METADATA.
+
+    dimension : str or int
+        Atlas dimension.
+
+    Returns
+    -------
+
+    pandas.DataFrame
+        Centroid coordinates.
+    """
     if atlas_name not in ATLAS_METADATA:
         raise NotImplementedError('Selected atlas is not supported.')
 
@@ -73,8 +105,19 @@ def get_centroid(atlas_name, dimension):
 
 
 def get_difumo_centroids(d):
+    """
+    Compute difumo centroids.
+
+    Parameters
+    ----------
+
+    d : int
+        Atlas dimension.
+
+    """
     current_atlas = fetch_atlas_path('difumo', d)
     if d > 256:
+        # split the map and work on individual maps
         n_roi = current_atlas.labels.shape[0]
         centroid = []
         for i in range(0, n_roi, 200):

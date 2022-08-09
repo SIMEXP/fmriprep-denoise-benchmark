@@ -60,7 +60,53 @@ def plot_motion_resid(
     return fig
 
 
+def _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc):
+    """Return motion metrics plot for one map."""
+    fig = plt.figure(constrained_layout=True, figsize=(13, 5))
+    fig.suptitle(
+        'Residual effect of motion on connectomes after de-noising',
+        fontsize='xx-large',
+    )
+    subfigs = fig.subfigures(1, 2)
+    axs = subfigs[0].subplots(1, 2, sharey=False)
+    for ax, figure_data in zip(axs, [qcfc_sig, qcfc_mad]):
+        sns.barplot(
+            data=figure_data['data'],
+            orient='h',
+            order=figure_data['order'],
+            palette=utils._get_palette(figure_data['order']),
+            ax=ax,
+        )
+        ax.set_title(figure_data['title'])
+        ax.set(xlabel=figure_data['label'])
+        ax.set(ylabel='Confound removal strategy')
+
+    axs = subfigs[1].subplots(3, 4, sharex=True, sharey=True)
+    for i, row_axes in enumerate(axs):
+        for j, ax in enumerate(row_axes):
+            if cur_strategy := utils.GRID_LOCATION.get((i, j), False):
+                mask = long_qcfc['Strategy'] == cur_strategy
+                g = sns.kdeplot(
+                    data=long_qcfc.loc[mask, :],
+                    x='qcfc',
+                    fill=True,
+                    color=utils.palette_dict[cur_strategy],
+                    ax=ax,
+                )
+                g.set_title(cur_strategy, fontsize='small')
+                mad = qcfc_mad['data'][cur_strategy].values
+                g.axvline(mad, linewidth=1, linestyle='--', color='r')
+                xlabel = "Pearson's correlation" if i == 2 else None
+                g.set(xlabel=xlabel)
+            else:
+                subfigs[1].delaxes(axs[i, j])
+    subfigs[1].set_facecolor('0.85')
+    subfigs[1].suptitle('Distribution of QC-FC')
+    return fig
+
+
 def _summary_plots(figure_data, ax):
+    """Return motion metrics plot for a full set of atlas."""
     color_order = utils._get_palette(list(utils.GRID_LOCATION.values()))
     if figure_data['data'].shape[0] != 1:
         ax = sns.boxplot(
@@ -90,6 +136,24 @@ def _summary_plots(figure_data, ax):
 def plot_distance_dependence(
     dataset, atlas_name=None, dimension=None, group='full_sample'
 ):
+    """
+    Dirty and quick plot for motion distnace dependence.
+
+    Parameters
+    ----------
+    dataset : str
+        Dataset ID.
+
+    atlas_name : None or str
+        Atlas name.
+
+    dimension : None or str or int
+        Dimension of the atlas.
+
+    group : str
+        Default to full sampe ('full_sample'), or string value under the
+        dataset's groups column.
+    """
     metric = 'qcfc'
     files_qcfc, labels = utils._get_connectome_metric_paths(
         dataset, metric, atlas_name, dimension
@@ -176,6 +240,23 @@ def plot_distance_dependence(
 def plot_network_modularity(
     dataset, path_root, atlas_name=None, dimension=None, by_group=False
 ):
+    """
+    Dirty and quick plot for motion impact on modularity.
+
+    Parameters
+    ----------
+    dataset : str
+        Dataset ID.
+
+    atlas_name : None or str
+        Atlas name.
+
+    dimension : None or str or int
+        Dimension of the atlas.
+
+    by_group : bool, default False
+        Default to full sampe.
+    """
     metric = 'modularity'
     files_network, labels = utils._get_connectome_metric_paths(
         dataset, metric, atlas_name, dimension
@@ -193,7 +274,9 @@ def plot_network_modularity(
             dimension, files_network, labels, dataset, movement
         )
 
-    _, participant_groups, groups = utils._get_participants_groups(dataset, path_root)
+    _, participant_groups, groups = utils._get_participants_groups(
+        dataset, path_root
+    )
     figs = []
     for group in groups:
         subgroup_movement = movement[participant_groups == group]
@@ -207,6 +290,7 @@ def plot_network_modularity(
 def _plot_network_modularity(
     dimension, files_network, labels, group, movement
 ):
+    """Motion impact on modularity for one map or a full set of atlas."""
     network_mod, corr_mod = utils._corr_modularity_motion(
         movement, files_network, labels
     )
@@ -239,8 +323,26 @@ def _plot_network_modularity(
     return fig
 
 
-def plot_dof_dataset(path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None):
+def plot_dof_dataset(
+    path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+):
+    """
+    Dirty and quick plot for loss of temporal degrees of freedom.
 
+    Parameters
+    ----------
+    path_root : pathlib.Path
+        Root of the metrics output.
+
+    gross_fd : None or float
+        Gross mean framewise dispancement threshold.
+
+    fd_thresh : None or float
+        Volume level framewise dispancement threshold.
+
+    proportion_thresh : None or float
+        Proportion of volumes scrubbed threshold.
+    """
     datasets = ['ds000228', 'ds000030']
 
     fig = plt.figure(constrained_layout=True, figsize=(11, 5))
@@ -251,10 +353,13 @@ def plot_dof_dataset(path_root, gross_fd=None, fd_thresh=None, proportion_thresh
             confounds_phenotype,
             participant_groups,
             groups,
-        ) = utils._get_participants_groups(dataset, path_root,
-                                           gross_fd=gross_fd,
-                                           fd_thresh=fd_thresh,
-                                           proportion_thresh=proportion_thresh)
+        ) = utils._get_participants_groups(
+            dataset,
+            path_root,
+            gross_fd=gross_fd,
+            fd_thresh=fd_thresh,
+            proportion_thresh=proportion_thresh,
+        )
         ds_groups.append((dataset, groups))
         participant_groups = participant_groups.to_frame()
         participant_groups = participant_groups.reset_index(
@@ -340,7 +445,27 @@ def plot_dof_dataset(path_root, gross_fd=None, fd_thresh=None, proportion_thresh
     return fig, ds_groups
 
 
-def plot_vol_scrubbed_dataset(path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None):
+def plot_vol_scrubbed_dataset(
+    path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+):
+    """
+    Dirty and quick plot for loss of temporal volumes in scrubbing based
+    strategy.
+
+    Parameters
+    ----------
+    path_root : pathlib.Path
+        Root of the metrics output.
+
+    gross_fd : None or float
+        Gross mean framewise dispancement threshold.
+
+    fd_thresh : None or float
+        Volume level framewise dispancement threshold.
+
+    proportion_thresh : None or float
+        Proportion of volumes scrubbed threshold.
+    """
     datasets = ['ds000228', 'ds000030']
 
     fig = plt.figure(constrained_layout=True, figsize=(11, 5))
@@ -351,10 +476,13 @@ def plot_vol_scrubbed_dataset(path_root, gross_fd=None, fd_thresh=None, proporti
             confounds_phenotype,
             participant_groups,
             groups,
-        ) = utils._get_participants_groups(dataset, path_root,
-                                           gross_fd=gross_fd,
-                                           fd_thresh=fd_thresh,
-                                           proportion_thresh=proportion_thresh)
+        ) = utils._get_participants_groups(
+            dataset,
+            path_root,
+            gross_fd=gross_fd,
+            fd_thresh=fd_thresh,
+            proportion_thresh=proportion_thresh,
+        )
         participant_groups = participant_groups.to_frame()
         participant_groups = participant_groups.reset_index(
             col_fill='participant_id'
@@ -390,48 +518,4 @@ def plot_vol_scrubbed_dataset(path_root, gross_fd=None, fd_thresh=None, proporti
         ax.set_xlabel('Proportion of removed volumes to scan length')
         ax.set_title(dataset)
         ax.set_xlim((-0.1, 1.1))
-    return fig
-
-
-def _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc):
-    fig = plt.figure(constrained_layout=True, figsize=(13, 5))
-    fig.suptitle(
-        'Residual effect of motion on connectomes after de-noising',
-        fontsize='xx-large',
-    )
-    subfigs = fig.subfigures(1, 2)
-    axs = subfigs[0].subplots(1, 2, sharey=False)
-    for ax, figure_data in zip(axs, [qcfc_sig, qcfc_mad]):
-        sns.barplot(
-            data=figure_data['data'],
-            orient='h',
-            order=figure_data['order'],
-            palette=utils._get_palette(figure_data['order']),
-            ax=ax,
-        )
-        ax.set_title(figure_data['title'])
-        ax.set(xlabel=figure_data['label'])
-        ax.set(ylabel='Confound removal strategy')
-
-    axs = subfigs[1].subplots(3, 4, sharex=True, sharey=True)
-    for i, row_axes in enumerate(axs):
-        for j, ax in enumerate(row_axes):
-            if cur_strategy := utils.GRID_LOCATION.get((i, j), False):
-                mask = long_qcfc['Strategy'] == cur_strategy
-                g = sns.kdeplot(
-                    data=long_qcfc.loc[mask, :],
-                    x='qcfc',
-                    fill=True,
-                    color=utils.palette_dict[cur_strategy],
-                    ax=ax,
-                )
-                g.set_title(cur_strategy, fontsize='small')
-                mad = qcfc_mad['data'][cur_strategy].values
-                g.axvline(mad, linewidth=1, linestyle='--', color='r')
-                xlabel = "Pearson's correlation" if i == 2 else None
-                g.set(xlabel=xlabel)
-            else:
-                subfigs[1].delaxes(axs[i, j])
-    subfigs[1].set_facecolor('0.85')
-    subfigs[1].suptitle('Distribution of QC-FC')
     return fig
