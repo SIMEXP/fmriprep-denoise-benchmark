@@ -3,7 +3,7 @@ import argparse
 import pandas as pd
 
 from pathlib import Path
-from multiprocessing import Pool
+from joblib import Parallel, delayed
 
 from fmriprep_denoise.dataset.fmriprep import get_prepro_strategy
 from fmriprep_denoise.features.derivatives import (
@@ -89,13 +89,17 @@ def main():
         )
         print('\tLoaded connectome...')
 
-        if dataset == 'ds000228' and atlas in ['mist', 'schaefer7networks']:
-            if dimension in ['800', '325', '444']:
-                print('\t\tmultiprocesspr not working.')
-                qs = [louvain_modularity(vect) for vect in connectome.values.tolist()]
-        else:
-            with Pool(8) as pool:
-                qs = pool.map(louvain_modularity, connectome.values.tolist())
+        qs = Parallel(n_jobs=4)(
+            delayed(louvain_modularity)(vect)
+            for vect in connectome.values.tolist())
+
+        # if dataset == 'ds000228' and atlas in ['mist', 'schaefer7networks']:
+        #     if dimension in ['800', '325', '444']:
+        #         print('\t\tmultiprocesspr not working.')
+        #         qs = [louvain_modularity(vect) for vect in connectome.values.tolist()]
+        # else:
+        #     with Pool(8) as pool:
+        #         qs = pool.map(louvain_modularity, connectome.values.tolist())
 
         modularity = pd.DataFrame(
             qs, columns=[strategy_name], index=connectome.index
