@@ -2,7 +2,7 @@
 # Get some confounds metadata, such as numver of volumes scrubbed
 # Run after generating fMRIPRep dataset
 #SBATCH --job-name=meta_confounds
-#SBATCH --time=6:00:00
+#SBATCH --time=2:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/meta_confounds.out
 #SBATCH --error=logs/meta_confounds.err
