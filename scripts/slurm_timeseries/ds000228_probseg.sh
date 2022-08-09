@@ -1,6 +1,6 @@
 #!/bin/bash
 #SBATCH --job-name=ds000228probseg
-#SBATCH --time=6:00:00
+#SBATCH --time=2:00:00
 #SBATCH --account=rrg-pbellec
 #SBATCH --output=logs/ds000228probseg.%a.out
 #SBATCH --error=logs/ds000228probseg.%a.err
