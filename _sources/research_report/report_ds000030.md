@@ -285,61 +285,179 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-
-import warnings
-
-warnings.filterwarnings('ignore')
-from fmriprep_denoise.visualization import figures
-from myst_nb import glue
-
-# Load metric data
-dataset = 'ds000030'
-atlases = ['difumo', 'mist', 'schaefer7networks', 'gordon333']
 for atlas in atlases:
-    fig = figures.plot_distance_dependence(dataset, path_root, atlas)
-    glue(f'{dataset}_{atlas}_dist-fig', fig, display=False)
+    for group in groups:
+        fig = figures.plot_distance_dependence(dataset, path_root, atlas, group=group)
+        glue(f'{dataset}_{group}_{atlas}_dist-fig', fig, display=False)
 ```
-
 :::{tab-set}
-````{tab-item} MIST
-```{glue:figure} ds000030_mist_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000030_mist_dist-fig"
 
+````{tab-item} MIST
+
+```{glue:figure} ds000030_CONTROL_mist_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_CONTROL_mist_dist-fig"
+
+CONTROL.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
 ```
+
+```{glue:figure} ds000030_SCHZ_mist_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_SCHZ_mist_dist-fig"
+
+SCHZ.
+Distance-dependent effects of motion on connectivity with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
+```{glue:figure} ds000030_BIPOLAR_mist_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_BIPOLAR_mist_dist-fig"
+
+BIPOLAR.
+Distance-dependent effects of motion on connectivity with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
+```{glue:figure} ds000030_ADHD_mist_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_ADHD_mist_dist-fig"
+
+ADHD.
+Distance-dependent effects of motion on connectivity with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
 ````
 
 ````{tab-item} DiFuMo
-```{glue:figure} ds000030_difumo_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000030_difumo_dist-fig"
 
-TBA
+```{glue:figure} ds000030_CONTROL_difumo_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_CONTROL_difumo_dist-fig"
+
+CONTROL.
+Distance-dependent effects of motion on connectivity with DiFuMo atlas.
+Each data point represent different resolution.
 ```
+
+```{glue:figure} ds000030_SCHZ_difumo_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_SCHZ_difumo_dist-fig"
+
+SCHZ.
+Distance-dependent effects of motion on connectivity with DiFuMo atlas.
+Each data point represent different resolution.
+```
+
+```{glue:figure} ds000030_BIPOLAR_difumo_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_BIPOLAR_difumo_dist-fig"
+
+BIPOLAR.
+Distance-dependent effects of motion on connectivity with DiFuMo atlas.
+Each data point represent different resolution.
+```
+
+```{glue:figure} ds000030_ADHD_difumo_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_ADHD_difumo_dist-fig"
+
+ADHD.
+Distance-dependent effects of motion on connectivity with DiFuMo atlas.
+Each data point represent different resolution.
+```
+
 ````
 
 ````{tab-item} Schaefer 7 Networks
-```{glue:figure} ds000030_schaefer7networks_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000030_schaefer7networks_dist-fig"
 
+```{glue:figure} ds000030_CONTROL_schaefer7networks_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_CONTROL_schaefer7networks_dist-fig"
+
+CONTROL.
 Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
 Each data point represent different resolution.
 ```
+
+```{glue:figure} ds000030_SCHZ_schaefer7networks_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_SCHZ_schaefer7networks_dist-fig"
+
+SCHZ.
+Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
+Each data point represent different resolution.
+```
+
+```{glue:figure} ds000030_BIPOLAR_schaefer7networks_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_BIPOLAR_schaefer7networks_dist-fig"
+
+BIPOLAR.
+Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
+Each data point represent different resolution.
+```
+
+```{glue:figure} ds000030_ADHD_schaefer7networks_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_ADHD_schaefer7networks_dist-fig"
+
+ADHD.
+Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
+Each data point represent different resolution.
+```
+
 ````
 
 ````{tab-item} Gordon 333 parcels
-```{glue:figure} ds000030_gordon333_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000030_gordon333_dist-fig"
 
-Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
+```{glue:figure} ds000030_CONTROL_gordon333_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_CONTROL_gordon333_dist-fig"
+
+CONTROL.
+Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there's only one parcellation scheme.
 ```
+
+```{glue:figure} ds000030_SCHZ_gordon333_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_SCHZ_gordon333_dist-fig"
+
+SCHZ.
+Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there's only one parcellation scheme.
+```
+
+```{glue:figure} ds000030_BIPOLAR_gordon333_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_BIPOLAR_gordon333_dist-fig"
+
+BIPOLAR.
+Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there's only one parcellation scheme.
+```
+
+```{glue:figure} ds000030_ADHD_gordon333_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000030_ADHD_gordon333_dist-fig"
+
+ADHD.
+Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
+In this atlas there's only one parcellation scheme.
+```
+
 ````
 :::
 
