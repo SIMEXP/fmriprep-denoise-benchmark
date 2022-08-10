@@ -91,7 +91,7 @@ def _get_connectome_metric_paths(
     files = list(
         path_root.glob(
             (
-                f'fmrieprep-denoise-metrics/dataset-{dataset}/'
+                f'dataset-{dataset}/'
                 f'dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_'
                 f'{metric}.tsv'
             )

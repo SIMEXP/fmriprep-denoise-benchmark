@@ -17,9 +17,10 @@ kernelspec:
 import warnings
 
 warnings.filterwarnings('ignore')
-from fmriprep_denoise.visualization import figures
+from fmriprep_denoise.visualization import figures, utils
 from myst_nb import glue
 
+path_root = utils.get_data_root()
 
 # Load metric data
 dataset = 'ds000228'
@@ -111,7 +112,7 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 ```{code-cell}
 :tags: [hide-input, remove-output]
 
-fig = figures.plot_motion_resid(dataset, atlas_name, dimension)
+fig = figures.plot_motion_resid(dataset, path_root, atlas_name=atlas_name, dimension=dimension)
 glue('ohbm-qcfc-fig', fig, display=False)
 ```
 
@@ -127,7 +128,7 @@ Consistent with the literature, `aroma` reduces the distance dependency of motio
 ```{code-cell}
 :tags: [hide-input, remove-output]
 
-fig = figures.plot_distance_dependence(dataset, atlas_name, dimension)
+fig = figures.plot_distance_dependence(dataset, path_root, atlas_name=atlas_name, dimension=dimension)
 glue('ohbm-dist-fig', fig, display=False)
 ```
 
@@ -145,7 +146,7 @@ The correlation between modularity quality and motion for each denoising approac
 ```{code-cell}
 :tags: [hide-input, remove-output]
 
-fig = figures.plot_network_modularity(dataset, atlas_name, dimension)
+fig = figures.plot_network_modularity(dataset, path_root, atlas_name=atlas_name, dimension=dimension)
 glue('ohbm-network-fig', fig, display=False)
 ```
 

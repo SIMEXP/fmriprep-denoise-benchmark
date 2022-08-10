@@ -38,16 +38,16 @@ def lazy_demographic(
     n_female = df['gender'].sum()
     n_female = pd.Series([n_female], index=['n_female'])
     full = df.describe()['age']
-    full.name = 'full sample'
     full = pd.concat([full, n_female])
+    full.name = 'full sample'
 
     desc = [full]
     for g in groups:
         sub_group = df[df['groups'] == g].describe()['age']
-        sub_group.name = g
         n_female = df.loc[df['groups'] == g, 'gender'].sum()
         n_female = pd.Series([n_female], index=['n_female'])
-        sub_group = pd.concat([full, n_female])
+        sub_group = pd.concat([sub_group, n_female])
+        sub_group.name = g
         desc.append(sub_group)
 
     return pd.concat(desc, axis=1)

@@ -11,7 +11,7 @@ from fmriprep_denoise.visualization import utils
 
 
 def plot_motion_resid(
-    dataset, atlas_name=None, dimension=None, group='full_sample'
+    dataset, path_root, atlas_name=None, dimension=None, group='full_sample'
 ):
     """
     Dirty and quick plot for residual motion impact on functional connectivity.
@@ -34,7 +34,7 @@ def plot_motion_resid(
     # One cannot use specific dimension but use wild card in atlas
     metric = 'qcfc'
     files_qcfc, labels = utils._get_connectome_metric_paths(
-        dataset, metric, atlas_name, dimension
+        dataset, metric, atlas_name, dimension, path_root,
     )
     qcfc_sig = utils._qcfc_fdr(files_qcfc, labels, group=group)
     qcfc_mad = utils._get_qcfc_median_absolute(files_qcfc, labels, group=group)
@@ -134,7 +134,7 @@ def _summary_plots(figure_data, ax):
 
 
 def plot_distance_dependence(
-    dataset, atlas_name=None, dimension=None, group='full_sample'
+    dataset, path_root, atlas_name=None, dimension=None, group='full_sample'
 ):
     """
     Dirty and quick plot for motion distnace dependence.
@@ -156,7 +156,7 @@ def plot_distance_dependence(
     """
     metric = 'qcfc'
     files_qcfc, labels = utils._get_connectome_metric_paths(
-        dataset, metric, atlas_name, dimension
+        dataset, metric, atlas_name, dimension, path_root
     )
     qcfc_dist = utils._get_corr_distance(files_qcfc, labels, group=group)
     color_order = utils._get_palette(qcfc_dist['order'])
@@ -259,7 +259,7 @@ def plot_network_modularity(
     """
     metric = 'modularity'
     files_network, labels = utils._get_connectome_metric_paths(
-        dataset, metric, atlas_name, dimension
+        dataset, metric, atlas_name, dimension, path_root,
     )
 
     file_dataset = (
@@ -269,6 +269,7 @@ def plot_network_modularity(
     movement = pd.read_csv(
         file_dataset, sep='\t', index_col=0, header=0, encoding='utf8'
     )
+    movement = movement[['mean_framewise_displacement', 'age', 'gender']]
     if not by_group:
         return _plot_network_modularity(
             dimension, files_network, labels, dataset, movement
