@@ -231,7 +231,7 @@ In this atlas there's only one parcellation scheme.
 ```
 ```{glue:figure} ds000228_child_gordon333_dist-fig
 :figwidth: 800px
-:name: "tbl:ds000228_child_gordon333_dist-fig"
+:name: "tbl:ds000228_child  _gordon333_dist-fig"
 
 Childredn.
 Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
