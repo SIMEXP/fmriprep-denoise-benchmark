@@ -55,7 +55,7 @@ The demographic information per condition is in {numref}`table-ds000030`.
 |       N(female) |     212(98) |         106(54) |         30(8) |           41(19) |      35(17) |
 |  Age Mean(s.d.) |   33.2(9.3) |       31.8(8.9) |    37.2 (9.2) |       34.7 (8.9) | 32.5 (10.2) |
 |       Age Range |      21--50 |          21--50 |        22--49 |           21--50 |      21--50 |
-``` 
+```
 
 ```{code-cell}
 :tags: [hide-input]

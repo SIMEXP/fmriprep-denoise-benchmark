@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
+    executenb(
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+    return future.result()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 663, in async_execute
+    await self.async_execute_cell(
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import warnings
+
+warnings.filterwarnings('ignore')
+from fmriprep_denoise.visualization import figures, utils
+from myst_nb import glue
+
+path_root = utils.get_data_root()
+
+# Load metric data
+dataset = 'ds000228'
+atlases = ['mist', 'difumo', 'schaefer7networks', 'gordon333']
+groups = [adult', 'child']
+for atlas in atlases:
+    for group in groups:
+        fig = figures.plot_motion_resid(dataset, path_root, atlas, group=group)
+        glue(f'{dataset}_{group}_{atlas}_qcfc-fig', fig, display=False)
+------------------
+
+[0;36m  Input [0;32mIn [1][0;36m[0m
+[0;31m    groups = [adult', 'child'][0m
+[0m                   ^[0m
+[0;31mSyntaxError[0m[0;31m:[0m invalid syntax
+
+SyntaxError: invalid syntax (2033713969.py, line 12)
+

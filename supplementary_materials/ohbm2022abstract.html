@@ -194,7 +194,7 @@ const thebe_selector_output = ".output, .cell_output"
   <ul>
    <li class="toctree-l2">
     <a class="reference internal" href="setup.html">
-     Setup of this project
+     Setup to run all customised scripts for preprocessing
     </a>
    </li>
    <li class="toctree-l2">
@@ -549,26 +549,15 @@ title="Print to PDF"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s1">&#39;ignore&#39;</span><span class="p">)</span>
-<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span>
+<span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span><span class="p">,</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
+<span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_data_root</span><span class="p">()</span>
 
 <span class="c1"># Load metric data</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000228&#39;</span>
 <span class="n">atlas_name</span> <span class="o">=</span> <span class="s1">&#39;schaefer7networks&#39;</span>
 <span class="n">dimension</span> <span class="o">=</span> <span class="mi">400</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>---- repo2data starting ----
-/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/repo2data
-Config from file :
-/home/haoting/projects/fmriprep-denoise-benchmark/binder/data_requirement.json
-Destination:
-../../inputs/fmrieprep-denoise-paper
-
-Info : ../../inputs/fmrieprep-denoise-paper already downloaded
 </pre></div>
 </div>
 </div>
@@ -757,7 +746,7 @@ We also calculated the connectome from high-pass filtered time series as a compa
 Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature <span id="id20">[<a class="reference internal" href="../research_report/references.html#id16" title="Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. NeuroImage, 154(1):174–187, July 2017. doi:10.1016/j.neuroimage.2017.03.020.">Ciric <em>et al.</em>, 2017</a>]</span> <span id="id21">[<a class="reference internal" href="../research_report/references.html#id18" title="Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. NeuroImage, 171:415–436, May 2018. doi:10.1016/j.neuroimage.2017.12.073.">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_motion_resid</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">path_root</span><span class="p">,</span> <span class="n">atlas_name</span><span class="o">=</span><span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
 <span class="n">glue</span><span class="p">(</span><span class="s1">&#39;ohbm-qcfc-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -774,7 +763,7 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 <p>Consistent with the literature, <code class="docutils literal notranslate"><span class="pre">aroma</span></code> reduces the distance dependency of motion on connectivity.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_distance_dependence</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_distance_dependence</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">path_root</span><span class="p">,</span> <span class="n">atlas_name</span><span class="o">=</span><span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
 <span class="n">glue</span><span class="p">(</span><span class="s1">&#39;ohbm-dist-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -793,7 +782,7 @@ GSR-based strategies improved the network modularity compared to their conunterp
 The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">figures</span><span class="o">.</span><span class="n">plot_network_modularity</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">path_root</span><span class="p">,</span> <span class="n">atlas_name</span><span class="o">=</span><span class="n">atlas_name</span><span class="p">,</span> <span class="n">dimension</span><span class="o">=</span><span class="n">dimension</span><span class="p">)</span>
 <span class="n">glue</span><span class="p">(</span><span class="s1">&#39;ohbm-network-fig&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 </pre></div>
 </div>

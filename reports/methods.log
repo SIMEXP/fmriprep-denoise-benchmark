@@ -17,18 +17,30 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-desc = tables.lazy_demographic('ds000228', path_root, **stringent)
+import warnings
+
+warnings.filterwarnings('ignore')
+import pandas as pd
+from myst_nb import glue
+from fmriprep_denoise.visualization import tables, utils
+
+path_root = utils.get_data_root()
+print(path_root)
+
+desc = tables.lazy_demographic('ds000228', path_root)
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
 
-glue('ds000228_scrubbed_desc', desc) 
+glue('ds000228_desc', desc)
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mValueError[0m                                Traceback (most recent call last)
-Input [0;32mIn [7][0m, in [0;36m<cell line: 1>[0;34m()[0m
-[0;32m----> 1[0m desc [38;5;241m=[39m [43mtables[49m[38;5;241;43m.[39;49m[43mlazy_demographic[49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mds000228[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mpath_root[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mstringent[49m[43m)[49m
-[1;32m      2[0m desc [38;5;241m=[39m desc[38;5;241m.[39mstyle[38;5;241m.[39mset_table_attributes([38;5;124m'[39m[38;5;124mstyle=[39m[38;5;124m"[39m[38;5;124mfont-size: 12px[39m[38;5;124m"[39m[38;5;124m'[39m)
-[1;32m      4[0m glue([38;5;124m'[39m[38;5;124mds000228_scrubbed_desc[39m[38;5;124m'[39m, desc)
+Input [0;32mIn [1][0m, in [0;36m<cell line: 11>[0;34m()[0m
+[1;32m      8[0m path_root [38;5;241m=[39m utils[38;5;241m.[39mget_data_root()
+[1;32m      9[0m [38;5;28mprint[39m(path_root)
+[0;32m---> 11[0m desc [38;5;241m=[39m [43mtables[49m[38;5;241;43m.[39;49m[43mlazy_demographic[49m[43m([49m[38;5;124;43m'[39;49m[38;5;124;43mds000228[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mpath_root[49m[43m)[49m
+[1;32m     12[0m desc [38;5;241m=[39m desc[38;5;241m.[39mstyle[38;5;241m.[39mset_table_attributes([38;5;124m'[39m[38;5;124mstyle=[39m[38;5;124m"[39m[38;5;124mfont-size: 12px[39m[38;5;124m"[39m[38;5;124m'[39m)
+[1;32m     14[0m glue([38;5;124m'[39m[38;5;124mds000228_desc[39m[38;5;124m'[39m, desc)
 
 File [0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/tables.py:53[0m, in [0;36mlazy_demographic[0;34m(dataset, path_root, gross_fd, fd_thresh, proportion_thresh)[0m
 [1;32m     50[0m     sub_group [38;5;241m=[39m pd[38;5;241m.[39mconcat([full, n_female])

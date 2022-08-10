@@ -225,6 +225,9 @@ mean framewise displacement > {glue:}`gross_fd` mm,
 above {glue:}`proportion_thresh`% of volumes removed while scrubbing 
 with a {glue:}`fd_thresh` mm threshold.
 
+The two tables below are the demographic information of the datasets after
+the automatic motion quality control.
+
 ```{code-cell}
 :tags: [hide-input]
 desc = tables.lazy_demographic('ds000228', path_root, **stringent)
@@ -282,19 +285,16 @@ for dataset, baseline_group in zip(datasets, baseline_groups):
     for_plotting.update({dataset: data})
 ```
 
-We will firstly characterise motion through the mean framewise displacement of each sample and the sub-groups.
-This report will serve as a reference point for understanding the remainder of the results.
-In `ds000228`, there was a significant difference in motion during the scan captured by mean framewise displacement 
+We again checked the difference in mean framewise displacement of each sample and the sub-groups.
+In `ds000228`, there was still a significant difference in motion during the scan captured by mean framewise displacement 
 between the child 
 (M = {glue:text}`ds000228_child_mean_qc:.2f`, SD = {glue:text}`ds000228_child_sd_qc:.2f`, n = {glue:text}`ds000228_child_n_qc:i`)
 and adult sample
 (M = {glue:text}`ds000228_adult_mean_qc:.2f`, SD = {glue:text}`ds000228_adult_sd_qc:.2f`, n = {glue:text}`ds000228_adult_n_qc:i`,
-t({glue:text}`ds000228_df_child_qc:.2f`) = {glue:text}`ds000228_t_child_qc:.2f`, p = {glue:text}`ds000228_p_child_qc:.3f`,
-This is consistent with the existing literature.
-In `ds000030`, the only patient group shows a difference comparing to the
-control 
+t({glue:text}`ds000228_df_child_qc:.2f`) = {glue:text}`ds000228_t_child_qc:.2f`, p = {glue:text}`ds000228_p_child_qc:.3f`).
+In `ds000030`, the only patient group shows a difference comparing to the control 
 (M = {glue:text}`ds000030_CONTROL_mean_qc:.2f`, SD = {glue:text}`ds000030_CONTROL_sd_qc:.2f`, n = {glue:text}`ds000030_CONTROL_n_qc:i`)
-is the schizophrania group 
+is still the schizophrania group 
 (M = {glue:text}`ds000030_SCHZ_mean_qc:.2f`, SD = {glue:text}`ds000030_SCHZ_sd_qc:.2f`, n = {glue:text}`ds000030_SCHZ_n_qc:i`;
 t({glue:text}`ds000030_df_SCHZ_qc:.2f`) = {glue:text}`ds000030_t_SCHZ_qc:.2f`, p = {glue:text}`ds000030_p_SCHZ_qc:.3f`).
 There was no difference between the control and ADHD group
@@ -349,11 +349,14 @@ for ds, group in ds_groups:
     glue(f'group-order_{ds}_cleaned', group, display=False)
 ```
 
+As for the loss in temporal degrees of freedom break down by groups, the trend 
+did not differ from the full sample, as seen in the two graphs below.
+
 ```{glue:figure} dof-fig_cleaned
 :figwidth: 800px
 :name: "tbl:dof-fig_cleaned"
 
-Loss in temporal degrees of freedom break down by groups,
+Loss in temporal degrees of freedom break down by groups after quality control,
 after applying the stringent quality control threashold.
 From the lightest hue to the darkes, the order of the group in `ds000228` is:
 {glue:}`group-order_ds000228_cleaned`
@@ -371,15 +374,10 @@ glue(f'scrubbing-fig_cleaned', fig, display=False)
 :figwidth: 800px
 :name: "tbl:scrubbing-fig_cleaned"
 
-Loss in number of volumes in proportion to the full length of the scan, 
+Loss in number of volumes in proportion to the full length of the scan after quality control, 
 break down by groups in each dataset,
 after applying the stringent quality control threashold.
 We can see the trend is similar to mean framewise displacement result. 
 
 ```
-
-<!-- need to filter and regenerate the metrics -->
-<!-- The trend of benchmaker metrics does not differ amongst the choice of atlases.
-However, we can see variance within the parcellation scheme MIST and DiFuMo.
-The variance comes from different resolution of the same parcellation scheme, epecially with low parcel counts.
--->
+In the next section, we will report the three functional connectivity based metrics and break down the effect on each dataset.

@@ -27,23 +27,65 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 import warnings
 
 warnings.filterwarnings('ignore')
-from fmriprep_denoise.visualization import figures
+from fmriprep_denoise.visualization import figures, utils
 from myst_nb import glue
+
+path_root = utils.get_data_root()
 
 # Load metric data
 dataset = 'ds000228'
 atlases = ['mist', 'difumo', 'schaefer7networks', 'gordon333']
+groups = ['adult', 'child']
 for atlas in atlases:
-    fig = figures.plot_motion_resid(dataset, atlas)
-    glue(f'{dataset}_{atlas}_qcfc-fig', fig, display=False)
+    for group in groups:
+        fig = figures.plot_motion_resid(dataset, path_root, atlas, group=group)
+        glue(f'{dataset}_{group}_{atlas}_qcfc-fig', fig, display=False)
 ```
 
 :::{tab-set}
 ````{tab-item} MIST
-```{glue:figure} ds000228_mist_qcfc-fig
-:figwidth: 800px
-:name: "tbl:ds000228_mist_qcfc-fig"
 
+```{glue:figure} ds000228_child_mist_qcfc-fig
+:figwidth: 800px
+:name: "tbl:ds000228_child_mist_qcfc-fig"
+
+Child.
+Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
+```{glue:figure} ds000228_adult_mist_qcfc-fig
+:figwidth: 800px
+:name: "tbl:ds000228_adult_mist_qcfc-fig"
+
+Adult. 
+Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
+````
+
+````{tab-item} DiFuMo
+```{glue:figure} ds000228_child_difumo_qcfc-fig
+:figwidth: 800px
+:name: "tbl:ds000228_child_difumo_qcfc-fig"
+
+Child.
+Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
+```{glue:figure} ds000228_adult_difumo_qcfc-fig
+:figwidth: 800px
+:name: "tbl:ds000228_adult_difumo_qcfc-fig"
+
+Adult.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
@@ -51,33 +93,51 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
 ```
 ````
 
-````{tab-item} DiFuMo
-```{glue:figure} ds000228_difumo_qcfc-fig
-:figwidth: 800px
-:name: "tbl:ds000228_difumo_qcfc-fig"
-
-Residual effect of motion on connectomes generated with DiFuMo atlas.
-Each data point represent different resolution.
-```
-````
-
 ````{tab-item} Schaefer 7 Networks
-```{glue:figure} ds000228_schaefer7networks_qcfc-fig
+```{glue:figure} ds000228_child_schaefer7networks_qcfc-fig
 :figwidth: 800px
-:name: "tbl:ds000228_schaefer7networks_qcfc-fig"
+:name: "tbl:ds000228_child_schaefer7networks_child_qcfc-fig"
 
-Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+Child.
+Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
+```{glue:figure} ds000228_adult_schaefer7networks_qcfc-fig
+:figwidth: 800px
+:name: "tbl:ds000228_adult_schaefer7networks_qcfc-fig"
+
+Adult.
+Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
 ```
 ````
 
 ````{tab-item} Gordon 333 parcels
-```{glue:figure} ds000228_gordon333_qcfc-fig
+```{glue:figure} ds000228_child_gordon333_qcfc-fig
 :figwidth: 800px
-:name: "tbl:ds000228_gordon333_qcfc-fig"
+:name: "tbl:ds000228_child_gordon333_qcfc-fig"
 
-Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
-In this atlas there's only one parcellation scheme.
+Child.
+Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+```
+
+```{glue:figure} ds000228_adult_gordon333_qcfc-fig
+:figwidth: 800px
+:name: "tbl:ds000228_adult_gordon333_qcfc-fig"
+
+Adult.
+Residual effect of motion on connectomes generated with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
 ```
 ````
 :::
@@ -99,7 +159,7 @@ from myst_nb import glue
 dataset = 'ds000228'
 atlases = ['difumo', 'mist', 'schaefer7networks', 'gordon333']
 for atlas in atlases:
-    fig = figures.plot_distance_dependence(dataset, atlas)
+    fig = figures.plot_distance_dependence(dataset, path_root, atlas)
     glue(f'{dataset}_{atlas}_dist-fig', fig, display=False)
 ```
 
@@ -165,28 +225,24 @@ from myst_nb import glue
 dataset = 'ds000228'
 atlases = ['mist', 'difumo', 'schaefer7networks', 'gordon333']
 for atlas in atlases:
-    fig = figures.plot_network_modularity(dataset, atlas, by_group=False)
+    fig = figures.plot_network_modularity(dataset, path_root, atlas, by_group=False)
     glue(f'{dataset}_{atlas}_network-fig', fig, display=False)
-    figs = figures.plot_network_modularity(dataset, atlas, by_group=True)
+    figs = figures.plot_network_modularity(dataset, path_root, atlas, by_group=True)
     for i, fig in enumerate(figs):
         glue(f'{dataset}_{atlas}_network-{i+1}-fig', fig, display=False)
 ```
 
 :::{tab-set}
 ````{tab-item} MIST
-```{glue:figure} ds000228_mist_network-fig
+
+```{glue:figure} ds000228_mist_network-1-fig
 :figwidth: 800px
-:name: "tbl:ds000228_mist_network-fig"
+:name: "tbl:ds000228_mist_network-1-fig"
 
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
 The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
-```
-
-```{glue:figure} ds000228_mist_network-1-fig
-:figwidth: 800px
-:name: "tbl:ds000228_mist_network-1-fig"
 
 ```
 
@@ -200,18 +256,13 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
 
 ````{tab-item} DiFuMo
 
-```{glue:figure} ds000228_difumo_network-fig
-:figwidth: 800px
-:name: "tbl:ds000228_difumo_network-fig"
-
-Residual effect of motion on connectomes generated with DiFuMo atlas.
-Each data point represent different resolution.
-```
 
 ```{glue:figure} ds000228_difumo_network-1-fig
 :figwidth: 800px
 :name: "tbl:ds000228_difumo_network-1-fig"
 
+Residual effect of motion on connectomes generated with DiFuMo atlas.
+Each data point represent different resolution.
 ```
 
 ```{glue:figure} ds000228_difumo_network-2-fig
@@ -223,18 +274,14 @@ Each data point represent different resolution.
 ````
 
 ````{tab-item} Schaefer 7 Networks
-```{glue:figure} ds000228_schaefer7networks_network-fig
-:figwidth: 800px
-:name: "tbl:ds000228_schaefer7networks_network-fig"
-
-Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
-Each data point represent different resolution.
-```
 
 ```{glue:figure} ds000228_schaefer7networks_network-1-fig
 :figwidth: 800px
 :name: "tbl:ds000228_schaefer7networks_network-1-fig"
 
+
+Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
+Each data point represent different resolution.
 ```
 
 ```{glue:figure} ds000228_schaefer7networks_network-2-fig
