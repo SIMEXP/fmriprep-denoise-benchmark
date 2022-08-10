@@ -31,7 +31,10 @@ We investigated the loss of temporal degrees of freedom of each strategy, and th
 quality control / functional connectivity (QC-FC),
 distance-dependent effects of motion on connectivity, and
 denoised outcome on network modularity. 
-<!-- results -->
+After exluding subject with excessive motion, all strategies can reduce the correlation of motion and functional connectivity measure,
+except ICA-AROMA combined with global signal regression. 
+Scrubbing based strategy is the best at eliminating distance depenency of motion.
+For network modularity, strategies including globla signal regression shows more detectable networks. <!-- results -->
 <!-- conclusion -->
 
 **{fa}`key` Keywords:** 

@@ -225,7 +225,7 @@ def _qcfc_fdr(file_qcfc, labels, group):
         'data': long_qcfc_sig.T,
         'order': list(GRID_LOCATION.values()),
         'title': 'Percentage of significant QC-FC',
-        'xlim': (-5, 105),
+        'xlim': (-5, 55),
         'label': 'Percentage %',
     }
 
@@ -251,6 +251,6 @@ def _get_qcfc_median_absolute(file_qcfc, labels, group):
         'data': pd.DataFrame(qcfc_median_absolute).T,
         'order': list(GRID_LOCATION.values()),
         'title': title,
-        'xlim': (-0.02, 0.22),
+        'xlim': (0.00, 0.3),
         'label': 'Median absolute deviation',
     }

@@ -24,7 +24,7 @@ is a major component of the fMRI workflow to ensure the quality of analysis.
 <!-- NC: I thought the opening and closing sentences of this section were repeating the same informtion unecessarily -->
 <!-- so I combined them. It could also work at the end, but I think this way flows better to the next section -->
 The most common method to minimize the impact of confounds in functional connectivity analysis is to perform a linear regression {cite:p}`friston_statistical_1994`.
-After basic processing steps (see fMRIPrep {cite:p}`esteban_fmriprep_2020`), 
+After basic processing steps (see fMRIPrep {cite:p}`fmriprep1`), 
 regressors are regressed out from the signal and the resulting residual used as denoised signal in all subsequent analyses.
 Nuisance regressors can be separated into classes, capturing different types of non-neuronal noise.
 __Temporal high-pass filtering__ accounts for low-frequency signal drifts introduced by _physiological and scanner noise sources_.

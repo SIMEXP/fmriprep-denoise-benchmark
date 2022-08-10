@@ -55,6 +55,7 @@ def plot_motion_resid(
         axs = fig.subplots(1, 2, sharey=False)
         for ax, figure_data in zip(axs, [qcfc_sig, qcfc_mad]):
             ax = _summary_plots(figure_data, ax)
+            ax.set_xlim(figure_data['xlim'])
             ax.set_title(figure_data['title'])
         axs[0].set(ylabel='Confound removal strategy')
     return fig
@@ -119,7 +120,7 @@ def _summary_plots(figure_data, ax):
             palette=color_order,
         )
     else:
-        sns.stripplot(
+        ax = sns.stripplot(
             data=figure_data['data'],
             orient='h',
             order=figure_data['order'],
@@ -233,7 +234,7 @@ def plot_distance_dependence(
         )
         ax.set(xlabel=qcfc_dist['label'])
         ax.set(ylabel='Confound removal strategy')
-        ax.set_xlim((-0.75, 0.05))
+        ax.set_xlim((-0.75, 0.5))
     return fig
 
 

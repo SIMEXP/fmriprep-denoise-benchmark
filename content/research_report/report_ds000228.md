@@ -14,12 +14,14 @@ kernelspec:
 # ds000228
 
 ## QC-FC and distance-dependent effect
-<!--
-No denoise strategy removed the correlation with motion captured by mean framewise displacement.
-`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement.
-`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`.
-`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. -->
+
+With good quality data, all denoising methonds reduce the corelation between functional connectivity and mean framewise displacement.
+All strategies, including the baseline, 
+shows motion remains in close to 0% of the connectivity edges.
+`aroma+gsr` performs worse than the baseline in the child sample.
+This result is consistent across atlases of choice.
+The meduan absolute deviation of QC-FC are all similar to the baseline. 
+
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -53,7 +55,7 @@ Child.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000228_adult_mist_qcfc-fig
@@ -64,7 +66,7 @@ Adult.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ````
@@ -78,7 +80,7 @@ Child.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000228_adult_difumo_qcfc-fig
@@ -89,7 +91,7 @@ Adult.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 ````
 
@@ -102,7 +104,7 @@ Child.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000228_adult_schaefer7networks_qcfc-fig
@@ -113,7 +115,7 @@ Adult.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 ````
 
@@ -126,7 +128,7 @@ Child.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000228_adult_gordon333_qcfc-fig
@@ -137,80 +139,124 @@ Adult.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 ````
 :::
 
 ## Distance-dependent effects of motion on connectivity
 
-<!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  -->
+For the remaining distance-dependent effects of motion on connectivity, 
+a value closer to zero reproesents better performance. 
+Here we can see the distinct difference betwenn adult and child sample.
+No denoising strategy stands out in the adult sample.
+For the child sample, we see a general negative correlation between pair-wise distance and QC-FC. 
+Scrubbing with a 0.2 mm threshold improves the measure the most, and all other strategies perfroms better than the baseline with `aroma` based strategies perfroming slightly better.
+
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-
-import warnings
-
-warnings.filterwarnings('ignore')
-from fmriprep_denoise.visualization import figures
-from myst_nb import glue
-
-# Load metric data
-dataset = 'ds000228'
-atlases = ['difumo', 'mist', 'schaefer7networks', 'gordon333']
 for atlas in atlases:
-    fig = figures.plot_distance_dependence(dataset, path_root, atlas)
-    glue(f'{dataset}_{atlas}_dist-fig', fig, display=False)
+    for group in groups:
+        fig = figures.plot_distance_dependence(dataset, path_root, atlas, group=group)
+        glue(f'{dataset}_{group}_{atlas}_dist-fig', fig, display=False)
 ```
 
 :::{tab-set}
 ````{tab-item} MIST
-```{glue:figure} ds000228_mist_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000228_mist_dist-fig"
 
+```{glue:figure} ds000228_adult_mist_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000228_adult_mist_dist-fig"
+
+Adults.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
+
+```{glue:figure} ds000228_child_mist_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000228_child_mist_dist-fig"
+
+Children.
+Distance-dependent effects of motion on connectivity with MIST atlas.
+Each data point represent different resolution.
+MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
+```
+
 ````
 
 ````{tab-item} DiFuMo
-```{glue:figure} ds000228_difumo_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000228_difumo_dist-fig"
 
+```{glue:figure} ds000228_adult_difumo_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000228_adult_difumo_dist-fig"
+
+Adult.
 TBA
 ```
+```{glue:figure} ds000228_child_difumo_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000228_child_difumo_dist-fig"
+
+Children.
+TBA
 ````
 
 ````{tab-item} Schaefer 7 Networks
-```{glue:figure} ds000228_schaefer7networks_dist-fig
-:figwidth: 800px
-:name: "tbl:ds000228_schaefer7networks_dist-fig"
 
+```{glue:figure} ds000228_adult_schaefer7networks_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000228_adult_schaefer7networks_dist-fig"
+
+Adult.
 Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
 Each data point represent different resolution.
 ```
+
+```{glue:figure} ds000228_child_schaefer7networks_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000228_child_schaefer7networks_dist-fig"
+
+Childredn.
+Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
+Each data point represent different resolution.
+```
+
 ````
 
 ````{tab-item} Gordon 333 parcels
-```{glue:figure} ds000228_gordon333_dist-fig
+```{glue:figure} ds000228_adult_gordon333_dist-fig
 :figwidth: 800px
-:name: "tbl:ds000228_gordon333_dist-fig"
+:name: "tbl:ds00022_adult8_gordon333_dist-fig"
 
+Adult.
 Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
 In this atlas there's only one parcellation scheme.
 ```
+```{glue:figure} ds000228_child_gordon333_dist-fig
+:figwidth: 800px
+:name: "tbl:ds000228_child  _gordon333_dist-fig"
+
+Childredn.
+Distance-dependent effects of motion on connectivity with Gordon atlas 333 parcels.
+In this atlas there's only one parcellation scheme.
+```
+
 ````
 :::
 
 ## Network modularity
-<!--
-All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all.
+
+We next see if the denoising strategies can dissociate network modularity and motion. 
+The correlation between modularity quality and motion for each denoising approach shows that `aroma` is the best at eliminating correlations between motion and modularity in the child sample.
+The results in tha adult sample is more fuzzy.
+With the mean network modularity, 
 GSR-based strategies improved the network modularity compared to their conunterparts.
-The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity. -->
+
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -242,7 +288,7 @@ for atlas in atlases:
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 
 ```
 
