@@ -14,12 +14,12 @@ kernelspec:
 # ds000030
 
 ## QC-FC and distance-dependent effect
-<!--
-No denoise strategy removed the correlation with motion captured by mean framewise displacement.
-`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement.
-`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`.
-`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. -->
+
+`ds000030` consists of adult sample only.
+All denoisng strategies aside from `aroma+gsr` eliminate the impact of motion.
+The variablilty in the healthy control is potentially driven by a larger sample than the rest.
+However, when looking at the median absolute deviations, the schizophrania group still retains higher impact of motion than the remaining sample.
+
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -53,7 +53,7 @@ for atlas in atlases:
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 ````
 
@@ -100,7 +100,7 @@ CONTROL.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_SCHZ_mist_qcfc-fig
@@ -111,7 +111,7 @@ SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_BIPOLAR_mist_qcfc-fig
@@ -122,7 +122,7 @@ BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_ADHD_mist_qcfc-fig
@@ -133,7 +133,7 @@ ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ````
@@ -157,7 +157,7 @@ SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_BIPOLAR_difumo_qcfc-fig
@@ -168,7 +168,7 @@ BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_ADHD_difumo_qcfc-fig
@@ -179,7 +179,7 @@ ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ````
@@ -203,7 +203,7 @@ SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_BIPOLAR_schaefer7networks_qcfc-fig
@@ -214,7 +214,7 @@ BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_ADHD_schaefer7networks_qcfc-fig
@@ -225,7 +225,7 @@ ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ````
@@ -249,7 +249,7 @@ SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_BIPOLAR_gordon333_qcfc-fig
@@ -260,7 +260,7 @@ BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_ADHD_gordon333_qcfc-fig
@@ -271,17 +271,17 @@ ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ````
 :::
 
-
-
 ## Distance-dependent effects of motion on connectivity
 
-<!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  -->
+Scrubbing with 0.2 mm threshold most consistently reduce the pairwise distance-motion dependency across different sample and atlas of choice. 
+The MIST atlas  shows more negative trend than the other choices of atlas.
+
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -302,7 +302,7 @@ CONTROL.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_SCHZ_mist_dist-fig
@@ -313,7 +313,7 @@ SCHZ.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_BIPOLAR_mist_dist-fig
@@ -324,7 +324,7 @@ BIPOLAR.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ```{glue:figure} ds000030_ADHD_mist_dist-fig
@@ -335,7 +335,7 @@ ADHD.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ```
 
 ````
@@ -463,10 +463,8 @@ In this atlas there's only one parcellation scheme.
 
 
 ## Network modularity
-<!--
-All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all.
-GSR-based strategies improved the network modularity compared to their conunterparts.
-The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity. -->
+
+Results here are so fuzzy I don't know what to do.
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -498,7 +496,7 @@ for atlas in atlases:
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ``` -->
 
 ```{glue:figure} ds000030_mist_network-1-fig

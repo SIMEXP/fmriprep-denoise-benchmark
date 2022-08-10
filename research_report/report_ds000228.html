@@ -490,12 +490,13 @@ title="Print to PDF"
 <h1>ds000228<a class="headerlink" href="#ds000228" title="Permalink to this headline">#</a></h1>
 <div class="section" id="qc-fc-and-distance-dependent-effect">
 <h2>QC-FC and distance-dependent effect<a class="headerlink" href="#qc-fc-and-distance-dependent-effect" title="Permalink to this headline">#</a></h2>
-<!--
-No denoise strategy removed the correlation with motion captured by mean framewise displacement.
-`aroma`, `compcor6`, and `simple` reduced the correlation between connectivity edges and mean framewise displacement.
-`scrubbing` and `scrubbing+gsr` performed the best, as seen in previous work {cite:p}`power_recent_2015`.
-`compcor`, which applies compcor-based regressors covering 50% of the variance, performs worse than the connectome baseline created with high-pass filtered time series.
-Surprisingly, all strategies with global signal regression underperform, contradicting the existing literature {cite:p}`ciric_benchmarking_2017` {cite:p}`parkes_evaluation_2018`. --><div class="cell tag_hide-input tag_remove-output docutils container">
+<p>With good quality data, all denoising methonds reduce the corelation between functional connectivity and mean framewise displacement.
+All strategies, including the baseline,
+shows motion remains in close to 0% of the connectivity edges.
+<code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> performs worse than the baseline in the child sample.
+This result is consistent across atlases of choice.
+The meduan absolute deviation of QC-FC are all similar to the baseline.</p>
+<div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
 
@@ -518,8 +519,8 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 </div>
 </div>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="23eb8b49-6623-4a03-afeb-80c26fc8c9d9" name="71c7c634-c54c-4405-bc4e-8aa2f490f801" type="radio">
-</input><label class="sd-tab-label" for="23eb8b49-6623-4a03-afeb-80c26fc8c9d9">
+<input checked="checked" id="afc10926-c606-4c5c-a951-c38daff2eefd" name="33c7d601-67ce-4dfa-9008-fbdc80edb180" type="radio">
+</input><label class="sd-tab-label" for="afc10926-c606-4c5c-a951-c38daff2eefd">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-child-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -529,7 +530,7 @@ MIST</label><div class="sd-tab-content docutils">
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-child-mist-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-child-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000228-adult-mist-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -539,11 +540,11 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-adult-mist-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-adult-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="0a6d1746-3f3e-4384-83cc-5dce60332dd7" name="71c7c634-c54c-4405-bc4e-8aa2f490f801" type="radio">
-</input><label class="sd-tab-label" for="0a6d1746-3f3e-4384-83cc-5dce60332dd7">
+<input id="78abc8d6-ed48-46aa-bc3e-de1a4446c584" name="33c7d601-67ce-4dfa-9008-fbdc80edb180" type="radio">
+</input><label class="sd-tab-label" for="78abc8d6-ed48-46aa-bc3e-de1a4446c584">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-child-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -553,7 +554,7 @@ DiFuMo</label><div class="sd-tab-content docutils">
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-child-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-child-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000228-adult-difumo-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -563,11 +564,11 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-adult-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-adult-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="69293526-950a-4cf6-81d3-dafd4b857681" name="71c7c634-c54c-4405-bc4e-8aa2f490f801" type="radio">
-</input><label class="sd-tab-label" for="69293526-950a-4cf6-81d3-dafd4b857681">
+<input id="a02b01ad-3bb4-4d58-aece-af088f2760db" name="33c7d601-67ce-4dfa-9008-fbdc80edb180" type="radio">
+</input><label class="sd-tab-label" for="a02b01ad-3bb4-4d58-aece-af088f2760db">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-child-schaefer7networks-child-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -577,7 +578,7 @@ Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-child-schaefer7networks-child-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-child-schaefer7networks-child-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000228-adult-schaefer7networks-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -587,11 +588,11 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-adult-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-adult-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="ee2941a0-3731-493b-b064-b393703f7ddf" name="71c7c634-c54c-4405-bc4e-8aa2f490f801" type="radio">
-</input><label class="sd-tab-label" for="ee2941a0-3731-493b-b064-b393703f7ddf">
+<input id="eb0acfdd-e6e5-42d4-b17e-1eaf81f1ec10" name="33c7d601-67ce-4dfa-9008-fbdc80edb180" type="radio">
+</input><label class="sd-tab-label" for="eb0acfdd-e6e5-42d4-b17e-1eaf81f1ec10">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-child-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -601,7 +602,7 @@ Gordon 333 parcels</label><div class="sd-tab-content docutils">
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-child-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-child-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000228-adult-gordon333-qcfc-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -611,14 +612,20 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-adult-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-adult-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
 </div>
 </div>
 <div class="section" id="distance-dependent-effects-of-motion-on-connectivity">
 <h2>Distance-dependent effects of motion on connectivity<a class="headerlink" href="#distance-dependent-effects-of-motion-on-connectivity" title="Permalink to this headline">#</a></h2>
-<!-- Consistent with the literature, `aroma` reduces the distance dependency of motion on connectivity.  --><div class="cell tag_hide-input tag_remove-output docutils container">
+<p>For the remaining distance-dependent effects of motion on connectivity,
+a value closer to zero reproesents better performance.
+Here we can see the distinct difference betwenn adult and child sample.
+No denoising strategy stands out in the adult sample.
+For the child sample, we see a general negative correlation between pair-wise distance and QC-FC.
+Scrubbing with a 0.2 mm threshold improves the measure the most, and all other strategies perfroms better than the baseline with <code class="docutils literal notranslate"><span class="pre">aroma</span></code> based strategies perfroming slightly better.</p>
+<div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">atlas</span> <span class="ow">in</span> <span class="n">atlases</span><span class="p">:</span>
     <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
@@ -629,8 +636,8 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 </div>
 </div>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="1b5323f8-e59f-492b-947d-82d2d03b29bf" name="4eb33c75-3368-4557-b80b-30fd81cee3d8" type="radio">
-</input><label class="sd-tab-label" for="1b5323f8-e59f-492b-947d-82d2d03b29bf">
+<input checked="checked" id="a7606374-7751-4520-9f67-e99b4ffd10e6" name="436de74f-d7d6-4f99-9495-2300beb768ae" type="radio">
+</input><label class="sd-tab-label" for="a7606374-7751-4520-9f67-e99b4ffd10e6">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-adult-mist-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -640,7 +647,7 @@ MIST</label><div class="sd-tab-content docutils">
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-adult-mist-dist-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-adult-mist-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000228-child-mist-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -650,11 +657,11 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-child-mist-dist-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-child-mist-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="685ee096-e9d2-4900-81fe-1a2642c72bc2" name="4eb33c75-3368-4557-b80b-30fd81cee3d8" type="radio">
-</input><label class="sd-tab-label" for="685ee096-e9d2-4900-81fe-1a2642c72bc2">
+<input id="ca1d9d71-f8ed-49f5-a86c-ad5559254bf8" name="436de74f-d7d6-4f99-9495-2300beb768ae" type="radio">
+</input><label class="sd-tab-label" for="ca1d9d71-f8ed-49f5-a86c-ad5559254bf8">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-adult-difumo-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -671,8 +678,8 @@ TBA</span><a class="headerlink" href="#tbl-ds000228-adult-difumo-dist-fig" title
 TBA</span><a class="headerlink" href="#tbl-ds000228-child-difumo-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="5c3ef9cc-3d88-401b-bf9b-2225c030f042" name="4eb33c75-3368-4557-b80b-30fd81cee3d8" type="radio">
-</input><label class="sd-tab-label" for="5c3ef9cc-3d88-401b-bf9b-2225c030f042">
+<input id="21aae003-19cf-4c7e-8d90-cf25105e3328" name="436de74f-d7d6-4f99-9495-2300beb768ae" type="radio">
+</input><label class="sd-tab-label" for="21aae003-19cf-4c7e-8d90-cf25105e3328">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-adult-schaefer7networks-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -691,8 +698,8 @@ Distance-dependent effects of motion on connectivity with Schaefer 7 Networks at
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000228-child-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="a1110d28-de75-4fcd-8a24-da76d943904f" name="4eb33c75-3368-4557-b80b-30fd81cee3d8" type="radio">
-</input><label class="sd-tab-label" for="a1110d28-de75-4fcd-8a24-da76d943904f">
+<input id="b8b8a70e-91be-406d-bd7c-86516423dfd0" name="436de74f-d7d6-4f99-9495-2300beb768ae" type="radio">
+</input><label class="sd-tab-label" for="b8b8a70e-91be-406d-bd7c-86516423dfd0">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds00022-adult8-gordon333-dist-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -715,10 +722,12 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 </div>
 <div class="section" id="network-modularity">
 <h2>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">#</a></h2>
-<!--
-All strategies increased the overall network modularity compared to the `baseline`, with scrubbing based methods performing the best out of all.
-GSR-based strategies improved the network modularity compared to their conunterparts.
-The correlation between modularity quality and motion for each denoising approach shows that compcor-based and ICA-AROMA strategies are the best at eliminating correlations between motion and modularity. --><div class="cell tag_hide-input tag_remove-output docutils container">
+<p>We next see if the denoising strategies can dissociate network modularity and motion.
+The correlation between modularity quality and motion for each denoising approach shows that <code class="docutils literal notranslate"><span class="pre">aroma</span></code> is the best at eliminating correlations between motion and modularity in the child sample.
+The results in tha adult sample is more fuzzy.
+With the mean network modularity,
+GSR-based strategies improved the network modularity compared to their conunterparts.</p>
+<div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">warnings</span>
 
@@ -740,8 +749,8 @@ The correlation between modularity quality and motion for each denoising approac
 </div>
 </div>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="335e4b42-c744-4a16-aadc-daa16d997932" name="66fa29f6-b5cb-4f89-ade6-3c037accbeb3" type="radio">
-</input><label class="sd-tab-label" for="335e4b42-c744-4a16-aadc-daa16d997932">
+<input checked="checked" id="704bb830-ca74-4639-bfa5-64aceb587347" name="d98a1828-9940-4770-b731-1b990ca5dfc2" type="radio">
+</input><label class="sd-tab-label" for="704bb830-ca74-4639-bfa5-64aceb587347">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-mist-network-1-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -750,7 +759,7 @@ MIST</label><div class="sd-tab-content docutils">
 <p class="caption"><span class="caption-number">Fig. 22 </span><span class="caption-text">Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
 MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical for compression.
-The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><a class="headerlink" href="#tbl-ds000228-mist-network-1-fig" title="Permalink to this image">#</a></p>
+The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000228-mist-network-1-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000228-mist-network-2-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -758,8 +767,8 @@ The outliers here are driven by the 7, 12, 20 ROIs version of the atlas.</span><
 </div>
 </div>
 </div>
-<input id="279b8e23-bad5-4f1f-81c8-50a28709a5bf" name="66fa29f6-b5cb-4f89-ade6-3c037accbeb3" type="radio">
-</input><label class="sd-tab-label" for="279b8e23-bad5-4f1f-81c8-50a28709a5bf">
+<input id="fbe210fd-279a-40a6-b642-f526731b1d3d" name="d98a1828-9940-4770-b731-1b990ca5dfc2" type="radio">
+</input><label class="sd-tab-label" for="fbe210fd-279a-40a6-b642-f526731b1d3d">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-difumo-network-1-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -774,8 +783,8 @@ Each data point represent different resolution.</span><a class="headerlink" href
 </div>
 </div>
 </div>
-<input id="41b946cc-ddb6-48c5-839b-d94d2c821a0f" name="66fa29f6-b5cb-4f89-ade6-3c037accbeb3" type="radio">
-</input><label class="sd-tab-label" for="41b946cc-ddb6-48c5-839b-d94d2c821a0f">
+<input id="b411eb4f-07c4-4505-aa53-7f67545d6c96" name="d98a1828-9940-4770-b731-1b990ca5dfc2" type="radio">
+</input><label class="sd-tab-label" for="b411eb4f-07c4-4505-aa53-7f67545d6c96">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-schaefer7networks-network-1-fig" style="width: 800px">
 <div class="cell_output docutils container">
@@ -790,8 +799,8 @@ Each data point represent different resolution.</span><a class="headerlink" href
 </div>
 </div>
 </div>
-<input id="396705ce-8b3b-4fa6-a76d-034e8831a0e3" name="66fa29f6-b5cb-4f89-ade6-3c037accbeb3" type="radio">
-</input><label class="sd-tab-label" for="396705ce-8b3b-4fa6-a76d-034e8831a0e3">
+<input id="084e554c-0ce1-49de-99b1-9f93d0a2aae4" name="d98a1828-9940-4770-b731-1b990ca5dfc2" type="radio">
+</input><label class="sd-tab-label" for="084e554c-0ce1-49de-99b1-9f93d0a2aae4">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000228-gordon333-network-fig" style="width: 800px">
 <div class="cell_output docutils container">
