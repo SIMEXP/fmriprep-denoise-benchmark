@@ -1,28 +1,25 @@
 # Introductions
 
-<!-- We all know denosing is important now. And we cannot understand brain activity without it. -->
+<!-- aim of the paragraph: We all know denosing is important now. And we cannot understand brain activity without it. -->
 Amongst functional magnetic resonance imaging (fMRI) acquisition protocols,
 resting state fMRI has become a tool of choice to explore human brain function in healthy and diseased populations {cite:p}`biswal_2010`.
 Functional connectivity {cite:p}`sporns_organization_2004`,
-a measure derived from resting state fMRI, is in particular a popular method to characterize the neural basis of <!-- any suggestions of some newer paper to cite is good. NC: Changed wording here due to repetition of 'choice', but you may prefer a different word to method -->
+a measure derived from resting state fMRI, is in particular a popular method to characterize the neural basis of <!-- any suggestions of some newer paper to cite is good. -->
 cognitive function {cite:p}`finn_functional_2015`,
 aging {cite:p}`andrews-hanna_disruption_2007`,
 and pathology {cite:p}`woodward_resting-state_2015`.
 The rise in popularity of resting state fMRI has also highlighted challenges and gaps in the analytic approach {cite:p}`cole_advances_2010`,
 such as distortion introduced by non-neuronal sources.
-These include head motion, scanner noise, cardiac and repiratory artifacts {cite:p`rogers_assessing_2007,murphy_2013`.
-Known as confounds or nuisance regressors, they pose a major challenge in functional connectivity analysis {cite:p`satterthwaite_impact_2012`.
+These include head motion, scanner noise, cardiac and repiratory artifacts {cite:p}`rogers_assessing_2007,murphy_2013`.
+Known as confounds or nuisance regressors, they pose a major challenge in functional connectivity analysis {cite:p}`satterthwaite_impact_2012`.
 For example, when functional connectivity is contaminated with motion, it can lead to altered network structure {cite:p}`power_scrubbing_2012`.
 Indeed, in younger subjects and neurologic/psychiatric patients the impact of head motion on connectivity is frequently reported {cite:p}`makowski_head_2019,satterthwaite_impact_2012`.
 Hence, reducing the impact of confounds, known as denoising,
 is a major component of the fMRI workflow to ensure the quality of analysis.
 
-<!-- Classes of nuisance regressors - like how load_confounds separate them -->
-<!-- need to add reference to this section-->
 ## Types of noise regressors
 
-<!-- NC: I thought the opening and closing sentences of this section were repeating the same informtion unecessarily -->
-<!-- so I combined them. It could also work at the end, but I think this way flows better to the next section -->
+<!-- aim of the paragraph: Classes of nuisance regressors - like how load_confounds separate them -->
 The most common method to minimize the impact of confounds in functional connectivity analysis is to perform a linear regression {cite:p}`friston_statistical_1994`.
 After basic processing steps (see fMRIPrep {cite:p}`fmriprep1`), 
 regressors are regressed out from the signal and the resulting residual used as denoised signal in all subsequent analyses.
@@ -42,20 +39,17 @@ and an optimal approach often involves combining a few classes of regressors des
 
 ## Implementation of denoising step
 
-<!-- How denoising is traditionally done in propriatory software -->
-<!-- NC: changed this to present tense as I assume people still use the software being described? -->
+<!-- aim of the paragraph: How denoising is traditionally done in propriatory software -->
 Which approach to adopt is straightforward when users use preprocessing software with statistical modelling functionality.
 Each software implements their own preferred strategy,
 for instance, FSL adds the motion parameters by default, and provides an option to run ICA-AROMA.
 The noise regressors are preselected,
 and thus user intervention is avoided.
 However, when users wish to use additional regressors, the process can be complicated.
-With the recent benchmark papers on confound denoising, <!-- NC: references here?  -->
+With the recent benchmark papers on confound denoising highlighting methods such as ICA-AROMA and CompCor {cite:p}`ciric_benchmarking_2017,parkes_evaluation_2018`, 
 it's not uncommon for users to want to add parameters other than the native options from a given software.
 In the FSL example, if a user wants to use an unsupported strategy, such as CompCor,
 they will have to calculate the regressors and inject into the workflow manually.
-<!-- Question: should we compare some other software? ie. niak and cpac has a more flexible approach, but still lock user-in  -->
-<!-- NC: sounds relevant to me! Could be just one sentence  -->
 
 The recent rise of minimal preprocessing pipelines fMRIPrep {cite:p}`fmriprep1` has addressed the confound regressor issue from a different angle.
 fMRIPrep aims to standardize the established steps of fMRI preprocessing, including registration, slice timing correction, motion correction, and distortion correction.
@@ -67,20 +61,19 @@ A common concern is that users unfamiliar with the denoising literature or the f
 or miss regressors that should be used together (e.g. discrete cosine-basis regressors should always be applied with CompCor components).
 These inappropriate choices may reintroduce noise to the data or produce suboptimal denoising results.
 In addition, there is no standard way of tracking a users' choice of regressors,
-and project-specific pipelines can be implemented,
-making replication of others denoising steps more difficult. <!-- NC: I thought the two points here could be combined under one issue  -->
+making replication of others denoising steps more difficult.
 Lastly, denoising benchmark literature has thus far been performed on study-specific preprocessing pipelines, 
 and so the validity of these results on fMRIPrep has yet to be examined.
 
 ## Aim of the benchmark
-<!-- NC: I rearranged some sentences here as a different order made sense to me  -->
+
 The current work aims to introduce an application programming interface (API) to standardise user interaction with fMRIPrep and provide a benchmark using functional connectivity generated from resting state data.
 We selected two datasets from OpenNeuro,
 one with adult and child samples, and the other with psychiatric conditions.
 The benchmark will systematically evaluate the impact of common denoising strategies,
 their impact on different types of samples,
 and select the best approach for a dataset,
-providing a useful reference for fMRIPrep users. <!-- NC: I thought some of the sentences here were repetitive so tried to combine them  -->
+providing a useful reference for fMRIPrep users. 
 The code base accompanying this project can be re-executed with different versions of fMRIPrep,
 and all material can serve as a foundation to generate connectome based metric quality reports. 
 The API is released under popular Python neuroimaging analytic library `nilearn`,
