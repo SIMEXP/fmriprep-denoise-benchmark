@@ -24,18 +24,33 @@ The most common method to minimize the impact of confounds in functional connect
 After basic processing steps (see fMRIPrep {cite:p}`fmriprep1`), 
 regressors are regressed out from the signal and the resulting residual used as denoised signal in all subsequent analyses.
 Nuisance regressors can be separated into classes, capturing different types of non-neuronal noise.
-__Temporal high-pass filtering__ accounts for low-frequency signal drifts introduced by _physiological and scanner noise sources_.
-__Head motion__ is captured by _6 rigid-body motion parameters_ (3 translations and 3 rotation) estimated relative to a reference image {cite:p}`friston_movement-related_1996`.
+__Head motion__ is captured by motion realignment measures: _6 rigid-body motion parameters_ (3 translations and 3 rotation) estimated relative to a reference image {cite:p}`friston_movement-related_1996`.
 __Non-grey matter tissue signal__ (such as _white matter_ and _cerebrospinal fluid_), unlikely to reflect neuronal activity {cite:p}`fox_pnas_2005`,
 is captured by averaging signal within anatomically-derived masks.
 __Global signal__ is calculated by averaging signal within the _full brain_ mask {cite:p}`fox_pnas_2005`.
+These three classes of regressors can be expanded to their first temporal derivatives and their quadratic terms {cite:p}`satterthwaite_2013`.
+__Scrubbing__ {cite:p}`power_scrubbing_2012` is a volume censoring approach to remove high motion segments which the framewise displacement exceeds some threshold. 
+The scrubbing approach is applied alogn side head motion parameters and tissue signal regressors.
+__Temporal high-pass filtering__ accounts for low-frequency signal drifts introduced by _physiological and scanner noise sources_.
+Aside from regressors directly modeling regressors derived from realignment measures or anatomical properties,
+other approaches capture the impact of motion and non-neuronal physiological activity through data-driven methods. 
+The principle component based method __CompCor__ {cite:p}`behzadi_compcor_2007,muschelli_compcor_2014` extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity.
+Independent component analysis based methods estimate spatial independent components representing brain activity and/or noise, 
+and then identify the cpmponents related to head-motion through a data-driven classifier (__ICA-FIX__ {cite:p}`salimi-khorshidi_automatic_2014`)
+or a pre-trained model (__ICA-AROMA__ {cite:p}`aroma`).
 
-These four classes of regressors can be expanded to their first temporal derivatives and their quadratic terms {cite:p}`satterthwaite_2013`.
-The principle component based method __CompCor__ {cite:p}`behzadi_compcor_2007` extracts principal components from white matter and cerebrospinal fluid masks to estimate non-neuronal activity.
-Independent component analysis based methods, __ICA-FIX__ {cite:p}`salimi-khorshidi_automatic_2014` and __ICA-AROMA__ {cite:p}`aroma`,
-estimate independent component time series related to head-motion through a data-driven classifier (ICA-FIX) or a pre-trained model (ICA-AROMA).
-Different strategies have particular strengths,
-and an optimal approach often involves combining a few classes of regressors described above.
+A denosing approach often involves combining a few classes of regressors described above.
+Different strategies have particular strengths and limitations, and researchers can make their own choices based on the property of their data.
+Head motion combied with non-grey matter tissue signal is one of the most basic approach {cite:p}`fox_pnas_2005`. 
+To gain the best denosing results, it often requires the their expansions to module non-linear impact of noise. 
+In addtion to the basic parameters, scrubbing has been shown to mitigate the imapct of framewise displacement on functional connectome, 
+but removing volumes prevents analysis focusing on frequency characteristics or dynamic changes in fMRI signal, and reduces the temporal degrees of freedom.
+The main argument driving the development of the data-decomposition approach is that the expansions of motion parameters results in high number of regressors,
+sacrificing the temporal degrees of freedom in the data, <!-- I found this hard to believe (after doing the benchmark), but this statement is in both compcor and the ica paper-->
+as well as potentially overfitting the data and remove meaningful signal {cite:p}`behzadi_compcor_2007,aroma`. 
+Still, these data driven parameters are not used on their own.
+Anatmoical CompCor regressors are applied along with the basic head motion parameters {cite:p}`muschelli_compcor_2014`.
+ICA-AROMA requires further denosing using the basic average of white matter and cerebrospinal fluid signal after the inital independent component denoising. 
 
 ## Implementation of denoising step
 
