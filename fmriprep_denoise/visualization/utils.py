@@ -225,7 +225,7 @@ def _qcfc_fdr(file_qcfc, labels, group):
         'data': long_qcfc_sig.T,
         'order': list(GRID_LOCATION.values()),
         'title': 'Percentage of significant QC-FC',
-        'xlim': (-5, 55),
+        'xlim': (-5, 40),
         'label': 'Percentage %',
     }
 

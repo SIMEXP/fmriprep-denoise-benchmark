@@ -234,7 +234,7 @@ def plot_distance_dependence(
         )
         ax.set(xlabel=qcfc_dist['label'])
         ax.set(ylabel='Confound removal strategy')
-        ax.set_xlim((-0.75, 0.5))
+        ax.set_xlim((-0.55, 0.5))
     return fig
 
 
