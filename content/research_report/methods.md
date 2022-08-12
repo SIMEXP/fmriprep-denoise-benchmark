@@ -111,7 +111,7 @@ Process involved here are implemented through nilearn {cite:p}`nilearn`.
 Time series were extracted using `nilearn.maskers.NiftiLabelsMasker` and `nilearn.maskers.NiftiMapsMasker`.
 Connectomes were calculated using Pearson's Correlations, implemented through `nilearn.connectome.ConnectivityMeasure`.
 
-
+(framewise-displacement)=
 ## Participant exclusion based on motion
 
 We performed data quality control to exclude subjects with exessive motion leading to unusable data.
