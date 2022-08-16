@@ -85,8 +85,9 @@ and so the validity of these results on fMRIPrep has yet to be examined.
 ## Aim of the benchmark
 
 The current work aims to introduce an application programming interface (API) to standardise user interaction with fMRIPrep and provide a benchmark using functional connectivity generated from resting state data.
-We selected two datasets from OpenNeuro,
-one with adult and child samples, and the other with psychiatric conditions.
+We selected two datasets on OpenNeuro for the current analysis:
+`ds000228` {cite:p}`ds000228:1.1.0` and `ds000030` {cite:p}`ds000030:1.0.0`. 
+`ds000228` contains adult and child samples, and `ds000030` includes psychiatric conditions.
 The benchmark will systematically evaluate the impact of common denoising strategies,
 their impact on different types of samples,
 and select the best approach for a dataset,
