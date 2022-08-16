@@ -208,22 +208,9 @@ We can see the trend is similar to mean framewise displacement result.
 ## Comparisons on the impacts of strategies on connectomes
 <!-- Please advice on the threshold here -->
 <!-- stiengent -->
-```{code-cell}
-:tags: [hide-input, remove-output]
-from fmriprep_denoise.features.derivatives import get_qc_criteria
-
-stringent = get_qc_criteria('stringent')
-glue('gross_fd', stringent['gross_fd'])
-glue('fd_thresh', stringent['fd_thresh'])
-glue('proportion_thresh', stringent['proportion_thresh'] * 100)
-```
-
-To evaluate the impact of denoising strategy on connectomes, 
-we will exclude subjects with high motion , 
-defined by the following criteria adopted from  {cite:p}`parkes_evaluation_2018`: 
-mean framewise displacement > {glue:}`gross_fd` mm, 
-above {glue:}`proportion_thresh`% of volumes removed while scrubbing 
-with a {glue:}`fd_thresh` mm threshold.
+To evaluate the impact of denoising strategy on connectomes in a practical scenrio, 
+we excluded subjects with high motion as such subjects would be normally excluded in data quality control stage 
+(see section {ref}`framewise-displacement`). 
 
 The two tables below are the demographic information of the datasets after
 the automatic motion quality control.
