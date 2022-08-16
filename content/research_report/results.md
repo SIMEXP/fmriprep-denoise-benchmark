@@ -344,7 +344,7 @@ did not differ from the full sample, as seen in the two graphs below.
 :name: "tbl:dof-fig_cleaned"
 
 Loss in temporal degrees of freedom break down by groups after quality control,
-after applying the stringent quality control threashold.
+after applying the stringent quality control threshold.
 From the lightest hue to the darkes, the order of the group in `ds000228` is:
 {glue:}`group-order_ds000228_cleaned`
 From the lightest hue to the darkes, the order of the group in `ds000030` is:
@@ -363,7 +363,7 @@ glue(f'scrubbing-fig_cleaned', fig, display=False)
 
 Loss in number of volumes in proportion to the full length of the scan after quality control, 
 break down by groups in each dataset,
-after applying the stringent quality control threashold.
+after applying the stringent quality control threshold.
 We can see the trend is similar to mean framewise displacement result. 
 
 ```
