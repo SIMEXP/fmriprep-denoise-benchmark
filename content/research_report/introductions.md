@@ -28,7 +28,8 @@ __Head motion__ is captured by motion realignment measures: _6 rigid-body motion
 __Non-grey matter tissue signal__ (such as _white matter_ and _cerebrospinal fluid_), unlikely to reflect neuronal activity {cite:p}`fox_pnas_2005`,
 is captured by averaging signal within anatomically-derived masks.
 __Global signal__ is calculated by averaging signal within the _full brain_ mask {cite:p}`fox_pnas_2005`.
-These three classes of regressors can be expanded to their first temporal derivatives and their quadratic terms {cite:p}`satterthwaite_2013`.
+These three classes of regressors can be expanded to their first temporal derivatives and their quadratic terms {cite:p}`satterthwaite_2013` to module non-linear impact of noise. 
+Full expansion of head motion parameters is often required for optimal denoising results.
 __Scrubbing__ {cite:p}`power_scrubbing_2012` is a volume censoring approach to remove high motion segments in which the framewise displacement 
 (see section {ref}`framewise-displacement`)
 exceeds some threshold. 
@@ -44,7 +45,6 @@ or a pre-trained model (__ICA-AROMA__ {cite:p}`aroma`).
 A denoising approach often involves combining a few classes of regressors described above.
 Different strategies have particular strengths and limitations, and researchers can make their own choices based on properties of their data.
 Head motion combined with non-grey matter tissue signal is one of the most basic approaches {cite:p}`fox_pnas_2005`. 
-To gain the best denosing results, it often requires the their expansions to module non-linear impact of noise. 
 In addition to the basic parameters, scrubbing has been shown to mitigate the impact of framewise displacement on the functional connectome, 
 but removing volumes prevents analysis focusing on frequency characteristics or dynamic changes in fMRI signal, and reduces the temporal degrees of freedom.
 The main argument driving the development of the data-decomposition approach is that the expansions of motion parameters results in high number of regressors,
