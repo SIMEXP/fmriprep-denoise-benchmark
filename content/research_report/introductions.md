@@ -43,13 +43,13 @@ or a pre-trained model (__ICA-AROMA__ {cite:p}`aroma`).
 
 A denoising approach often involves combining a few classes of regressors described above.
 Different strategies have particular strengths and limitations, and researchers can make their own choices based on properties of their data.
-Head motion combied with non-grey matter tissue signal is one of the most basic approach {cite:p}`fox_pnas_2005`. 
+Head motion combined with non-grey matter tissue signal is one of the most basic approaches {cite:p}`fox_pnas_2005`. 
 To gain the best denosing results, it often requires the their expansions to module non-linear impact of noise. 
-In addition to the basic parameters, scrubbing has been shown to mitigate the impact of framewise displacement on functional connectome, 
+In addition to the basic parameters, scrubbing has been shown to mitigate the impact of framewise displacement on the functional connectome, 
 but removing volumes prevents analysis focusing on frequency characteristics or dynamic changes in fMRI signal, and reduces the temporal degrees of freedom.
 The main argument driving the development of the data-decomposition approach is that the expansions of motion parameters results in high number of regressors,
 sacrificing the temporal degrees of freedom in the data, <!-- I found this hard to believe (after doing the benchmark), but this statement is in both compcor and the ica paper-->
-as well as potentially overfitting the data and remove meaningful signal {cite:p}`behzadi_compcor_2007,aroma`. 
+as well as potentially overfitting the data and removing meaningful signal {cite:p}`behzadi_compcor_2007,aroma`. 
 Still, these data driven parameters are not used on their own.
 Anatmoical CompCor regressors are applied along with the basic head motion parameters {cite:p}`muschelli_compcor_2014`.
 ICA-AROMA requires further denosing using the basic average of white matter and cerebrospinal fluid signal after the initial independent component denoising. 
