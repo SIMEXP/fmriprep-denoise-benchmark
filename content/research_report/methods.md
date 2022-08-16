@@ -15,8 +15,6 @@ kernelspec:
 
 ## Datasets
 
-We selected two datasets on OpenNeuro for the current analysis:
-`ds000228` {cite:p}`ds000228:1.1.0` and `ds000030` {cite:p}`ds000030:1.0.0`. <!-- NC: Maybe remove this from the intro since it's just been stated there, and probably belongs in the methods instead?  -->
 Dataset `ds000228` (N = 155) contains fMRI scans of participants watching a silent version of a Pixar animated movie "Partly Cloudy".
 The dataset includes 33 adult subjects
 (Age Mean(s.d.) =  24.8(5.3), range = 18--39; 20 female)
