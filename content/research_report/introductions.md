@@ -43,16 +43,25 @@ and then identify the components related to head-motion through using a data-dri
 or a pre-trained model (__ICA-AROMA__ {cite:p}`aroma`).
 
 A denoising approach often involves combining a few classes of regressors described above.
-Different strategies have particular strengths and limitations, and researchers can make their own choices based on properties of their data.
 Head motion combined with non-grey matter tissue signal is one of the most basic approaches {cite:p}`fox_pnas_2005`. 
-In addition to the basic parameters, scrubbing has been shown to mitigate the impact of framewise displacement on the functional connectome, 
-but removing volumes prevents analysis focusing on frequency characteristics or dynamic changes in fMRI signal, and reduces the temporal degrees of freedom.
-The main argument driving the development of the data-decomposition approach is that the expansions of motion parameters results in high number of regressors,
-sacrificing the temporal degrees of freedom in the data, <!-- I found this hard to believe (after doing the benchmark), but this statement is in both compcor and the ica paper-->
-as well as potentially overfitting the data and removing meaningful signal {cite:p}`behzadi_compcor_2007,aroma`. 
-Still, these data driven parameters are not used on their own.
+Scrubbing combines the basic approach above with volume censoring. 
 Anatmoical CompCor regressors are applied along with the basic head motion parameters {cite:p}`muschelli_compcor_2014`.
-ICA-AROMA requires further denosing using the basic average of white matter and cerebrospinal fluid signal after the initial independent component denoising. 
+ICA-AROMA requires further denosing using the basic average of white matter and cerebrospinal fluid signal after the initial independent component denoising {cite:p}`aroma`. 
+
+Different strategies have particular strengths and limitations,
+and researchers can make their own choices based on properties of their data and the limitation of the denoising approaches.
+One of the major concern is the loss in temporal degrees of freedom, leading to the loss of statistical power.
+The more loss in temporal degrees of freedom, the less power the remaining data would have to explain the effects.
+The full expansion of head motion, white matter, cerebrospinal fluid, and global signal parameters consists of 36 parameters.
+Scrubbing has been shown to mitigate the impact of framewise displacement on the functional connectome, 
+but removing volumes prevents analysis focusing on frequency characteristics or dynamic changes in fMRI signal, and reduces the temporal degrees of freedom.
+Data-decomposition approaches, such as ICA-AROMA and CompCor, were proposed to preserve statistical power in the data.
+These approaches aim to reduce the number of nuisance regressors parameters, <!-- I found this hard to believe (after doing the benchmark), but this statement is in both compcor and the ica paper-->
+gain better denoising results without volume censoring,
+as well as avoiding potentially overfitting the data and removing meaningful signal {cite:p}`behzadi_compcor_2007,aroma,pruim_evaluation_2015`. 
+However, these methods have their own disadvantages.
+ICA-AROMA and CompCor can lead to inconsistent number of remaining degrees of freedom as the number of components applied to each subjects can vary.
+Past research has also reported that CompCor may only be viable in low-motion data {cite:p}`parkes_evaluation_2018`.
 
 ## Implementation of denoising step
 
