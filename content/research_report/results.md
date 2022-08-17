@@ -207,7 +207,7 @@ We can see the trend is similar to mean framewise displacement result.
 
 ## Comparisons on the impacts of strategies on connectomes
 <!-- Please advice on the threshold here -->
-<!-- stiengent -->
+<!-- stringent -->
 To evaluate the impact of denoising strategy on connectomes in a practical scenrio, 
 we excluded subjects with high motion as such subjects would be normally excluded in data quality control stage 
 (see section {ref}`framewise-displacement`). 
@@ -217,6 +217,9 @@ the automatic motion quality control.
 
 ```{code-cell}
 :tags: [hide-input]
+from fmriprep_denoise.features.derivatives import get_qc_criteria
+
+stringent = get_qc_criteria('stringent')
 desc = tables.lazy_demographic('ds000228', path_root, **stringent)
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
 

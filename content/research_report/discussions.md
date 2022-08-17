@@ -81,7 +81,7 @@ The independent components puts the number of regressors in the similar range of
 Scrubbing at 0.5 mm or 0.2 mm shows difference between strategies; 
 within each dataset this difference presists across groups.
 
-## A low number of parcels in atlas results in poor denoising results
+## Other considerations
 <!-- other things to consider -->
 We included different type of atlas in the current analysis.
 We got clear outliers with the MIST atlas including decompositions low number of parcels. 
@@ -89,12 +89,13 @@ For any atlas with 64 or above parcels, we show that altas selection did not bri
 Volumetric data based atlas, both probablility and descret atlas performs similarly.
 Surface-based Schaefer atlas provides less variance across different resolutions.
 
-## Limitation: uneven clinical sub-groups 
-<!-- write some stuff about the clinical population -->
+We showed the difference between the child and adult sample cannot be eliminated by including age as a covariate in `ds000228`.
+Moreover the loss of degrees of freedom shows that two samples requires drastically different number of regressors for `compcor` and `aroma`-based methods.
+`simple` might be the better strategy if the inconsistancy of loss of degrees of freedom is not desired.
+For the clinical groups in `ds000030`, we only see differences between the control and the schizopharnia group in gross framewise displacement.
+The remaining results are too fussy to make an reliable observation amongst the clinical groups.
 The limitation of the current results lies in the small and uneven subgroups in each dataset. 
-One of the aims of this paper
 The small sample size constraints the conclusion we can draw from the comparison. 
-
 
 ## General suggestions
 
