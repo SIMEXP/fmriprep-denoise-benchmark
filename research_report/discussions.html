@@ -405,12 +405,66 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#residual-motion-in-connectivity-edges-were-not-found-amongs-in-most-methods">
+   Residual motion in connectivity edges were not found amongs in most methods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distance-dependency-of-connectivity-edges-were-best-removed-by-an-aggressive-scrubbing-approach">
+   Distance dependency of connectivity edges were best removed by an aggressive scrubbing approach
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#correlation-between-motion-and-network-modularity-presists-and-global-signal-alters-network-modularity">
+   Correlation between motion and network modularity presists and global signal alters network modularity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#high-degrees-of-freedom-loss-with-using-compcor-components-up-to-50-variance">
+   High degrees of freedom loss with using CompCor components up to 50% variance
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#other-considerations">
+   Other considerations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#general-suggestions">
+   General suggestions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#future-directions">
+   Future directions
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -422,6 +476,49 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#residual-motion-in-connectivity-edges-were-not-found-amongs-in-most-methods">
+   Residual motion in connectivity edges were not found amongs in most methods
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#distance-dependency-of-connectivity-edges-were-best-removed-by-an-aggressive-scrubbing-approach">
+   Distance dependency of connectivity edges were best removed by an aggressive scrubbing approach
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#correlation-between-motion-and-network-modularity-presists-and-global-signal-alters-network-modularity">
+   Correlation between motion and network modularity presists and global signal alters network modularity
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#high-degrees-of-freedom-loss-with-using-compcor-components-up-to-50-variance">
+   High degrees of freedom loss with using CompCor components up to 50% variance
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#other-considerations">
+   Other considerations
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#general-suggestions">
+   General suggestions
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#future-directions">
+   Future directions
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -431,48 +528,137 @@ title="Print to PDF"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="discussions">
 <h1>Discussions<a class="headerlink" href="#discussions" title="Permalink to this headline">#</a></h1>
-<p>Selecting the correct conofund variables for denoising minimally preprocessed fMRI data is a challenging task.
-fMRIPrep ensure a large collection of metrics are delivered in the standard way.
-They provided documentation to guide the user for regressor selection.
-However, there’s no guarantee it is goining to be correct or people are reading the documentation properly.
-<code class="docutils literal notranslate"><span class="pre">load_confounds</span></code> is an API to simplify the process.
+<!-- Take home message
+- fMRIPrep does a good job 
+- Quality control your data
+- Choise of atlas doesn't impact the results much
+- ICA-AROMA is not magical
+ -->
+<p>fMRIPrep ensured to provide minimally preprocessed fMRI data and a large collection of nuisance regressors in the standard way.
+They provided extended documentation to guide the user for regressor selection and choices for subsequent analysis.
+However, selecting the correct conofund variables for denoising minimally preprocessed fMRI data is still a daunting task.
+There’s no guarantee that people are reading the documentation to select the right things. <!-- This sentence is too blunt and harsh -->
+The aim of <code class="docutils literal notranslate"><span class="pre">load_confounds</span></code> is to provide an API to simplify the process of nuisance regressors selection.
 Built with careful curation of the literature, it ensures users select the sensible nusiance regressors.
 It also provide predefined strategies with the best understanding of the literature.
-The remaining issue is that the performance of these denoising strategies has yet to be exaimined.
-The current research aims to provide benchmark on the performance of common methods in the denoising literature for functional connectivity analysis.</p>
-<p>We performed the benchmark on two open access datasets: ds000228 and ds000030.
-ds000228 allows us to examine the difference between children and adult.
-ds000030 includes healthy control and patients of three different psychiatric conditions.
+The performance of these denoising strategies has yet to be exaimined.
+The current research aims to provide benchmark on the performance of common methods in the denoising literature for functional connectivity analysis.
+We only includes denoise strategies that are realistically applicable to the sample.
+In addition, we set some exclusion criteria on the sample to show the result on reasonable quality subject only.
+The aim is to provide a benchmark in a realistic context as much as possible.</p>
+<p>We performed the benchmark on two open access datasets.
+<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> allows us to examine the difference between child and adult sample.
+<code class="docutils literal notranslate"><span class="pre">ds000030</span></code> includes healthy control and patients of three different psychiatric conditions.
 We used three different multi-resolution atlases in this benchmark (MIST, DiFuMo, Schaefer)
 as well as one common altlas in the previous benchmark literature,
 the Gordon atlas with 333 parcels, to compare with the past literature using different pipelines.
-The benchmark is largely consistent with the recent literatures.
-Comparing to the baseline, data that was high-pass filtered,</p>
-<!-- some description of the results -->
-<p>However, the results related to GSR are weird in both dataset.
-Further investigation is needed on the code for signal cleaning in nilearn and GSR calculation implemented in fMRIPrep.</p>
-<p>Scrubbing based method is the best if the analysis is using summary statistics such as functional connectivity at individual level.
-For analysis requires the continueous timeseries, the simple strategy might be the most balanced approach.
-Aside for the benchmark on denoising performance, another important factor is the degree of freedome loss.
+Subject with more than 80% of volumes with a framewise displacement exeeding 0.2 mm,
+and mean framewise displacement above 0.55 mm were excluded from the analysis.</p>
+<div class="section" id="residual-motion-in-connectivity-edges-were-not-found-amongs-in-most-methods">
+<h2>Residual motion in connectivity edges were not found amongs in most methods<a class="headerlink" href="#residual-motion-in-connectivity-edges-were-not-found-amongs-in-most-methods" title="Permalink to this headline">#</a></h2>
+<!-- QC/FC -->
+<p>When examining QC/FC, all strategies, including the baseline (i.e. data that was high-pass filtered),
+shows very little impact of residual imapct of motion on functional connectivity, with the exception of <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code>.
+<code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> did not perfrom well in the healthy control in <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> and the child sample in <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>.
+The healthy control in <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> shows more variablilty possibly due to the larger sample size (88 subjects) comparing to the patient samples (ranging from 19 – 32 subjects).
+Similarly, <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> contains twice as many child sample comapring to the adult sample (51 vs 24 subjects).
+There’s a possibility of global signal regressor reintroduce motion to the data.
+In fMRIPrep, the whole brain global signal regressor and the estimated head-motion parameters was calcuated on the output from their regular pipeline (i.e. before denoising).
+The <code class="docutils literal notranslate"><span class="pre">aroma</span></code> strategy perfroms as expected, which is consistent with the <a class="reference external" href="https://github.com/nipreps/fmriprep-notebooks/blob/9933a628dfb759dc73e61701c144d67898b92de0/05%20-%20Discussion%20AROMA%20confounds%20-%20issue-817%20%5BJ.%20Kent%5D.ipynb">simulation shown in fMRIPrep documentation</a>.
+The global signal regressor might reintroduce motion.
+This would be consistent with the suggestion that confound regressors should be recalculated when using AROMA-cleaned data in the literature <span id="id1">[<a class="reference internal" href="references.html#id36" title="Michael N. Hallquist, Kai Hwang, and Beatriz Luna. The nuisance of nuisance regression: Spectral misspecification in a common approach to resting-state fMRI preprocessing reintroduces noise and obscures functional connectivity. NeuroImage, 82:208–225, November 2013. doi:10.1016/j.neuroimage.2013.05.116.">Hallquist <em>et al.</em>, 2013</a>, <a class="reference internal" href="references.html#id37" title="Martin A. Lindquist, Stephan Geuter, Tor D. Wager, and Brian S. Caffo. Modular preprocessing pipelines can reintroduce artifacts into fMRI data. Human Brain Mapping, 40(8):2358–2376, January 2019. doi:10.1002/hbm.24528.">Lindquist <em>et al.</em>, 2019</a>]</span>.</p>
+</div>
+<div class="section" id="distance-dependency-of-connectivity-edges-were-best-removed-by-an-aggressive-scrubbing-approach">
+<h2>Distance dependency of connectivity edges were best removed by an aggressive scrubbing approach<a class="headerlink" href="#distance-dependency-of-connectivity-edges-were-best-removed-by-an-aggressive-scrubbing-approach" title="Permalink to this headline">#</a></h2>
+<!-- Distance dependency -->
+<p>For the distance depnendency effect on QC/FC, a score close to zero indicates a methods reduces the correlation between residual motion in functional connectivity and pairwise node distance.
+We found scrubbing with a 0.2 mm threshold mitigates with distance depnendency well consistently regardless the type of subject.
+DiFuMo on adult subjects across both dataset shows consistence results in reducing the impact of motion on distance dependency.</p>
+</div>
+<div class="section" id="correlation-between-motion-and-network-modularity-presists-and-global-signal-alters-network-modularity">
+<h2>Correlation between motion and network modularity presists and global signal alters network modularity<a class="headerlink" href="#correlation-between-motion-and-network-modularity-presists-and-global-signal-alters-network-modularity" title="Permalink to this headline">#</a></h2>
+<!-- network modularity -->
+<p>To quantify the impact of confound removal on meaningful signal, we evaluated modularity quality of the connectomes.
+The correlation between motion and modularity was not eliminated by any methods.
+For the mean modularity score, we can see two clear cluster grouping methods separated by including global signal regressor or not.
+Including global signal regressor increases the network modularity in <code class="docutils literal notranslate"><span class="pre">simple+gsr</span></code>, <code class="docutils literal notranslate"><span class="pre">scrubbing.5+gsr</span></code>, <code class="docutils literal notranslate"><span class="pre">scrubbing.2+gsr</span></code>, and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> (with a smaller magnitude).
+The result is consistent with the fact that global signal increases negative values to functional connectome
+(see nilearn examples visualisation of connectome <a class="reference external" href="https://nilearn.github.io/stable/auto_examples/03_connectivity/plot_signal_extraction.html#the-impact-of-global-signal-removal">with and without global signal regression</a>)
+by shifting the value to approximately zero-centred <span id="id2">[<a class="reference internal" href="references.html#id27" title="Kevin Murphy, Rasmus M. Birn, Daniel A. Handwerker, Tyler B. Jones, and Peter A. Bandettini. The impact of global signal regression on resting state correlations: are anti-correlated networks introduced? NeuroImage, 44(3):893–905, February 2009. doi:10.1016/j.neuroimage.2008.09.036.">Murphy <em>et al.</em>, 2009</a>]</span>.</p>
+</div>
+<div class="section" id="high-degrees-of-freedom-loss-with-using-compcor-components-up-to-50-variance">
+<h2>High degrees of freedom loss with using CompCor components up to 50% variance<a class="headerlink" href="#high-degrees-of-freedom-loss-with-using-compcor-components-up-to-50-variance" title="Permalink to this headline">#</a></h2>
+<!-- dof loss -->
+<p>Aside for the benchmark on denoising performance, another important factor is the degree of freedom loss.
 Losing degree of freedom means the variance left for the subsequent analysis will be limited.
-Despite the good performance of ICA-AROMA, it is the method with the highest losss in degrees of freedom.</p>
-<!-- check what ciric et al say about the degree of freedom -->
-<p>For dataset with shorter data acquisition sequence, methods using too many nuisance regressors might not be a good idea.
-CompCor and ICA-AROMA both performs well but can risk in lossing to much degrees of freedom.
-Compcor method should be used with caution.
-The six component cut-off does not respect differences of each dataset, but does perform well on average.
-Our beenchmark shows the 50% variance approach doesn’t perform better than just a smaller subset of the components.
-And it risk reintroducing noise to the data and a higher cost in loss of degree of freedom.
-Both CompCor and ICA-AROMA produce components that are approximation of likely noise.
-Component based method might not be desirable for users who wish to have explicit definition for their regressors.
-In summary, simple is a sufficient enough approach and scrubbing is great if network structure is a priority and timeseries property is not needed.</p>
-<!-- write some stuff about the clinical population -->
-<p>With benchmark on different type of atlas, we also show that the impact of altas selection is not big.
+The default CompCor output of fMRIPrep (the 50% variance) resulted in the highest number of regressors used during denoising.
+Contrary to the previous literature <span id="id3">[<a class="reference internal" href="references.html#id20" title="Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. NeuroImage, 171:415–436, May 2018. doi:10.1016/j.neuroimage.2017.12.073.">Parkes <em>et al.</em>, 2018</a>]</span> we do not see much advantage of ICA-AROMA.
+The independent components puts the number of regressors in the similar range of the <code class="docutils literal notranslate"><span class="pre">simple</span></code> and <code class="docutils literal notranslate"><span class="pre">compcor6</span></code> strategies.
+Scrubbing at 0.5 mm or 0.2 mm shows difference between strategies;
+within each dataset this difference presists across groups.</p>
+</div>
+<div class="section" id="other-considerations">
+<h2>Other considerations<a class="headerlink" href="#other-considerations" title="Permalink to this headline">#</a></h2>
+<!-- other things to consider -->
+<p>We included different type of atlas in the current analysis.
+We got clear outliers with the MIST atlas including decompositions low number of parcels.
+For any atlas with 64 or above parcels, we show that altas selection did not bring critical differences to the benchmark.
 Volumetric data based atlas, both probablility and descret atlas performs similarly.
-Surface based atlas provides less variance across different resolutions.
-The current software will be maintained along with the release of fMRIprep.
-The code base used in this paper provides a great foundation for generating reports on dataset for post-fMRIPrep processing.
-The reports on these two dataset will be able to regenerate the for the future release of fMRIprep.</p>
+Surface-based Schaefer atlas provides less variance across different resolutions.</p>
+<p>We showed the difference between the child and adult sample cannot be eliminated by including age as a covariate in <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>.
+Moreover the loss of degrees of freedom shows that two samples requires drastically different number of regressors for <code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based methods.
+<code class="docutils literal notranslate"><span class="pre">simple</span></code> might be the better strategy if the inconsistancy of loss of degrees of freedom is not desired.
+For the clinical groups in <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, we only see differences between the control and the schizopharnia group in gross framewise displacement.
+The remaining results are too fussy to make an reliable observation amongst the clinical groups.
+The limitation of the current results lies in the small and uneven subgroups in each dataset.
+The small sample size constraints the conclusion we can draw from the comparison.</p>
+</div>
+<div class="section" id="general-suggestions">
+<h2>General suggestions<a class="headerlink" href="#general-suggestions" title="Permalink to this headline">#</a></h2>
+<p>We speculates that the differences highlighted in the literature could be a result of including strawman methods that are not applicable or commonly used in practical research setting (see 2P, tCompCor in <span id="id4">[<a class="reference internal" href="references.html#id18" title="Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. NeuroImage, 154(1):174–187, July 2017. doi:10.1016/j.neuroimage.2017.03.020.">Ciric <em>et al.</em>, 2017</a>]</span>), and including known high motion subjects (children) with young adult sample (see <span id="id5">[<a class="reference internal" href="references.html#id18" title="Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. NeuroImage, 154(1):174–187, July 2017. doi:10.1016/j.neuroimage.2017.03.020.">Ciric <em>et al.</em>, 2017</a>]</span> including 8 –22 years old in the same analysis). <!-- please help me with more diplomatic way of saying this -->
+We performed partial correlation for all correlation based metric to address the covariate introduced by age.
+However the differences betwee adult and child sample still presists.
+With real-data applicable methods and motion based data exclusion, combining all metrics evaluated,
+we find it difficult to conclude a best method for different type of subjects.
+ICA-AROMA did not stand out in our benchmark as the previous benchmarks highlighted <span id="id6">[<a class="reference internal" href="references.html#id18" title="Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. NeuroImage, 154(1):174–187, July 2017. doi:10.1016/j.neuroimage.2017.03.020.">Ciric <em>et al.</em>, 2017</a>, <a class="reference internal" href="references.html#id20" title="Linden Parkes, Ben Fulcher, Murat Yücel, and Alex Fornito. An evaluation of the efficacy, reliability, and sensitivity of motion correction strategies for resting-state functional mri. NeuroImage, 171:415–436, May 2018. doi:10.1016/j.neuroimage.2017.12.073.">Parkes <em>et al.</em>, 2018</a>]</span>.</p>
+<p>Altough the data-driven methods were invented to solve the loss in degrees of freedom for the head motion based strategy,
+we did not observe a clear advantage.
+There are a few data-driven strategy that researchers should adopt with cautions when using fMRIPrep outputs.
+For the CompCor based strategy, the 50% variance approach <code class="docutils literal notranslate"><span class="pre">compcor</span></code> performed comparably to the 6 component strategy <code class="docutils literal notranslate"><span class="pre">compcor6</span></code> with a significant loss in degrees of freedom.
+<code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> produces concerning results on the QC/FC measures being the only method with inconsistent amount of edgest correlating with mean framewise displacement.
+The performance of <code class="docutils literal notranslate"><span class="pre">scrubbing.5</span></code> is similar to <code class="docutils literal notranslate"><span class="pre">simple</span></code>, suggesting that a loos scrubbing threshold might not bring much advantage comparing to the more stringent threshould and at risk of loosing degrees of freedom.
+For the remaining strategies, we would suggest researchers to adapt denoising strategies that best fit their needs.
+Data-driven, component-based methods (<code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor</span></code>, and <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>) can be applied to data with high numbers of volumes.
+We still recommand users to investigate the ratio of regressor number to the full length of the scan.
+They might not be desirable for users who wish to have explicit definition for their regressors.
+For users who wish to have explicit and simple definition of the nuisance regressors, <code class="docutils literal notranslate"><span class="pre">simple</span></code> is a sufficient approach, and <code class="docutils literal notranslate"><span class="pre">scrubbing.2</span></code> is great if network structure is a priority and timeseries property is not needed.
+The variation of any methods involving global signal regressor should be applied with cautions as it highlights the network property the data (for more on this topic, please see <span id="id7">[<a class="reference internal" href="references.html#id26" title="Kevin Murphy and Michael D. Fox. Towards a consensus regarding global signal regression for resting state functional connectivity MRI. Neuroimage, 154:169–173, July 2017. doi:10.1016/j.neuroimage.2016.11.052.">Murphy and Fox, 2017</a>, <a class="reference internal" href="references.html#id28" title="Ziad S. Saad, Stephen J. Gotts, Kevin Murphy, Gang Chen, Hang Joon Jo, Alex Martin, and Robert W. Cox. Trouble at rest: how correlation patterns and group differences become distorted after global signal regression. Brain Connectivity, 2(1):25–32, 2012. doi:10.1089/brain.2012.0080.">Saad <em>et al.</em>, 2012</a>]</span>)</p>
+</div>
+<div class="section" id="future-directions">
+<h2>Future directions<a class="headerlink" href="#future-directions" title="Permalink to this headline">#</a></h2>
+<div class="margin sidebar">
+<p class="sidebar-title"></p>
+<div class="tip admonition">
+<p class="admonition-title">fMRIPrep long-term support (LTS) release</p>
+<p>Read the <a class="reference external" href="https://reproducibility.stanford.edu/fmriprep-lts/">fMRIPrep LTS 20.2.x blog post</a>
+to understand more details about long-term support model and the relevance for reproducibility.</p>
+</div>
+</div>
+<!-- send help PLZ -->
+<p>The current work will serve as a benchmark for fMRIPrep users when deciding the denoisning strategy for their analysis workflow.
+The confounds variable selection standardised through <code class="docutils literal notranslate"><span class="pre">load_confounds</span></code>, we showed all regressors generated by fMRIprep performs better than the comparison baseline, with the exception of <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code>.
+We hope this paper presents a convining case that with the maturity of fMRI preprocessing software (fMRIPrep), the common denoising strategies are achieving the goal and the choice of strategies are down to the researchers.
+There is no definitive best option for denoising but methods that fits for different purpose.</p>
+<p>For the software aspect, with the long-term support (LTS) release of fMRIPrep, the results reported here will be applicable for the 20.2.x serie upto September 2024.
+The API <code class="docutils literal notranslate"><span class="pre">load_confounds</span></code> is implemented in <code class="docutils literal notranslate"><span class="pre">nilearn</span></code> and maintained with community feedbacks.
+We completed the work with all elements under open source license, including data sets, software, and code.
+Combining with the three elements above,
+the reports on these two dataset will be able to regenerate the for the future LTS release of fMRIprep.
+For fMRIPrep release beyond the LTS version, as long as the API in <code class="docutils literal notranslate"><span class="pre">nilearn</span></code> is maintained,
+the code used to generate all current reports can be applied to the same two datasets.
+Thus, rebuilding this paper on future fMRIPrep release can be a potential for vairfying the stability of preprocessed result at dataset level,
+complimenting the individual reports from fMRIPrep.</p>
+</div>
 </div>
 
     <script type="text/x-thebe-config">

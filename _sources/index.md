@@ -34,8 +34,13 @@ denoised outcome on network modularity.
 After exluding subject with excessive motion, all strategies can reduce the correlation of motion and functional connectivity measure,
 except ICA-AROMA combined with global signal regression. 
 Scrubbing based strategy is the best at eliminating distance depenency of motion.
-For network modularity, strategies including globla signal regression shows more detectable networks. <!-- results -->
-<!-- conclusion -->
+For network modularity, strategies including global signal regression shows more detectable networks. 
+Between different age groups, the number of ICA-AROMA and/or CompCor components varies,
+and will result in inconsistent loss in degrees of freedom and statistical power in the study.
+A simple approach containing only head motion parameters, white matter and cerebrospinal fluid signal might provides consistency regardless of the sample. 
+In conclusion, with the maturity of fMRIPrep, the common denoising strategies are achieving the goal,
+and the choice of strategies are down to the researchers need. 
+There is no definitive best option for denoising but methods that fits for different purpose.
 
 **{fa}`key` Keywords:** 
 `reproducibility`, 
