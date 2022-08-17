@@ -15,8 +15,6 @@ kernelspec:
 
 ## Datasets
 
-We selected two datasets on OpenNeuro for the current analysis:
-`ds000228` {cite:p}`ds000228:1.1.0` and `ds000030` {cite:p}`ds000030:1.0.0`. <!-- NC: Maybe remove this from the intro since it's just been stated there, and probably belongs in the methods instead?  -->
 Dataset `ds000228` (N = 155) contains fMRI scans of participants watching a silent version of a Pixar animated movie "Partly Cloudy".
 The dataset includes 33 adult subjects
 (Age Mean(s.d.) =  24.8(5.3), range = 18--39; 20 female)
@@ -95,15 +93,20 @@ Multiresolution Intrinsic Segmentation Template (MIST) {cite:p}`urchs_mist_2019`
 and Dictionary of Functional Modes (DiFuMo){cite:p}`difumo_2020`.
 All atlases were resampled to the resolution of the preprocessed functional data.
 
-<!-- NC: Re-jigged below paragraph to improve understanding -->
+````{margin}
+```{admonition} Warning message related to masker resampling
+:class: note
+[See source code](https://github.com/nilearn/nilearn/blob/d53169c6af1cbb3db3485c9480a3e7cb31c2537d/nilearn/maskers/nifti_labels_masker.py#L568-L573)
+```
+````
+
 Since DiFuMo and MIST atlases can include networks with disjointed regions under the same label, 
 we carried out further ROI extraction. 
 Labels are presented with the original number of parcels.
 and we denote the number of extracted ROI in brackets. 
 Gordon and Schaefer atlas parcels use isolated ROI, 
 hence no further extraction was done. 
-The Schaefer 1000 parcels atlas was excluded since some regions would be dropped after resampling. 
-<!-- NC: do you need a bit more explanation of what 'dropped after resampling' means or will the people reading already know?  -->
+The Schaefer 1000 parcels atlas was excluded since some regions would disappear after resampling the atlas to the shape of the processed fMRI data. 
 
 - Gordon atlas: 333
 - Schaefer atlas: 100, 200, 300, 400, 500, 600, 800
@@ -114,12 +117,11 @@ Processes involved here are implemented through nilearn {cite:p}`nilearn`.
 Time series were extracted using `nilearn.maskers.NiftiLabelsMasker` and `nilearn.maskers.NiftiMapsMasker`.
 Connectomes were calculated using Pearson's Correlation, implemented through `nilearn.connectome.ConnectivityMeasure`.
 
-
+(framewise-displacement)=
 ## Participant exclusion based on motion
 
 We performed data quality control to exclude subjects with excessive motion leading to unusable data.
-The current benchmark uses framewise displacement as the metric to quantify motion. <!-- NC: what's meant by current benchmark here, 
-<!-- your research or another published benchmark? I think it's a bit confusing -->
+In the current report, we uses framewise displacement as the metric to quantify motion. 
 Framewise displacement (FD) indexes the movement of the head from one volume to the next.
 The movement includes the transitions on the three axes ($x$, $y$, $z$) and the respective rotation ($\alpha$, $\beta_t$, $\gamma$).
 Rotational displacements are calculated as the displacement on the surface of a sphere of radius 50 mm {cite}`power_scrubbing_2012`.
@@ -131,28 +133,39 @@ $$
 |\Delta d_{z,t}| + |\Delta \alpha_t| + |\Delta \beta_t| + |\Delta \gamma_t|
 $$
 
-Based on the gross mean FD and proportion of volumes excluded based on the scrubbing strategy,
-some subject would have too <!-- NC: read up to here for this section -->
+```{code-cell}
+:tags: [hide-input, remove-output]
+from fmriprep_denoise.features.derivatives import get_qc_criteria
 
+stringent = get_qc_criteria('stringent')
+glue('gross_fd', stringent['gross_fd'])
+glue('fd_thresh', stringent['fd_thresh'])
+glue('proportion_thresh', stringent['proportion_thresh'] * 100)
+```
 
+To ensure the analysis is performed in a realistic scenario we exclude subjects with high motion, 
+defined by the following criteria adopted from  {cite:p}`parkes_evaluation_2018`: 
+mean framewise displacement > {glue:}`gross_fd` mm, 
+above {glue:}`proportion_thresh`% of volumes removed while scrubbing 
+with a {glue:}`fd_thresh` mm threshold.
 
 ## Confound regression strategies
-<!-- NC: edited below into a small list to improve readability, but please make sure I have retained the
-correct meaning! -->
-Confound variables were retrieved using i) a basic API that retrieves different classes of confound regressors,
+
+Confound variables were retrieved using 
+i) a basic API that retrieves different classes of confound regressors,
 `nilearn.interfaces.fmriprep.load_confounds` (simplified as `load_confounds`);
 and ii) a higher level wrapper to implement common strategies from the denoising literature,
 `nilearn.interfaces.fmriprep.load_confounds_strategy`(simplified as `load_confounds_strategy`).
 The following section describes the logic behind the design of the API.
-For documentation of the actual function, please see the latest version of `nilearn`. <!-- NC: add nilearn ref -->
+For documentation of the actual function, please see the latest version of [`nilearn` documentation](https://nilearn.github.io/stable/). 
 
 ### Basic noise components
 
 To enable easy confound variable loading from fMRIPrep outputs,
 `load_confounds` provides an interface that groups subsets of confound variables into noise components and their parameters.
 It is possible to fine-tune these subsets through this function.
-The implementation will only support fMRIPrep functional derivatives directory from the 1.2.x series. <!-- NC: did you mean directly, instead of directory? Otherwise change to 'only support the fMRIPrep' -->
-The compcor noise component requires 1.4.x series or above. <!-- NC: this is a bit confusing here as you haven't mentioned compcor in the methods yet. Add a few more words introducing it, or move it to around line 184? -->
+The implementation will only support fMRIPrep 1.4.x series or above. <!-- in nilearn we technically only advertise it for LTS versions. -->
+User has to kept the outputed functional derivatives directory unchanged.
 
 <!-- Explain the logic of nilearn API mirror the intro -->
 Two types of regressors are always loaded with no additional parameters for user customisation:
