@@ -53,7 +53,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="ds000228" href="report_ds000228.html" />
+    <link rel="next" title="Discussions" href="discussions.html" />
     <link rel="prev" title="Methods" href="methods.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -130,27 +130,10 @@ const thebe_selector_output = ".output, .cell_output"
    Methods
   </a>
  </li>
- <li class="toctree-l1 current active has-children">
+ <li class="toctree-l1 current active">
   <a class="current reference internal" href="#">
    Results
   </a>
-  <input checked="" class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
-  <label for="toctree-checkbox-1">
-   <i class="fas fa-chevron-down">
-   </i>
-  </label>
-  <ul>
-   <li class="toctree-l2">
-    <a class="reference internal" href="report_ds000228.html">
-     ds000228
-    </a>
-   </li>
-   <li class="toctree-l2">
-    <a class="reference internal" href="report_ds000030.html">
-     ds000030
-    </a>
-   </li>
-  </ul>
  </li>
  <li class="toctree-l1">
   <a class="reference internal" href="discussions.html">
@@ -180,6 +163,16 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/report_ds000228.html">
+   ds000228
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/report_ds000030.html">
+   ds000030
+  </a>
+ </li>
+ <li class="toctree-l1">
   <a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html">
    OHBM 2022 abstract - submitted text
   </a>
@@ -188,8 +181,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../supplementary_materials/walkthrough.html">
    Code documentation
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
-  <label for="toctree-checkbox-2">
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -443,6 +436,23 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#comparisons-on-the-impacts-of-strategies-on-connectomes">
    Comparisons on the impacts of strategies on connectomes
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#qc-fc">
+     QC-FC
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distance-dependent-of-motion-after-denoising">
+     Distance-dependent of motion after denoising
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#network-modularity">
+     Network modularity
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -477,6 +487,23 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#comparisons-on-the-impacts-of-strategies-on-connectomes">
    Comparisons on the impacts of strategies on connectomes
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#qc-fc">
+     QC-FC
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#distance-dependent-of-motion-after-denoising">
+     Distance-dependent of motion after denoising
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#network-modularity">
+     Network modularity
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -505,6 +532,9 @@ title="Print to PDF"
 
 
 <span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_data_root</span><span class="p">()</span>
+
+<span class="n">strategy_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">GRID_LOCATION</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+<span class="n">group_order</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ds000228&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;adult&#39;</span><span class="p">,</span> <span class="s1">&#39;child&#39;</span><span class="p">],</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">:[</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="s1">&#39;ADHD&#39;</span><span class="p">,</span> <span class="s1">&#39;bipolar&#39;</span><span class="p">,</span> <span class="s1">&#39;schizophrenia&#39;</span><span class="p">]}</span>
 </pre></div>
 </div>
 </div>
@@ -518,11 +548,11 @@ title="Print to PDF"
 <span class="n">for_plotting</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">]</span>
-<span class="n">baseline_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adult&#39;</span><span class="p">,</span> <span class="s1">&#39;CONTROL&#39;</span><span class="p">]</span>
+<span class="n">baseline_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adult&#39;</span><span class="p">,</span> <span class="s1">&#39;control&#39;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">baseline_group</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">baseline_groups</span><span class="p">):</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">groups</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">get_descriptive_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">path_root</span><span class="p">)</span>
     <span class="n">baseline</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">baseline_group</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]:</span>
         <span class="n">compare</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">group</span><span class="p">]</span>
         <span class="n">glue</span><span class="p">(</span>
             <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">_mean&#39;</span><span class="p">,</span>
@@ -556,8 +586,8 @@ In <code class="docutils literal notranslate"><span class="pre">ds000228</span><
 between the child
 (M = <span class="pasted-text">0.37</span>, SD = <span class="pasted-text">0.29</span>, n = <span class="pasted-text">122</span>)
 and adult sample
-(M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.09</span>, n = <span class="pasted-text">33</span>,
-t(<span class="pasted-text">148.75</span>) = <span class="pasted-text">-5.99</span>, p = <span class="pasted-text">0.000</span>,
+(M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.09</span>, n = <span class="pasted-text">33</span>;
+t(<span class="pasted-text">148.75</span>) = <span class="pasted-text">-5.99</span>, p = <span class="pasted-text">0.000</span>).
 This is consistent with the existing literature.
 In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the only patient group shows a difference comparing to the
 control
@@ -587,8 +617,10 @@ In conclusion, adult samples has lower mean framewise displacement than a youth 
         <span class="p">}</span>
     <span class="p">)</span>
     <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
-        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Mean Framewise Displacement (mm)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Mean Framewise Displacement (mm)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
     <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
         <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="se">\n</span><span class="s1">Mean</span><span class="se">\u00B1</span><span class="s1">SD=</span><span class="si">{</span><span class="n">mean_fd</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="se">\u00B1</span><span class="si">{</span><span class="n">sd_fd</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s1">$N=</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">$&#39;</span>
     <span class="p">)</span>
@@ -653,9 +685,9 @@ ICA-AROMA uses pretrained model on healthy subjects to select noise components <
 <code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies shows variability depending on the number of noise compoenets detected.
 The variability is broken down by groups.
 From the lightest hue to the darkes, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is:
-<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['child',</span> <span class="pre">'adult']</span></code></span>
+<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['adult',</span> <span class="pre">'child']</span></code></span>
 From the lightest hue to the darkes, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> is:
-<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['CONTROL',</span> <span class="pre">'SCHZ',</span> <span class="pre">'BIPOLAR',</span> <span class="pre">'ADHD']</span></code></span></span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
+<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['control',</span> <span class="pre">'ADHD',</span> <span class="pre">'bipolar',</span> <span class="pre">'schizophrenia']</span></code></span></span><a class="headerlink" href="#tbl-dof-fig" title="Permalink to this image">#</a></p>
 </div>
 <p>To compare the loss in number of volumes from scrubbing base strategy across datasets,
 we calculate the proportion of volume loss to number of volumes in a full scan.
@@ -706,69 +738,69 @@ the automatic motion quality control.</p>
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_3845f_" style="font-size: 12px">
+<table id="T_b9e38_" style="font-size: 12px">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
       <th class="col_heading level0 col0" >full sample</th>
-      <th class="col_heading level0 col1" >child</th>
-      <th class="col_heading level0 col2" >adult</th>
+      <th class="col_heading level0 col1" >adult</th>
+      <th class="col_heading level0 col2" >child</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th id="T_3845f_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_3845f_row0_col0" class="data row0 col0" >75.000000</td>
-      <td id="T_3845f_row0_col1" class="data row0 col1" >51.000000</td>
-      <td id="T_3845f_row0_col2" class="data row0 col2" >24.000000</td>
+      <th id="T_b9e38_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_b9e38_row0_col0" class="data row0 col0" >75.000000</td>
+      <td id="T_b9e38_row0_col1" class="data row0 col1" >24.000000</td>
+      <td id="T_b9e38_row0_col2" class="data row0 col2" >51.000000</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_3845f_row1_col0" class="data row1 col0" >12.222012</td>
-      <td id="T_3845f_row1_col1" class="data row1 col1" >6.854723</td>
-      <td id="T_3845f_row1_col2" class="data row1 col2" >23.627500</td>
+      <th id="T_b9e38_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_b9e38_row1_col0" class="data row1 col0" >12.222012</td>
+      <td id="T_b9e38_row1_col1" class="data row1 col1" >23.627500</td>
+      <td id="T_b9e38_row1_col2" class="data row1 col2" >6.854723</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_3845f_row2_col0" class="data row2 col0" >8.434903</td>
-      <td id="T_3845f_row2_col1" class="data row2 col1" >2.390175</td>
-      <td id="T_3845f_row2_col2" class="data row2 col2" >4.107435</td>
+      <th id="T_b9e38_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_b9e38_row2_col0" class="data row2 col0" >8.434903</td>
+      <td id="T_b9e38_row2_col1" class="data row2 col1" >4.107435</td>
+      <td id="T_b9e38_row2_col2" class="data row2 col2" >2.390175</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_3845f_row3_col0" class="data row3 col0" >3.594798</td>
-      <td id="T_3845f_row3_col1" class="data row3 col1" >3.594798</td>
-      <td id="T_3845f_row3_col2" class="data row3 col2" >18.000000</td>
+      <th id="T_b9e38_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_b9e38_row3_col0" class="data row3 col0" >3.594798</td>
+      <td id="T_b9e38_row3_col1" class="data row3 col1" >18.000000</td>
+      <td id="T_b9e38_row3_col2" class="data row3 col2" >3.594798</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_3845f_row4_col0" class="data row4 col0" >5.475000</td>
-      <td id="T_3845f_row4_col1" class="data row4 col1" >5.070000</td>
-      <td id="T_3845f_row4_col2" class="data row4 col2" >21.000000</td>
+      <th id="T_b9e38_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_b9e38_row4_col0" class="data row4 col0" >5.475000</td>
+      <td id="T_b9e38_row4_col1" class="data row4 col1" >21.000000</td>
+      <td id="T_b9e38_row4_col2" class="data row4 col2" >5.070000</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_3845f_row5_col0" class="data row5 col0" >8.590000</td>
-      <td id="T_3845f_row5_col1" class="data row5 col1" >7.000000</td>
-      <td id="T_3845f_row5_col2" class="data row5 col2" >22.500000</td>
+      <th id="T_b9e38_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_b9e38_row5_col0" class="data row5 col0" >8.590000</td>
+      <td id="T_b9e38_row5_col1" class="data row5 col1" >22.500000</td>
+      <td id="T_b9e38_row5_col2" class="data row5 col2" >7.000000</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_3845f_row6_col0" class="data row6 col0" >20.000000</td>
-      <td id="T_3845f_row6_col1" class="data row6 col1" >9.020000</td>
-      <td id="T_3845f_row6_col2" class="data row6 col2" >27.015000</td>
+      <th id="T_b9e38_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_b9e38_row6_col0" class="data row6 col0" >20.000000</td>
+      <td id="T_b9e38_row6_col1" class="data row6 col1" >27.015000</td>
+      <td id="T_b9e38_row6_col2" class="data row6 col2" >9.020000</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_3845f_row7_col0" class="data row7 col0" >31.000000</td>
-      <td id="T_3845f_row7_col1" class="data row7 col1" >11.510000</td>
-      <td id="T_3845f_row7_col2" class="data row7 col2" >31.000000</td>
+      <th id="T_b9e38_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_b9e38_row7_col0" class="data row7 col0" >31.000000</td>
+      <td id="T_b9e38_row7_col1" class="data row7 col1" >31.000000</td>
+      <td id="T_b9e38_row7_col2" class="data row7 col2" >11.510000</td>
     </tr>
     <tr>
-      <th id="T_3845f_level0_row8" class="row_heading level0 row8" >n_female</th>
-      <td id="T_3845f_row8_col0" class="data row8 col0" >38.000000</td>
-      <td id="T_3845f_row8_col1" class="data row8 col1" >24.000000</td>
-      <td id="T_3845f_row8_col2" class="data row8 col2" >14.000000</td>
+      <th id="T_b9e38_level0_row8" class="row_heading level0 row8" >n_female</th>
+      <td id="T_b9e38_row8_col0" class="data row8 col0" >38.000000</td>
+      <td id="T_b9e38_row8_col1" class="data row8 col1" >14.000000</td>
+      <td id="T_b9e38_row8_col2" class="data row8 col2" >24.000000</td>
     </tr>
   </tbody>
 </table>
@@ -788,89 +820,89 @@ the automatic motion quality control.</p>
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_9f378_" style="font-size: 12px">
+<table id="T_2f415_" style="font-size: 12px">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
       <th class="col_heading level0 col0" >full sample</th>
-      <th class="col_heading level0 col1" >CONTROL</th>
-      <th class="col_heading level0 col2" >SCHZ</th>
-      <th class="col_heading level0 col3" >BIPOLAR</th>
-      <th class="col_heading level0 col4" >ADHD</th>
+      <th class="col_heading level0 col1" >control</th>
+      <th class="col_heading level0 col2" >ADHD</th>
+      <th class="col_heading level0 col3" >bipolar</th>
+      <th class="col_heading level0 col4" >schizophrenia</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th id="T_9f378_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_9f378_row0_col0" class="data row0 col0" >168.000000</td>
-      <td id="T_9f378_row0_col1" class="data row0 col1" >88.000000</td>
-      <td id="T_9f378_row0_col2" class="data row0 col2" >19.000000</td>
-      <td id="T_9f378_row0_col3" class="data row0 col3" >29.000000</td>
-      <td id="T_9f378_row0_col4" class="data row0 col4" >32.000000</td>
+      <th id="T_2f415_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_2f415_row0_col0" class="data row0 col0" >168.000000</td>
+      <td id="T_2f415_row0_col1" class="data row0 col1" >88.000000</td>
+      <td id="T_2f415_row0_col2" class="data row0 col2" >32.000000</td>
+      <td id="T_2f415_row0_col3" class="data row0 col3" >29.000000</td>
+      <td id="T_2f415_row0_col4" class="data row0 col4" >19.000000</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_9f378_row1_col0" class="data row1 col0" >31.714286</td>
-      <td id="T_9f378_row1_col1" class="data row1 col1" >30.511364</td>
-      <td id="T_9f378_row1_col2" class="data row1 col2" >35.157895</td>
-      <td id="T_9f378_row1_col3" class="data row1 col3" >32.482759</td>
-      <td id="T_9f378_row1_col4" class="data row1 col4" >32.281250</td>
+      <th id="T_2f415_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_2f415_row1_col0" class="data row1 col0" >31.714286</td>
+      <td id="T_2f415_row1_col1" class="data row1 col1" >30.511364</td>
+      <td id="T_2f415_row1_col2" class="data row1 col2" >32.281250</td>
+      <td id="T_2f415_row1_col3" class="data row1 col3" >32.482759</td>
+      <td id="T_2f415_row1_col4" class="data row1 col4" >35.157895</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_9f378_row2_col0" class="data row2 col0" >8.918220</td>
-      <td id="T_9f378_row2_col1" class="data row2 col1" >8.202879</td>
-      <td id="T_9f378_row2_col2" class="data row2 col2" >10.045802</td>
-      <td id="T_9f378_row2_col3" class="data row2 col3" >8.274836</td>
-      <td id="T_9f378_row2_col4" class="data row2 col4" >10.340133</td>
+      <th id="T_2f415_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_2f415_row2_col0" class="data row2 col0" >8.918220</td>
+      <td id="T_2f415_row2_col1" class="data row2 col1" >8.202879</td>
+      <td id="T_2f415_row2_col2" class="data row2 col2" >10.340133</td>
+      <td id="T_2f415_row2_col3" class="data row2 col3" >8.274836</td>
+      <td id="T_2f415_row2_col4" class="data row2 col4" >10.045802</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_9f378_row3_col0" class="data row3 col0" >21.000000</td>
-      <td id="T_9f378_row3_col1" class="data row3 col1" >21.000000</td>
-      <td id="T_9f378_row3_col2" class="data row3 col2" >22.000000</td>
-      <td id="T_9f378_row3_col3" class="data row3 col3" >21.000000</td>
-      <td id="T_9f378_row3_col4" class="data row3 col4" >21.000000</td>
+      <th id="T_2f415_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_2f415_row3_col0" class="data row3 col0" >21.000000</td>
+      <td id="T_2f415_row3_col1" class="data row3 col1" >21.000000</td>
+      <td id="T_2f415_row3_col2" class="data row3 col2" >21.000000</td>
+      <td id="T_2f415_row3_col3" class="data row3 col3" >21.000000</td>
+      <td id="T_2f415_row3_col4" class="data row3 col4" >22.000000</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_9f378_row4_col0" class="data row4 col0" >24.000000</td>
-      <td id="T_9f378_row4_col1" class="data row4 col1" >24.000000</td>
-      <td id="T_9f378_row4_col2" class="data row4 col2" >27.000000</td>
-      <td id="T_9f378_row4_col3" class="data row4 col3" >25.000000</td>
-      <td id="T_9f378_row4_col4" class="data row4 col4" >24.000000</td>
+      <th id="T_2f415_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_2f415_row4_col0" class="data row4 col0" >24.000000</td>
+      <td id="T_2f415_row4_col1" class="data row4 col1" >24.000000</td>
+      <td id="T_2f415_row4_col2" class="data row4 col2" >24.000000</td>
+      <td id="T_2f415_row4_col3" class="data row4 col3" >25.000000</td>
+      <td id="T_2f415_row4_col4" class="data row4 col4" >27.000000</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_9f378_row5_col0" class="data row5 col0" >29.000000</td>
-      <td id="T_9f378_row5_col1" class="data row5 col1" >27.500000</td>
-      <td id="T_9f378_row5_col2" class="data row5 col2" >33.000000</td>
-      <td id="T_9f378_row5_col3" class="data row5 col3" >32.000000</td>
-      <td id="T_9f378_row5_col4" class="data row5 col4" >28.000000</td>
+      <th id="T_2f415_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_2f415_row5_col0" class="data row5 col0" >29.000000</td>
+      <td id="T_2f415_row5_col1" class="data row5 col1" >27.500000</td>
+      <td id="T_2f415_row5_col2" class="data row5 col2" >28.000000</td>
+      <td id="T_2f415_row5_col3" class="data row5 col3" >32.000000</td>
+      <td id="T_2f415_row5_col4" class="data row5 col4" >33.000000</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_9f378_row6_col0" class="data row6 col0" >39.000000</td>
-      <td id="T_9f378_row6_col1" class="data row6 col1" >37.250000</td>
-      <td id="T_9f378_row6_col2" class="data row6 col2" >45.500000</td>
-      <td id="T_9f378_row6_col3" class="data row6 col3" >36.000000</td>
-      <td id="T_9f378_row6_col4" class="data row6 col4" >40.000000</td>
+      <th id="T_2f415_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_2f415_row6_col0" class="data row6 col0" >39.000000</td>
+      <td id="T_2f415_row6_col1" class="data row6 col1" >37.250000</td>
+      <td id="T_2f415_row6_col2" class="data row6 col2" >40.000000</td>
+      <td id="T_2f415_row6_col3" class="data row6 col3" >36.000000</td>
+      <td id="T_2f415_row6_col4" class="data row6 col4" >45.500000</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_9f378_row7_col0" class="data row7 col0" >50.000000</td>
-      <td id="T_9f378_row7_col1" class="data row7 col1" >50.000000</td>
-      <td id="T_9f378_row7_col2" class="data row7 col2" >49.000000</td>
-      <td id="T_9f378_row7_col3" class="data row7 col3" >48.000000</td>
-      <td id="T_9f378_row7_col4" class="data row7 col4" >50.000000</td>
+      <th id="T_2f415_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_2f415_row7_col0" class="data row7 col0" >50.000000</td>
+      <td id="T_2f415_row7_col1" class="data row7 col1" >50.000000</td>
+      <td id="T_2f415_row7_col2" class="data row7 col2" >50.000000</td>
+      <td id="T_2f415_row7_col3" class="data row7 col3" >48.000000</td>
+      <td id="T_2f415_row7_col4" class="data row7 col4" >49.000000</td>
     </tr>
     <tr>
-      <th id="T_9f378_level0_row8" class="row_heading level0 row8" >n_female</th>
-      <td id="T_9f378_row8_col0" class="data row8 col0" >79.000000</td>
-      <td id="T_9f378_row8_col1" class="data row8 col1" >46.000000</td>
-      <td id="T_9f378_row8_col2" class="data row8 col2" >4.000000</td>
-      <td id="T_9f378_row8_col3" class="data row8 col3" >15.000000</td>
-      <td id="T_9f378_row8_col4" class="data row8 col4" >14.000000</td>
+      <th id="T_2f415_level0_row8" class="row_heading level0 row8" >n_female</th>
+      <td id="T_2f415_row8_col0" class="data row8 col0" >79.000000</td>
+      <td id="T_2f415_row8_col1" class="data row8 col1" >46.000000</td>
+      <td id="T_2f415_row8_col2" class="data row8 col2" >14.000000</td>
+      <td id="T_2f415_row8_col3" class="data row8 col3" >15.000000</td>
+      <td id="T_2f415_row8_col4" class="data row8 col4" >4.000000</td>
     </tr>
   </tbody>
 </table>
@@ -883,11 +915,11 @@ the automatic motion quality control.</p>
 <span class="n">for_plotting</span> <span class="o">=</span> <span class="p">{}</span>
 
 <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">]</span>
-<span class="n">baseline_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adult&#39;</span><span class="p">,</span> <span class="s1">&#39;CONTROL&#39;</span><span class="p">]</span>
+<span class="n">baseline_groups</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;adult&#39;</span><span class="p">,</span> <span class="s1">&#39;control&#39;</span><span class="p">]</span>
 <span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">baseline_group</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">baseline_groups</span><span class="p">):</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">groups</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">get_descriptive_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">path_root</span><span class="p">,</span> <span class="o">**</span><span class="n">stringent</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">tables</span><span class="o">.</span><span class="n">get_descriptive_data</span><span class="p">(</span><span class="n">dataset</span><span class="p">,</span> <span class="n">path_root</span><span class="p">,</span> <span class="o">**</span><span class="n">stringent</span><span class="p">)</span>
     <span class="n">baseline</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">baseline_group</span><span class="p">]</span>
-    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">groups</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">group</span> <span class="ow">in</span> <span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]:</span>
         <span class="n">compare</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;groups&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">group</span><span class="p">]</span>
         <span class="n">glue</span><span class="p">(</span>
             <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">_</span><span class="si">{</span><span class="n">group</span><span class="si">}</span><span class="s1">_mean_qc&#39;</span><span class="p">,</span>
@@ -954,8 +986,10 @@ In conclusion, adult samples has lower mean framewise displacement than a youth 
         <span class="p">}</span>
     <span class="p">)</span>
     <span class="n">sns</span><span class="o">.</span><span class="n">boxplot</span><span class="p">(</span>
-        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Mean Framewise Displacement (mm)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Mean Framewise Displacement (mm)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;Groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
     <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">],</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span>
         <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="se">\n</span><span class="s1">Mean</span><span class="se">\u00B1</span><span class="s1">SD=</span><span class="si">{</span><span class="n">mean_fd</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="se">\u00B1</span><span class="si">{</span><span class="n">sd_fd</span><span class="si">:</span><span class="s1">.2f</span><span class="si">}</span><span class="se">\n</span><span class="s1">$N=</span><span class="si">{</span><span class="n">df</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s1">$&#39;</span>
     <span class="p">)</span>
@@ -990,9 +1024,9 @@ did not differ from the full sample, as seen in the two graphs below.</p>
 <p class="caption"><span class="caption-number">Fig. 4 </span><span class="caption-text">Loss in temporal degrees of freedom break down by groups after quality control,
 after applying the stringent quality control threshold.
 From the lightest hue to the darkes, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is:
-<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['child',</span> <span class="pre">'adult']</span></code></span>
+<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['adult',</span> <span class="pre">'child']</span></code></span>
 From the lightest hue to the darkes, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> is:
-<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['CONTROL',</span> <span class="pre">'SCHZ',</span> <span class="pre">'BIPOLAR',</span> <span class="pre">'ADHD']</span></code></span></span><a class="headerlink" href="#tbl-dof-fig-cleaned" title="Permalink to this image">#</a></p>
+<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['control',</span> <span class="pre">'ADHD',</span> <span class="pre">'bipolar',</span> <span class="pre">'schizophrenia']</span></code></span></span><a class="headerlink" href="#tbl-dof-fig-cleaned" title="Permalink to this image">#</a></p>
 </div>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
@@ -1011,9 +1045,181 @@ break down by groups in each dataset,
 after applying the stringent quality control threshold.
 We can see the trend is similar to mean framewise displacement result.</span><a class="headerlink" href="#tbl-scrubbing-fig-cleaned" title="Permalink to this image">#</a></p>
 </div>
-<p>In the next section, we will report the three functional connectivity based metrics and break down the effect on each dataset.</p>
+<p>In the next section, we report the three functional connectivity based metrics and break down the effect on each dataset.
+We combined all atlases in the current report as the trends in each atlas are similar.
+For breakdown of each metric by atlas,
+please see the supplemental material for
+<a class="reference internal" href="../supplementary_materials/report_ds000228.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">ds000228</span></code></span></a> and <a class="reference internal" href="../supplementary_materials/report_ds000030.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">ds000030</span></code></span></a>.</p>
+<div class="section" id="qc-fc">
+<h3>QC-FC<a class="headerlink" href="#qc-fc" title="Permalink to this headline">#</a></h3>
+<div class="cell tag_hide-input tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">path_ds000228</span> <span class="o">=</span> <span class="n">path_root</span> <span class="o">/</span> <span class="s2">&quot;dataset-ds000228_summary.tsv&quot;</span>
+<span class="n">path_ds000030</span> <span class="o">=</span>  <span class="n">path_root</span> <span class="o">/</span> <span class="s2">&quot;dataset-ds000030_summary.tsv&quot;</span>
+<span class="n">ds000228</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_ds000228</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+<span class="n">ds000030</span>  <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">path_ds000030</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">header</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">({</span><span class="s1">&#39;ds000228&#39;</span><span class="p">:</span> <span class="n">ds000228</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">:</span><span class="n">ds000030</span><span class="p">},</span> <span class="n">names</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">])</span>
+<span class="n">id_vars</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">names</span>
+
+<span class="c1"># Plotting</span>
+<span class="n">data_long</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;qcfc_fdr_significant&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="n">id_vars</span><span class="p">,</span> <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Percentage %&#39;</span><span class="p">)</span>
+<span class="n">data_long</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">],</span> <span class="n">axs</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Percentage %&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="c1"># hue_order=[&#39;full_sample&#39;]</span>
+        <span class="n">hue_order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">stripplot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s1">&#39;Percentage %&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> 
+                  <span class="n">order</span><span class="o">=</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">hue_order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+    <span class="c1"># Improve the legend</span>
+    <span class="n">handles</span><span class="p">,</span> <span class="n">labels</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_legend_handles_labels</span><span class="p">()</span>
+    <span class="n">lgd_idx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">])</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">handles</span><span class="p">[</span><span class="n">lgd_idx</span><span class="p">:],</span> <span class="n">labels</span><span class="p">[</span><span class="n">lgd_idx</span><span class="p">:])</span>
+
+<span class="n">glue</span><span class="p">(</span><span class="s1">&#39;qcfc_fdr_significant&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+
+<span class="n">data_long</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;qcfc_mad&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="n">id_vars</span><span class="p">,</span> <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Median absolute deviation&#39;</span><span class="p">)</span>
+<span class="n">data_long</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">],</span> <span class="n">axs</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Median absolute deviation&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="s1">&#39;sd&#39;</span><span class="p">,</span>
+        <span class="c1"># hue_order=[&#39;full_sample&#39;]</span>
+        <span class="n">hue_order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="n">glue</span><span class="p">(</span><span class="s1">&#39;qcfc_mad&#39;</span><span class="p">,</span> <span class="n">fig</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
+</div>
+</div>
+<p>With good quality data, most denoising methonds reduce the corelation between functional connectivity and mean framewise displacement,
+accessed by the QC-FC measure.
+<code class="docutils literal notranslate"><span class="pre">ds000030</span></code> consists of adult sample only.
+All denoisng strategies aside from <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> eliminate the impact of motion.
+The variablilty in the healthy control is potentially driven by a larger sample than the rest.
+When looking at the median absolute deviations, the schizophrania group still retains higher impact of motion than the remaining sample.
+In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, all strategies, including the baseline,
+shows motion remains in close to 0% of the connectivity edges.
+<code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code> performs worse than the baseline in the child sample.
+The meduan absolute deviation of QC-FC are all similar to the baseline.</p>
+<div class="figure align-default" id="tbl-qcfc-fdr-significant" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/results_21_0.png" src="../_images/results_21_0.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 6 </span><span class="caption-text">Percentage of edges significantly correlating with mean framewise displacement false-discovery-rate corrected, summarised across all atlas of choices.</span><a class="headerlink" href="#tbl-qcfc-fdr-significant" title="Permalink to this image">#</a></p>
+</div>
+<div class="figure align-default" id="tbl-qcfc-mad" style="width: 800px">
+<div class="cell_output docutils container">
+<img alt="../_images/results_21_1.png" src="../_images/results_21_1.png" />
+</div>
+<p class="caption"><span class="caption-number">Fig. 7 </span><span class="caption-text">Median absolute deviation of the correlations between connectivity edges and mean framewise displacement, summarised across all atlas of choices.
+Lower value indicates less residual effect of motion after denoising.</span><a class="headerlink" href="#tbl-qcfc-mad" title="Permalink to this image">#</a></p>
+</div>
+</div>
+<div class="section" id="distance-dependent-of-motion-after-denoising">
+<h3>Distance-dependent of motion after denoising<a class="headerlink" href="#distance-dependent-of-motion-after-denoising" title="Permalink to this headline">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_long</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;corr_motion_distance&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="n">id_vars</span><span class="p">,</span> <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Pearson</span><span class="se">\&#39;</span><span class="s1">s correlation&#39;</span><span class="p">)</span>
+<span class="n">data_long</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">],</span> <span class="n">axs</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Pearson</span><span class="se">\&#39;</span><span class="s1">s correlation&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="s1">&#39;sd&#39;</span><span class="p">,</span> 
+        <span class="c1"># hue_order=[&#39;full_sample&#39;]</span>
+        <span class="n">hue_order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_23_0.png" src="../_images/results_23_0.png" />
+</div>
+</div>
+<p>Ideally, a denoising strategy should leave no residual association between QC-FC and interregional distance.
+No strategy can eliminate the correlation between motion and short range connectivity edges.
+In both datasets, we see all strategies reduces the magnitude of coreelation between distance and motion combaring to the baseline.
+We observed a trend that strategy <code class="docutils literal notranslate"><span class="pre">scrubbing.2</span></code> and <code class="docutils literal notranslate"><span class="pre">scrubbing.2+gsr</span></code> are the closest in reducing the correlation to 0 between distance and motion, followed by <code class="docutils literal notranslate"><span class="pre">aroma</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code>.
+This trend is similar to the results reported in <span id="id4">Ciric <em>et al.</em> [<a class="reference internal" href="references.html#id18" title="Rastko Ciric, Daniel H. Wolf, Jonathan D. Power, David R. Roalf, Graham L. Baum, Kosha Ruparel, Russell T. Shinohara, Mark A. Elliott, Simon B. Eickhoff, Christos Davatzikos, Ruben C. Gur, Raquel E. Gur, Danielle S. Bassett, and Theodore D. Satterthwaite. Benchmarking of participant-level confound regression strategies for the control of motion artifact in studies of functional connectivity. NeuroImage, 154(1):174–187, July 2017. doi:10.1016/j.neuroimage.2017.03.020.">2017</a>]</span>.</p>
+</div>
+<div class="section" id="network-modularity">
+<h3>Network modularity<a class="headerlink" href="#network-modularity" title="Permalink to this headline">#</a></h3>
+<p>The average network modularity after denoising shows that the inclusion of global signal regressors increases the modularity in both datasets.
+The correlation between motion and network modularity is less conclusive.
+In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, we first see the big differences between the adult and child sample.
+Generally, the denoising strategies reduced the correlation motion and network modularity more in the adult sample than the child sample.<br />
+In both samples, <code class="docutils literal notranslate"><span class="pre">aroma</span></code> reduced the the correlation the most, followed by the baseline and the <code class="docutils literal notranslate"><span class="pre">simple</span></code> strategy.
+In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the schizophrania sample still showed a high correlation between modularity and motion.
+For the control group, <code class="docutils literal notranslate"><span class="pre">aroma</span></code>, <code class="docutils literal notranslate"><span class="pre">aroma+gsr</span></code>, <code class="docutils literal notranslate"><span class="pre">compcor6</span></code>, and <code class="docutils literal notranslate"><span class="pre">simple</span></code> all brings the correlation between modularity and motion close to 0.
+The baseline along performs better than the remainders.
+For ADHD and bipolar group, <code class="docutils literal notranslate"><span class="pre">compcor</span></code> was the best performing strategy and performed better than baseline.
+<code class="docutils literal notranslate"><span class="pre">aroma</span></code> was the second best overall, however, it performed on similar level comparing to the baseline.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_long</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;modularity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="n">id_vars</span><span class="p">,</span> <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Mean modularity quality (a.u.)&#39;</span><span class="p">)</span>
+<span class="n">data_long</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">],</span> <span class="n">axs</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Mean modularity quality (a.u.)&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="s1">&#39;sd&#39;</span><span class="p">,</span> 
+        <span class="c1"># hue_order=[&#39;full_sample&#39;]</span>
+        <span class="n">hue_order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_25_0.png" src="../_images/results_25_0.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">data_long</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;corr_motion_modularity&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">reset_index</span><span class="p">()</span><span class="o">.</span><span class="n">melt</span><span class="p">(</span><span class="n">id_vars</span><span class="o">=</span><span class="n">id_vars</span><span class="p">,</span> <span class="n">value_name</span><span class="o">=</span><span class="s1">&#39;Pearson</span><span class="se">\&#39;</span><span class="s1">s correlation&#39;</span><span class="p">)</span>
+<span class="n">data_long</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="n">keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;datasets&#39;</span><span class="p">])</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">axs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">sharey</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">dataset</span><span class="p">,</span> <span class="n">ax</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">([</span><span class="s1">&#39;ds000228&#39;</span><span class="p">,</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">],</span> <span class="n">axs</span><span class="p">):</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">data_long</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">dataset</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">sns</span><span class="o">.</span><span class="n">barplot</span><span class="p">(</span>
+        <span class="n">y</span><span class="o">=</span><span class="s1">&#39;Pearson</span><span class="se">\&#39;</span><span class="s1">s correlation&#39;</span><span class="p">,</span> <span class="n">x</span><span class="o">=</span><span class="s1">&#39;strategy&#39;</span><span class="p">,</span> <span class="n">hue</span><span class="o">=</span><span class="s1">&#39;groups&#39;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">df</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">order</span><span class="o">=</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">ci</span><span class="o">=</span><span class="s1">&#39;sd&#39;</span><span class="p">,</span>
+        <span class="c1"># hue_order=[&#39;full_sample&#39;]</span>
+        <span class="n">hue_order</span><span class="o">=</span><span class="n">group_order</span><span class="p">[</span><span class="n">dataset</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">(</span><span class="n">strategy_order</span><span class="p">,</span> <span class="n">rotation</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">ha</span><span class="o">=</span><span class="s1">&#39;right&#39;</span><span class="p">,</span> <span class="n">rotation_mode</span><span class="o">=</span><span class="s1">&#39;anchor&#39;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;dataset-</span><span class="si">{</span><span class="n">dataset</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/results_26_0.png" src="../_images/results_26_0.png" />
+</div>
+</div>
+</div>
 </div>
 </div>
 
@@ -1051,10 +1257,10 @@ We can see the trend is similar to mean framewise displacement result.</span><a 
             <p class="prev-next-title">Methods</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="report_ds000228.html" title="next page">
+    <a class='right-next' id="next-link" href="discussions.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">ds000228</p>
+        <p class="prev-next-title">Discussions</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

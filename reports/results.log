@@ -17,19 +17,81 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-desc = tables.lazy_demographic('ds000228', path_root, **stringent)
-desc = desc.style.set_table_attributes('style="font-size: 12px"')
+fig = plt.figure(figsize=(7, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(for_plotting, axs):
+    df = for_plotting[dataset]
+    mean_fd = df['mean_framewise_displacement'].mean()
+    sd_fd = df['mean_framewise_displacement'].std()
+    df = df.rename(
+        columns={
+            'mean_framewise_displacement': 'Mean Framewise Displacement (mm)',
+            'groups': 'Groups'
+        }
+    )
+    sns.boxplot(
+        y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax,
+        order=group_order[dataset]
+    )
+    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_title(
+        f'{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$'
+    )
+# fig.suptitle("Mean framewise displacement per sub-sample")
 
-glue('ds000228_scrubbed_desc', desc) 
+glue('meanFD-fig', fig, display=False)
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mNameError[0m                                 Traceback (most recent call last)
-Input [0;32mIn [6][0m, in [0;36m<cell line: 1>[0;34m()[0m
-[0;32m----> 1[0m desc [38;5;241m=[39m tables[38;5;241m.[39mlazy_demographic([38;5;124m'[39m[38;5;124mds000228[39m[38;5;124m'[39m, path_root, [38;5;241m*[39m[38;5;241m*[39m[43mstringent[49m)
-[1;32m      2[0m desc [38;5;241m=[39m desc[38;5;241m.[39mstyle[38;5;241m.[39mset_table_attributes([38;5;124m'[39m[38;5;124mstyle=[39m[38;5;124m"[39m[38;5;124mfont-size: 12px[39m[38;5;124m"[39m[38;5;124m'[39m)
-[1;32m      4[0m glue([38;5;124m'[39m[38;5;124mds000228_scrubbed_desc[39m[38;5;124m'[39m, desc)
+[0;31mValueError[0m                                Traceback (most recent call last)
+Input [0;32mIn [3][0m, in [0;36m<cell line: 3>[0;34m()[0m
+[1;32m      7[0m     df [38;5;241m=[39m df[38;5;241m.[39mrename(
+[1;32m      8[0m         columns[38;5;241m=[39m{
+[1;32m      9[0m             [38;5;124m'[39m[38;5;124mmean_framewise_displacement[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mMean Framewise Displacement (mm)[39m[38;5;124m'[39m,
+[1;32m     10[0m             [38;5;124m'[39m[38;5;124mgroups[39m[38;5;124m'[39m: [38;5;124m'[39m[38;5;124mGroups[39m[38;5;124m'[39m
+[1;32m     11[0m         }
+[1;32m     12[0m     )
+[1;32m     13[0m     sns[38;5;241m.[39mboxplot(
+[1;32m     14[0m         y[38;5;241m=[39m[38;5;124m'[39m[38;5;124mMean Framewise Displacement (mm)[39m[38;5;124m'[39m, x[38;5;241m=[39m[38;5;124m'[39m[38;5;124mGroups[39m[38;5;124m'[39m, data[38;5;241m=[39mdf, ax[38;5;241m=[39max,
+[1;32m     15[0m         order[38;5;241m=[39mgroup_order[dataset]
+[1;32m     16[0m     )
+[0;32m---> 17[0m     [43max[49m[38;5;241;43m.[39;49m[43mset_xticklabels[49m[43m([49m[43mstrategy_order[49m[43m,[49m[43m [49m[43mrotation[49m[38;5;241;43m=[39;49m[38;5;241;43m45[39;49m[43m,[49m[43m [49m[43mha[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mright[39;49m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mrotation_mode[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43manchor[39;49m[38;5;124;43m'[39;49m[43m)[49m
+[1;32m     18[0m     ax[38;5;241m.[39mset_title(
+[1;32m     19[0m         [38;5;124mf[39m[38;5;124m'[39m[38;5;132;01m{[39;00mdataset[38;5;132;01m}[39;00m[38;5;130;01m\n[39;00m[38;5;124mMean[39m[38;5;130;01m\u00B1[39;00m[38;5;124mSD=[39m[38;5;132;01m{[39;00mmean_fd[38;5;132;01m:[39;00m[38;5;124m.2f[39m[38;5;132;01m}[39;00m[38;5;130;01m\u00B1[39;00m[38;5;132;01m{[39;00msd_fd[38;5;132;01m:[39;00m[38;5;124m.2f[39m[38;5;132;01m}[39;00m[38;5;130;01m\n[39;00m[38;5;124m$N=[39m[38;5;132;01m{[39;00mdf[38;5;241m.[39mshape[[38;5;241m0[39m][38;5;132;01m}[39;00m[38;5;124m$[39m[38;5;124m'[39m
+[1;32m     20[0m     )
+[1;32m     21[0m [38;5;66;03m# fig.suptitle("Mean framewise displacement per sub-sample")[39;00m
 
-[0;31mNameError[0m: name 'stringent' is not defined
-NameError: name 'stringent' is not defined
+File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/matplotlib/axes/_base.py:73[0m, in [0;36m_axis_method_wrapper.__set_name__.<locals>.wrapper[0;34m(self, *args, **kwargs)[0m
+[1;32m     72[0m [38;5;28;01mdef[39;00m [38;5;21mwrapper[39m([38;5;28mself[39m, [38;5;241m*[39margs, [38;5;241m*[39m[38;5;241m*[39mkwargs):
+[0;32m---> 73[0m     [38;5;28;01mreturn[39;00m [43mget_method[49m[43m([49m[38;5;28;43mself[39;49m[43m)[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/matplotlib/_api/deprecation.py:471[0m, in [0;36mmake_keyword_only.<locals>.wrapper[0;34m(*args, **kwargs)[0m
+[1;32m    465[0m [38;5;28;01mif[39;00m [38;5;28mlen[39m(args) [38;5;241m>[39m idx:
+[1;32m    466[0m     warn_deprecated(
+[1;32m    467[0m         since, message[38;5;241m=[39m[38;5;124m"[39m[38;5;124mPassing the [39m[38;5;132;01m%(name)s[39;00m[38;5;124m [39m[38;5;132;01m%(obj_type)s[39;00m[38;5;124m [39m[38;5;124m"[39m
+[1;32m    468[0m         [38;5;124m"[39m[38;5;124mpositionally is deprecated since Matplotlib [39m[38;5;132;01m%(since)s[39;00m[38;5;124m; the [39m[38;5;124m"[39m
+[1;32m    469[0m         [38;5;124m"[39m[38;5;124mparameter will become keyword-only [39m[38;5;132;01m%(removal)s[39;00m[38;5;124m.[39m[38;5;124m"[39m,
+[1;32m    470[0m         name[38;5;241m=[39mname, obj_type[38;5;241m=[39m[38;5;124mf[39m[38;5;124m"[39m[38;5;124mparameter of [39m[38;5;132;01m{[39;00mfunc[38;5;241m.[39m[38;5;18m__name__[39m[38;5;132;01m}[39;00m[38;5;124m()[39m[38;5;124m"[39m)
+[0;32m--> 471[0m [38;5;28;01mreturn[39;00m [43mfunc[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/matplotlib/axis.py:1790[0m, in [0;36mAxis._set_ticklabels[0;34m(self, labels, fontdict, minor, **kwargs)[0m
+[1;32m   1788[0m [38;5;28;01mif[39;00m fontdict [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m:
+[1;32m   1789[0m     kwargs[38;5;241m.[39mupdate(fontdict)
+[0;32m-> 1790[0m [38;5;28;01mreturn[39;00m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mset_ticklabels[49m[43m([49m[43mlabels[49m[43m,[49m[43m [49m[43mminor[49m[38;5;241;43m=[39;49m[43mminor[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+
+File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/matplotlib/axis.py:1711[0m, in [0;36mAxis.set_ticklabels[0;34m(self, ticklabels, minor, **kwargs)[0m
+[1;32m   1707[0m [38;5;28;01mif[39;00m [38;5;28misinstance[39m(locator, mticker[38;5;241m.[39mFixedLocator):
+[1;32m   1708[0m     [38;5;66;03m# Passing [] as a list of ticklabels is often used as a way to[39;00m
+[1;32m   1709[0m     [38;5;66;03m# remove all tick labels, so only error for > 0 ticklabels[39;00m
+[1;32m   1710[0m     [38;5;28;01mif[39;00m [38;5;28mlen[39m(locator[38;5;241m.[39mlocs) [38;5;241m!=[39m [38;5;28mlen[39m(ticklabels) [38;5;129;01mand[39;00m [38;5;28mlen[39m(ticklabels) [38;5;241m!=[39m [38;5;241m0[39m:
+[0;32m-> 1711[0m         [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
+[1;32m   1712[0m             [38;5;124m"[39m[38;5;124mThe number of FixedLocator locations[39m[38;5;124m"[39m
+[1;32m   1713[0m             [38;5;124mf[39m[38;5;124m"[39m[38;5;124m ([39m[38;5;132;01m{[39;00m[38;5;28mlen[39m(locator[38;5;241m.[39mlocs)[38;5;132;01m}[39;00m[38;5;124m), usually from a call to[39m[38;5;124m"[39m
+[1;32m   1714[0m             [38;5;124m"[39m[38;5;124m set_ticks, does not match[39m[38;5;124m"[39m
+[1;32m   1715[0m             [38;5;124mf[39m[38;5;124m"[39m[38;5;124m the number of ticklabels ([39m[38;5;132;01m{[39;00m[38;5;28mlen[39m(ticklabels)[38;5;132;01m}[39;00m[38;5;124m).[39m[38;5;124m"[39m)
+[1;32m   1716[0m     tickd [38;5;241m=[39m {loc: lab [38;5;28;01mfor[39;00m loc, lab [38;5;129;01min[39;00m [38;5;28mzip[39m(locator[38;5;241m.[39mlocs, ticklabels)}
+[1;32m   1717[0m     func [38;5;241m=[39m functools[38;5;241m.[39mpartial([38;5;28mself[39m[38;5;241m.[39m_format_with_dict, tickd)
+
+[0;31mValueError[0m: The number of FixedLocator locations (2), usually from a call to set_ticks, does not match the number of ticklabels (11).
+ValueError: The number of FixedLocator locations (2), usually from a call to set_ticks, does not match the number of ticklabels (11).
 
