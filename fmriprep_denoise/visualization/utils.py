@@ -128,6 +128,7 @@ def prepare_qcfc_plotting(dataset, atlas_name, dimension, path_root):
         )
 
     for p, label in zip(file_qcfc, qcfc_labels):
+        label = label.replace(f'dataset-{dataset}_', '')
         # significant correlation between motion and edges
         qcfc_pvalue = _qcfc_bygroup('pvalue', p)
         qcfc_pvalue = qcfc_pvalue.melt(var_name=['groups', 'strategy'])
@@ -200,6 +201,8 @@ def prepare_modularity_plotting(dataset, atlas_name, dimension, path_root, qc):
 
     ds_mean_corr, ds_mean_modularity = [], []
     for file_network, label in zip(files_network, modularity_labels):
+        label = label.replace(f'dataset-{dataset}_', '')
+
         modularity = pd.read_csv(file_network, sep='\t', index_col=0)
         modularity = pd.concat([movement['groups'], modularity],axis=1)
 

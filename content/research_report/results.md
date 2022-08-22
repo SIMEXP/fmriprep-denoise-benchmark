@@ -371,3 +371,36 @@ We can see the trend is similar to mean framewise displacement result.
 
 ```
 In the next section, we will report the three functional connectivity based metrics and break down the effect on each dataset.
+
+```{code-cell}
+import pandas as pd
+from fmriprep_denoise.visualization import utils
+
+input_root = utils.get_data_root()
+path_ds000228 = input_root / "dataset-ds000228_summary.tsv"
+path_ds000030 =  input_root / "dataset-ds000030_summary.tsv"
+ds000228 = pd.read_csv(path_ds000228, sep='\t', index_col=[0, 1], header=[0, 1])
+ds000030  = pd.read_csv(path_ds000030, sep='\t', index_col=[0, 1], header=[0, 1])
+group_name_rename = {'CONTROL':'control', 'BIPOLAR': 'bipolar', 'SCHZ':'schizophrenia'}
+ds000030 = ds000030.rename(index=group_name_rename)
+
+data = pd.concat({'ds000228': ds000228, 'ds000030':ds000030}, names=['datasets'])
+strategy_order = list(utils.GRID_LOCATION.values())
+group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
+id_vars = data.index.names
+data_long = data['qcfc_fdr_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
+data_long = data_long.set_index(keys=['datasets'])
+fig = plt.figure(figsize=(13, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(['ds000228', 'ds000030'], axs):
+    df = data_long.loc[dataset, :]
+    sns.barplot(
+        y='Percentage %', x='strategy', hue='groups', data=df, ax=ax,
+        order=strategy_order, 
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_title(f'dataset-{dataset}')
+
+```
