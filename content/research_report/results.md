@@ -29,6 +29,10 @@ from myst_nb import glue
 
 
 path_root = utils.get_data_root()
+
+strategy_order = list(utils.GRID_LOCATION.values())
+group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
+
 ```
 
 ## Level of motion in samples quitified by mean framewise displacement
@@ -41,11 +45,11 @@ from statsmodels.stats.weightstats import ttest_ind
 for_plotting = {}
 
 datasets = ['ds000228', 'ds000030']
-baseline_groups = ['adult', 'CONTROL']
+baseline_groups = ['adult', 'control']
 for dataset, baseline_group in zip(datasets, baseline_groups):
     _, data, groups = tables.get_descriptive_data(dataset, path_root)
     baseline = data[data['groups'] == baseline_group]
-    for group in groups:
+    for group in group_order[dataset]:
         compare = data[data['groups'] == group]
         glue(
             f'{dataset}_{group}_mean',
@@ -77,21 +81,21 @@ In `ds000228`, there was a significant difference in motion during the scan capt
 between the child 
 (M = {glue:text}`ds000228_child_mean:.2f`, SD = {glue:text}`ds000228_child_sd:.2f`, n = {glue:text}`ds000228_child_n:i`)
 and adult sample
-(M = {glue:text}`ds000228_adult_mean:.2f`, SD = {glue:text}`ds000228_adult_sd:.2f`, n = {glue:text}`ds000228_adult_n:i`,
-t({glue:text}`ds000228_df_child:.2f`) = {glue:text}`ds000228_t_child:.2f`, p = {glue:text}`ds000228_p_child:.3f`,
+(M = {glue:text}`ds000228_adult_mean:.2f`, SD = {glue:text}`ds000228_adult_sd:.2f`, n = {glue:text}`ds000228_adult_n:i`;
+t({glue:text}`ds000228_df_child:.2f`) = {glue:text}`ds000228_t_child:.2f`, p = {glue:text}`ds000228_p_child:.3f`).
 This is consistent with the existing literature.
 In `ds000030`, the only patient group shows a difference comparing to the
 control 
-(M = {glue:text}`ds000030_CONTROL_mean:.2f`, SD = {glue:text}`ds000030_CONTROL_sd:.2f`, n = {glue:text}`ds000030_CONTROL_n:i`)
+(M = {glue:text}`ds000030_control_mean:.2f`, SD = {glue:text}`ds000030_control_sd:.2f`, n = {glue:text}`ds000030_control_n:i`)
 is the schizophrania group 
-(M = {glue:text}`ds000030_SCHZ_mean:.2f`, SD = {glue:text}`ds000030_SCHZ_sd:.2f`, n = {glue:text}`ds000030_SCHZ_n:i`;
-t({glue:text}`ds000030_df_SCHZ:.2f`) = {glue:text}`ds000030_t_SCHZ:.2f`, p = {glue:text}`ds000030_p_SCHZ:.3f`).
+(M = {glue:text}`ds000030_schizophrenia_mean:.2f`, SD = {glue:text}`ds000030_schizophrenia_sd:.2f`, n = {glue:text}`ds000030_schizophrenia_n:i`;
+t({glue:text}`ds000030_df_schizophrenia:.2f`) = {glue:text}`ds000030_t_schizophrenia:.2f`, p = {glue:text}`ds000030_p_schizophrenia:.3f`).
 There was no difference between the control and ADHD group
 (M = {glue:text}`ds000030_ADHD_mean:.2f`, SD = {glue:text}`ds000030_ADHD_sd:.2f`, n = {glue:text}`ds000030_ADHD_n:i`;
 t({glue:text}`ds000030_df_ADHD:.2f`) = {glue:text}`ds000030_t_ADHD:.2f`, p = {glue:text}`ds000030_p_ADHD:.3f`),
 or the bipolar group 
-(M = {glue:text}`ds000030_BIPOLAR_mean:.2f`, SD = {glue:text}`ds000030_BIPOLAR_sd:.2f`, n = {glue:text}`ds000030_BIPOLAR_n:i`;
-t({glue:text}`ds000030_df_BIPOLAR:.2f`) = {glue:text}`ds000030_t_BIPOLAR:.2f`, p = {glue:text}`ds000030_p_BIPOLAR:.3f`).
+(M = {glue:text}`ds000030_bipolar_mean:.2f`, SD = {glue:text}`ds000030_bipolar_sd:.2f`, n = {glue:text}`ds000030_bipolar_n:i`;
+t({glue:text}`ds000030_df_bipolar:.2f`) = {glue:text}`ds000030_t_bipolar:.2f`, p = {glue:text}`ds000030_p_bipolar:.3f`).
 In conclusion, adult samples has lower mean framewise displacement than a youth sample.
 
 ```{code-cell}
@@ -110,8 +114,10 @@ for dataset, ax in zip(for_plotting, axs):
         }
     )
     sns.boxplot(
-        y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax
+        y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax,
+        order=group_order[dataset]
     )
+    ax.set_xticklabels(group_order[dataset], rotation=45, ha='right', rotation_mode='anchor')
     ax.set_title(
         f'{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$'
     )
@@ -245,11 +251,11 @@ from statsmodels.stats.weightstats import ttest_ind
 for_plotting = {}
 
 datasets = ['ds000228', 'ds000030']
-baseline_groups = ['adult', 'CONTROL']
+baseline_groups = ['adult', 'control']
 for dataset, baseline_group in zip(datasets, baseline_groups):
-    _, data, groups = tables.get_descriptive_data(dataset, path_root, **stringent)
+    _, data, _ = tables.get_descriptive_data(dataset, path_root, **stringent)
     baseline = data[data['groups'] == baseline_group]
-    for group in groups:
+    for group in group_order[dataset]:
         compare = data[data['groups'] == group]
         glue(
             f'{dataset}_{group}_mean_qc',
@@ -283,16 +289,16 @@ and adult sample
 (M = {glue:text}`ds000228_adult_mean_qc:.2f`, SD = {glue:text}`ds000228_adult_sd_qc:.2f`, n = {glue:text}`ds000228_adult_n_qc:i`,
 t({glue:text}`ds000228_df_child_qc:.2f`) = {glue:text}`ds000228_t_child_qc:.2f`, p = {glue:text}`ds000228_p_child_qc:.3f`).
 In `ds000030`, the only patient group shows a difference comparing to the control 
-(M = {glue:text}`ds000030_CONTROL_mean_qc:.2f`, SD = {glue:text}`ds000030_CONTROL_sd_qc:.2f`, n = {glue:text}`ds000030_CONTROL_n_qc:i`)
+(M = {glue:text}`ds000030_control_mean_qc:.2f`, SD = {glue:text}`ds000030_control_sd_qc:.2f`, n = {glue:text}`ds000030_control_n_qc:i`)
 is still the schizophrania group 
-(M = {glue:text}`ds000030_SCHZ_mean_qc:.2f`, SD = {glue:text}`ds000030_SCHZ_sd_qc:.2f`, n = {glue:text}`ds000030_SCHZ_n_qc:i`;
-t({glue:text}`ds000030_df_SCHZ_qc:.2f`) = {glue:text}`ds000030_t_SCHZ_qc:.2f`, p = {glue:text}`ds000030_p_SCHZ_qc:.3f`).
+(M = {glue:text}`ds000030_schizophrenia_mean_qc:.2f`, SD = {glue:text}`ds000030_schizophrenia_sd_qc:.2f`, n = {glue:text}`ds000030_schizophrenia_n_qc:i`;
+t({glue:text}`ds000030_df_schizophrenia_qc:.2f`) = {glue:text}`ds000030_t_schizophrenia_qc:.2f`, p = {glue:text}`ds000030_p_schizophrenia_qc:.3f`).
 There was no difference between the control and ADHD group
 (M = {glue:text}`ds000030_ADHD_mean_qc:.2f`, SD = {glue:text}`ds000030_ADHD_sd:.2f`, n = {glue:text}`ds000030_ADHD_n_qc:i`;
 t({glue:text}`ds000030_df_ADHD_qc:.2f`) = {glue:text}`ds000030_t_ADHD_qc:.2f`, p = {glue:text}`ds000030_p_ADHD_qc:.3f`),
 or the bipolar group 
-(M = {glue:text}`ds000030_BIPOLAR_mean_qc:.2f`, SD = {glue:text}`ds000030_BIPOLAR_sd_qc:.2f`, n = {glue:text}`ds000030_BIPOLAR_n_qc:i`;
-t({glue:text}`ds000030_df_BIPOLAR_qc:.2f`) = {glue:text}`ds000030_t_BIPOLAR_qc:.2f`, p = {glue:text}`ds000030_p_BIPOLAR_qc:.3f`).
+(M = {glue:text}`ds000030_bipolar_mean_qc:.2f`, SD = {glue:text}`ds000030_bipolar_sd_qc:.2f`, n = {glue:text}`ds000030_bipolar_n_qc:i`;
+t({glue:text}`ds000030_df_bipolar_qc:.2f`) = {glue:text}`ds000030_t_bipolar_qc:.2f`, p = {glue:text}`ds000030_p_bipolar_qc:.3f`).
 In conclusion, adult samples has lower mean framewise displacement than a youth sample.
 
 ```{code-cell}
@@ -316,8 +322,10 @@ for dataset, ax in zip(for_plotting, axs):
         }
     )
     sns.boxplot(
-        y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax
+        y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax,
+        order=group_order[dataset]
     )
+    ax.set_xticklabels(group_order[dataset], rotation=45, ha='right', rotation_mode='anchor')
     ax.set_title(
         f'{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$'
     )
@@ -370,37 +378,163 @@ after applying the stringent quality control threshold.
 We can see the trend is similar to mean framewise displacement result. 
 
 ```
-In the next section, we will report the three functional connectivity based metrics and break down the effect on each dataset.
+
+In the next section, we report the three functional connectivity based metrics and break down the effect on each dataset.
+We combined all atlases in the current report as the trends in each atlas are similar.
+For breakdown of each metric by atlas, 
+please see the supplemental material for 
+[`ds000228`](../supplementary_materials/report_ds000228.md) and [`ds000030`](../supplementary_materials/report_ds000030.md).
+
+### QC-FC
 
 ```{code-cell}
-import pandas as pd
-from fmriprep_denoise.visualization import utils
-
-input_root = utils.get_data_root()
-path_ds000228 = input_root / "dataset-ds000228_summary.tsv"
-path_ds000030 =  input_root / "dataset-ds000030_summary.tsv"
+:tags: [hide-input, remove-output]
+path_ds000228 = path_root / "dataset-ds000228_summary.tsv"
+path_ds000030 =  path_root / "dataset-ds000030_summary.tsv"
 ds000228 = pd.read_csv(path_ds000228, sep='\t', index_col=[0, 1], header=[0, 1])
 ds000030  = pd.read_csv(path_ds000030, sep='\t', index_col=[0, 1], header=[0, 1])
-group_name_rename = {'CONTROL':'control', 'BIPOLAR': 'bipolar', 'SCHZ':'schizophrenia'}
-ds000030 = ds000030.rename(index=group_name_rename)
 
 data = pd.concat({'ds000228': ds000228, 'ds000030':ds000030}, names=['datasets'])
-strategy_order = list(utils.GRID_LOCATION.values())
-group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
 id_vars = data.index.names
+
+# Plotting
 data_long = data['qcfc_fdr_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
+data_long = data_long.set_index(keys=['datasets'])
+fig = plt.figure(figsize=(11, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(['ds000228', 'ds000030'], axs):
+    df = data_long.loc[dataset, :]
+    sns.barplot(
+        y='Percentage %', x='strategy', hue='groups', data=df, ax=ax,
+        order=strategy_order, ci=None,
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    sns.stripplot(y='Percentage %', x='strategy', hue='groups', data=df, ax=ax, 
+                  order=strategy_order, hue_order=group_order[dataset])
+    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_title(f'dataset-{dataset}')
+    # Improve the legend
+    handles, labels = ax.get_legend_handles_labels()
+    lgd_idx = len(group_order[dataset])
+    ax.legend(handles[lgd_idx:], labels[lgd_idx:])
+
+glue('qcfc_fdr_significant', fig, display=False)
+
+
+data_long = data['qcfc_mad'].reset_index().melt(id_vars=id_vars, value_name='Median absolute deviation')
 data_long = data_long.set_index(keys=['datasets'])
 fig = plt.figure(figsize=(13, 5))
 axs = fig.subplots(1, 2, sharey=True)
 for dataset, ax in zip(['ds000228', 'ds000030'], axs):
     df = data_long.loc[dataset, :]
     sns.barplot(
-        y='Percentage %', x='strategy', hue='groups', data=df, ax=ax,
-        order=strategy_order, 
+        y='Median absolute deviation', x='strategy', hue='groups', data=df, ax=ax,
+        order=strategy_order, ci='sd',
         # hue_order=['full_sample']
         hue_order=group_order[dataset]
     )
     ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
     ax.set_title(f'dataset-{dataset}')
+glue('qcfc_mad', fig, display=False)
+```
 
+With good quality data, most denoising methonds reduce the corelation between functional connectivity and mean framewise displacement,
+accessed by the QC-FC measure.
+`ds000030` consists of adult sample only.
+All denoisng strategies aside from `aroma+gsr` eliminate the impact of motion.
+The variablilty in the healthy control is potentially driven by a larger sample than the rest.
+When looking at the median absolute deviations, the schizophrania group still retains higher impact of motion than the remaining sample.
+In `ds000228`, all strategies, including the baseline, 
+shows motion remains in close to 0% of the connectivity edges.
+`aroma+gsr` performs worse than the baseline in the child sample.
+The meduan absolute deviation of QC-FC are all similar to the baseline. 
+
+
+```{glue:figure} qcfc_fdr_significant
+:figwidth: 800px
+:name: "tbl:qcfc_fdr_significant"
+
+Percentage of edges significantly correlating with mean framewise displacement false-discovery-rate corrected, summarised across all atlas of choices.
+```
+
+```{glue:figure} qcfc_mad
+:figwidth: 800px
+:name: "tbl:qcfc_mad"
+
+Median absolute deviation of the correlations between connectivity edges and mean framewise displacement, summarised across all atlas of choices.
+Lower value indicates less residual effect of motion after denoising.
+```
+
+
+### Distance-dependent of motion after denoising
+
+```{code-cell}
+data_long = data['corr_motion_distance'].reset_index().melt(id_vars=id_vars, value_name='Pearson\'s correlation')
+data_long = data_long.set_index(keys=['datasets'])
+fig = plt.figure(figsize=(13, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(['ds000228', 'ds000030'], axs):
+    df = data_long.loc[dataset, :]
+    sns.barplot(
+        y='Pearson\'s correlation', x='strategy', hue='groups', data=df, ax=ax,
+        order=strategy_order, ci='sd', 
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_title(f'dataset-{dataset}')
+```
+
+Ideally, a denoising strategy should leave no residual association between QC-FC and interregional distance.
+No strategy can eliminate the correlation between motion and short range connectivity edges.
+In both datasets, we see all strategies reduces the magnitude of coreelation between distance and motion combaring to the baseline.
+We observed a trend that strategy `scrubbing.2` and `scrubbing.2+gsr` are the closest in reducing the correlation to 0 between distance and motion, followed by `aroma` and `aroma+gsr`.
+This trend is similar to the results reported in {cite:t}`ciric_benchmarking_2017`.
+
+### Network modularity
+
+The average network modularity after denoising shows that the inclusion of global signal regressors increases the modularity in both datasets. 
+The correlation between motion and network modularity is less conclusive.
+In `ds000228`, we first see the big differences between the adult and child sample.
+Generally, the denoising strategies reduced the correlation motion and network modularity more in the adult sample than the child sample.  
+In both samples, `aroma` reduced the the correlation the most, followed by the baseline and the `simple` strategy.
+In `ds000030`, the schizophrania sample still showed a high correlation between modularity and motion.
+For the control group, `aroma`, `aroma+gsr`, `compcor6`, and `simple` all brings the correlation between modularity and motion close to 0.
+The baseline along performs better than the remainders.
+For ADHD and bipolar group, `compcor` was the best performing strategy and performed better than baseline.
+`aroma` was the second best overall, however, it performed on similar level comparing to the baseline.
+
+```{code-cell}
+data_long = data['modularity'].reset_index().melt(id_vars=id_vars, value_name='Mean modularity quality (a.u.)')
+data_long = data_long.set_index(keys=['datasets'])
+fig = plt.figure(figsize=(13, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(['ds000228', 'ds000030'], axs):
+    df = data_long.loc[dataset, :]
+    sns.barplot(
+        y='Mean modularity quality (a.u.)', x='strategy', hue='groups', data=df, ax=ax,
+        order=strategy_order, ci='sd', 
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_title(f'dataset-{dataset}')
+```
+
+```{code-cell}
+data_long = data['corr_motion_modularity'].reset_index().melt(id_vars=id_vars, value_name='Pearson\'s correlation')
+data_long = data_long.set_index(keys=['datasets'])
+fig = plt.figure(figsize=(13, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for dataset, ax in zip(['ds000228', 'ds000030'], axs):
+    df = data_long.loc[dataset, :]
+    sns.barplot(
+        y='Pearson\'s correlation', x='strategy', hue='groups', data=df, ax=ax,
+        order=strategy_order, ci='sd',
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    ax.set_title(f'dataset-{dataset}')
 ```

@@ -2,6 +2,8 @@ import pandas as pd
 
 
 fd2label = {0.5: 'scrubbing.5', 0.2: 'scrubbing.2'}
+group_name_rename = {'CONTROL':'control', 'BIPOLAR': 'bipolar', 'SCHZ':'schizophrenia'}
+group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
 
 
 def lazy_demographic(
@@ -90,7 +92,9 @@ def get_descriptive_data(
         path_root
         / f'dataset-{dataset}_desc-movement_phenotype.tsv'
     )
-    movements = pd.read_csv(movements, index_col=0, sep='\t')
+    movements = pd.read_csv(movements, index_col=[0, -1], sep='\t')
+    movements = movements.rename(index=group_name_rename)
+    movements = movements.reset_index(level='groups')
 
     path_dof = (
         path_root
@@ -114,7 +118,10 @@ def get_descriptive_data(
         keep_scrub = confounds_phenotype.index
     mask_motion = keep_gross_fd.intersection(keep_scrub)
 
-    groups = movements['groups'].unique().tolist()
+    if dataset not in group_order:
+        groups = movements['groups'].unique().tolist()
+    else:
+        groups = group_order[dataset]
     movements = movements.loc[mask_motion, :]
     confounds_phenotype = confounds_phenotype.loc[mask_motion, :]
     return confounds_phenotype, movements, groups

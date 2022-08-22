@@ -265,7 +265,7 @@ def plot_network_modularity(
 
     file_dataset = (
         path_root
-        / f'dataset-{dataset}/dataset-{dataset}_desc-movement_phenotype.tsv'
+        / f'dataset-{dataset}_desc-movement_phenotype.tsv'
     )
     movement = pd.read_csv(
         file_dataset, sep='\t', index_col=0, header=0, encoding='utf8'

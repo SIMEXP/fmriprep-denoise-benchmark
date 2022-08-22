@@ -9,15 +9,14 @@ parts:
     - file: research_report/introductions.md
     - file: research_report/methods.md
     - file: research_report/results.md
-      sections:
-      - file: research_report/report_ds000228.md
-      - file: research_report/report_ds000030.md
     - file: research_report/discussions.md
     - file: research_report/contributions.md
     - file: research_report/references.md
   - caption: Appendices and supplemental material
     chapters:
     - file: supplementary_materials/CITATION.md
+    - file: supplementary_materials/report_ds000228.md
+    - file: supplementary_materials/report_ds000030.md
     - file: supplementary_materials/ohbm2022abstract.md
     - file: supplementary_materials/walkthrough.md
       sections:

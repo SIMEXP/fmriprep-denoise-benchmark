@@ -12,7 +12,7 @@ from fmriprep_denoise.features import (
     calculate_median_absolute,
     get_atlas_pairwise_distance,
 )
-from fmriprep_denoise.visualization.tables import get_descriptive_data
+from fmriprep_denoise.visualization.tables import get_descriptive_data, group_name_rename
 
 
 GRID_LOCATION = {
@@ -28,7 +28,6 @@ GRID_LOCATION = {
     (2, 2): 'aroma',
     (2, 3): 'aroma+gsr',
 }
-
 
 palette = sns.color_palette('Paired', n_colors=12)
 palette_dict = {
@@ -220,12 +219,10 @@ def prepare_modularity_plotting(dataset, atlas_name, dimension, path_root, qc):
     ds_mean_corr.columns = pd.MultiIndex.from_product([['corr_motion_modularity'], ds_mean_corr.columns])
     return pd.concat([ds_mean_modularity, ds_mean_corr], axis=1)
 
-
 def _qcfc_bygroup(metric, p):
     """QC/FC statistics organised by groups."""
     qcfc_stats = pd.read_csv(p, sep='\t', index_col=0, header=[0, 1])
-    groups = qcfc_stats.columns.levels[0].tolist()
-    qcfc_stats = qcfc_stats[groups]
+    qcfc_stats = qcfc_stats.rename(columns=group_name_rename)
 
     df = qcfc_stats.filter(regex=metric)
     new_col = pd.MultiIndex.from_tuples(
