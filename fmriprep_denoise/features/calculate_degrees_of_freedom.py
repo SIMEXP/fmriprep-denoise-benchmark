@@ -54,7 +54,7 @@ def main():
     fmriprep_specifier = args.specifier
     fmriprep_path = Path(args.fmriprep_path)
     participant_tsv = Path(args.participants_tsv)
-    output_root = Path(args.output_path) / f'dataset-{dataset_name}'
+    output_root = Path(args.output_path)
 
     output_root.mkdir(exist_ok=True, parents=True)
     path_movement = Path(
