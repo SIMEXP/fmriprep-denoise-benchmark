@@ -88,14 +88,12 @@ def get_descriptive_data(
     # load basic data
     movements = (
         path_root
-        / f'dataset-{dataset}'
         / f'dataset-{dataset}_desc-movement_phenotype.tsv'
     )
     movements = pd.read_csv(movements, index_col=0, sep='\t')
 
     path_dof = (
         path_root
-        / f'dataset-{dataset}'
         / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
     )
     confounds_phenotype = pd.read_csv(

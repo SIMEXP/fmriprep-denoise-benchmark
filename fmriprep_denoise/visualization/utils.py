@@ -52,29 +52,15 @@ def get_data_root():
     default_path = (
         Path(__file__).parents[2] / 'inputs' / 'fmrieprep-denoise-metrics'
     )
-    return default_path if default_path.exists() else repo2data_path()
+    if not default_path.exists():
+        default_path.mkdir()
+    return default_path
+
 
 
 def _get_palette(order):
     """Get colour palette for each strategy in a specific order."""
     return [palette_dict[item] for item in order]
-
-
-def _get_participants_groups(
-    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
-):
-    """Get subject group information."""
-
-    # To me deleted if I ever refactor this code.
-    confounds_phenotype, movements, groups = get_descriptive_data(
-        dataset,
-        path_root,
-        gross_fd=gross_fd,
-        fd_thresh=fd_thresh,
-        proportion_thresh=proportion_thresh,
-    )
-    participant_groups = movements['groups']
-    return confounds_phenotype, participant_groups, groups
 
 
 def _get_connectome_metric_paths(
@@ -107,6 +93,218 @@ def _get_connectome_metric_paths(
         )
     labels = [file.name.split(f'_{metric}')[0] for file in files]
     return files, labels
+
+
+def prepare_qcfc_plotting(dataset, atlas_name, dimension, path_root):
+    """
+    Generate three summary metrics for plotting:
+        - significant correlation between motion and edges
+        - median absolute of correlation between motion and edges
+        - distance dependency of edge and motion
+
+    Parameters
+    ----------
+
+    dataset : str
+        Dataset name.
+
+    atlas_name : None or str
+        Atlas name. Default None to get all outputs.
+
+    dimension : None or str
+        Atlas dimension. Default None to get all outputs.
+
+    path_root : pathlib.Path
+        Path to the input data directory.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Summary metrics by group, by strategy
+    """
+    ds_qcfc_sig, ds_qcfc_median_absolute, ds_corr_distance = [], [], []
+    file_qcfc, qcfc_labels = _get_connectome_metric_paths(
+        dataset, 'qcfc', atlas_name, dimension, path_root
+        )
+
+    for p, label in zip(file_qcfc, qcfc_labels):
+        label = label.replace(f'dataset-{dataset}_', '')
+        # significant correlation between motion and edges
+        qcfc_pvalue = _qcfc_bygroup('pvalue', p)
+        qcfc_pvalue = qcfc_pvalue.melt(var_name=['groups', 'strategy'])
+        qcfc_pvalue['fdr'] = qcfc_pvalue.groupby(['groups', 'strategy'])['value'].transform(fdr)
+        qcfc_sig = qcfc_pvalue.groupby(['groups', 'strategy']).apply(
+            lambda x: 100 * x.fdr.sum() / x.fdr.shape[0]
+        )
+        qcfc_sig = pd.DataFrame(qcfc_sig, columns=[label])
+        ds_qcfc_sig.append(qcfc_sig)
+
+        # median absolute of correlation between motion and edges
+        qcfc = _qcfc_bygroup('correlation', p)
+        mad_qcfc = qcfc.apply(calculate_median_absolute)
+        mad_qcfc.name = label
+        ds_qcfc_median_absolute.append(mad_qcfc)
+
+        # distance dependency
+        cur_atlas_name = label.split('atlas-')[-1].split('_')[0]
+        cur_dimension = label.split('nroi-')[-1].split('_')[0]
+        pairwise_distance = get_atlas_pairwise_distance(cur_atlas_name, cur_dimension)
+        cols = qcfc.columns
+        corr_distance_qcfc, _ = spearmanr(pairwise_distance.iloc[:, -1], qcfc)
+        corr_distance_qcfc = pd.DataFrame(corr_distance_qcfc[1:, 0], index=cols, columns=[label])
+        ds_corr_distance.append(corr_distance_qcfc)
+
+    ds_qcfc_sig = pd.concat(ds_qcfc_sig, axis=1)
+    ds_qcfc_sig.columns = pd.MultiIndex.from_product([['qcfc_fdr_significant'], ds_qcfc_sig.columns])
+
+    ds_qcfc_median_absolute = pd.concat(ds_qcfc_median_absolute, axis=1)
+    ds_qcfc_median_absolute.columns = pd.MultiIndex.from_product([['qcfc_mad'], ds_qcfc_median_absolute.columns])
+
+    ds_corr_distance = pd.concat(ds_corr_distance, axis=1)
+    ds_corr_distance.columns = pd.MultiIndex.from_product([['corr_motion_distance'], ds_corr_distance.columns])
+    return pd.concat([ds_qcfc_sig, ds_qcfc_median_absolute, ds_corr_distance], axis=1)
+
+
+def prepare_modularity_plotting(dataset, atlas_name, dimension, path_root, qc):
+    """
+    Generate two summary metrics for plotting:
+        - Mean modularity
+        - Correlation between motion and modularity
+
+    Parameters
+    ----------
+
+    dataset : str
+        Dataset name.
+
+    atlas_name : None or str
+        Atlas name. Default None to get all outputs.
+
+    dimension : None or str
+        Atlas dimension. Default None to get all outputs.
+
+    path_root : pathlib.Path
+        Path to the input data directory.
+
+    qc : dict
+        Movement quality control filter.
+
+    Returns
+    -------
+    pandas.DataFrame
+        Summary metrics by group, by strategy
+    """
+    files_network, modularity_labels = _get_connectome_metric_paths(
+        dataset, 'modularity', atlas_name, dimension, path_root,
+        )
+    _, movement, _ = get_descriptive_data(dataset, path_root, **qc)
+
+    ds_mean_corr, ds_mean_modularity = [], []
+    for file_network, label in zip(files_network, modularity_labels):
+        label = label.replace(f'dataset-{dataset}_', '')
+
+        modularity = pd.read_csv(file_network, sep='\t', index_col=0)
+        modularity = pd.concat([movement['groups'], modularity],axis=1)
+
+        mean_by_group = _calculate_mean_modularity(modularity, label)
+        corr_modularity = _calculate_corr_modularity(modularity, movement, label)
+        ds_mean_modularity.append(mean_by_group)
+        ds_mean_corr.append(corr_modularity)
+
+    # modularity
+    ds_mean_modularity = pd.concat(ds_mean_modularity, axis=1)
+    ds_mean_modularity.columns = pd.MultiIndex.from_product([['modularity'], ds_mean_modularity.columns])
+
+    # motion and modularity
+    ds_mean_corr = pd.concat(ds_mean_corr, axis=1)
+    ds_mean_corr.columns = pd.MultiIndex.from_product([['corr_motion_modularity'], ds_mean_corr.columns])
+    return pd.concat([ds_mean_modularity, ds_mean_corr], axis=1)
+
+
+def _qcfc_bygroup(metric, p):
+    """QC/FC statistics organised by groups."""
+    qcfc_stats = pd.read_csv(p, sep='\t', index_col=0, header=[0, 1])
+    groups = qcfc_stats.columns.levels[0].tolist()
+    qcfc_stats = qcfc_stats[groups]
+
+    df = qcfc_stats.filter(regex=metric)
+    new_col = pd.MultiIndex.from_tuples(
+        [(group, strategy.replace(f'_{metric}', '')) for group, strategy in df.columns],
+        names=['groups', 'strategy'])
+    df.columns = new_col
+    return df
+
+
+def _calculate_corr_modularity(modularity, movement, label):
+    """Calculate correlation between motion and network modularity by groups."""
+    # motion and modularity
+    corr_modularity = []
+    z_movement = movement[['mean_framewise_displacement', 'age', 'gender']].apply(zscore)
+
+    # full sample
+    for strategy, value in modularity.iloc[:, 1:].iteritems():
+        current_df = partial_correlation(
+            value,
+            movement['mean_framewise_displacement'],
+            z_movement[['age', 'gender']],
+        )
+        current_df['strategy'] = strategy
+        current_df['groups'] = 'full_sample'
+        corr_modularity.append(current_df)
+
+    # by group
+    modularity_long = modularity.reset_index().melt(id_vars=['index', 'groups'], var_name='strategy')
+    for (group, strategy), df in modularity_long.groupby(['groups', 'strategy']):
+        df = df.set_index('index')
+        current_df = partial_correlation(
+            df['value'],
+            movement.loc[df.index, 'mean_framewise_displacement'].values,
+            z_movement.loc[df.index, ['age', 'gender']].values,
+        )
+        current_df['strategy'] = strategy
+        current_df['groups'] = group
+        corr_modularity.append(current_df)
+
+    corr_modularity = pd.DataFrame(corr_modularity).set_index(['groups', 'strategy'])['correlation']
+    corr_modularity.name = label
+    return corr_modularity
+
+
+def _calculate_mean_modularity(modularity, label):
+    """Calculate mean network modularity by groups."""
+
+    # by group
+    mean_by_group = modularity.groupby(['groups']).mean().reset_index()
+    mean_by_group = mean_by_group.melt(id_vars=['groups'], var_name="strategy", value_name=label)
+    mean_by_group = mean_by_group.set_index(['groups', 'strategy'])
+
+    # full sample
+    mean_full_sample = modularity.iloc[:, 1:].mean()
+    mean_full_sample.index = pd.MultiIndex.from_product(
+        [['full_sample'], mean_full_sample.index],
+        names=['groups', 'strategy']
+    )
+    mean_full_sample = mean_full_sample.to_frame()
+    mean_full_sample.columns = [label]
+
+    return pd.concat([mean_full_sample, mean_by_group])
+
+
+def _get_participants_groups(
+    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+):
+    """Get subject group information."""
+
+    # To me deleted if I ever refactor this code.
+    confounds_phenotype, movements, groups = get_descriptive_data(
+        dataset,
+        path_root,
+        gross_fd=gross_fd,
+        fd_thresh=fd_thresh,
+        proportion_thresh=proportion_thresh,
+    )
+    participant_groups = movements['groups']
+    return confounds_phenotype, participant_groups, groups
 
 
 def _get_qcfc_metric(file_path, metric, group):
