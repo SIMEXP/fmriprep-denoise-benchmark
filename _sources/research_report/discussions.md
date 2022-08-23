@@ -45,7 +45,7 @@ and mean framewise displacement above 0.55 mm were excluded from the analysis.
 ## Residual motion in connectivity edges was not found among most methods
 <!-- QC-FC -->
 When examining QC-FC, all strategies, including the baseline (i.e. data that was high-pass filtered),
-shows very little residual impact of motion on functional connectivity, except `aroma+gsr`.
+show very little residual impact of motion on functional connectivity, except `aroma+gsr`.
 `aroma+gsr` did not perform well in the healthy control in `ds000030` and the child sample in `ds000228`.
 The healthy control in `ds000030` shows more variability possibly due to the larger sample size (88 subjects) compared to the patient samples (ranging from 19 -- 32 subjects).
 Similarly, `ds000228` contains twice as many child samples compared to the adult samples (51 vs 24 subjects).
@@ -57,7 +57,7 @@ This would be consistent with the suggestion that confound regressors should be 
 
 ## Distance dependency of connectivity edges was best removed by an aggressive scrubbing approach
 <!-- Distance dependency -->
-For the distance dependency effect on QC-FC, a score close to zero indicates a method reduced the correlation between residual motion in functional connectivity and pairwise node distance. 
+For the distance dependency effect on QC-FC, a score close to zero indicates a method to reduce the correlation between residual motion in functional connectivity and pairwise node distance. 
 We found scrubbing with a 0.2 mm threshold mitigates distance dependency well consistently regardless of the type of subject. 
 DiFuMo on adult subjects across both datasets shows consistent results in reducing the impact of motion on distance dependency.
 
