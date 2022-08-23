@@ -348,10 +348,10 @@ for ds, group in ds_groups:
 ```
 
 As for the loss in temporal degrees of freedom broken down by groups, the trend 
-did not differ from the full sample, as seen in the two graphs below.
+did not differ from the full sample, as seen in {numref}`fig:dof-fig_cleaned`, {numref}`fig:scrubbing-fig_cleaned`.
 
 ```{glue:figure} dof-fig_cleaned
-:name: "tbl:dof-fig_cleaned"
+:name: "fig:dof-fig_cleaned"
 
 Loss in temporal degrees of freedom break down by groups after quality control,
 after applying the stringent quality control threshold.
@@ -369,7 +369,7 @@ glue(f'scrubbing-fig_cleaned', fig, display=False)
 ```
 
 ```{glue:figure} scrubbing-fig_cleaned
-:name: "tbl:scrubbing-fig_cleaned"
+:name: "fig:scrubbing-fig_cleaned"
 
 Loss in number of volumes in proportion to the full length of the scan after quality control, 
 break down by groups in each dataset,
@@ -505,7 +505,7 @@ This trend is similar to the results reported in {cite:t}`ciric_benchmarking_201
 Distance-dependent of motion after denoising.
 
 A value closer to zero indicates the less residual effect of motion after denoising.
-The bar indicates the average Pearson's correlation between the Euclidian distance between node pairs and QC-FC,
+The bar indicates the average Pearson's correlation between the Euclidean distance between node pairs and QC-FC,
 the error bars represent its standard deviations. 
 ```
 
@@ -548,8 +548,8 @@ for dataset, ax in zip(['ds000228', 'ds000030'], axs):
 glue('corr_motion_modularity', fig, display=False)
 ```
 
-The average network modularity after denoising ({numref}`modularity`) shows that the inclusion of global signal regressors increases the modularity in both datasets. 
-The correlation between motion and network modularity is less conclusive ({numref}`corr_motion_modularity`).
+The average network modularity after denoising ({numref}`fig:modularity`) shows that the inclusion of global signal regressors increases the modularity in both datasets. 
+The correlation between motion and network modularity is less conclusive ({numref}`fig:corr_motion_modularity`).
 In `ds000228`, we first see the big differences between the adult and child samples.
 Generally, the denoising strategies reduced the correlation motion and network modularity more in the adult sample than in the child sample.  
 In both samples, `aroma` reduced the correlation the most, followed by the baseline and the `simple` strategy.
