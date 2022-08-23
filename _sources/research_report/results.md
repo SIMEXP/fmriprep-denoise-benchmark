@@ -440,17 +440,17 @@ glue('qcfc_mad', fig, display=False)
 
 With good quality data, most denoising methods reduce the correlation between functional connectivity and mean framewise displacement,
 accessed by the QC-FC measure.
-`ds000030` consists of the adult sample only.
+`ds000030` consists of the adult sample only ({numref}`fig:qcfc_fdr_significant`).
 All denoising strategies aside from `aroma+gsr` eliminate the impact of motion.
 The variability in the healthy control is potentially driven by a larger sample than the rest.
 When looking at the median absolute deviations, the schizophrenia group still retains a higher impact of motion than the remaining sample.
 In `ds000228`, all strategies, including the baseline, 
 show motion remains in close to 0% of the connectivity edges.
 `aroma+gsr` performs worse than the baseline in the child sample.
-The median absolute deviation of QC-FC is all similar to the baseline. 
+The median absolute deviation of QC-FC is all similar to the baseline ({numref}`fig:qcfc_mad`). 
 
 ```{glue:figure} qcfc_fdr_significant
-:name: "tbl:qcfc_fdr_significant"
+:name: "fig:qcfc_fdr_significant"
 
 Percentage of edges significantly correlating with mean framewise displacement.
 
@@ -460,7 +460,7 @@ the dots are the percentage of nodes with significant QC-FC of each parcellation
 ```
 
 ```{glue:figure} qcfc_mad
-:name: "tbl:qcfc_mad"
+:name: "fig:qcfc_mad"
 
 Median absolute deviation of the correlations between connectivity edges and mean framewise displacement, summarised across all atlas of choices.
 
@@ -493,7 +493,7 @@ for dataset, ax in zip(['ds000228', 'ds000030'], axs):
 glue('distance_qcfc', fig, display=False)
 ```
 
-Ideally, a denoising strategy should leave no residual association between QC-FC and interregional distance.
+Ideally, a denoising strategy should leave no residual association between QC-FC and interregional distance ({numref}`fig:distance_qcfc`).
 No strategy can eliminate the correlation between motion and short-range connectivity edges.
 In both datasets, we see all strategies reduce the magnitude of the correlation between distance and motion compared to the baseline.
 We observed a trend that strategies `scrubbing.2` and `scrubbing.2+gsr` are the closest in reducing the correlation to 0 between distance and motion, followed by `aroma` and `aroma+gsr`.
@@ -548,8 +548,8 @@ for dataset, ax in zip(['ds000228', 'ds000030'], axs):
 glue('corr_motion_modularity', fig, display=False)
 ```
 
-The average network modularity after denoising shows that the inclusion of global signal regressors increases the modularity in both datasets. 
-The correlation between motion and network modularity is less conclusive.
+The average network modularity after denoising ({numref}`modularity`) shows that the inclusion of global signal regressors increases the modularity in both datasets. 
+The correlation between motion and network modularity is less conclusive ({numref}`corr_motion_modularity`).
 In `ds000228`, we first see the big differences between the adult and child samples.
 Generally, the denoising strategies reduced the correlation motion and network modularity more in the adult sample than in the child sample.  
 In both samples, `aroma` reduced the correlation the most, followed by the baseline and the `simple` strategy.
