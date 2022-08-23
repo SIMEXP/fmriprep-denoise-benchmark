@@ -19,7 +19,7 @@ Hao-Ting Wang migrated the code base to `nilearn`.
 Nicolas Gensollen[^5] and Bertrand Thirion[^5] reviewed the code migrated to `nilearn`.
 We thank Chris Markiewicz[^6] for feedbacks related to fMRIPrep.
 
-Hao-Ting Wang and Pierre Bellec drafted the paper.
+Hao-Ting Wang and Pierre Bellec drafted the paper. Natasha Clarke[^1] revised and provided critical feed backs.
 
 Please see the [original repository](https://github.com/SIMEXP/load_confounds#contributors-) for a full history of development and contributors.
 
