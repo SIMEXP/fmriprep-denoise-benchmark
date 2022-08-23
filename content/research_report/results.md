@@ -84,10 +84,10 @@ and adult sample
 (M = {glue:text}`ds000228_adult_mean:.2f`, SD = {glue:text}`ds000228_adult_sd:.2f`, n = {glue:text}`ds000228_adult_n:i`;
 t({glue:text}`ds000228_df_child:.2f`) = {glue:text}`ds000228_t_child:.2f`, p = {glue:text}`ds000228_p_child:.3f`).
 This is consistent with the existing literature.
-In `ds000030`, the only patient group shows a difference comparing to the
+In `ds000030`, the only patient group shows a difference compared to the
 control 
 (M = {glue:text}`ds000030_control_mean:.2f`, SD = {glue:text}`ds000030_control_sd:.2f`, n = {glue:text}`ds000030_control_n:i`)
-is the schizophrania group 
+is the schizophrenia group 
 (M = {glue:text}`ds000030_schizophrenia_mean:.2f`, SD = {glue:text}`ds000030_schizophrenia_sd:.2f`, n = {glue:text}`ds000030_schizophrenia_n:i`;
 t({glue:text}`ds000030_df_schizophrenia:.2f`) = {glue:text}`ds000030_t_schizophrenia:.2f`, p = {glue:text}`ds000030_p_schizophrenia:.3f`).
 There was no difference between the control and ADHD group
@@ -96,7 +96,7 @@ t({glue:text}`ds000030_df_ADHD:.2f`) = {glue:text}`ds000030_t_ADHD:.2f`, p = {gl
 or the bipolar group 
 (M = {glue:text}`ds000030_bipolar_mean:.2f`, SD = {glue:text}`ds000030_bipolar_sd:.2f`, n = {glue:text}`ds000030_bipolar_n:i`;
 t({glue:text}`ds000030_df_bipolar:.2f`) = {glue:text}`ds000030_t_bipolar:.2f`, p = {glue:text}`ds000030_p_bipolar:.3f`).
-In conclusion, adult samples has lower mean framewise displacement than a youth sample.
+In conclusion, adult samples have lower mean framewise displacement than youth samples.
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -131,39 +131,39 @@ glue('meanFD-fig', fig, display=False)
 :name: "tbl:meanFD-fig"
 
 Mean framewise displacement of each dataset.
-We found young subjects has higher motion comparing to adults,
+We found young subjects have higher motion compared to adults,
 which is consistent with the pattern described in the literature.
-Amongst psychiatric conditiontions, only the schizophrania group shows difference to the control group.
+Amongst psychiatric conditions, only the schizophrenia group shows a difference from the control group.
 ```
 
 ## The loss in temporal degrees of freedom in different strategies
 
-The common analysis and denoising methods are based on linear reagression.
+The common analysis and denoising methods are based on linear regression.
 Using more nuisance regressors can capture additional sources of noise-related variance in the data and thus improve denoising.
 However, this comes at the expense of a loss of temporal degrees of freedom for statistical inference in further analysis.
-This is an important point to consider along side the denoising performance.
+This is an important point to consider alongside the denoising performance.
 
 In fMRIPrep, high-pass filtering is done through discrete cosine-basis regressors, 
-labled as `cosine_*` in fMRIPrep confounds output.
-In the following section, the number of discrete cosine-basis regressor will be denoted as $c$. 
+labeled as `cosine_*` in fMRIPrep confounds output.
+In the following section, the number of discrete cosine-basis regressors will be denoted as $c$. 
 Depending on the length of the scan, the number of discrete cosine-basis regressors can differ ($c_{ds000228}=4$, $c_{ds000030}=3$). 
-The `simple` and `srubbing`-based strategy are the strategy with a fixed number of degree of freedom loss.
-`compcor` and `aroma`-based strategies shows variability depending on the number of noise compoenets detected.
-In theory, `compcor6` should also report a fixed number of degree of freedom loss.
-However, fMRIPrep outputs the compcor compoenents based on the 50% variance cut-off.
+The `simple` and `scrubbing`-based strategies are the strategy with a fixed number of degrees of freedom loss.
+`compcor` and `aroma`-based strategies show variability depending on the number of noise components detected.
+In theory, `compcor6` should also report a fixed number of degrees of freedom loss.
+However, fMRIPrep outputs the compcor components based on the 50% variance cut-off.
 For some subjects the number of components could be lower than 6, hence the variability.
 
 In {cite:t}`ciric_benchmarking_2017`, the equivalent `aroma` and `aroma+gsr` strategies were reported with 
 a lower magnitude of loss in temporal degrees of freedom than `scrubbing` or `simple` strategies.
-However, we did not observe this advantage is limited to sample with relatively low motion (i.e. adults).
-When selecting denoising strategy, 
+However, we did not observe this advantage is limited to samples with relatively low motion (i.e. adults).
+When selecting a denoising strategy, 
 The two datasets used in the current benchmark both contained subjects with behaviours deviating from the healthy controls.
 `ds000228` is comprised of adult healthy controls and children.
 `ds000030` includes healthy controls and subjects with three different psychiatric conditions.
 the loss in degrees of freedom `simple` ($26 + c$) and `simple+gsr` ($27 + c$) used the least amount of regressors in the general population.
-Certain sub-sample uses less regressors with the `aroma` and `aroma+gsr` strategies.
+Certain sub-sample uses fewer regressors with the `aroma` and `aroma+gsr` strategies.
 The reason potentially lies in the implementation of ICA-AROMA. 
-ICA-AROMA uses pretrained model on healthy subjects to select noise components {cite:p}`aroma`.
+ICA-AROMA uses a pre-trained model on healthy subjects to select noise components {cite:p}`aroma`.
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -177,24 +177,24 @@ for ds, group in ds_groups:
 :figwidth: 800px
 :name: "tbl:dof-fig"
 
-Loss in temporal degrees of freedom break down by groups.
-`compcor` and `aroma`-based strategies shows variability depending on the number of noise compoenets detected.
-The variability is broken down by groups.
-From the lightest hue to the darkes, the order of the group in `ds000228` is:
+Loss in temporal degrees of freedom breaks down into groups.
+`compcor` and `aroma`-based strategies show variability depending on the number of noise components detected.
+The variability is broken down into groups.
+From the lightest hue to the darkest, the order of the group in `ds000228` is:
 {glue:}`group-order_ds000228`
-From the lightest hue to the darkes, the order of the group in `ds000030` is:
+From the lightest hue to the darkest, the order of the group in `ds000030` is:
 {glue:}`group-order_ds000030`
 ```
 
-To compare the loss in number of volumes from scrubbing base strategy across datasets,
-we calculate the proportion of volume loss to number of volumes in a full scan.
-`ds000228` includes child subjects and shows higher loss in volumes comparing to `ds000030` with adult subjects only.
+To compare the loss in the number of volumes from the scrubbing base strategy across datasets,
+we calculate the proportion of volume loss to the number of volumes in a full scan.
+`ds000228` includes child subjects and shows a higher loss in volumes compared to `ds000030` with adult subjects only.
 This is consistent with the trend in the difference in mean framewise displacement,
 and it fits the observation shown in literature {cite:p}`satterthwaite_impact_2012`.
-In `ds000030`, we see the similar trend mirroring the mean framewise displacemnt results.
-The schizophrania group shows the highest amount of volumes scrubbed,
+In `ds000030`, we see a similar trend mirroring the mean framewise displacement results.
+The schizophrenia group shows the highest amount of volumes scrubbed,
 followed by the bipolar group, and comparable results between the control group and ADHD group.
-With a stringent 0.2 mm threshold, groups with high motion will loose on average close to half of the volumes. 
+With a stringent 0.2 mm threshold, groups with high motion will lose on average close to half of the volumes. 
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -206,16 +206,16 @@ glue(f'scrubbing-fig', fig, display=False)
 :figwidth: 800px
 :name: "tbl:scrubbing-fig"
 
-Loss in number of volumes in proportion to the full length of the scan, break down by groups in each dataset.
-We can see the trend is similar to mean framewise displacement result. 
+Loss in the number of volumes in proportion to the full length of the scan, broken down by groups in each dataset.
+We can see the trend is similar to the mean framewise displacement result. 
 
 ```
 
 ## Comparisons on the impacts of strategies on connectomes
 <!-- Please advice on the threshold here -->
 <!-- stringent -->
-To evaluate the impact of denoising strategy on connectomes in a practical scenrio, 
-we excluded subjects with high motion as such subjects would be normally excluded in data quality control stage 
+To evaluate the impact of denoising strategy on connectomes in a practical scenario, 
+we excluded subjects with high motion as such subjects would be normally excluded in the data quality control stage 
 (see section {ref}`framewise-displacement`). 
 
 The two tables below are the demographic information of the datasets after
@@ -281,16 +281,16 @@ for dataset, baseline_group in zip(datasets, baseline_groups):
     for_plotting.update({dataset: data})
 ```
 
-We again checked the difference in mean framewise displacement of each sample and the sub-groups.
+We again checked the difference in the mean framewise displacement of each sample and the sub-groups.
 In `ds000228`, there was still a significant difference in motion during the scan captured by mean framewise displacement 
 between the child 
 (M = {glue:text}`ds000228_child_mean_qc:.2f`, SD = {glue:text}`ds000228_child_sd_qc:.2f`, n = {glue:text}`ds000228_child_n_qc:i`)
 and adult sample
 (M = {glue:text}`ds000228_adult_mean_qc:.2f`, SD = {glue:text}`ds000228_adult_sd_qc:.2f`, n = {glue:text}`ds000228_adult_n_qc:i`,
 t({glue:text}`ds000228_df_child_qc:.2f`) = {glue:text}`ds000228_t_child_qc:.2f`, p = {glue:text}`ds000228_p_child_qc:.3f`).
-In `ds000030`, the only patient group shows a difference comparing to the control 
+In `ds000030`, the only patient group shows a difference compared to the control 
 (M = {glue:text}`ds000030_control_mean_qc:.2f`, SD = {glue:text}`ds000030_control_sd_qc:.2f`, n = {glue:text}`ds000030_control_n_qc:i`)
-is still the schizophrania group 
+is still the schizophrenia group 
 (M = {glue:text}`ds000030_schizophrenia_mean_qc:.2f`, SD = {glue:text}`ds000030_schizophrenia_sd_qc:.2f`, n = {glue:text}`ds000030_schizophrenia_n_qc:i`;
 t({glue:text}`ds000030_df_schizophrenia_qc:.2f`) = {glue:text}`ds000030_t_schizophrenia_qc:.2f`, p = {glue:text}`ds000030_p_schizophrenia_qc:.3f`).
 There was no difference between the control and ADHD group
@@ -299,7 +299,7 @@ t({glue:text}`ds000030_df_ADHD_qc:.2f`) = {glue:text}`ds000030_t_ADHD_qc:.2f`, p
 or the bipolar group 
 (M = {glue:text}`ds000030_bipolar_mean_qc:.2f`, SD = {glue:text}`ds000030_bipolar_sd_qc:.2f`, n = {glue:text}`ds000030_bipolar_n_qc:i`;
 t({glue:text}`ds000030_df_bipolar_qc:.2f`) = {glue:text}`ds000030_t_bipolar_qc:.2f`, p = {glue:text}`ds000030_p_bipolar_qc:.3f`).
-In conclusion, adult samples has lower mean framewise displacement than a youth sample.
+In conclusion, adult samples have lower mean framewise displacement than youth samples.
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -347,7 +347,7 @@ for ds, group in ds_groups:
     glue(f'group-order_{ds}_cleaned', group, display=False)
 ```
 
-As for the loss in temporal degrees of freedom break down by groups, the trend 
+As for the loss in temporal degrees of freedom broken down by groups, the trend 
 did not differ from the full sample, as seen in the two graphs below.
 
 ```{glue:figure} dof-fig_cleaned
@@ -379,9 +379,9 @@ We can see the trend is similar to mean framewise displacement result.
 
 ```
 
-In the next section, we report the three functional connectivity based metrics and break down the effect on each dataset.
+In the next section, we report the three functional connectivity-based metrics and break down the effect on each dataset.
 We combined all atlases in the current report as the trends in each atlas are similar.
-For breakdown of each metric by atlas, 
+For a breakdown of each metric by atlas, 
 please see the supplemental material for 
 [`ds000228`](../supplementary_materials/report_ds000228.md) and [`ds000030`](../supplementary_materials/report_ds000030.md).
 
@@ -439,17 +439,16 @@ for dataset, ax in zip(['ds000228', 'ds000030'], axs):
 glue('qcfc_mad', fig, display=False)
 ```
 
-With good quality data, most denoising methonds reduce the corelation between functional connectivity and mean framewise displacement,
+With good quality data, most denoising methods reduce the correlation between functional connectivity and mean framewise displacement,
 accessed by the QC-FC measure.
-`ds000030` consists of adult sample only.
-All denoisng strategies aside from `aroma+gsr` eliminate the impact of motion.
-The variablilty in the healthy control is potentially driven by a larger sample than the rest.
-When looking at the median absolute deviations, the schizophrania group still retains higher impact of motion than the remaining sample.
+`ds000030` consists of the adult sample only.
+All denoising strategies aside from `aroma+gsr` eliminate the impact of motion.
+The variability in the healthy control is potentially driven by a larger sample than the rest.
+When looking at the median absolute deviations, the schizophrenia group still retains a higher impact of motion than the remaining sample.
 In `ds000228`, all strategies, including the baseline, 
 shows motion remains in close to 0% of the connectivity edges.
 `aroma+gsr` performs worse than the baseline in the child sample.
-The meduan absolute deviation of QC-FC are all similar to the baseline. 
-
+The median absolute deviation of QC-FC is all similar to the baseline. 
 
 ```{glue:figure} qcfc_fdr_significant
 :figwidth: 800px
@@ -463,7 +462,7 @@ Percentage of edges significantly correlating with mean framewise displacement f
 :name: "tbl:qcfc_mad"
 
 Median absolute deviation of the correlations between connectivity edges and mean framewise displacement, summarised across all atlas of choices.
-Lower value indicates less residual effect of motion after denoising.
+A lower value indicates the less residual effect of motion after denoising.
 ```
 
 
@@ -487,23 +486,23 @@ for dataset, ax in zip(['ds000228', 'ds000030'], axs):
 ```
 
 Ideally, a denoising strategy should leave no residual association between QC-FC and interregional distance.
-No strategy can eliminate the correlation between motion and short range connectivity edges.
-In both datasets, we see all strategies reduces the magnitude of coreelation between distance and motion combaring to the baseline.
-We observed a trend that strategy `scrubbing.2` and `scrubbing.2+gsr` are the closest in reducing the correlation to 0 between distance and motion, followed by `aroma` and `aroma+gsr`.
+No strategy can eliminate the correlation between motion and short-range connectivity edges.
+In both datasets, we see all strategies reduce the magnitude of the correlation between distance and motion compared to the baseline.
+We observed a trend that strategies `scrubbing.2` and `scrubbing.2+gsr` are the closest in reducing the correlation to 0 between distance and motion, followed by `aroma` and `aroma+gsr`.
 This trend is similar to the results reported in {cite:t}`ciric_benchmarking_2017`.
 
 ### Network modularity
 
 The average network modularity after denoising shows that the inclusion of global signal regressors increases the modularity in both datasets. 
 The correlation between motion and network modularity is less conclusive.
-In `ds000228`, we first see the big differences between the adult and child sample.
-Generally, the denoising strategies reduced the correlation motion and network modularity more in the adult sample than the child sample.  
-In both samples, `aroma` reduced the the correlation the most, followed by the baseline and the `simple` strategy.
-In `ds000030`, the schizophrania sample still showed a high correlation between modularity and motion.
-For the control group, `aroma`, `aroma+gsr`, `compcor6`, and `simple` all brings the correlation between modularity and motion close to 0.
+In `ds000228`, we first see the big differences between the adult and child samples.
+Generally, the denoising strategies reduced the correlation motion and network modularity more in the adult sample than in the child sample.  
+In both samples, `aroma` reduced the correlation the most, followed by the baseline and the `simple` strategy.
+In `ds000030`, the schizophrenia sample still showed a high correlation between modularity and motion.
+For the control group, `aroma`, `aroma+gsr`, `compcor6`, and `simple` all bring the correlation between modularity and motion close to 0.
 The baseline along performs better than the remainders.
 For ADHD and bipolar group, `compcor` was the best performing strategy and performed better than baseline.
-`aroma` was the second best overall, however, it performed on similar level comparing to the baseline.
+`aroma` was the second best overall, however, it performed on a similar level compared to the baseline.
 
 ```{code-cell}
 data_long = data['modularity'].reset_index().melt(id_vars=id_vars, value_name='Mean modularity quality (a.u.)')
