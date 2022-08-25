@@ -2,18 +2,13 @@
 # Move templates to locations you need them to be
 #!/bin/bash
 
-# make sure the git submodules are updated 
-git submodule update --init --recursive
-
-# install the project
-pip install -r binder/requirements.txt
-
-python scripts/fetch_templates.py
-
+# mist
 python scripts/mist2templateflow/mist2templateflow.py -d -o inputs/custome_templateflow
 
+# difumo
 python scripts/difumo_segmentation/difumo_segmentation/main.py  -o inputs/custome_templateflow
 mv inputs/custome_templateflow/segmented_difumo_atlases/tpl-MNI152NLin2009cAsym/* inputs/custome_templateflow/tpl-MNI152NLin2009cAsym
+python scripts/caculate_centroids.py
 
 # clean up
 rm -rf inputs/custome_templateflow/segmented_difumo_atlases/
