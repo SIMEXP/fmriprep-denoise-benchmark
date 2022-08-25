@@ -77,6 +77,15 @@ If you wish to use the produced metrics to generate the book, feel free to skip 
     Remember to check your script to make sure everything runs correctly.
     This will take the time of a coffee break.
 
+4. Run fmriprep
+    
+    fMRIPrep slurm will give you the exact commands you need to run.
+    It should be something looking like this:
+    ```
+    find /scratch/${USER}/ds000228/${UNIXTIME}/.slurm/smriprep_sub-*.sh -type f | while read file; do sbatch "$file"; done
+    ```
+    This process will take up a day.
+
 ## Generate timeseries and metrics 
     
 3. `slurm_timesereis/*.sh`: 

@@ -8,8 +8,9 @@ EMAIL=${SLACK_EMAIL_BOT}
 
 echo "Create fmriprep-slurm scripts"
 
-module load singularity
+module load singularity/3.8
 
+echo "BIDS validators"
 for dataset in ${DATASETS[*]}; do
     # run BIDS validator on the dataset
     # you only need this done once
@@ -29,12 +30,13 @@ for v in ${VERSION[*]}; do
 done
 
 echo ds000030
+subjects=$(cat inputs/ds000030_valid-subjects.txt)
 for v in ${VERSION[*]}; do
     echo "Slurm files for fmriprep-${v}"
     ${FMRIPREP_SLURM}/singularity_run.bash \
         ${DATASET_PATH}/ds000030 \
         fmriprep-${v}lts \
-        --participant-label $(cat ./scripts/ds000030_valid-subjects.txt)\
+        --participant-label $subjects \
         --fmriprep-args=\"-t rest --use-aroma\" \
         --email=${EMAIL} \
         --container ${CONTAINER_PATH}/fmriprep-${v}lts.sif
