@@ -17,7 +17,7 @@ source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark
 
 cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
     
-python ./fmriprep_denoise/features/build_features_qcfc.py \
+build_features_qcfc \
     "/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-${DATASET}.tar.gz" \
     ${OUTPUT} \
     --atlas mist \

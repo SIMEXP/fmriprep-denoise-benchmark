@@ -52,7 +52,6 @@ def main():
 
     fetch_schaefer()
     verify_gordon()
-    calculate_difumo_centroids()
 
 
 if __name__ == "__main__":

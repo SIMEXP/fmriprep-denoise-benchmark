@@ -3,8 +3,18 @@
 [![Jupyter Book Badge](https://jupyterbook.org/badge.svg)](https://simexp.github.io/fmriprep-denoise-benchmark/)
 
 The project is a continuation of [load_confounds](https://github.com/SIMEXP/load_confounds).
-The aim is to evaluate the impact of denoising strategy on functional connectivity data, using output processed by fMRIPrep LTS.
+The aim is to evaluate the impact of denoising strategy on functional connectivity data, using output processed by fMRIPrep LTS in a reproducible workflow.
 
+## Quick start
+
+```bash
+git clone --recurse-submodules https://github.com/SIMEXP/fmriprep-denoise-benchmark.git
+cd fmriprep-denoise-benchmark
+virtualenv env
+source env/bin/activate
+pip install -r binder/requirements.txt
+make book
+```
 
 ## Dataset structure
 

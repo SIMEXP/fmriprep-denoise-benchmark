@@ -15,7 +15,7 @@ DATASET=(ds000030 ds000228)
 
 cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 
-python ./fmriprep_denoise/features/build_features_modularity.py \
+build_features_modularity \
     "/home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/inputs/dataset-${DATASET[${SLURM_ARRAY_TASK_ID}]}.tar.gz" \
     ${OUTPUT} \
     --atlas schaefer7networks \
