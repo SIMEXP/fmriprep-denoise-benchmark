@@ -57,7 +57,7 @@ If you wish to use the produced metrics to generate the book, feel free to skip 
 
 1. `preprocessing/get_fmriprep.sh`:
 
-    We need to build the fMRIPrep singularity containers version `20.2.1` (fMRIPrep-slurm default) and `20.2.7`.
+    We need to build the fMRIPrep singularity containers version `20.2.1` (fMRIPrep-slurm default) and `20.2.5`.
     For details, please find the documentation on [niprep](https://www.nipreps.org/apps/singularity/).
     Alternatively, you can execute the script prepared `get_fmriprep.sh`. 
     We recommand building the container in a tmux session.
