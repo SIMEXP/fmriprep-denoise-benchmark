@@ -1,7 +1,7 @@
 #!/bin/bash
 
 CONTAINER_PATH="/lustre03/project/6003287/containers"
-VERSION=("20.2.1" "20.2.7")
+VERSION=("20.2.1" "20.2.5")
 DATASET_PATH="/lustre04/scratch/${USER}/openneuro"
 FMRIPREP_SLURM="/lustre03/project/6003287/fmriprep-slurm"
 EMAIL=${SLACK_EMAIL_BOT}

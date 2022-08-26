@@ -45,7 +45,7 @@ def parse_args():
         type=str,
         help=(
             'Text in a fmriprep file name, in between '
-            'sub-<subject>_ses-<session>_and `space-<template>`.',
+            'sub-<subject>_ses-<session>_and `space-<template>`.'
         ),
     )
     parser.add_argument(

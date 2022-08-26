@@ -21,7 +21,7 @@ cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 subject=$( sed -n -E "$((${SLURM_ARRAY_TASK_ID}))s/(\S*)\>.*/\1/gp" ${valid_id} )
 echo $subject
 
-python ./fmriprep_denoise/dataset/make_dataset.py \
+make_timeseries \
     --fmriprep_path ${fmriprep_path} \
     --dataset_name ds000030 \
     --specifier task-rest \
