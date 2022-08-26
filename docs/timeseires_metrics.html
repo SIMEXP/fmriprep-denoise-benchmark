@@ -5,53 +5,53 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Abstract &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
+    <title>Generate the reports &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
     
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
-<link href="_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
-    href="_static/vendor/fontawesome/5.13.0/css/all.min.css">
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
   <link rel="preload" as="font" type="font/woff2" crossorigin
-    href="_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
-    <link rel="stylesheet" href="_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
-    <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
-    <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
-    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
-    <script src="_static/jquery.js"></script>
-    <script src="_static/underscore.js"></script>
-    <script src="_static/doctools.js"></script>
-    <script src="_static/clipboard.min.js"></script>
-    <script src="_static/copybutton.js"></script>
-    <script src="_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
     <script>let toggleHintShow = 'Click to show';</script>
     <script>let toggleHintHide = 'Click to hide';</script>
     <script>let toggleOpenOnPrint = 'true';</script>
-    <script src="_static/togglebutton.js"></script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="_static/design-tabs.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
-    <script async="async" src="_static/sphinx-thebe.js"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Introductions" href="research_report/introductions.html" />
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Preprocessing fMRI data" href="fmriprep.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -86,27 +86,27 @@ const thebe_selector_output = ".output, .cell_output"
 <div class="bd-sidebar noprint" id="site-navigation">
     <div class="bd-sidebar__content">
         <div class="bd-sidebar__top"><div class="navbar-brand-box">
-    <a class="navbar-brand text-wrap" href="#">
+    <a class="navbar-brand text-wrap" href="../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
         
       
       
-      <img src="_static/logo.png" class="logo" alt="logo">
+      <img src="../_static/logo.png" class="logo" alt="logo">
       
       
       <h1 class="site-logo" id="site-title">Benchmark denoising strategies on fMRIPrep outputs</h1>
       
     </a>
-</div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
   <i class="icon fas fa-search"></i>
   <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
 </form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
                     Abstract
                 </a>
             </li>
@@ -118,32 +118,32 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="research_report/introductions.html">
+  <a class="reference internal" href="../research_report/introductions.html">
    Introductions
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="research_report/methods.html">
+  <a class="reference internal" href="../research_report/methods.html">
    Methods
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="research_report/results.html">
+  <a class="reference internal" href="../research_report/results.html">
    Results
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="research_report/discussions.html">
+  <a class="reference internal" href="../research_report/discussions.html">
    Discussions
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="research_report/contributions.html">
+  <a class="reference internal" href="../research_report/contributions.html">
    Contributions
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="research_report/references.html">
+  <a class="reference internal" href="../research_report/references.html">
    References
   </a>
  </li>
@@ -155,22 +155,22 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="supplementary_materials/CITATION.html">
+  <a class="reference internal" href="../supplementary_materials/CITATION.html">
    fMRIPrep preprocessing details
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="supplementary_materials/report_ds000228.html">
+  <a class="reference internal" href="../supplementary_materials/report_ds000228.html">
    ds000228
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="supplementary_materials/report_ds000030.html">
+  <a class="reference internal" href="../supplementary_materials/report_ds000030.html">
    ds000030
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="supplementary_materials/ohbm2022abstract.html">
+  <a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html">
    OHBM 2022 abstract - submitted text
   </a>
  </li>
@@ -180,24 +180,24 @@ const thebe_selector_output = ".output, .cell_output"
   Workflow documentation
  </span>
 </p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="docs/tldr.html">
+  <a class="reference internal" href="tldr.html">
    Quick start
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="docs/setup.html">
+  <a class="reference internal" href="setup.html">
    Setup to run all customised scripts for preprocessing
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="docs/fmriprep.html">
+  <a class="reference internal" href="fmriprep.html">
    Preprocessing fMRI data
   </a>
  </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="docs/timeseires_metrics.html">
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
    Generate the reports
   </a>
  </li>
@@ -252,35 +252,6 @@ title="Toggle navigation"
         
     </div>
     <div class="header-article__right">
-<div class="menu-dropdown menu-dropdown-launch-buttons">
-  <button class="headerbtn menu-dropdown__trigger"
-      aria-label="Launch interactive content">
-      <i class="fas fa-rocket"></i>
-  </button>
-  <div class="menu-dropdown__content">
-    <ul>
-      <li>
-        <a href="https://mybinder.org/v2/gh/SIMEXP/fmriprep-denoise-benchmark/main?urlpath=tree/content/index.md"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Launch on Binder"
->
-  
-
-<span class="headerbtn__icon-container">
-  
-    <img src="_static/images/logo_binder.svg">
-  </span>
-<span class="headerbtn__text-container">Binder</span>
-</a>
-
-      </li>
-      
-    </ul>
-  </div>
-</div>
-
 <button onclick="toggleFullScreen()"
   class="headerbtn"
   data-toggle="tooltip"
@@ -320,7 +291,7 @@ title="Source repository"
       </li>
       
       <li>
-        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Findex.html&body=Your%20issue%20content%20here."
+        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Fdocs/timeseires_metrics.html&body=Your%20issue%20content%20here."
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -348,24 +319,7 @@ title="Open an issue"
   <div class="menu-dropdown__content">
     <ul>
       <li>
-        <a href="_sources/index.ipynb"
-   class="headerbtn"
-   data-toggle="tooltip"
-data-placement="left"
-title="Download notebook file"
->
-  
-
-<span class="headerbtn__icon-container">
-  <i class="fas fa-code"></i>
-  </span>
-<span class="headerbtn__text-container">.ipynb</span>
-</a>
-
-      </li>
-      
-      <li>
-        <a href="_sources/index.md"
+        <a href="../_sources/docs/timeseires_metrics.md"
    class="headerbtn"
    data-toggle="tooltip"
 data-placement="left"
@@ -402,23 +356,70 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#timeseries-and-metrics">
+   timeseries and metrics
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#build-the-book">
+   Build the book
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
         <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
-                <h1>Abstract</h1>
+                <h1>Generate the reports</h1>
                 <!-- Table of contents -->
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#timeseries-and-metrics">
+   timeseries and metrics
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#build-the-book">
+   Build the book
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -426,48 +427,52 @@ title="Print to PDF"
                 
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="abstract">
-<h1>Abstract<a class="headerlink" href="#abstract" title="Permalink to this headline">#</a></h1>
-<p>Various fMRI denoising benchmarks have been published in the past,
-however the impact of the denoising strategies has yet to be evaluated on the popular minimal preprocessing tool fMRIPrep.
-The confound outputs of fMRIPrep presented the users with a range of possible nuisance regressors.While users benefit from a wide selection of regressors,
-without understanding the literature one can pick a combination of regressors that reintroduce noise to the signal.
-Current work aims to introduce an application programming interface (API) implemented in
-<a class="reference external" href="https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds"><code class="docutils literal notranslate"><span class="pre">nilearn</span></code></a>
-to standardise fMRIPrep confounds retrieval from the confounds outputs,
-and provide benchmarks of different strategies using functional connectivity generated from resting state data.
-We compared the connectomes generated from a set of different atlases and compare 4 classes of denoising strategies against the high-pass filtered data:
-head motion and tissue signal (<code class="docutils literal notranslate"><span class="pre">simple</span></code>), scrubbing (<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code>), CompCor (<code class="docutils literal notranslate"><span class="pre">compcor</span></code>), and ICA-AROMA (<code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code>).
-The benchmarks were performed on two datasets openly available on OpenNeuro, covering different age group and psychiatric conditions:
-<code class="docutils literal notranslate"><span class="pre">ds000228</span></code> (child and adult), and
-<code class="docutils literal notranslate"><span class="pre">ds000030</span></code> (healthy control, ADHD, bipolar, and schizophrenia).
-We investigated the loss of temporal degrees of freedom of each strategy, and three functional connectivity based metrics:
-quality control / functional connectivity (QC-FC),
-distance-dependent effects of motion on connectivity, and
-denoised outcome on network modularity.
-After excluding subjects with excessive motion,
-all strategies can reduce the correlation of motion and functional connectivity measure,
-except ICA-AROMA combined with global signal regression.
-Scrubbing based strategy is the best at eliminating distance dependency of motion.
-For network modularity, strategies including global signal regression show more detectable networks.
-Between different age groups, the number of ICA-AROMA and/or CompCor components varies,
-and will result in inconsistent loss in degrees of freedom and statistical power in the study.
-A simple approach containing only head motion parameters, white matter and cerebrospinal fluid signal might provide consistency regardless of the sample.
-In conclusion, with the maturity of fMRIPrep, the common denoising strategies are achieving the goal,
-and the choice of strategies are down to the researchers’ needs.
-There is no definitive best option for denoising but methods that fit for different purposes.</p>
-<p><strong><span class="fa fa-key"></span> Keywords:</strong>
-<code class="docutils literal notranslate"><span class="pre">reproducibility</span></code>,
-<code class="docutils literal notranslate"><span class="pre">fMRIPrep</span></code>,
-<code class="docutils literal notranslate"><span class="pre">nilearn</span></code>,
-<code class="docutils literal notranslate"><span class="pre">nuisance</span> <span class="pre">regressor</span></code>,
-<code class="docutils literal notranslate"><span class="pre">resting-state</span> <span class="pre">fMRI</span></code>,
-<code class="docutils literal notranslate"><span class="pre">functional</span> <span class="pre">connectivity</span></code></p>
-<div class="toctree-wrapper compound">
+  <div class="tex2jax_ignore mathjax_ignore section" id="generate-the-reports">
+<h1>Generate the reports<a class="headerlink" href="#generate-the-reports" title="Permalink to this headline">#</a></h1>
+<div class="section" id="timeseries-and-metrics">
+<h2>timeseries and metrics<a class="headerlink" href="#timeseries-and-metrics" title="Permalink to this headline">#</a></h2>
+<ol>
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_timeseries_slurm_scripts.py</span></code>:</p>
+<p>Extract time series with different atlases.
+The scripts generates slurm to extract time series with different atlases.
+We created two separate scripts for descrete and probability atlas due to different memory requrement.
+You will find the output under:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/scratch/${USER}/fmriprep-denoise-benchmark/giga_timeseries/{DATASET_NAME}/{FMRIPREP_VERSION}/{UNIXTIME}/.slurm
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
+<p>Similar to fmriprep-slurm, it will give you the exact commands you need to run.
+It should be something looking like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>find /scratch/${USER}/ds000228/UNIXTIME/.slurm/smriprep_sub-*.sh -type f | while read file; do sbatch &quot;$file&quot;; done
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
+<p>This process will take a few hours.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slurm_meta_confounds.sh</span></code>:</p>
+<p>Create files to determine which subject will enter the next stage for metric generation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch slurm_metric/slurm_meta_confounds.sh
+</pre></div>
+</div>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slurm_metric/*/*.sh</span></code>:</p>
+<p>Caculate metrics on denoising quality per atlas.
+Use this line to submit all jobs at once.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/slurm_metrics/*/*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+</pre></div>
+</div>
+</li>
+<li><p>Create a symbolic link of the metrics to the <code class="docutils literal notranslate"><span class="pre">inputs/</span></code> directory</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ln -s $SCRATCH/fmriprep-denoise-benchmark/metrics inputs/fmrieprep-denoise-metrics
+</pre></div>
+</div>
+<p>This way when the book built is triggered, it will not download data from zenodo.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="build-the-book">
+<h2>Build the book<a class="headerlink" href="#build-the-book" title="Permalink to this headline">#</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">book</span>
+</pre></div>
+</div>
 </div>
 </div>
 
@@ -484,7 +489,7 @@ There is no definitive best option for denoising but methods that fit for differ
         },
         kernelOptions: {
             kernelName: "python3",
-            path: "./."
+            path: "./docs"
         },
         predefinedOutput: true
     }
@@ -498,12 +503,12 @@ There is no definitive best option for denoising but methods that fit for differ
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='right-next' id="next-link" href="research_report/introductions.html" title="next page">
-    <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Introductions</p>
-    </div>
-    <i class="fas fa-angle-right"></i>
+    <a class='left-prev' id="prev-link" href="fmriprep.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Preprocessing fMRI data</p>
+        </div>
     </a>
 </div>
             </footer>
@@ -526,7 +531,7 @@ There is no definitive best option for denoising but methods that fit for differ
     </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
 
 
   </body>
