@@ -352,12 +352,46 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#atlases">
+   Atlases
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing-fmri-data">
+   Preprocessing fMRI data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generate-timeseries-and-metrics">
+   Generate timeseries and metrics
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -369,6 +403,29 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#atlases">
+   Atlases
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#preprocessing-fmri-data">
+   Preprocessing fMRI data
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#generate-timeseries-and-metrics">
+   Generate timeseries and metrics
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -380,35 +437,103 @@ title="Print to PDF"
 <h1>Setup to run all customised scripts for preprocessing<a class="headerlink" href="#setup-to-run-all-customised-scripts-for-preprocessing" title="Permalink to this headline">#</a></h1>
 <p>The dataset and features requires HPC for the computation.
 Here are scripts we used to process the current project presented in the study.
-If not otherwise specified, the scripts were executive from the root of the project.</p>
+If not otherwise specified, the scripts were executive from the root of the project.
+If you are a member of the SIMEXP team, you can run the script as is;
+otherwise, please install other software and modify the path and variables accordingly.</p>
+<p>We recommand to understand how to create and detach a tmux session before further reading.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://tmuxcheatsheet.com/">tmux cheat sheet</a></p></li>
+<li><p><a class="reference external" href="https://stackoverflow.com/questions/25331471/tmux-detach-while-running-script">How to leave your script running in a tmux session</a></p></li>
+</ul>
+<p>In most of the slurm scripts, we send SLURM job status email to slack bot,
+please see
+<a class="reference external" href="https://simexp-documentation.readthedocs.io/en/latest/alliance_canada/hpc.html?highlight=slack#slurm-notifications-on-slack">here</a>
+to set-up your slack bot email address.
+Please modify the scripts accordingly.</p>
+<div class="section" id="atlases">
+<h2>Atlases<a class="headerlink" href="#atlases" title="Permalink to this headline">#</a></h2>
+<p>After cloning and setting up the project, we will need to get all the atlases for the analysis.
+We will need to download from <code class="docutils literal notranslate"><span class="pre">templateflow</span></code> and <code class="docutils literal notranslate"><span class="pre">nilearn</span></code>, and organise them in <code class="docutils literal notranslate"><span class="pre">templateflow</span></code> standard.</p>
 <ol>
-<li><p>Preprocess data with fMRIPrep.
-We generate the slurm files using <a class="reference external" href="https://simexp-documentation.readthedocs.io/en/latest/giga_preprocessing/preprocessing.html">fMRIPrep-slurm</a>.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>fmriprep-slurm/singularity_run.bash <span class="se">\</span>
-    PATH/TO/BIDS/DATASET <span class="se">\</span>
-    fmriprep <span class="se">\</span>
-    --fmriprep-args<span class="o">=</span><span class="se">\&quot;</span>--use-aroma<span class="se">\&quot;</span> <span class="se">\</span>
-    --email<span class="o">=</span><span class="nv">$SLACK_EMAIL_BOT</span>
+<li><p>Download all the atlases (require network access):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/fetch_templates.py
 </pre></div>
 </div>
-<p>See here to learn about <a class="reference external" href="https://simexp-documentation.readthedocs.io/en/latest/alliance_canada/hpc.html?highlight=slack#slurm-notifications-on-slack"><code class="docutils literal notranslate"><span class="pre">$SLACK_EMAIL_BOT</span></code></a></p>
-</li>
-<li><p><code class="docutils literal notranslate"><span class="pre">setup.sh</span></code>:
-Install all dependencies.
-Download atlases and save them in templateflow competible format.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">slurm_timesereis/*.sh</span></code>:
-Extract time series with different atlases.
-The scripts were separated based on different memory requirements.
-Use this line to submit all jobs at once.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/slurm_timeseries/*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+<p>Or you can use the make command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make atlas
 </pre></div>
 </div>
-<p>If you get an error along the line of <code class="docutils literal notranslate"><span class="pre">Job</span> <span class="pre">violates</span> <span class="pre">accounting/QOS</span> <span class="pre">policy</span></code>,
-Submit batches by dataset.</p>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">slurm_metric/slurm_meta_confounds.sh</span></code>:
-Create files to determine which subject will enter the next stage for metric generation.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch scripts/slurm_metric/slurm_meta_confounds.sh
+<li><p>Process the atlases and organise the files to templateflow standard.
+One of the measure require the node-wise distances, so we need to separate the Difumo atlas dimensions into parcels.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash scripts/setup_templateflow.sh
+</pre></div>
+</div>
+<p>Or the Make command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make templateflow
+</pre></div>
+</div>
+<p>If this step is computational too intensive, you can run it in on a computing node.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="preprocessing-fmri-data">
+<h2>Preprocessing fMRI data<a class="headerlink" href="#preprocessing-fmri-data" title="Permalink to this headline">#</a></h2>
+<p>The steps here are required if you want to fully rerun the analysis.
+If you are not a SIMEXP member on Aliance Canada,
+you will need to clone <a class="reference external" href="https://github.com/SIMEXP/fmriprep-slurm">fMRIPrep-slurm</a> and modify paths accordingly.
+All scripts are under <code class="docutils literal notranslate"><span class="pre">scripts/preprocessing</span></code>.
+If you wish to use the produced metrics to generate the book, feel free to skip this section.</p>
+<ol>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocessing/get_fmriprep.sh</span></code>:</p>
+<p>We need to build the fMRIPrep singularity containers version <code class="docutils literal notranslate"><span class="pre">20.2.1</span></code> (fMRIPrep-slurm default) and <code class="docutils literal notranslate"><span class="pre">20.2.5</span></code>.
+For details, please find the documentation on <a class="reference external" href="https://www.nipreps.org/apps/singularity/">niprep</a>.
+Alternatively, you can execute the script prepared <code class="docutils literal notranslate"><span class="pre">get_fmriprep.sh</span></code>.
+We recommand building the container in a tmux session.
+This will take a few hours!
+Run it before going home.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocessing/get_datasets.sh</span></code>:</p>
+<p>While runing Step 1 you can get the OpenNeuro datasets in parallel.
+Run the script in a tmux session.
+This will take an hour or so.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">preprocessing/create_fmriprep_slurm_scripts.sh</span></code>:</p>
+<p>After the containers are built and datasets downloaded, we generate the slurm files using <a class="reference external" href="https://simexp-documentation.readthedocs.io/en/latest/giga_preprocessing/preprocessing.html">fMRIPrep-slurm</a>.</p>
+<p>Remember to check your script to make sure everything runs correctly.
+This will take the time of a coffee break.</p>
+</li>
+<li><p>Run fmriprep</p>
+<p>fMRIPrep-slurm will give you the exact commands you need to run.
+It should be something looking like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>find /scratch/${USER}/ds000228/UNIXTIME/.slurm/smriprep_sub-*.sh -type f | while read file; do sbatch &quot;$file&quot;; done
+</pre></div>
+</div>
+<p>This process will take up a day.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="generate-timeseries-and-metrics">
+<h2>Generate timeseries and metrics<a class="headerlink" href="#generate-timeseries-and-metrics" title="Permalink to this headline">#</a></h2>
+<ol>
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_timeseries_slurm_scripts.py</span></code>:</p>
+<p>Extract time series with different atlases.
+The scripts generates slurm to extract time series with different atlases.
+We created two separate scripts for descrete and probability atlas due to different memory requrement.
+You will find the output under:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/scratch/${USER}/fmriprep-denoise-benchmark/giga_timeseries/{DATASET_NAME}/{FMRIPREP_VERSION}/{UNIXTIME}/.slurm
+</pre></div>
+</div>
+<p>Similar to fmriprep-slurm, it will give you the exact commands you need to run.
+It should be something looking like this:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>find /scratch/${USER}/ds000228/UNIXTIME/.slurm/smriprep_sub-*.sh -type f | while read file; do sbatch &quot;$file&quot;; done
+</pre></div>
+</div>
+<p>This process will take a few hours.</p>
+</li>
+<li><p><code class="docutils literal notranslate"><span class="pre">slurm_meta_confounds.sh</span></code>:</p>
+<p>Create files to determine which subject will enter the next stage for metric generation.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch slurm_metric/slurm_meta_confounds.sh
 </pre></div>
 </div>
 </li>
@@ -420,6 +545,7 @@ Use this line to submit all jobs at once.</p>
 </div>
 </li>
 </ol>
+</div>
 </div>
 
     <script type="text/x-thebe-config">
