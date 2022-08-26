@@ -77,26 +77,39 @@ If you wish to use the produced metrics to generate the book, feel free to skip 
     Remember to check your script to make sure everything runs correctly.
     This will take the time of a coffee break.
 
+4. Run fmriprep
+    
+    fMRIPrep-slurm will give you the exact commands you need to run.
+    It should be something looking like this:
+    ```
+    find /scratch/${USER}/ds000228/UNIXTIME/.slurm/smriprep_sub-*.sh -type f | while read file; do sbatch "$file"; done
+    ```
+    This process will take up a day.
+
 ## Generate timeseries and metrics 
     
-3. `slurm_timesereis/*.sh`: 
+3. `generate_timeseries_slurm_scripts.py`: 
 
     Extract time series with different atlases. 
-    The scripts were separated based on different memory requirements.
-    Use this line to submit all jobs at once.
-
-    ```bash
-    find scripts/slurm_timeseries/*.sh -type f | while read file; do sbatch $file; done
+    The scripts generates slurm to extract time series with different atlases.
+    We created two separate scripts for descrete and probability atlas due to different memory requrement.
+    You will find the output under:
     ```
-    If you get an error along the line of `Job violates accounting/QOS policy`,
-    Submit batches by dataset.
+    /scratch/${USER}/fmriprep-denoise-benchmark/giga_timeseries/{DATASET_NAME}/{FMRIPREP_VERSION}/{UNIXTIME}/.slurm
+    ```
+    Similar to fmriprep-slurm, it will give you the exact commands you need to run.
+    It should be something looking like this:
+    ```
+    find /scratch/${USER}/ds000228/UNIXTIME/.slurm/smriprep_sub-*.sh -type f | while read file; do sbatch "$file"; done
+    ```
+    This process will take a few hours.
 
-4. `slurm_metric/slurm_meta_confounds.sh`:
+4. `slurm_meta_confounds.sh`:
 
     Create files to determine which subject will enter the next stage for metric generation.
 
     ```bash
-    sbatch scripts/slurm_metric/slurm_meta_confounds.sh
+    sbatch slurm_metric/slurm_meta_confounds.sh
     ```
 
 5. `slurm_metric/*/*.sh`: 
