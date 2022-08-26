@@ -19,8 +19,8 @@ parts:
     - file: supplementary_materials/report_ds000030.md
     - file: supplementary_materials/ohbm2022abstract.md
   - caption: Workflow documentation
-    - file: docs/walkthrough.md
-      sections:
-      - file: docs/setup.md
-      - file: docs/fmriprep.md
-      - file: docs/timeseires_metrics.md
+    chapters:
+    - file: docs/tldr.md
+    - file: docs/setup.md
+    - file: docs/fmriprep.md
+    - file: docs/timeseires_metrics.md

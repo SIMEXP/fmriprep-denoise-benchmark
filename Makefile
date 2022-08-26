@@ -1,4 +1,4 @@
-.PHONY: help atlas templateflow data book all
+.PHONY: help atlas templateflow book all
 
 PYTHON ?= python
 
@@ -8,7 +8,7 @@ help:
 	@echo "Please use 'make <target>' where <target> is one of:"
 	@echo "  atlas				to download atlases for analysis"
 	@echo "  templateflow		to process the atlases for analysis"
-	# @echo "  data				to download data needed for jupyter book"
+	@echo "  data				to download data needed for jupyter book"
 	@echo "  book				to compile the jupyter book"
 	@echo "  all				to run 'atlas', templateflow, and 'book'"
 
