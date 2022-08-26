@@ -1,7 +1,9 @@
 #!/bin/bash
 
 CONTAINER_PATH="/lustre03/project/6003287/containers"
-VERSION=("20.2.1" "20.2.7")
+VERSION=("20.2.1" "20.2.5")
+
+module load singularity/3.8
 
 echo "Check signularity containers"
 for v in ${VERSION[*]}; do
