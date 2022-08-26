@@ -26,7 +26,7 @@ for v in ${VERSION[*]}; do
         fmriprep-${v}lts \
         --fmriprep-args=\"--use-aroma\" \
         --email=${EMAIL} \
-        --container ${CONTAINER_PATH}/fmriprep-${v}lts.sif
+        --container fmriprep-${v}lts
 done
 
 echo ds000030
@@ -39,5 +39,5 @@ for v in ${VERSION[*]}; do
         --participant-label $subjects \
         --fmriprep-args=\"-t rest --use-aroma\" \
         --email=${EMAIL} \
-        --container ${CONTAINER_PATH}/fmriprep-${v}lts.sif
+        --container fmriprep-${v}lts
 done
