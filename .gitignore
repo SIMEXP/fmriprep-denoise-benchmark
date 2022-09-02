@@ -1,6 +1,8 @@
 # input 
 inputs/*
 tmp/
+draft/
+*.drawio.bkp
 
 # HCP
 logs/

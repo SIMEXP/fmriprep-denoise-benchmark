@@ -1,5 +1,20 @@
 # Introductions
 
+<!-- - background: (5 - 10 lines)
+    - denoising matter
+    - gap: standardisation denoising in fmri
+        - easy to use, maintainable implementation
+        - re-executable benchmark to track changes overtime
+- standardise preprocessing, testing and maintainance
+- denoising
+- benchmark and repro
+- in this paper:
+    - implement something maintainable
+    - reproducible benchmark
+	- actual benchmark results
+    - recommandation for future direction -->
+
+
 <!-- aim of the paragraph: We all know denoising is important now. And we cannot understand brain activity without it. -->
 Amongst functional magnetic resonance imaging (fMRI) acquisition protocols,
 resting-state fMRI has become a tool of choice to explore human brain function in healthy and diseased populations {cite:p}`biswal_2010`.
@@ -16,6 +31,8 @@ For example, when functional connectivity is contaminated with motion, it can le
 Indeed, in younger subjects and neurologic/psychiatric patients the impact of head motion on connectivity is frequently reported {cite:p}`makowski_head_2019,satterthwaite_impact_2012`.
 Hence, reducing the impact of confounds, known as denoising,
 is a major component of the fMRI workflow to ensure the quality of analysis.
+
+
 
 ## Types of noise regressors
 
