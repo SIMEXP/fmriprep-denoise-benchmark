@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Introductions &#8212; Benchmark denoising strategies on fMRIPrep outputs</title>
+    <title>Introductions &#8212; Maintainable implementation of re-executable benchmark to track changes overtime</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -51,7 +51,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script async="async" src="../_static/sphinx-thebe.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Methods" href="methods.html" />
+    <link rel="next" title="Software implementation" href="software_implemetation.html" />
     <link rel="prev" title="Abstract" href="../index.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -96,7 +96,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../_static/logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">Benchmark denoising strategies on fMRIPrep outputs</h1>
+      <h1 class="site-logo" id="site-title">Maintainable implementation of re-executable benchmark to track changes overtime</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -124,8 +124,13 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="methods.html">
-   Methods
+  <a class="reference internal" href="software_implemetation.html">
+   Software implementation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="benchmark_methods.html">
+   Benchmark methods
   </a>
  </li>
  <li class="toctree-l1">
@@ -440,6 +445,19 @@ title="Print to PDF"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="introductions">
 <h1>Introductions<a class="headerlink" href="#introductions" title="Permalink to this headline">#</a></h1>
+<!-- - background: (5 - 10 lines)
+    - denoising matter
+    - gap: standardisation denoising in fmri
+        - easy to use, maintainable implementation
+        - re-executable benchmark to track changes overtime
+- standardise preprocessing, testing and maintainance
+- denoising
+- benchmark and repro
+- in this paper:
+    - implement something maintainable
+    - reproducible benchmark
+	- actual benchmark results
+    - recommandation for future direction -->
 <!-- aim of the paragraph: We all know denoising is important now. And we cannot understand brain activity without it. -->
 <p>Amongst functional magnetic resonance imaging (fMRI) acquisition protocols,
 resting-state fMRI has become a tool of choice to explore human brain function in healthy and diseased populations <span id="id1">[<a class="reference internal" href="references.html#id2" title="Bharat B. Biswal, Maarten Mennes, Xi-Nian Zuo, Suril Gohel, Clare Kelly, Steve M. Smith, Christian F. Beckmann, Jonathan S. Adelstein, Randy L. Buckner, Stan Colcombe, Anne-Marie Dogonowski, Monique Ernst, Damien Fair, Michelle Hampson, Matthew J. Hoptman, James S. Hyde, Vesa J. Kiviniemi, Rolf Kötter, Shi-Jiang Li, Ching-Po Lin, Mark J. Lowe, Clare Mackay, David J. Madden, Kristoffer H. Madsen, Daniel S. Margulies, Helen S. Mayberg, Katie McMahon, Christopher S. Monk, Stewart H. Mostofsky, Bonnie J. Nagel, James J. Pekar, Scott J. Peltier, Steven E. Petersen, Valentin Riedl, Serge A. R. B. Rombouts, Bart Rypma, Bradley L. Schlaggar, Sein Schmidt, Rachael D. Seidler, Greg J. Siegle, Christian Sorg, Gao-Jun Teng, Juha Veijola, Arno Villringer, Martin Walter, Lihong Wang, Xu-Chu Weng, Susan Whitfield-Gabrieli, Peter Williamson, Christian Windischberger, Yu-Feng Zang, Hong-Ying Zhang, F. Xavier Castellanos, and Michael P. Milham. Toward discovery science of human brain function. Proceedings of the National Academy of Sciences, 107(10):4734-4739, 2010. doi:10.1073/pnas.0911855107.">Biswal <em>et al.</em>, 2010</a>]</span>.
@@ -470,7 +488,7 @@ is captured by averaging signals within anatomically-derived masks.
 These three classes of regressors can be expanded to their first temporal derivatives and their quadratic terms <span id="id16">[<a class="reference internal" href="references.html#id21" title="Theodore D. Satterthwaite, Mark A. Elliott, Raphael T. Gerraty, Kosha Ruparel, James Loughead, Monica E. Calkins, Simon B. Eickhoff, Hakon Hakonarson, Ruben C. Gur, Raquel E. Gur, and Daniel H. Wolf. An improved framework for confound regression and filtering for control of motion artifact in the preprocessing of resting-state functional connectivity data. NeuroImage, 64:240-256, 2013. doi:https://doi.org/10.1016/j.neuroimage.2012.08.052.">Satterthwaite <em>et al.</em>, 2013</a>]</span> to module the non-linear impact of noise.
 Full expansion of head motion parameters is often required for optimal denoising results.
 <strong>Scrubbing</strong> <span id="id17">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span> is a volume censoring approach to remove high motion segments in which the framewise displacement
-(see section <a class="reference internal" href="methods.html#framewise-displacement"><span class="std std-ref">Participant exclusion based on motion</span></a>)
+(see section <a class="reference internal" href="benchmark_methods.html#framewise-displacement"><span class="std std-ref">Participant exclusion based on motion</span></a>)
 exceeds some threshold.
 The scrubbing approach is applied alongside head motion parameters and tissue signal regressors.
 <strong>Temporal high-pass filtering</strong> accounts for low-frequency signal drifts introduced by <em>physiological and scanner noise sources</em>.
@@ -578,10 +596,10 @@ with the aim of maximising the exposure of the API to the larger Python fMRI com
             <p class="prev-next-title">Abstract</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="methods.html" title="next page">
+    <a class='right-next' id="next-link" href="software_implemetation.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Methods</p>
+        <p class="prev-next-title">Software implementation</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
@@ -592,7 +610,7 @@ with the aim of maximising the exposure of the API to the larger Python fMRI com
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Hao-Ting Wang, Natasha Clarke,Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec<br/>
+    By Hao-Ting Wang, Natasha Clarke, Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec<br/>
   
       &copy; Copyright 2022.<br/>
 </p>

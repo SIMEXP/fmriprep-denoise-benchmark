@@ -1,0 +1,707 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Software implementation &#8212; Maintainable implementation of re-executable benchmark to track changes overtime</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Benchmark methods" href="benchmark_methods.html" />
+    <link rel="prev" title="Introductions" href="introductions.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint">⚠️This is a working draft for discussion and feedback!⚠️</div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../_static/logo.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Maintainable implementation of re-executable benchmark to track changes overtime</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../index.html">
+                    Abstract
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Research report
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="introductions.html">
+   Introductions
+  </a>
+ </li>
+ <li class="toctree-l1 current active">
+  <a class="current reference internal" href="#">
+   Software implementation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="benchmark_methods.html">
+   Benchmark methods
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="results.html">
+   Results
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="discussions.html">
+   Discussions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="contributions.html">
+   Contributions
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="references.html">
+   References
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Appendices and supplemental material
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/CITATION.html">
+   fMRIPrep preprocessing details
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/report_ds000228.html">
+   ds000228
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/report_ds000030.html">
+   ds000030
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../supplementary_materials/ohbm2022abstract.html">
+   OHBM 2022 abstract - submitted text
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Workflow documentation
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../docs/tldr.html">
+   Quick start
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../docs/setup.html">
+   Setup to run all customised scripts for preprocessing
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../docs/fmriprep.html">
+   Preprocessing fMRI data
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../docs/timeseires_metrics.html">
+   Generate the reports
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/SIMEXP/fmriprep-denoise-benchmark/issues/new?title=Issue%20on%20page%20%2Fresearch_report/software_implemetation.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/research_report/software_implemetation.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#retrieve-fmriprep-confounds-output">
+   Retrieve fMRIPrep confounds output
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#basic-noise-components">
+     Basic noise components
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-defined-strategies">
+     Pre-defined strategies
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#denoising-workflow">
+   Denoising workflow
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Software implementation</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#retrieve-fmriprep-confounds-output">
+   Retrieve fMRIPrep confounds output
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#basic-noise-components">
+     Basic noise components
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#pre-defined-strategies">
+     Pre-defined strategies
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#denoising-workflow">
+   Denoising workflow
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="tex2jax_ignore mathjax_ignore section" id="software-implementation">
+<h1>Software implementation<a class="headerlink" href="#software-implementation" title="Permalink to this headline">#</a></h1>
+<p>fMRIprep <span id="id1">[<a class="reference internal" href="references.html#id38" title="Oscar Esteban, Christopher Markiewicz, Ross W Blair, Craig Moodie, Ayse Ilkay Isik, Asier Erramuzpe Aliaga, James Kent, Mathias Goncalves, Elizabeth DuPre, Madeleine Snyder, Hiroyuki Oya, Satrajit Ghosh, Jessey Wright, Joke Durnez, Russell Poldrack, and Krzysztof Jacek Gorgolewski. fMRIPrep: a robust preprocessing pipeline for functional MRI. Nature Methods, 2018. doi:10.1038/s41592-018-0235-4.">Esteban <em>et al.</em>, 2018</a>]</span> is a popular minimal preprocessing software for functional MRI data.
+‘Minimal preprocessing’ refers to motion correction, field unwarping, normalization, bias field correction, and brain extraction.
+Denoising and smoothing are excluded from the workflow.
+Instead, fMRIprep provides users with a large set of potential confound regressors that covers many denoising strategies.
+The users have to select the confound regressors for denoising in subsequent analyses.
+Our aim was to firstly, provide a easy and foolproof API for users to perform subsequent denoising of fMRIprep outputs.
+The loaded format is compatible with <code class="docutils literal notranslate"><span class="pre">nilearn</span></code> analysis functions such as <code class="docutils literal notranslate"><span class="pre">NiftiMasker</span></code> and the GLM modules.
+Secondly we will show how to generate denoised functional connectivity matrix from fMRIPrep outputs with nilearn.</p>
+<div class="section" id="retrieve-fmriprep-confounds-output">
+<h2>Retrieve fMRIPrep confounds output<a class="headerlink" href="#retrieve-fmriprep-confounds-output" title="Permalink to this headline">#</a></h2>
+<p>To enable easy confound variable loading from fMRIPrep outputs,
+confound variables were retrieved using
+(i) a basic API that retrieves different classes of confound regressors,
+<code class="docutils literal notranslate"><span class="pre">nilearn.interfaces.fmriprep.load_confounds</span></code> (simplified as <code class="docutils literal notranslate"><span class="pre">load_confounds</span></code>);
+and (ii) a higher level wrapper to implement common strategies from the denoising literature,
+<code class="docutils literal notranslate"><span class="pre">nilearn.interfaces.fmriprep.load_confounds_strategy</span></code> (simplified as <code class="docutils literal notranslate"><span class="pre">load_confounds_strategy</span></code>).</p>
+<p>The following section describes the logic behind the design of the API.
+For documentation of the actual function, please see the latest version of <a class="reference external" href="https://nilearn.github.io/stable/"><code class="docutils literal notranslate"><span class="pre">nilearn</span></code> documentation</a>.</p>
+<div class="section" id="basic-noise-components">
+<h3>Basic noise components<a class="headerlink" href="#basic-noise-components" title="Permalink to this headline">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">load_confounds</span></code> provides an interface that groups subsets of confound variables into noise components and their parameters.
+It is possible to fine-tune these subsets through the parameters provided.
+The implementation will only support fMRIPrep 1.4.x series or above. <!-- in nilearn we technically only advertise it for LTS versions. -->
+User has to keep the outputted functional derivatives directory unchanged.
+User gains the maximum amount of freedoms from using this interface,
+and some minimal constraints were implemented based on fMRIPrep documentations.
+Warnings and errors will inform the user if the selected confounds were missing or not suited based on their requests.
+The function returns the confound variables and a sample mask per input image.
+The sample mask filters out si
+The details of each parameter are described in the following section.</p>
+<p>Two types of regressors are always loaded with no additional parameters for user customisation:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">high_pass</span></code>: discrete cosine transformation basis regressors to handle low-frequency signal drifts.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">non_steady_state</span></code> denotes volumes collected before the fMRI scanner had reached a stable state.</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">motion</span></code>, <code class="docutils literal notranslate"><span class="pre">wm_csf</span></code>, and <code class="docutils literal notranslate"><span class="pre">global_signal</span></code> share similar expansion options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">motion</span></code>: head motion estimates translation/rotation (6 parameters).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">wm_csf</span></code>: average signal extracted from masks of white matter and cerebrospinal fluid (2 parameters).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">global_signal</span></code>: average signal extracted from brain mask (1 parameters).</p></li>
+</ul>
+<p>For the three parameters above, the user can select from the following four options:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">basic</span></code>: original signal only (n parameter)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">power2</span></code>: original signal + quadratic term (2 * n parameters)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">derivatives</span></code>: original signal + temporal derivative (2 * n parameters)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>:  original signal + temporal derivatives + quadratic terms + quadratic terms temporal derivatives (4 * n parameters)</p></li>
+</ul>
+<p><code class="docutils literal notranslate"><span class="pre">scrub</span></code> generates a mask to exclude volumes with excessive motion <span id="id2">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.
+Three types of parameters can be used to determine volumes to be excluded:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">fd_threshold</span></code>: set the head motion cut-off value determined by framewise displacement approach <span id="id3">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">std_dvars_threshold</span></code>: set the head motion cut-off value determined by the standard deviation of root mean square approach <span id="id4">[<a class="reference internal" href="references.html#id23" title="Mark Jenkinson, Peter Bannister, Michael Brady, and Stephen Smith. Improved optimization for the robust and accurate linear registration and motion correction of brain images. NeuroImage, 17(2):825-841, 2002. doi:https://doi.org/10.1006/nimg.2002.1132.">Jenkinson <em>et al.</em>, 2002</a>, <a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scrub</span></code>: after accounting for time frames with excessive motion, further remove segments shorter than the given number assigned.</p></li>
+</ul>
+<p>The CompCor <span id="id5">[<a class="reference internal" href="references.html#id15" title="Yashar Behzadi, Khaled Restom, Joy Liau, and Thomas T. Liu. A component based noise correction method (compcor) for bold and perfusion based fmri. NeuroImage, 37(1):90-101, 2007. doi:10.1016/j.neuroimage.2007.04.042.">Behzadi <em>et al.</em>, 2007</a>]</span> approach has two associated parameters:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">compcor</span></code> allows users to select components generated by the temporal approach,
+or the anatomical approach with specific details for the mask used in noise signal extraction.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">n_compcor</span></code> states the number of principal components to retrieve.</p></li>
+</ul>
+<p>For the ICA-based approach, fMRIPrep implemented ICA-AROMA <span id="id6">[<a class="reference internal" href="references.html#id56" title="Raimon H. R. Pruim, Maarten Mennes, Daan van Rooij, Alberto Llera, Jan K. Buitelaar, and Christian F. Beckmann. Ica-AROMA: a robust ICA-based strategy for removing motion artifacts from fmri data. NeuroImage, 112(Supplement C):267-277, 2015. URL: http://www.sciencedirect.com/science/article/pii/S1053811915001822, doi:10.1016/j.neuroimage.2015.02.064.">Pruim <em>et al.</em>, 2015</a>]</span>.
+Users must manually enable ICA-AROMA with flag <code class="docutils literal notranslate"><span class="pre">--use-aroma</span></code> when using fMRIPrep.
+The parameter <code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code> allows two approaches:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">full</span></code>: Use fMRIPrep output with suffix <code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold.nii.gz</span></code>. This is the standard and recommanded approach.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">basic</span></code>: Use noise independent components only. Must be used with output with suffix <code class="docutils literal notranslate"><span class="pre">desc-preproc_bold.nii.gz</span></code>.</p></li>
+</ul>
+</div>
+<div class="section" id="pre-defined-strategies">
+<h3>Pre-defined strategies<a class="headerlink" href="#pre-defined-strategies" title="Permalink to this headline">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">load_confounds_strategy</span></code> provides an interface to select currated confounds based on past literature,
+with limited parameters for user customisation.
+There are four possible strategies implementable from fMRIPrep confounds:
+<code class="docutils literal notranslate"><span class="pre">simple</span></code> <span id="id7">[<a class="reference internal" href="references.html#id13" title="Michael D. Fox, Abraham Z. Snyder, Justin L. Vincent, Maurizio Corbetta, David C. Van Essen, and Marcus E. Raichle. The human brain is intrinsically organized into dynamic, anticorrelated functional networks. Proceedings of the National Academy of Sciences, 102(27):9673-9678, 2005. doi:10.1073/pnas.0504136102.">Fox <em>et al.</em>, 2005</a>]</span> (motion parameters and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">scrubbing</span></code> <span id="id8">[<a class="reference internal" href="references.html#id14" title="Jonathan D. Power, Kelly A. Barnes, Abraham Z. Snyder, Bradley L. Schlaggar, and Steven E. Petersen. Spurious but systematic correlations in functional connectivity MRI networks arise from subject motion. NeuroImage, 59(3):2142–2154, 2012. doi:10.1016/j.neuroimage.2011.10.018.">Power <em>et al.</em>, 2012</a>]</span>(volume censoring, motion parameters, and tissue signal),
+<code class="docutils literal notranslate"><span class="pre">compcor</span></code> <span id="id9">[<a class="reference internal" href="references.html#id15" title="Yashar Behzadi, Khaled Restom, Joy Liau, and Thomas T. Liu. A component based noise correction method (compcor) for bold and perfusion based fmri. NeuroImage, 37(1):90-101, 2007. doi:10.1016/j.neuroimage.2007.04.042.">Behzadi <em>et al.</em>, 2007</a>]</span>(anatomical compcor and motion parameters),
+and <code class="docutils literal notranslate"><span class="pre">aroma</span></code> <span id="id10">[<a class="reference internal" href="references.html#id56" title="Raimon H. R. Pruim, Maarten Mennes, Daan van Rooij, Alberto Llera, Jan K. Buitelaar, and Christian F. Beckmann. Ica-AROMA: a robust ICA-based strategy for removing motion artifacts from fmri data. NeuroImage, 112(Supplement C):267-277, 2015. URL: http://www.sciencedirect.com/science/article/pii/S1053811915001822, doi:10.1016/j.neuroimage.2015.02.064.">Pruim <em>et al.</em>, 2015</a>]</span>(ICA-AROMA based denoising and tissue signal).
+All strategies, except <code class="docutils literal notranslate"><span class="pre">compcor</span></code>, provide an option to add global signal to the confound regressors.
+The predefined strategies with their associated noise component is listed in <a class="reference internal" href="#table-predefined-strategies"><span class="std std-numref">Table 1</span></a>.
+Parameters with <code class="docutils literal notranslate"><span class="pre">*</span></code> denote customisable parameters.</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3">
+<summary class="sd-summary-title sd-card-header">
+Click to see <a class="reference internal" href="#table-predefined-strategies"><span class="std std-numref">Table 1</span></a><div class="sd-summary-down docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-down" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 8.72a.75.75 0 000 1.06l6.25 6.25a.75.75 0 001.06 0l6.25-6.25a.75.75 0 00-1.06-1.06L12 14.44 6.28 8.72a.75.75 0 00-1.06 0z"></path></svg></div>
+<div class="sd-summary-up docutils">
+<svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-up" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M18.78 15.28a.75.75 0 000-1.06l-6.25-6.25a.75.75 0 00-1.06 0l-6.25 6.25a.75.75 0 101.06 1.06L12 9.56l5.72 5.72a.75.75 0 001.06 0z"></path></svg></div>
+</summary><div class="sd-summary-content sd-card-body docutils">
+<table class="colwidths-auto table" id="table-predefined-strategies">
+<caption><span class="caption-number">Table 1 </span><span class="caption-text">Denoising strategies</span><a class="headerlink" href="#table-predefined-strategies" title="Permalink to this table">#</a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p class="sd-card-text">strategy</p></th>
+<th class="head"><p class="sd-card-text">image</p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">high_pass</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">motion</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">wm_csf</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">global_signal</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">scrub</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">fd_thresh</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">std_dvars_threshold</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">compcor</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">n_compcor</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">ica_aroma</span></code></p></th>
+<th class="head"><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">demean</span></code></p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">simple</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">full</span></code>*</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">basic</span></code>*</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">None</span></code>*</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code>*</p></td>
+</tr>
+<tr class="row-odd"><td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">scrubbing</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">full</span></code>*</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">5</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">0.5</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">3</span></code>*</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code>*</p></td>
+</tr>
+<tr class="row-even"><td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">compcor</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">desc-preproc_bold</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">full</span></code>*</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">None</span></code>*</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">anat_combined</span></code>*</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">all</span></code>*</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code>*</p></td>
+</tr>
+<tr class="row-odd"><td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">aroma</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">desc-smoothAROMAnonaggr_bold</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code></p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">basic</span></code>*</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">None</span></code>*</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text">N/A</p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">full</span></code></p></td>
+<td><p class="sd-card-text"><code class="docutils literal notranslate"><span class="pre">True</span></code>*</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</details></div>
+</div>
+<div class="section" id="denoising-workflow">
+<h2>Denoising workflow<a class="headerlink" href="#denoising-workflow" title="Permalink to this headline">#</a></h2>
+<p>The denoising workflow is implemented through <code class="docutils literal notranslate"><span class="pre">nilearn</span></code>.
+<a class="reference internal" href="#fig-fmriprep-nilearn-denoise"><span class="std std-numref">Fig. 1</span></a> presents the graphic summary of the workflow.</p>
+<div class="figure align-default" id="fig-fmriprep-nilearn-denoise">
+<a class="reference internal image-reference" href="../_images/fmriprep-nilearn-denoise.png"><img alt="../_images/fmriprep-nilearn-denoise.png" src="../_images/fmriprep-nilearn-denoise.png" style="height: 500px;" /></a>
+<p class="caption"><span class="caption-number">Fig. 1 </span><span class="caption-text">Example workflow of extracting denoised timeseries and functional connectomes from fMRIPrep outputs using nilearn.</span><a class="headerlink" href="#fig-fmriprep-nilearn-denoise" title="Permalink to this image">#</a></p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./research_report"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="introductions.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Introductions</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="benchmark_methods.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Benchmark methods</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Hao-Ting Wang, Natasha Clarke, Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
