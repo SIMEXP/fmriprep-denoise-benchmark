@@ -439,3 +439,5 @@ A value closer to zero indicates the less residual effect of motion after denois
 The bar indicates the average Pearson's correlation between mean framewise displacement and Louvain network modularity,
 the error bars represent its standard deviations. 
 ```
+
+<!-- Visualise connectomes -->
