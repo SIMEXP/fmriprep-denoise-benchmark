@@ -228,3 +228,17 @@ we would expect modularity to decline.
 To understand the extent of correlation between modularity and motion,
 we computed the partial correlation between subjects' modularity values and mean framewise displacement,
 with age and sex as covariates.
+
+## Benchmark workflow
+
+{numref}`fig-denoise-benchmark-workflow` presents the graphic summary of the benchmark workflow.
+
+<!-- description TBA -->
+
+```{figure} ../images/denoise-benchmark-workflow.png
+---
+height: 500px
+name: fig-denoise-benchmark-workflow
+---
+Workflow of generating the full denoising benchmark.
+```
