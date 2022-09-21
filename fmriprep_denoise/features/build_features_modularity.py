@@ -27,7 +27,7 @@ def parse_args():
         'input_path',
         action='store',
         type=str,
-        help='input path for .gz dataset.',
+        help='input path timeseries collection.',
     )
     parser.add_argument(
         'output_path',
@@ -59,15 +59,15 @@ def main():
     """Main function."""
     args = parse_args()
     print(vars(args))
-    input_gz = Path(args.input_path)
+    input_path = Path(args.input_path)
     atlas = args.atlas
     dimension = args.dimension
 
-    extracted_path = check_extraction(input_gz, extracted_path_root=None)
-    print(extracted_path)
-    dataset = extracted_path.name.split('-')[-1]
+    print(input_path)
+    dataset = input_path.parents[2].name
+    fmriprep_ver = input_path.parents[1].name
     path_root = Path(args.output_path).absolute()
-    output_path = path_root / f'dataset-{dataset}'
+    output_path = path_root / dataset / fmriprep_ver
     output_path.mkdir(exist_ok=True)
 
     strategy_names = get_prepro_strategy(None)

@@ -18,7 +18,7 @@ def parse_args():
         description='Extract confound degree of freedome info.',
     )
     parser.add_argument(
-        'output_path', action='store', type=str, help='output path data.'
+        'output_path', action='store', type=str, help='Output path data.'
     )
     parser.add_argument(
         '--fmriprep_path',
