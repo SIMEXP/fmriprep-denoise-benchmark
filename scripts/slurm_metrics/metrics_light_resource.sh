@@ -5,7 +5,7 @@
 #SBATCH --output=logs/qcfc_gordon.out
 #SBATCH --error=logs/qcfc_gordon.err
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=8G 
+#SBATCH --mem-per-cpu=4G 
 
 
 source /lustre03/project/6003287/${USER}/.virtualenvs/fmriprep-denoise-benchmark/bin/activate

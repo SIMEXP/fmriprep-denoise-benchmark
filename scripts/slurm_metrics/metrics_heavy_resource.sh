@@ -5,7 +5,7 @@
 #SBATCH --output=logs/qcfc_highdem.%a.out
 #SBATCH --error=logs/qcfc_highdem.%a.err
 #SBATCH --cpus-per-task=4
-#SBATCH --mem=32G 
+#SBATCH --mem-per-cpu=8G 
 #SBATCH --array=0-1
 
 

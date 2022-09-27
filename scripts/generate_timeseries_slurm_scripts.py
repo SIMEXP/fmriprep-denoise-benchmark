@@ -71,8 +71,8 @@ def create_slurm_scripts(args):
     subjects = sorted(subjects)
     dataset = Path(args.fmriprep_output).parents[1].name
     fmriprep_version = get_fmriprep_version(args.fmriprep_output)
-    timestamp = int(time.time())
-    timeseires_output = f"{args.scratch_path}/fmriprep-denoise-benchmark/giga_timeseries/{dataset}/{fmriprep_version}/{timestamp}"
+    # timestamp = int(time.time())
+    timeseires_output = f"{args.scratch_path}/fmriprep-denoise-benchmark/giga_timeseries/{dataset}/{fmriprep_version}"
     (Path(timeseires_output) / SLURM_JOB_DIR).mkdir(parents=True, exist_ok=True)
     (Path(timeseires_output) / SLURM_LOGS_DIR).mkdir(parents=True, exist_ok=True)
     print("Writing slurm scripts:")
@@ -95,6 +95,7 @@ def create_slurm_scripts(args):
     print("Find outputs in " + timeseires_output + "/" + SLURM_JOB_DIR)
     print("Run jobs:")
     print(f"find {timeseires_output}/{SLURM_JOB_DIR}/timeseries_{dataset}_{fmriprep_version}_*.sh -type f | while read file; do sbatch \"$file\"; done")
+
 
 def create_cmd_inputs(args, subject, dataset, atlas_type, timeseires_output):
     cmd_atlas = []
