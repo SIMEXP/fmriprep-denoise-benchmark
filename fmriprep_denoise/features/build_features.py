@@ -134,13 +134,13 @@ def main():
 
     metric_qcfc = pd.concat(metric_qcfc, axis=1)
     metric_qcfc.to_csv(
-        output_path / dataset / fmriprep_version 
+        output_path / dataset / fmriprep_ver 
         / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv',
         sep='\t',
     )
     metric_mod = pd.concat(metric_mod, axis=1)
     metric_mod.to_csv(
-        output_path / dataset / fmriprep_version 
+        output_path / dataset / fmriprep_ver 
         / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_modularity.tsv',
         sep='\t',
     )
