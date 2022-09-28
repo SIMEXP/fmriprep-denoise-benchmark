@@ -49,7 +49,7 @@ def repo2data_path():
 def get_data_root():
     """Get motion metric data path root."""
     default_path = (
-        Path(__file__).parents[2] / 'inputs' / 'fmrieprep-denoise-metrics'
+        Path(__file__).parents[2] / 'inputs' / 'denoise-metrics'
     )
     if not default_path.exists():
         default_path.mkdir()
@@ -63,7 +63,7 @@ def _get_palette(order):
 
 
 def _get_connectome_metric_paths(
-    dataset, metric, atlas_name, dimension, path_root
+    dataset, fmriprep_version, metric, atlas_name, dimension, path_root
 ):
     """Load connectome motion metrics with some give labels."""
     atlas_name = '*' if isinstance(atlas_name, type(None)) else atlas_name
@@ -76,7 +76,7 @@ def _get_connectome_metric_paths(
     files = list(
         path_root.glob(
             (
-                f'dataset-{dataset}/'
+                f'{dataset}/{fmriprep_version}/'
                 f'dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_'
                 f'{metric}.tsv'
             )
@@ -94,7 +94,7 @@ def _get_connectome_metric_paths(
     return files, labels
 
 
-def prepare_qcfc_plotting(dataset, atlas_name, dimension, path_root):
+def prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, path_root):
     """
     Generate three summary metrics for plotting:
         - significant correlation between motion and edges
@@ -106,6 +106,9 @@ def prepare_qcfc_plotting(dataset, atlas_name, dimension, path_root):
 
     dataset : str
         Dataset name.
+
+    fmriprep_version : str {fmrieprep-20.2.1lts, fmrieprep-20.2.5lts}
+        fMRIPrep version used for preporcessin.
 
     atlas_name : None or str
         Atlas name. Default None to get all outputs.
@@ -123,7 +126,7 @@ def prepare_qcfc_plotting(dataset, atlas_name, dimension, path_root):
     """
     ds_qcfc_sig, ds_qcfc_median_absolute, ds_corr_distance = [], [], []
     file_qcfc, qcfc_labels = _get_connectome_metric_paths(
-        dataset, 'qcfc', atlas_name, dimension, path_root
+        dataset, fmriprep_version, 'qcfc', atlas_name, dimension, path_root
         )
 
     for p, label in zip(file_qcfc, qcfc_labels):
@@ -164,7 +167,7 @@ def prepare_qcfc_plotting(dataset, atlas_name, dimension, path_root):
     return pd.concat([ds_qcfc_sig, ds_qcfc_median_absolute, ds_corr_distance], axis=1)
 
 
-def prepare_modularity_plotting(dataset, atlas_name, dimension, path_root, qc):
+def prepare_modularity_plotting(dataset, fmriprep_version, atlas_name, dimension, path_root, qc):
     """
     Generate two summary metrics for plotting:
         - Mean modularity
@@ -175,6 +178,9 @@ def prepare_modularity_plotting(dataset, atlas_name, dimension, path_root, qc):
 
     dataset : str
         Dataset name.
+
+    fmriprep_version : str {fmrieprep-20.2.1lts, fmrieprep-20.2.5lts}
+        fMRIPrep version used for preporcessin.
 
     atlas_name : None or str
         Atlas name. Default None to get all outputs.
@@ -194,7 +200,7 @@ def prepare_modularity_plotting(dataset, atlas_name, dimension, path_root, qc):
         Summary metrics by group, by strategy
     """
     files_network, modularity_labels = _get_connectome_metric_paths(
-        dataset, 'modularity', atlas_name, dimension, path_root,
+        dataset, fmriprep_version, 'modularity', atlas_name, dimension, path_root,
         )
     _, movement, _ = get_descriptive_data(dataset, path_root, **qc)
 

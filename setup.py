@@ -11,8 +11,7 @@ setup(name='fmriprep-denoise-benchmark',
             'console_scripts': [
                   "make_timeseries = fmriprep_denoise.dataset.make_timeseries:main",
                   "calculate_degrees_of_freedom = fmriprep_denoise.features.calculate_degrees_of_freedom:main",
-                  "build_features_modularity = fmriprep_denoise.features.build_features_modularity:main",
-                  "build_features_qcfc = fmriprep_denoise.features.build_features_qcfc:main",
+                  "build_features = fmriprep_denoise.features.build_features:main",
             ],
       },
       zip_safe=False)

@@ -56,12 +56,19 @@ def lazy_demographic(
 
 
 def get_descriptive_data(
-    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    dataset, fmriprep_version, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """
     Get the data frame of all descriptive data needed for a dataset.
+    
     Parameters
     ----------
+
+    dataset : str
+        Dataset name.
+
+    fmriprep_version : str {fmrieprep-20.2.1lts, fmrieprep-20.2.5lts}
+        fMRIPrep version used for preporcessin.
 
     path_root : pathlib.Path
         Root of the metrics output.
@@ -89,7 +96,7 @@ def get_descriptive_data(
         )
     # load basic data
     movements = (
-        path_root
+        path_root / dataset / fmriprep_version 
         / f'dataset-{dataset}_desc-movement_phenotype.tsv'
     )
     movements = pd.read_csv(movements, index_col=[0, -1], sep='\t')
@@ -97,7 +104,7 @@ def get_descriptive_data(
     movements = movements.reset_index(level='groups')
 
     path_dof = (
-        path_root
+        path_root / dataset / fmriprep_version 
         / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
     )
     confounds_phenotype = pd.read_csv(
