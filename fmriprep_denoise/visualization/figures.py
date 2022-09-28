@@ -85,7 +85,8 @@ def _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc):
     axs = subfigs[1].subplots(3, 4, sharex=True, sharey=True)
     for i, row_axes in enumerate(axs):
         for j, ax in enumerate(row_axes):
-            if cur_strategy := utils.GRID_LOCATION.get((i, j), False):
+            cur_strategy = utils.GRID_LOCATION.get((i, j), False)
+            if cur_strategy:
                 mask = long_qcfc['Strategy'] == cur_strategy
                 g = sns.kdeplot(
                     data=long_qcfc.loc[mask, :],
@@ -190,7 +191,8 @@ def plot_distance_dependence(
         )
         for i, row_axes in enumerate(axs):
             for j, ax in enumerate(row_axes):
-                if cur_strategy := utils.GRID_LOCATION.get((i, j), False):
+                cur_strategy = utils.GRID_LOCATION.get((i, j), False)
+                if cur_strategy:
                     mask = corr_distance_long['Strategy'] == cur_strategy
                     g = sns.histplot(
                         data=corr_distance_long.loc[mask, :],
