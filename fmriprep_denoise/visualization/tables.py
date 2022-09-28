@@ -91,7 +91,7 @@ def get_descriptive_data(
     """
     if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
         raise ValueError(
-            'We did not generate metric with scrubbing threshold set at'
+            'We did not generate metric with scrubbing threshold set at '
             f'framewise displacement = {fd_thresh} mm.'
         )
     # load basic data

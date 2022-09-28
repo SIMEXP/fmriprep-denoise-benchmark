@@ -63,14 +63,14 @@ def main():
     dimension = args.dimension
 
     print(input_path)
-    dataset = input_path.parents[1].name
-    fmriprep_ver = input_path.parents[0].name
+    dataset = input_path.parents[0].name
+    fmriprep_ver = input_path.name
     path_root = Path(args.output_path).absolute()
     output_path = path_root
     output_path.mkdir(parents=True, exist_ok=True)
     print(dataset)
     print(fmriprep_ver)
-
+    print(path_root)
     strategy_names = get_prepro_strategy(None)
     motion_qc = get_qc_criteria(args.qc)
 
@@ -82,6 +82,7 @@ def main():
             atlas,
             input_path,
             dataset,
+            fmriprep_ver,
             path_root,
             file_pattern,
             gross_fd=motion_qc['gross_fd'],

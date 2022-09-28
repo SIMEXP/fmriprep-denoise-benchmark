@@ -15,12 +15,12 @@ DATASET=(ds000030 ds000228)
 cd /home/${USER}/projects/rrg-pbellec/${USER}/fmriprep-denoise-benchmark/
 
 build_features_qcfc inputs/giga_timeseries/${DATASET[${SLURM_ARRAY_TASK_ID}]}/fmriprep-20.2.1lts/ \
-    inputs/denoise-metrics/${DATASET[${SLURM_ARRAY_TASK_ID}]}/fmrieprep-20.2.1lts/ \
+    inputs/denoise-metrics/ \
     --atlas difumo --dimension 1024 --qc stringent
 
 
 build_features_qcfc inputs/giga_timeseries/${DATASET[${SLURM_ARRAY_TASK_ID}]}/fmriprep-20.2.1lts/ \
-    inputs/denoise-metrics/${DATASET[${SLURM_ARRAY_TASK_ID}]}/fmrieprep-20.2.1lts/ \
+    inputs/denoise-metrics/ \
     --atlas schaefer7networks \
     --dimension 800 \
     --qc stringent

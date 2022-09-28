@@ -51,6 +51,7 @@ def compute_connectome(
     atlas,
     extracted_path,
     dataset,
+    fmriprep_version,
     path_root,
     file_pattern,
     gross_fd=None,
@@ -71,6 +72,9 @@ def compute_connectome(
     dataset : str
         Name of the dataset.
 
+    fmriprep_version : str {fmrieprep-20.2.1lts, fmrieprep-20.2.5lts}
+        fMRIPrep version used for preporcessin.
+
     file_pattern : str
         Details about the atlas and description of the file.
 
@@ -80,7 +84,7 @@ def compute_connectome(
         Flatten connectomes and phenotypes.
     """
     _, phenotype, _ = tables.get_descriptive_data(
-        dataset, path_root, gross_fd, fd_thresh, proportion_thresh
+        dataset, fmriprep_version, path_root, gross_fd, fd_thresh, proportion_thresh
     )
     participant_id = phenotype.index.tolist()
     valid_ids, valid_ts = _load_valid_timeseries(
