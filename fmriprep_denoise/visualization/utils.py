@@ -202,7 +202,7 @@ def prepare_modularity_plotting(dataset, fmriprep_version, atlas_name, dimension
     files_network, modularity_labels = _get_connectome_metric_paths(
         dataset, fmriprep_version, 'modularity', atlas_name, dimension, path_root,
         )
-    _, movement, _ = get_descriptive_data(dataset, path_root, **qc)
+    _, movement, _ = get_descriptive_data(dataset, fmriprep_version, path_root, **qc)
 
     ds_mean_corr, ds_mean_modularity = [], []
     for file_network, label in zip(files_network, modularity_labels):

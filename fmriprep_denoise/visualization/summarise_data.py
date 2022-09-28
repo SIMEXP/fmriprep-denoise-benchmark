@@ -11,6 +11,7 @@ atlas_name = None
 dimension = None
 qc = 'stringent'
 datasets = ['ds000228', 'ds000030']
+fmriprep_version = 'fmriprep-20.2.1lts'
 input_root = None
 output_root = None
 
@@ -22,7 +23,7 @@ if __name__ == "__main__":
 
     for dataset in datasets:
         print(f"Processing {dataset}...")
-        ds_modularity = utils.prepare_modularity_plotting(dataset, atlas_name, dimension, input_root, qc)
+        ds_modularity = utils.prepare_modularity_plotting(dataset, fmriprep_version, atlas_name, dimension, input_root, qc)
         ds_qcfc = utils.prepare_qcfc_plotting(dataset, atlas_name, dimension, input_root)
         data = pd.concat([ds_qcfc, ds_modularity], axis=1)
         data.to_csv(output_root / f"dataset-{dataset}_summary.tsv", sep="\t")
