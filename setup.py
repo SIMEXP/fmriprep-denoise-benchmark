@@ -12,6 +12,7 @@ setup(name='fmriprep-denoise-benchmark',
                   "make_timeseries = fmriprep_denoise.dataset.make_timeseries:main",
                   "calculate_degrees_of_freedom = fmriprep_denoise.features.calculate_degrees_of_freedom:main",
                   "build_features = fmriprep_denoise.features.build_features:main",
+                  "build_average_connectomes = fmriprep_denoise.features.build_average_connectomes:main",
             ],
       },
       zip_safe=False)

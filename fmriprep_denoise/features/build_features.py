@@ -51,6 +51,12 @@ def parse_args():
         default=None,
         help='Automatic motion QC thresholds.',
     )
+    parser.add_argument(
+        '--metric',
+        action='store',
+        default='connectomes',
+        help='Metric to build {connectomes, qcfc, modularity}',
+    )
     return parser.parse_args()
 
 
@@ -66,15 +72,16 @@ def main():
     dataset = input_path.parents[0].name
     fmriprep_ver = input_path.name
     path_root = Path(args.output_path).absolute()
-    output_path = path_root
+    output_path = path_root / dataset / fmriprep_ver
     output_path.mkdir(parents=True, exist_ok=True)
     print(dataset)
     print(fmriprep_ver)
-    print(path_root)
+    print(output_path)
     strategy_names = get_prepro_strategy(None)
     motion_qc = get_qc_criteria(args.qc)
+    metric_option = str(args.metric)
 
-    metric_qcfc, metric_mod = [], []
+    collection_metric = []
     for strategy_name in strategy_names.keys():
         file_pattern = f'atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}'
         print(strategy_name)
@@ -90,58 +97,66 @@ def main():
             proportion_thresh=motion_qc['proportion_thresh'],
         )
         print('\tLoaded connectome...')
-        metric = qcfc(
-            phenotype.loc[:, 'mean_framewise_displacement'],
-            connectome,
-            phenotype.loc[:, ['age', 'gender']],
-        )
-        metric = pd.DataFrame(metric)
-        columns = [
-            ('full_sample', f'{strategy_name}_{col}') for col in metric.columns
-        ]
-        columns = pd.MultiIndex.from_tuples(columns)
-        metric.columns = columns
-        metric_qcfc.append(metric)
-        print('\tQC-FC...')
 
-        # QC-FC by group
-        groups = phenotype['groups'].unique()
-        for group in groups:
-            group_mask = phenotype['groups'] == group
-            # make sure values are numerical
-            subgroup = phenotype[group_mask].index
+        if metric_option == 'connectomes':
+            cur_strategy_average = connectome.mean(axis=0)
+            collection_metric.append(cur_strategy_average)
+            print('\tAverage connectome...')
+
+        elif metric_option == 'modularity':
+            # louvain_modularity
+            qs = Parallel(n_jobs=4)(
+                delayed(louvain_modularity)(vect)
+                for vect in connectome.values.tolist())
+            modularity = pd.DataFrame(
+                qs, columns=[strategy_name], index=connectome.index
+            )
+            collection_metric.append(modularity)
+            print('\tModularity...')
+
+        elif metric_option == 'qcfc':
             metric = qcfc(
-                phenotype.loc[subgroup, 'mean_framewise_displacement'],
-                connectome.loc[subgroup, :],
-                phenotype.loc[subgroup, ['age', 'gender']],
+                phenotype.loc[:, 'mean_framewise_displacement'],
+                connectome,
+                phenotype.loc[:, ['age', 'gender']],
             )
             metric = pd.DataFrame(metric)
-            metric.columns = [
-                (group, f'{strategy_name}_{col}') for col in metric.columns
+            columns = [
+                ('full_sample', f'{strategy_name}_{col}') for col in metric.columns
             ]
-            metric_qcfc.append(metric)
+            columns = pd.MultiIndex.from_tuples(columns)
+            metric.columns = columns
+            collection_metric.append(metric)
+            print('\tQC-FC...')
 
-        # louvain_modularity
-        qs = Parallel(n_jobs=4)(
-            delayed(louvain_modularity)(vect)
-            for vect in connectome.values.tolist())
-        modularity = pd.DataFrame(
-            qs, columns=[strategy_name], index=connectome.index
-        )
-        metric_mod.append(modularity)
-        print('\tModularity...')
+            # QC-FC by group
+            groups = phenotype['groups'].unique()
+            for group in groups:
+                group_mask = phenotype['groups'] == group
+                # make sure values are numerical
+                subgroup = phenotype[group_mask].index
+                metric = qcfc(
+                    phenotype.loc[subgroup, 'mean_framewise_displacement'],
+                    connectome.loc[subgroup, :],
+                    phenotype.loc[subgroup, ['age', 'gender']],
+                )
+                metric = pd.DataFrame(metric)
+                metric.columns = [
+                    (group, f'{strategy_name}_{col}') for col in metric.columns
+                ]
+                collection_metric.append(metric)
 
+        else:
+            raise(ValueError)
 
-    metric_qcfc = pd.concat(metric_qcfc, axis=1)
-    metric_qcfc.to_csv(
-        output_path / dataset / fmriprep_ver 
-        / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_qcfc.tsv',
-        sep='\t',
-    )
-    metric_mod = pd.concat(metric_mod, axis=1)
-    metric_mod.to_csv(
-        output_path / dataset / fmriprep_ver 
-        / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_modularity.tsv',
+    collection_metric = pd.concat(collection_metric, axis=1)
+    
+    if metric_option == "connectome":
+        collection_metric.columns = strategy_names.keys()
+
+    collection_metric.to_csv(
+        output_path 
+        / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_{metric_option}.tsv',
         sep='\t',
     )
 
