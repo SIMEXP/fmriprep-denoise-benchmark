@@ -29,6 +29,7 @@ from myst_nb import glue
 
 
 path_root = utils.get_data_root()
+fmriprep_version = 'fmriprep-20.2.1lts'
 
 strategy_order = list(utils.GRID_LOCATION.values())
 group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
@@ -43,8 +44,8 @@ group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'b
 from fmriprep_denoise.features.derivatives import get_qc_criteria
 
 stringent = get_qc_criteria('stringent')
-ds000228 = tables.lazy_demographic('ds000228', path_root, **stringent)
-ds000030 = tables.lazy_demographic('ds000030', path_root, **stringent)
+ds000228 = tables.lazy_demographic('ds000228', fmriprep_version, path_root, **stringent)
+ds000030 = tables.lazy_demographic('ds000030', fmriprep_version, path_root, **stringent)
 
 desc = pd.concat({'ds000228': ds000228, 'ds000030': ds000030}, axis=1, names=['dataset'])
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
@@ -75,7 +76,7 @@ for_plotting = {}
 datasets = ['ds000228', 'ds000030']
 baseline_groups = ['adult', 'control']
 for dataset, baseline_group in zip(datasets, baseline_groups):
-    _, data, _ = tables.get_descriptive_data(dataset, path_root, **stringent)
+    _, data, _ = tables.get_descriptive_data(dataset, fmriprep_version, path_root, **stringent)
     baseline = data[data['groups'] == baseline_group]
     for group in group_order[dataset]:
         compare = data[data['groups'] == group]
@@ -128,7 +129,7 @@ In conclusion, adult samples have lower mean framewise displacement than youth s
 
 datasets = ['ds000228', 'ds000030']
 for dataset in datasets:
-    _, data, _ = tables.get_descriptive_data(dataset, path_root, **stringent)
+    _, data, _ = tables.get_descriptive_data(dataset, fmriprep_version, path_root, **stringent)
     for_plotting.update({dataset: data})
 
 fig = plt.figure(figsize=(7, 5))
@@ -164,7 +165,7 @@ Mean framewise displacement of each dataset after excluding subjects with high m
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-fig, ds_groups = figures.plot_dof_dataset(path_root, **stringent)
+fig, ds_groups = figures.plot_dof_dataset(fmriprep_version, path_root, **stringent)
 glue(f'dof-fig_cleaned', fig, display=False)
 for ds, group in ds_groups:
     glue(f'group-order_{ds}_cleaned', group, display=False)
@@ -212,7 +213,7 @@ ICA-AROMA uses a pre-trained model on healthy subjects to select noise component
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-fig = figures.plot_vol_scrubbed_dataset(path_root, **stringent)
+fig = figures.plot_vol_scrubbed_dataset(fmriprep_version, path_root, **stringent)
 glue(f'scrubbing-fig_cleaned', fig, display=False)
 ```
 
@@ -248,8 +249,8 @@ please see the supplemental material for
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
-path_ds000228 = path_root / "dataset-ds000228_summary.tsv"
-path_ds000030 =  path_root / "dataset-ds000030_summary.tsv"
+path_ds000228 = path_root / "ds000228_fmriprep-20-2-1lts_summary.tsv"
+path_ds000030 =  path_root / "ds000030_fmriprep-20-2-1lts_summary.tsv"
 ds000228 = pd.read_csv(path_ds000228, sep='\t', index_col=[0, 1], header=[0, 1])
 ds000030  = pd.read_csv(path_ds000030, sep='\t', index_col=[0, 1], header=[0, 1])
 

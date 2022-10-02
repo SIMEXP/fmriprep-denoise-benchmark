@@ -7,7 +7,7 @@ group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'b
 
 
 def lazy_demographic(
-    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    dataset, fmriprep_version, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """
     Very lazy report of demographic information.
@@ -15,6 +15,12 @@ def lazy_demographic(
     Parameters
     ----------
 
+    dataset : str
+        Dataset name.
+
+    fmriprep_version : str {fmrieprep-20.2.1lts, fmrieprep-20.2.5lts}
+        fMRIPrep version used for preporcessin.
+        
     path_root : pathlib.Path
         Root of the metrics output.
 
@@ -35,7 +41,7 @@ def lazy_demographic(
         Descriptive stats of age and gender.
     """
     _, df, groups = get_descriptive_data(
-        dataset, path_root, gross_fd, fd_thresh, proportion_thresh
+        dataset, fmriprep_version, path_root, gross_fd, fd_thresh, proportion_thresh
     )
     n_female = df['gender'].sum()
     n_female = pd.Series([n_female], index=['n_female'])

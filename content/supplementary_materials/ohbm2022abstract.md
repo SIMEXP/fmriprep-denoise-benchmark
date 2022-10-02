@@ -24,6 +24,8 @@ path_root = utils.get_data_root()
 
 # Load metric data
 dataset = 'ds000228'
+fmriprep_version = 'fmriprep-20.2.1lts'
+
 atlas_name = 'schaefer7networks'
 dimension = 400
 ```
@@ -112,7 +114,7 @@ Surprisingly, all strategies with global signal regression underperform, contrad
 ```{code-cell}
 :tags: [hide-input, remove-output]
 
-fig = figures.plot_motion_resid(dataset, path_root, atlas_name=atlas_name, dimension=dimension)
+fig = figures.plot_motion_resid(dataset, fmriprep_version, path_root, atlas_name=atlas_name, dimension=dimension)
 glue('ohbm-qcfc-fig', fig, display=False)
 ```
 
@@ -128,7 +130,7 @@ Consistent with the literature, `aroma` reduces the distance dependency of motio
 ```{code-cell}
 :tags: [hide-input, remove-output]
 
-fig = figures.plot_distance_dependence(dataset, path_root, atlas_name=atlas_name, dimension=dimension)
+fig = figures.plot_distance_dependence(dataset, fmriprep_version, path_root, atlas_name=atlas_name, dimension=dimension)
 glue('ohbm-dist-fig', fig, display=False)
 ```
 
@@ -146,7 +148,7 @@ The correlation between modularity quality and motion for each denoising approac
 ```{code-cell}
 :tags: [hide-input, remove-output]
 
-fig = figures.plot_network_modularity(dataset, path_root, atlas_name=atlas_name, dimension=dimension)
+fig = figures.plot_network_modularity(dataset, fmriprep_version, path_root, atlas_name=atlas_name, dimension=dimension)
 glue('ohbm-network-fig', fig, display=False)
 ```
 

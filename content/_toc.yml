@@ -6,11 +6,11 @@ root: index.md
 parts:
   - caption: Research report
     chapters:
-    - file: research_report/introductions.md
+    # - file: research_report/introductions.md
     - file: research_report/software_implemetation.md
     - file: research_report/benchmark_methods.md
     - file: research_report/results.md
-    - file: research_report/discussions.md
+    # - file: research_report/discussions.md
     - file: research_report/contributions.md
     - file: research_report/references.md
   - caption: Appendices and supplemental material

@@ -33,8 +33,9 @@ from myst_nb import glue
 from fmriprep_denoise.visualization import tables, utils
 
 path_root = utils.get_data_root()
+fmriprep_version = 'fmriprep-20.2.1lts'
 
-desc = tables.lazy_demographic('ds000228', path_root)
+desc = tables.lazy_demographic('ds000228', fmriprep_version, path_root)
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
 
 glue('ds000228_desc', desc)
@@ -58,7 +59,7 @@ Demographic information per condition can be found in {numref}`table-ds000030`.
 ```{code-cell}
 :tags: [hide-input]
 
-desc = tables.lazy_demographic('ds000030', path_root)
+desc = tables.lazy_demographic('ds000030', fmriprep_version, path_root)
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
 
 glue('ds000030_desc', desc)

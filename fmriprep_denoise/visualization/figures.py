@@ -11,7 +11,7 @@ from fmriprep_denoise.visualization import utils
 
 
 def plot_motion_resid(
-    dataset, path_root, atlas_name=None, dimension=None, group='full_sample'
+    dataset, fmriprep_version, path_root, atlas_name=None, dimension=None, group='full_sample'
 ):
     """
     Dirty and quick plot for residual motion impact on functional connectivity.
@@ -34,7 +34,7 @@ def plot_motion_resid(
     # One cannot use specific dimension but use wild card in atlas
     metric = 'qcfc'
     files_qcfc, labels = utils._get_connectome_metric_paths(
-        dataset, metric, atlas_name, dimension, path_root,
+        dataset, fmriprep_version, metric, atlas_name, dimension, path_root,
     )
     qcfc_sig = utils._qcfc_fdr(files_qcfc, labels, group=group)
     qcfc_mad = utils._get_qcfc_median_absolute(files_qcfc, labels, group=group)
@@ -136,7 +136,7 @@ def _summary_plots(figure_data, ax):
 
 
 def plot_distance_dependence(
-    dataset, path_root, atlas_name=None, dimension=None, group='full_sample'
+    dataset, fmriprep_version, path_root, atlas_name=None, dimension=None, group='full_sample'
 ):
     """
     Dirty and quick plot for motion distnace dependence.
@@ -158,7 +158,7 @@ def plot_distance_dependence(
     """
     metric = 'qcfc'
     files_qcfc, labels = utils._get_connectome_metric_paths(
-        dataset, metric, atlas_name, dimension, path_root
+        dataset, fmriprep_version, metric, atlas_name, dimension, path_root
     )
     qcfc_dist = utils._get_corr_distance(files_qcfc, labels, group=group)
     color_order = utils._get_palette(qcfc_dist['order'])
@@ -241,7 +241,7 @@ def plot_distance_dependence(
 
 
 def plot_network_modularity(
-    dataset, path_root, atlas_name=None, dimension=None, by_group=False
+    dataset, fmriprep_version, path_root, atlas_name=None, dimension=None, by_group=False
 ):
     """
     Dirty and quick plot for motion impact on modularity.
@@ -262,11 +262,11 @@ def plot_network_modularity(
     """
     metric = 'modularity'
     files_network, labels = utils._get_connectome_metric_paths(
-        dataset, metric, atlas_name, dimension, path_root,
+        dataset, fmriprep_version, metric, atlas_name, dimension, path_root,
     )
 
     file_dataset = (
-        path_root
+        path_root / dataset/ fmriprep_version
         / f'dataset-{dataset}_desc-movement_phenotype.tsv'
     )
     movement = pd.read_csv(
@@ -279,7 +279,7 @@ def plot_network_modularity(
         )
 
     _, participant_groups, groups = utils._get_participants_groups(
-        dataset, path_root
+        dataset, fmriprep_version, path_root
     )
     figs = []
     for group in groups:
@@ -328,7 +328,7 @@ def _plot_network_modularity(
 
 
 def plot_dof_dataset(
-    path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    fmriprep_version, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """
     Dirty and quick plot for loss of temporal degrees of freedom.
@@ -359,6 +359,7 @@ def plot_dof_dataset(
             groups,
         ) = utils._get_participants_groups(
             dataset,
+            fmriprep_version,
             path_root,
             gross_fd=gross_fd,
             fd_thresh=fd_thresh,
@@ -450,7 +451,7 @@ def plot_dof_dataset(
 
 
 def plot_vol_scrubbed_dataset(
-    path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    fmriprep_version, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """
     Dirty and quick plot for loss of temporal volumes in scrubbing based
@@ -482,6 +483,7 @@ def plot_vol_scrubbed_dataset(
             groups,
         ) = utils._get_participants_groups(
             dataset,
+            fmriprep_version,
             path_root,
             gross_fd=gross_fd,
             fd_thresh=fd_thresh,

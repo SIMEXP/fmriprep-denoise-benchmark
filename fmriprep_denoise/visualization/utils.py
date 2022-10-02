@@ -49,10 +49,10 @@ def repo2data_path():
 def get_data_root():
     """Get motion metric data path root."""
     default_path = (
-        Path(__file__).parents[2] / 'inputs' / 'denoise-metrics'
+        Path(__file__).parents[2] / 'inputs' / 'denoise-metrics' / 'denoise-metrics'
     )
     if not default_path.exists():
-        default_path.mkdir()
+        default_path = repo2data_path() / 'denoise-metrics'
     return default_path
 
 
@@ -294,13 +294,14 @@ def _calculate_mean_modularity(modularity, label):
 
 
 def _get_participants_groups(
-    dataset, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    dataset, fmriprep_version, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
 ):
     """Get subject group information."""
 
     # To me deleted if I ever refactor this code.
     confounds_phenotype, movements, groups = get_descriptive_data(
         dataset,
+        fmriprep_version,
         path_root,
         gross_fd=gross_fd,
         fd_thresh=fd_thresh,
