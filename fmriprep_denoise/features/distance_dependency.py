@@ -89,8 +89,8 @@ def get_centroid(atlas_name, dimension):
             Path(__file__).parent / 'data' / file_dist, sep='\t'
         )
 
-    current_atlas = fetch_atlas_path(atlas_name, dimension)
     if atlas_name == 'mist':
+        current_atlas = fetch_atlas_path(atlas_name, dimension)
         return current_atlas.labels.loc[:, ['x', 'y', 'z']].values
     if atlas_name == 'difumo':
         # find files

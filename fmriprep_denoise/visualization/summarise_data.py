@@ -26,4 +26,4 @@ if __name__ == "__main__":
         ds_modularity = utils.prepare_modularity_plotting(dataset, fmriprep_version, atlas_name, dimension, input_root, qc)
         ds_qcfc = utils.prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, input_root)
         data = pd.concat([ds_qcfc, ds_modularity], axis=1)
-        data.to_csv(output_root / f"dataset-{dataset}_summary.tsv", sep="\t")
+        data.to_csv(output_root / f"{dataset}_{fmriprep_version.replace('.', '-')}_summary.tsv", sep="\t")
