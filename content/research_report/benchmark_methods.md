@@ -32,7 +32,7 @@ import pandas as pd
 from myst_nb import glue
 from fmriprep_denoise.visualization import tables, utils
 
-path_root = utils.get_data_root()
+path_root = utils.get_data_root() / "denoise-metrics"
 fmriprep_version = 'fmriprep-20.2.1lts'
 
 desc = tables.lazy_demographic('ds000228', fmriprep_version, path_root)

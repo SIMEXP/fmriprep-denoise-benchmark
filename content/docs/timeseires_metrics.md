@@ -1,8 +1,17 @@
 # Generate the reports
 
 ## timeseries and metrics 
-    
-1. `generate_timeseries_slurm_scripts.py`: 
+
+1. Create a symbolic link of the metrics to the `inputs/` directory
+
+    ```
+    mkdir $SCRATCH/fmriprep-denoise-benchmark/ 
+    rm -rf inputs/  # when you clone the project, this should be empty
+    ln -s $SCRATCH/fmriprep-denoise-benchmark/ inputs
+    ```
+    This way when the book built is triggered, it will not download data from zenodo.
+
+2. `generate_timeseries_slurm_scripts.py`: 
 
     Extract time series with different atlases. 
     The scripts generates slurm to extract time series with different atlases.
@@ -18,7 +27,7 @@
     ```
     This process will take a few hours.
 
-2. `slurm_meta_confounds.sh`:
+3. `slurm_meta_confounds.sh`:
 
     Create files to determine which subject will enter the next stage for metric generation.
 
@@ -26,20 +35,14 @@
     sbatch slurm_metric/slurm_meta_confounds.sh
     ```
 
-3. `slurm_metric/*/*.sh`: 
+4. `slurm_metric/*/*.sh`: 
 
     Caculate metrics on denoising quality per atlas. 
     Use this line to submit all jobs at once.
 
     ```bash
-    find scripts/slurm_metrics/*/*.sh -type f | while read file; do sbatch $file; done
+    find scripts/slurm_metrics/metrics*.sh -type f | while read file; do sbatch $file; done
     ```
-4. Create a symbolic link of the metrics to the `inputs/` directory
-
-    ```
-    ln -s $SCRATCH/fmriprep-denoise-benchmark/metrics inputs/fmrieprep-denoise-metrics
-    ```
-    This way when the book built is triggered, it will not download data from zenodo.
 
 ## Build the book
 

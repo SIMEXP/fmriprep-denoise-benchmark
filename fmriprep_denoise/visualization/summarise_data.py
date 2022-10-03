@@ -17,8 +17,8 @@ output_root = None
 
 
 if __name__ == "__main__":
-    input_root = utils.get_data_root() if input_root is None else Path(input_root)
-    output_root = utils.get_data_root() if output_root is None else Path(output_root)
+    input_root = utils.get_data_root() / "denoise-metrics" if input_root is None else Path(input_root)
+    output_root = utils.get_data_root() / "denoise-metrics" if output_root is None else Path(output_root)
     qc = get_qc_criteria(qc)
 
     for dataset in datasets:

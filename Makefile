@@ -1,8 +1,8 @@
-.PHONY: help atlas templateflow book all
+.PHONY: help atlas templateflow data book all
 
 PYTHON ?= python
 
-all: atlas templateflow book
+all: download book
 
 help:
 	@echo "Please use 'make <target>' where <target> is one of:"
@@ -19,6 +19,10 @@ atlas:
 templateflow:
 	@echo "Prepare for Templateflow..."
 	bash scripts/setup_templateflow.py
+
+data:
+	@echo "Download input data to build the report"
+	$(PYTHON) scripts/download_data.py
 
 book:
 	jb build content --all
