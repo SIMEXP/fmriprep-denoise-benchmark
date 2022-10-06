@@ -1,11 +1,5 @@
 #  Quick start
 
-```{warning}
-
-The instruction is not working yet as the data on zenodo is not up-to-date yet (26 Aug 2022). 
-
-```
-
 I (HTW) aim to provide some documentation for people who would like to rebuild 
 all material of this book.
 For those who wish to generate all the time series, connectomes, and metric, 
