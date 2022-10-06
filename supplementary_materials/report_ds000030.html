@@ -119,11 +119,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/introductions.html">
-   Introductions
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../research_report/software_implemetation.html">
    Software implementation
   </a>
@@ -136,11 +131,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../research_report/results.html">
    Results
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/discussions.html">
-   Discussions
   </a>
  </li>
  <li class="toctree-l1">
@@ -510,7 +500,7 @@ However, when looking at the median absolute deviations, the schizophrania group
 <span class="kn">from</span> <span class="nn">fmriprep_denoise.visualization</span> <span class="kn">import</span> <span class="n">figures</span><span class="p">,</span> <span class="n">utils</span>
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
-<span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_data_root</span><span class="p">()</span>
+<span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_data_root</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;denoise-metrics&quot;</span>
 
 <span class="c1"># Load metric data</span>
 <span class="n">dataset</span> <span class="o">=</span> <span class="s1">&#39;ds000030&#39;</span>
@@ -571,13 +561,10 @@ In this atlas there's only one parcellation scheme.
 ````
 ::: -->
 <div class="sd-tab-set docutils">
-<input checked="checked" id="e4f95234-996f-4bde-8cd4-5c2b17050233" name="284bc453-9b83-4265-9535-a0a2195ad57b" type="radio">
-</input><label class="sd-tab-label" for="e4f95234-996f-4bde-8cd4-5c2b17050233">
+<input checked="checked" id="62e4028d-7487-4444-99a6-2ac7683aac2a" name="16535c0b-389e-4ec7-b726-6d1094678d26" type="radio">
+</input><label class="sd-tab-label" for="62e4028d-7487-4444-99a6-2ac7683aac2a">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-mist-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_0.png" src="../_images/report_ds000030_1_0.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 35 </span><span class="caption-text">CONTROL.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -585,9 +572,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-control-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-mist-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_1.png" src="../_images/report_ds000030_1_1.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 36 </span><span class="caption-text">SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -595,9 +579,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-schz-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-mist-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_2.png" src="../_images/report_ds000030_1_2.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 37 </span><span class="caption-text">BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -605,9 +586,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-bipolar-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-mist-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_3.png" src="../_images/report_ds000030_1_3.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 38 </span><span class="caption-text">ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -615,21 +593,15 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-adhd-mist-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="ca5715cd-bc3e-40d3-8b3d-ccf5edf23062" name="284bc453-9b83-4265-9535-a0a2195ad57b" type="radio">
-</input><label class="sd-tab-label" for="ca5715cd-bc3e-40d3-8b3d-ccf5edf23062">
+<input id="de250a3c-33a8-4da5-90b2-c921ded505c4" name="16535c0b-389e-4ec7-b726-6d1094678d26" type="radio">
+</input><label class="sd-tab-label" for="de250a3c-33a8-4da5-90b2-c921ded505c4">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-difumo-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_4.png" src="../_images/report_ds000030_1_4.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 39 </span><span class="caption-text">CONTROL.
 Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-control-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-difumo-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_5.png" src="../_images/report_ds000030_1_5.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 40 </span><span class="caption-text">SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -637,9 +609,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-schz-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-difumo-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_6.png" src="../_images/report_ds000030_1_6.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 41 </span><span class="caption-text">BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -647,9 +616,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-bipolar-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-difumo-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_7.png" src="../_images/report_ds000030_1_7.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 42 </span><span class="caption-text">ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -657,21 +623,15 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-adhd-difumo-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="022daa91-867e-427b-bddc-8101b8299ca2" name="284bc453-9b83-4265-9535-a0a2195ad57b" type="radio">
-</input><label class="sd-tab-label" for="022daa91-867e-427b-bddc-8101b8299ca2">
+<input id="d55bd979-b791-49ad-8746-62c90e9234dc" name="16535c0b-389e-4ec7-b726-6d1094678d26" type="radio">
+</input><label class="sd-tab-label" for="d55bd979-b791-49ad-8746-62c90e9234dc">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-schaefer7networks-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_8.png" src="../_images/report_ds000030_1_8.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 43 </span><span class="caption-text">CONTROL.
 Residual effect of motion on connectomes generated with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-control-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-schaefer7networks-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_9.png" src="../_images/report_ds000030_1_9.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 44 </span><span class="caption-text">SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -679,9 +639,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-schz-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-schaefer7networks-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_10.png" src="../_images/report_ds000030_1_10.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 45 </span><span class="caption-text">BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -689,9 +646,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-bipolar-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-schaefer7networks-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_11.png" src="../_images/report_ds000030_1_11.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 46 </span><span class="caption-text">ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -699,21 +653,15 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-adhd-schaefer7networks-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="99226f5c-ba41-4b52-9e00-18a6d39ea18a" name="284bc453-9b83-4265-9535-a0a2195ad57b" type="radio">
-</input><label class="sd-tab-label" for="99226f5c-ba41-4b52-9e00-18a6d39ea18a">
+<input id="d68dc839-175e-4eeb-8740-fd424733f99a" name="16535c0b-389e-4ec7-b726-6d1094678d26" type="radio">
+</input><label class="sd-tab-label" for="d68dc839-175e-4eeb-8740-fd424733f99a">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-gordon333-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_12.png" src="../_images/report_ds000030_1_12.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 47 </span><span class="caption-text">CONTROL.
 Residual effect of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-control-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-gordon333-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_13.png" src="../_images/report_ds000030_1_13.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 48 </span><span class="caption-text">SCHZ.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -721,9 +669,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-schz-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-gordon333-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_14.png" src="../_images/report_ds000030_1_14.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 49 </span><span class="caption-text">BIPOLAR.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -731,9 +676,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-bipolar-gordon333-qcfc-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-gordon333-qcfc-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_1_15.png" src="../_images/report_ds000030_1_15.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 50 </span><span class="caption-text">ADHD.
 Residual effect of motion on connectomes generated with MIST atlas.
 Each data point represent different resolution.
@@ -758,13 +700,10 @@ The MIST atlas  shows more negative trend than the other choices of atlas.</p>
 </div>
 </div>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="6cb6b3ad-9b21-49af-8322-3a40c091862e" name="6d17bd3f-dafd-41f6-b55d-1376ecb420ea" type="radio">
-</input><label class="sd-tab-label" for="6cb6b3ad-9b21-49af-8322-3a40c091862e">
+<input checked="checked" id="48340edb-d47f-4154-a14c-38a6066627a0" name="645f1766-4d46-4e95-ba1e-a6e01b0a9d52" type="radio">
+</input><label class="sd-tab-label" for="48340edb-d47f-4154-a14c-38a6066627a0">
 MIST</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-mist-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_0.png" src="../_images/report_ds000030_3_0.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 51 </span><span class="caption-text">CONTROL.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
@@ -772,9 +711,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-control-mist-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-mist-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_1.png" src="../_images/report_ds000030_3_1.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 52 </span><span class="caption-text">SCHZ.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
@@ -782,9 +718,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-schz-mist-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-mist-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_2.png" src="../_images/report_ds000030_3_2.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 53 </span><span class="caption-text">BIPOLAR.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
@@ -792,9 +725,6 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-bipolar-mist-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-mist-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_3.png" src="../_images/report_ds000030_3_3.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 54 </span><span class="caption-text">ADHD.
 Distance-dependent effects of motion on connectivity with MIST atlas.
 Each data point represent different resolution.
@@ -802,109 +732,73 @@ MIST atlas includes some coarse parcels (&lt; 64 ROIs) that are not practical fo
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.</span><a class="headerlink" href="#tbl-ds000030-adhd-mist-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="f7f60df7-fcb9-4ae3-a71c-56d8c0ceda1e" name="6d17bd3f-dafd-41f6-b55d-1376ecb420ea" type="radio">
-</input><label class="sd-tab-label" for="f7f60df7-fcb9-4ae3-a71c-56d8c0ceda1e">
+<input id="e19b11dc-f28e-4d03-8596-b0e8d2f768b5" name="645f1766-4d46-4e95-ba1e-a6e01b0a9d52" type="radio">
+</input><label class="sd-tab-label" for="e19b11dc-f28e-4d03-8596-b0e8d2f768b5">
 DiFuMo</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-difumo-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_4.png" src="../_images/report_ds000030_3_4.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 55 </span><span class="caption-text">CONTROL.
 Distance-dependent effects of motion on connectivity with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-control-difumo-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-difumo-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_5.png" src="../_images/report_ds000030_3_5.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 56 </span><span class="caption-text">SCHZ.
 Distance-dependent effects of motion on connectivity with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-schz-difumo-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-difumo-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_6.png" src="../_images/report_ds000030_3_6.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 57 </span><span class="caption-text">BIPOLAR.
 Distance-dependent effects of motion on connectivity with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-bipolar-difumo-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-difumo-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_7.png" src="../_images/report_ds000030_3_7.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 58 </span><span class="caption-text">ADHD.
 Distance-dependent effects of motion on connectivity with DiFuMo atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-adhd-difumo-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="bc3cb898-f8e6-4b24-8992-9e65aa3b3186" name="6d17bd3f-dafd-41f6-b55d-1376ecb420ea" type="radio">
-</input><label class="sd-tab-label" for="bc3cb898-f8e6-4b24-8992-9e65aa3b3186">
+<input id="7edcc4b7-411a-43bf-935e-6927a02ec908" name="645f1766-4d46-4e95-ba1e-a6e01b0a9d52" type="radio">
+</input><label class="sd-tab-label" for="7edcc4b7-411a-43bf-935e-6927a02ec908">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-schaefer7networks-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_8.png" src="../_images/report_ds000030_3_8.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 59 </span><span class="caption-text">CONTROL.
 Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-control-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-schaefer7networks-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_9.png" src="../_images/report_ds000030_3_9.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 60 </span><span class="caption-text">SCHZ.
 Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-schz-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-schaefer7networks-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_10.png" src="../_images/report_ds000030_3_10.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 61 </span><span class="caption-text">BIPOLAR.
 Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-bipolar-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-schaefer7networks-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_11.png" src="../_images/report_ds000030_3_11.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 62 </span><span class="caption-text">ADHD.
 Distance-dependent effects of motion on connectivity with Schaefer 7 Networks atlas.
 Each data point represent different resolution.</span><a class="headerlink" href="#tbl-ds000030-adhd-schaefer7networks-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 </div>
-<input id="a2bbd124-44a9-4431-859b-be4772a25c4b" name="6d17bd3f-dafd-41f6-b55d-1376ecb420ea" type="radio">
-</input><label class="sd-tab-label" for="a2bbd124-44a9-4431-859b-be4772a25c4b">
+<input id="813d962e-d938-485a-b4c0-910d80c730f9" name="645f1766-4d46-4e95-ba1e-a6e01b0a9d52" type="radio">
+</input><label class="sd-tab-label" for="813d962e-d938-485a-b4c0-910d80c730f9">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <div class="figure align-default" id="tbl-ds000030-control-gordon333-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_12.png" src="../_images/report_ds000030_3_12.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 63 </span><span class="caption-text">CONTROL.
 Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-control-gordon333-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schz-gordon333-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_13.png" src="../_images/report_ds000030_3_13.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 64 </span><span class="caption-text">SCHZ.
 Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-schz-gordon333-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-bipolar-gordon333-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_14.png" src="../_images/report_ds000030_3_14.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 65 </span><span class="caption-text">BIPOLAR.
 Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-bipolar-gordon333-dist-fig" title="Permalink to this image">#</a></p>
 </div>
 <div class="figure align-default" id="tbl-ds000030-adhd-gordon333-dist-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_3_15.png" src="../_images/report_ds000030_3_15.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 66 </span><span class="caption-text">ADHD.
 Distance-dependent effects of motion on connectomes generated with Gordon atlas 333 parcels.
 In this atlas there’s only one parcellation scheme.</span><a class="headerlink" href="#tbl-ds000030-adhd-gordon333-dist-fig" title="Permalink to this image">#</a></p>
@@ -937,8 +831,8 @@ In this atlas there’s only one parcellation scheme.</span><a class="headerlink
 </div>
 </div>
 <div class="sd-tab-set docutils">
-<input checked="checked" id="069f65c3-80b4-45b4-b1b7-fa2f89913a2c" name="0d6a1f99-ab0b-4b0b-9f92-f18273b58e44" type="radio">
-</input><label class="sd-tab-label" for="069f65c3-80b4-45b4-b1b7-fa2f89913a2c">
+<input checked="checked" id="20660cdd-d66e-4985-811b-4b06e8028def" name="1488e595-3d4c-4584-b1f3-7424b55a1984" type="radio">
+</input><label class="sd-tab-label" for="20660cdd-d66e-4985-811b-4b06e8028def">
 MIST</label><div class="sd-tab-content docutils">
 <!-- ```{glue:figure} ds000030_mist_network-fig
 :figwidth: 800px
@@ -950,28 +844,16 @@ MIST atlas includes some coarse parcels (< 64 ROIs) that are not practical for c
 The 7, 12, 20 ROIs version of the atlas were excluded from plotting as these versions drives the outliers in these measures.
 ``` -->
 <div class="figure align-default" id="tbl-ds000030-mist-network-1-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_1.png" src="../_images/report_ds000030_5_1.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-mist-network-2-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_2.png" src="../_images/report_ds000030_5_2.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-mist-network-3-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_3.png" src="../_images/report_ds000030_5_3.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-mist-network-4-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_4.png" src="../_images/report_ds000030_5_4.png" />
 </div>
 </div>
-</div>
-<input id="6a542907-12f4-44d3-9b7c-2c1b897ce603" name="0d6a1f99-ab0b-4b0b-9f92-f18273b58e44" type="radio">
-</input><label class="sd-tab-label" for="6a542907-12f4-44d3-9b7c-2c1b897ce603">
+<input id="212f4769-60a5-4dde-aba8-176db7177b92" name="1488e595-3d4c-4584-b1f3-7424b55a1984" type="radio">
+</input><label class="sd-tab-label" for="212f4769-60a5-4dde-aba8-176db7177b92">
 DiFuMo</label><div class="sd-tab-content docutils">
 <!-- ```{glue:figure} ds000030_difumo_network-fig
 :figwidth: 800px
@@ -981,28 +863,16 @@ Residual effect of motion on connectomes generated with DiFuMo atlas.
 Each data point represent different resolution.
 ``` -->
 <div class="figure align-default" id="tbl-ds000030-difumo-network-1-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_6.png" src="../_images/report_ds000030_5_6.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-difumo-network-2-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_7.png" src="../_images/report_ds000030_5_7.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-difumo-network-3-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_8.png" src="../_images/report_ds000030_5_8.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-difumo-network-4-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_9.png" src="../_images/report_ds000030_5_9.png" />
 </div>
 </div>
-</div>
-<input id="a300e28b-54e7-4fcf-b11c-360318f7d8e4" name="0d6a1f99-ab0b-4b0b-9f92-f18273b58e44" type="radio">
-</input><label class="sd-tab-label" for="a300e28b-54e7-4fcf-b11c-360318f7d8e4">
+<input id="4bf8be88-3cc5-4bf5-9c51-1b6a2d238086" name="1488e595-3d4c-4584-b1f3-7424b55a1984" type="radio">
+</input><label class="sd-tab-label" for="4bf8be88-3cc5-4bf5-9c51-1b6a2d238086">
 Schaefer 7 Networks</label><div class="sd-tab-content docutils">
 <!-- ```{glue:figure} ds000030_schaefer7networks_network-fig
 :figwidth: 800px
@@ -1012,28 +882,16 @@ Residual effect of motion on connectomes generated with Schaefer 7 Networks atla
 Each data point represent different resolution.
 ``` -->
 <div class="figure align-default" id="tbl-ds000030-schaefer7networks-network-1-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_11.png" src="../_images/report_ds000030_5_11.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schaefer7networks-network-2-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_12.png" src="../_images/report_ds000030_5_12.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schaefer7networks-network-3-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_13.png" src="../_images/report_ds000030_5_13.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-schaefer7networks-network-4-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_14.png" src="../_images/report_ds000030_5_14.png" />
 </div>
 </div>
-</div>
-<input id="a2005be7-4971-451f-8dd3-30846612c816" name="0d6a1f99-ab0b-4b0b-9f92-f18273b58e44" type="radio">
-</input><label class="sd-tab-label" for="a2005be7-4971-451f-8dd3-30846612c816">
+<input id="82ff876b-9be5-4426-898d-7e19e4a612ec" name="1488e595-3d4c-4584-b1f3-7424b55a1984" type="radio">
+</input><label class="sd-tab-label" for="82ff876b-9be5-4426-898d-7e19e4a612ec">
 Gordon 333 parcels</label><div class="sd-tab-content docutils">
 <!-- ```{glue:figure} ds000030_gordon333_network-fig
 :figwidth: 800px
@@ -1043,24 +901,12 @@ Residual effect of motion on connectomes generated with Gordon atlas 333 parcels
 In this atlas there's only one parcellation scheme.
 ``` -->
 <div class="figure align-default" id="tbl-ds000030-gordon333-network-1-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_16.png" src="../_images/report_ds000030_5_16.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-gordon333-network-2-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_17.png" src="../_images/report_ds000030_5_17.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-gordon333-network-3-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_18.png" src="../_images/report_ds000030_5_18.png" />
-</div>
 </div>
 <div class="figure align-default" id="tbl-ds000030-gordon333-network-4-fig" style="width: 800px">
-<div class="cell_output docutils container">
-<img alt="../_images/report_ds000030_5_19.png" src="../_images/report_ds000030_5_19.png" />
-</div>
 </div>
 </div>
 </div>

@@ -23,12 +23,17 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import seaborn as sns
+from nilearn.plotting import plot_matrix
+from nilearn.connectome import vec_to_sym_matrix
+
 from fmriprep_denoise.visualization import figures, tables, utils
 from myst_nb import glue
 
 
-path_root = utils.get_data_root()
+path_root = utils.get_data_root() / "denoise-metrics"
+fmriprep_version = 'fmriprep-20.2.1lts'
 
 strategy_order = list(utils.GRID_LOCATION.values())
 group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
@@ -43,8 +48,8 @@ group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'b
 from fmriprep_denoise.features.derivatives import get_qc_criteria
 
 stringent = get_qc_criteria('stringent')
-ds000228 = tables.lazy_demographic('ds000228', path_root, **stringent)
-ds000030 = tables.lazy_demographic('ds000030', path_root, **stringent)
+ds000228 = tables.lazy_demographic('ds000228', fmriprep_version, path_root, **stringent)
+ds000030 = tables.lazy_demographic('ds000030', fmriprep_version, path_root, **stringent)
 
 desc = pd.concat({'ds000228': ds000228, 'ds000030': ds000030}, axis=1, names=['dataset'])
 desc = desc.style.set_table_attributes('style="font-size: 12px"')
@@ -75,7 +80,7 @@ for_plotting = {}
 datasets = ['ds000228', 'ds000030']
 baseline_groups = ['adult', 'control']
 for dataset, baseline_group in zip(datasets, baseline_groups):
-    _, data, _ = tables.get_descriptive_data(dataset, path_root, **stringent)
+    _, data, _ = tables.get_descriptive_data(dataset, fmriprep_version, path_root, **stringent)
     baseline = data[data['groups'] == baseline_group]
     for group in group_order[dataset]:
         compare = data[data['groups'] == group]
@@ -125,10 +130,16 @@ In conclusion, adult samples have lower mean framewise displacement than youth s
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
+        
+def significant_notation(item_pairs, max_value, sig, ax):
+    x1, x2 = item_pairs
+    y, h, col = max_value + 0.01, 0.01, 'k'
+    ax.plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
+    ax.text((x1+x2)*.5, y+h, sig, ha='center', va='bottom', color=col)
 
 datasets = ['ds000228', 'ds000030']
 for dataset in datasets:
-    _, data, _ = tables.get_descriptive_data(dataset, path_root, **stringent)
+    _, data, _ = tables.get_descriptive_data(dataset, fmriprep_version, path_root, **stringent)
     for_plotting.update({dataset: data})
 
 fig = plt.figure(figsize=(7, 5))
@@ -151,6 +162,14 @@ for dataset, ax in zip(for_plotting, axs):
     ax.set_title(
         f'{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$'
     )
+
+    # statistical annotation
+    max_value = df['Mean Framewise Displacement (mm)'].max()
+    if dataset == 'ds000228':
+        significant_notation((0, 1), max_value, "*", ax)
+    if dataset == 'ds000030':
+        significant_notation((0, 3), max_value, "**", ax)
+
 # fig.suptitle("Mean framewise displacement per sub-sample")
 
 glue('meanFD-stringent', fig, display=False)
@@ -164,10 +183,88 @@ Mean framewise displacement of each dataset after excluding subjects with high m
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-fig, ds_groups = figures.plot_dof_dataset(path_root, **stringent)
+
+fig = plt.figure(constrained_layout=True, figsize=(11, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for ax, dataset in zip(axs, datasets):
+    (
+        confounds_phenotype,
+        participant_groups,
+        groups,
+    ) = utils._get_participants_groups(
+        dataset,
+        fmriprep_version,
+        path_root,
+        gross_fd=stringent['gross_fd'],
+        fd_thresh=stringent['fd_thresh'],
+        proportion_thresh=stringent['proportion_thresh'],
+    )
+    confounds_phenotype = confounds_phenotype.reset_index()
+    confounds_phenotype = confounds_phenotype.melt(
+        id_vars=['index'],
+        var_name=['strategy', 'type'],
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[confounds_phenotype['type'] == 'compcor'],
+        ci=95,
+        color='blue',
+        linewidth=1,
+        edgecolor='blue',
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[confounds_phenotype['type'] == 'aroma'],
+        ci=95,
+        color='orange',
+        linewidth=1,
+        edgecolor='orange',
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[
+            confounds_phenotype['type'] == 'fixed_regressors'
+        ],
+        ci=95,
+        color='darkgrey',
+        linewidth=1,
+        edgecolor='darkgrey',
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[
+            confounds_phenotype['type'] == 'high_pass'
+        ],
+        ci=95,
+        color='grey',
+        linewidth=1,
+        edgecolor='grey',
+        ax=ax,
+    )
+    ax.set_xlim(0, 80)
+    ax.set_xlabel('Number of regressors')
+    ax.set_title(dataset)
+
+colors = ['blue', 'orange', 'darkgrey', 'grey']
+labels = [
+    'CompCor \nregressors',
+    'ICA-AROMA \npartial regressors',
+    'Head motion and \ntissue signal',
+    'Discrete cosine-basis \nregressors',
+]
+handles = [
+    mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)
+]
+axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
+
 glue(f'dof-fig_cleaned', fig, display=False)
-for ds, group in ds_groups:
-    glue(f'group-order_{ds}_cleaned', group, display=False)
 ```
 
 ```{glue:figure} dof-fig_cleaned
@@ -175,11 +272,6 @@ for ds, group in ds_groups:
 
 Loss in temporal degrees of freedom break down by groups after quality control,
 after applying the stringent quality control threshold.
-
-From the lightest hue to the darkes, the order of the group in `ds000228` is:
-{glue:}`group-order_ds000228_cleaned`.
-From the lightest hue to the darkes, the order of the group in `ds000030` is:
-{glue:}`group-order_ds000030_cleaned`.
 ```
 
 The common analysis and denoising methods are based on linear regression.
@@ -212,7 +304,51 @@ ICA-AROMA uses a pre-trained model on healthy subjects to select noise component
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
-fig = figures.plot_vol_scrubbed_dataset(path_root, **stringent)
+
+fig = plt.figure(constrained_layout=True, figsize=(11, 2))
+axs = fig.subplots(1, 2, sharey=True)
+
+for ax, dataset in zip(axs, datasets):
+    (
+        confounds_phenotype,
+        participant_groups,
+        groups,
+    ) = utils._get_participants_groups(
+        dataset,
+        fmriprep_version,
+        path_root,
+        gross_fd=stringent['gross_fd'],
+        fd_thresh=stringent['fd_thresh'],
+        proportion_thresh=stringent['proportion_thresh'],
+    )
+
+    selected = [
+        col
+        for col, strategy in zip(
+            confounds_phenotype.columns,
+            confounds_phenotype.columns.get_level_values(0),
+        )
+        if 'scrub' in strategy and 'gsr' not  in strategy 
+    ]
+    confounds_phenotype = confounds_phenotype.loc[:, selected]
+    confounds_phenotype = confounds_phenotype.reset_index()
+    confounds_phenotype = confounds_phenotype.melt(
+        id_vars=['index'],
+        var_name=['strategy', 'type'],
+    )
+
+    sns.boxplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[
+            confounds_phenotype['type'] == 'excised_vol_proportion'
+        ],
+        ax=ax,
+    )
+    ax.set_xlabel('Proportion of removed volumes to scan length')
+    ax.set_title(dataset)
+    ax.set_xlim((-0.1, 1.1))
+
 glue(f'scrubbing-fig_cleaned', fig, display=False)
 ```
 
@@ -248,8 +384,8 @@ please see the supplemental material for
 
 ```{code-cell}
 :tags: [hide-input, hide-output]
-path_ds000228 = path_root / "dataset-ds000228_summary.tsv"
-path_ds000030 =  path_root / "dataset-ds000030_summary.tsv"
+path_ds000228 = path_root / "ds000228_fmriprep-20-2-1lts_summary.tsv"
+path_ds000030 =  path_root / "ds000030_fmriprep-20-2-1lts_summary.tsv"
 ds000228 = pd.read_csv(path_ds000228, sep='\t', index_col=[0, 1], header=[0, 1])
 ds000030  = pd.read_csv(path_ds000030, sep='\t', index_col=[0, 1], header=[0, 1])
 
@@ -274,9 +410,9 @@ for dataset, ax in zip(['ds000228', 'ds000030'], axs):
     ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
     ax.set_title(f'dataset-{dataset}')
     # Improve the legend
-    handles, labels = ax.get_legend_handles_labels()
-    lgd_idx = len(group_order[dataset])
-    ax.legend(handles[lgd_idx:], labels[lgd_idx:])
+    # handles, labels = ax.get_legend_handles_labels()
+    # lgd_idx = len(group_order[dataset])
+    # ax.legend(handles[lgd_idx:], labels[lgd_idx:])
 
 glue('qcfc_fdr_significant', fig, display=False)
 
@@ -440,4 +576,22 @@ The bar indicates the average Pearson's correlation between mean framewise displ
 the error bars represent its standard deviations. 
 ```
 
-<!-- Visualise connectomes -->
+### Similarity of the denoised connectomes 
+
+```{code-cell}
+fig = plt.figure(figsize=(11, 5))
+axes = fig.subplots(1, 2)
+for ds, subfig in zip(datasets, axes):
+    cc = pd.read_csv(path_root / ds / f'fmriprep-20.2.1lts/dataset-{ds}_atlas-mist_nroi-ROI_connectome.tsv', sep='\t', index_col=0)
+    g = plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=False, axes=subfig, cmap='viridis',
+                reorder='complete', vmax=1, vmin=0.7)
+```
+
+```{code-cell}
+cc = pd.read_csv(path_root / 'ds000030' / f'fmriprep-20.2.1lts/dataset-ds000030_atlas-mist_nroi-64_connectome.tsv', sep='\t', index_col=0)
+
+for strategy in cc.columns:
+    mat = vec_to_sym_matrix(cc[strategy], np.zeros(64))
+    g = plot_matrix(mat, labels=range(1, 65), reorder='complete', title=strategy, vmax=1, vmin=-1)
+plt.show()
+```

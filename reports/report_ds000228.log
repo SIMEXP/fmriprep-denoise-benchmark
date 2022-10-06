@@ -1,19 +1,19 @@
 Traceback (most recent call last):
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
-    executenb(
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 1204, in execute
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 1204, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 84, in wrapped
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 84, in wrapped
     return just_run(coro(*args, **kwargs))
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 62, in just_run
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 62, in just_run
     return loop.run_until_complete(coro)
-  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+  File "/home/haoting/.pyenv/versions/3.7.14/lib/python3.7/asyncio/base_events.py", line 587, in run_until_complete
     return future.result()
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 663, in async_execute
-    await self.async_execute_cell(
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 965, in async_execute_cell
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 664, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 965, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
@@ -23,22 +23,40 @@ warnings.filterwarnings('ignore')
 from fmriprep_denoise.visualization import figures, utils
 from myst_nb import glue
 
-path_root = utils.get_data_root()
+path_root = utils.get_data_root() / "denoise-metrics"
 
 # Load metric data
 dataset = 'ds000228'
 atlases = ['mist', 'difumo', 'schaefer7networks', 'gordon333']
-groups = [adult', 'child']
+groups = ['adult', 'child']
 for atlas in atlases:
     for group in groups:
         fig = figures.plot_motion_resid(dataset, path_root, atlas, group=group)
         glue(f'{dataset}_{group}_{atlas}_qcfc-fig', fig, display=False)
 ------------------
 
-[0;36m  Input [0;32mIn [1][0;36m[0m
-[0;31m    groups = [adult', 'child'][0m
-[0m                   ^[0m
-[0;31mSyntaxError[0m[0;31m:[0m invalid syntax
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mAttributeError[0m                            Traceback (most recent call last)
+[0;32m/tmp/ipykernel_14336/4207074690.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     13[0m [0;32mfor[0m [0matlas[0m [0;32min[0m [0matlases[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     14[0m     [0;32mfor[0m [0mgroup[0m [0;32min[0m [0mgroups[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 15[0;31m         [0mfig[0m [0;34m=[0m [0mfigures[0m[0;34m.[0m[0mplot_motion_resid[0m[0;34m([0m[0mdataset[0m[0;34m,[0m [0mpath_root[0m[0;34m,[0m [0matlas[0m[0;34m,[0m [0mgroup[0m[0;34m=[0m[0mgroup[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     16[0m         [0mglue[0m[0;34m([0m[0;34mf'{dataset}_{group}_{atlas}_qcfc-fig'[0m[0;34m,[0m [0mfig[0m[0;34m,[0m [0mdisplay[0m[0;34m=[0m[0;32mFalse[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 
-SyntaxError: invalid syntax (2033713969.py, line 12)
+[0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/figures.py[0m in [0;36mplot_motion_resid[0;34m(dataset, fmriprep_version, path_root, atlas_name, dimension, group)[0m
+[1;32m     35[0m     [0mmetric[0m [0;34m=[0m [0;34m'qcfc'[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     36[0m     files_qcfc, labels = utils._get_connectome_metric_paths(
+[0;32m---> 37[0;31m         [0mdataset[0m[0;34m,[0m [0mfmriprep_version[0m[0;34m,[0m [0mmetric[0m[0;34m,[0m [0matlas_name[0m[0;34m,[0m [0mdimension[0m[0;34m,[0m [0mpath_root[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     38[0m     )
+[1;32m     39[0m     [0mqcfc_sig[0m [0;34m=[0m [0mutils[0m[0;34m.[0m[0m_qcfc_fdr[0m[0;34m([0m[0mfiles_qcfc[0m[0;34m,[0m [0mlabels[0m[0;34m,[0m [0mgroup[0m[0;34m=[0m[0mgroup[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/utils.py[0m in [0;36m_get_connectome_metric_paths[0;34m(dataset, fmriprep_version, metric, atlas_name, dimension, path_root)[0m
+[1;32m     75[0m     )
+[1;32m     76[0m     files = list(
+[0;32m---> 77[0;31m         path_root.glob(
+[0m[1;32m     78[0m             (
+[1;32m     79[0m                 [0;34mf'{dataset}/{fmriprep_version}/'[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mAttributeError[0m: 'str' object has no attribute 'glob'
+AttributeError: 'str' object has no attribute 'glob'
 

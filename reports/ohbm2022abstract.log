@@ -1,123 +1,46 @@
 Traceback (most recent call last):
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/jupyter_cache/executors/utils.py", line 51, in single_nb_execution
-    executenb(
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 1204, in execute
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 1204, in execute
     return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 84, in wrapped
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 84, in wrapped
     return just_run(coro(*args, **kwargs))
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/util.py", line 62, in just_run
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 62, in just_run
     return loop.run_until_complete(coro)
-  File "/usr/lib/python3.8/asyncio/base_events.py", line 616, in run_until_complete
+  File "/home/haoting/.pyenv/versions/3.7.14/lib/python3.7/asyncio/base_events.py", line 587, in run_until_complete
     return future.result()
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 663, in async_execute
-    await self.async_execute_cell(
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 965, in async_execute_cell
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 664, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 965, in async_execute_cell
     await self._check_raise_for_error(cell, cell_index, exec_reply)
-  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-fig = figures.plot_network_modularity(dataset, path_root, atlas_name=atlas_name, dimension=dimension)
-glue('ohbm-network-fig', fig, display=False)
+fig = figures.plot_motion_resid(dataset, fmriprep_version, path_root, atlas_name=atlas_name, dimension=dimension)
+glue('ohbm-qcfc-fig', fig, display=False)
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mFileNotFoundError[0m                         Traceback (most recent call last)
-Input [0;32mIn [4][0m, in [0;36m<cell line: 1>[0;34m()[0m
-[0;32m----> 1[0m fig [38;5;241m=[39m [43mfigures[49m[38;5;241;43m.[39;49m[43mplot_network_modularity[49m[43m([49m[43mdataset[49m[43m,[49m[43m [49m[43mpath_root[49m[43m,[49m[43m [49m[43matlas_name[49m[38;5;241;43m=[39;49m[43matlas_name[49m[43m,[49m[43m [49m[43mdimension[49m[38;5;241;43m=[39;49m[43mdimension[49m[43m)[49m
-[1;32m      2[0m glue([38;5;124m'[39m[38;5;124mohbm-network-fig[39m[38;5;124m'[39m, fig, display[38;5;241m=[39m[38;5;28;01mFalse[39;00m)
+[0;32m/tmp/ipykernel_31417/3410882656.py[0m in [0;36m<module>[0;34m[0m
+[0;32m----> 1[0;31m [0mfig[0m [0;34m=[0m [0mfigures[0m[0;34m.[0m[0mplot_motion_resid[0m[0;34m([0m[0mdataset[0m[0;34m,[0m [0mfmriprep_version[0m[0;34m,[0m [0mpath_root[0m[0;34m,[0m [0matlas_name[0m[0;34m=[0m[0matlas_name[0m[0;34m,[0m [0mdimension[0m[0;34m=[0m[0mdimension[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      2[0m [0mglue[0m[0;34m([0m[0;34m'ohbm-qcfc-fig'[0m[0;34m,[0m [0mfig[0m[0;34m,[0m [0mdisplay[0m[0;34m=[0m[0;32mFalse[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 
-File [0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/figures.py:270[0m, in [0;36mplot_network_modularity[0;34m(dataset, path_root, atlas_name, dimension, by_group)[0m
-[1;32m    262[0m files_network, labels [38;5;241m=[39m utils[38;5;241m.[39m_get_connectome_metric_paths(
-[1;32m    263[0m     dataset, metric, atlas_name, dimension, path_root,
-[1;32m    264[0m )
-[1;32m    266[0m file_dataset [38;5;241m=[39m (
-[1;32m    267[0m     path_root
-[1;32m    268[0m     [38;5;241m/[39m [38;5;124mf[39m[38;5;124m'[39m[38;5;124mdataset-[39m[38;5;132;01m{[39;00mdataset[38;5;132;01m}[39;00m[38;5;124m/dataset-[39m[38;5;132;01m{[39;00mdataset[38;5;132;01m}[39;00m[38;5;124m_desc-movement_phenotype.tsv[39m[38;5;124m'[39m
-[1;32m    269[0m )
-[0;32m--> 270[0m movement [38;5;241m=[39m [43mpd[49m[38;5;241;43m.[39;49m[43mread_csv[49m[43m([49m
-[1;32m    271[0m [43m    [49m[43mfile_dataset[49m[43m,[49m[43m [49m[43msep[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;130;43;01m\t[39;49;00m[38;5;124;43m'[39;49m[43m,[49m[43m [49m[43mindex_col[49m[38;5;241;43m=[39;49m[38;5;241;43m0[39;49m[43m,[49m[43m [49m[43mheader[49m[38;5;241;43m=[39;49m[38;5;241;43m0[39;49m[43m,[49m[43m [49m[43mencoding[49m[38;5;241;43m=[39;49m[38;5;124;43m'[39;49m[38;5;124;43mutf8[39;49m[38;5;124;43m'[39;49m
-[1;32m    272[0m [43m[49m[43m)[49m
-[1;32m    273[0m movement [38;5;241m=[39m movement[[[38;5;124m'[39m[38;5;124mmean_framewise_displacement[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mage[39m[38;5;124m'[39m, [38;5;124m'[39m[38;5;124mgender[39m[38;5;124m'[39m]]
-[1;32m    274[0m [38;5;28;01mif[39;00m [38;5;129;01mnot[39;00m by_group:
+[0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/figures.py[0m in [0;36mplot_motion_resid[0;34m(dataset, fmriprep_version, path_root, atlas_name, dimension, group)[0m
+[1;32m     35[0m     [0mmetric[0m [0;34m=[0m [0;34m'qcfc'[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     36[0m     files_qcfc, labels = utils._get_connectome_metric_paths(
+[0;32m---> 37[0;31m         [0mdataset[0m[0;34m,[0m [0mfmriprep_version[0m[0;34m,[0m [0mmetric[0m[0;34m,[0m [0matlas_name[0m[0;34m,[0m [0mdimension[0m[0;34m,[0m [0mpath_root[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     38[0m     )
+[1;32m     39[0m     [0mqcfc_sig[0m [0;34m=[0m [0mutils[0m[0;34m.[0m[0m_qcfc_fdr[0m[0;34m([0m[0mfiles_qcfc[0m[0;34m,[0m [0mlabels[0m[0;34m,[0m [0mgroup[0m[0;34m=[0m[0mgroup[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
 
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/util/_decorators.py:311[0m, in [0;36mdeprecate_nonkeyword_arguments.<locals>.decorate.<locals>.wrapper[0;34m(*args, **kwargs)[0m
-[1;32m    305[0m [38;5;28;01mif[39;00m [38;5;28mlen[39m(args) [38;5;241m>[39m num_allow_args:
-[1;32m    306[0m     warnings[38;5;241m.[39mwarn(
-[1;32m    307[0m         msg[38;5;241m.[39mformat(arguments[38;5;241m=[39marguments),
-[1;32m    308[0m         [38;5;167;01mFutureWarning[39;00m,
-[1;32m    309[0m         stacklevel[38;5;241m=[39mstacklevel,
-[1;32m    310[0m     )
-[0;32m--> 311[0m [38;5;28;01mreturn[39;00m [43mfunc[49m[43m([49m[38;5;241;43m*[39;49m[43margs[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwargs[49m[43m)[49m
+[0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/utils.py[0m in [0;36m_get_connectome_metric_paths[0;34m(dataset, fmriprep_version, metric, atlas_name, dimension, path_root)[0m
+[1;32m     89[0m             [0;34mf'dimension={dimension}, '[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     90[0m             [0;34mf'dataset={dataset}'[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 91[0;31m             [0;34mf'metric={metric}'[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     92[0m         )
+[1;32m     93[0m     [0mlabels[0m [0;34m=[0m [0;34m[[0m[0mfile[0m[0;34m.[0m[0mname[0m[0;34m.[0m[0msplit[0m[0;34m([0m[0;34mf'_{metric}'[0m[0;34m)[0m[0;34m[[0m[0;36m0[0m[0;34m][0m [0;32mfor[0m [0mfile[0m [0;32min[0m [0mfiles[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
 
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/io/parsers/readers.py:586[0m, in [0;36mread_csv[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, error_bad_lines, warn_bad_lines, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options)[0m
-[1;32m    571[0m kwds_defaults [38;5;241m=[39m _refine_defaults_read(
-[1;32m    572[0m     dialect,
-[1;32m    573[0m     delimiter,
-[0;32m   (...)[0m
-[1;32m    582[0m     defaults[38;5;241m=[39m{[38;5;124m"[39m[38;5;124mdelimiter[39m[38;5;124m"[39m: [38;5;124m"[39m[38;5;124m,[39m[38;5;124m"[39m},
-[1;32m    583[0m )
-[1;32m    584[0m kwds[38;5;241m.[39mupdate(kwds_defaults)
-[0;32m--> 586[0m [38;5;28;01mreturn[39;00m [43m_read[49m[43m([49m[43mfilepath_or_buffer[49m[43m,[49m[43m [49m[43mkwds[49m[43m)[49m
-
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/io/parsers/readers.py:482[0m, in [0;36m_read[0;34m(filepath_or_buffer, kwds)[0m
-[1;32m    479[0m _validate_names(kwds[38;5;241m.[39mget([38;5;124m"[39m[38;5;124mnames[39m[38;5;124m"[39m, [38;5;28;01mNone[39;00m))
-[1;32m    481[0m [38;5;66;03m# Create the parser.[39;00m
-[0;32m--> 482[0m parser [38;5;241m=[39m [43mTextFileReader[49m[43m([49m[43mfilepath_or_buffer[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[43mkwds[49m[43m)[49m
-[1;32m    484[0m [38;5;28;01mif[39;00m chunksize [38;5;129;01mor[39;00m iterator:
-[1;32m    485[0m     [38;5;28;01mreturn[39;00m parser
-
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/io/parsers/readers.py:811[0m, in [0;36mTextFileReader.__init__[0;34m(self, f, engine, **kwds)[0m
-[1;32m    808[0m [38;5;28;01mif[39;00m [38;5;124m"[39m[38;5;124mhas_index_names[39m[38;5;124m"[39m [38;5;129;01min[39;00m kwds:
-[1;32m    809[0m     [38;5;28mself[39m[38;5;241m.[39moptions[[38;5;124m"[39m[38;5;124mhas_index_names[39m[38;5;124m"[39m] [38;5;241m=[39m kwds[[38;5;124m"[39m[38;5;124mhas_index_names[39m[38;5;124m"[39m]
-[0;32m--> 811[0m [38;5;28mself[39m[38;5;241m.[39m_engine [38;5;241m=[39m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_make_engine[49m[43m([49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mengine[49m[43m)[49m
-
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/io/parsers/readers.py:1040[0m, in [0;36mTextFileReader._make_engine[0;34m(self, engine)[0m
-[1;32m   1036[0m     [38;5;28;01mraise[39;00m [38;5;167;01mValueError[39;00m(
-[1;32m   1037[0m         [38;5;124mf[39m[38;5;124m"[39m[38;5;124mUnknown engine: [39m[38;5;132;01m{[39;00mengine[38;5;132;01m}[39;00m[38;5;124m (valid options are [39m[38;5;132;01m{[39;00mmapping[38;5;241m.[39mkeys()[38;5;132;01m}[39;00m[38;5;124m)[39m[38;5;124m"[39m
-[1;32m   1038[0m     )
-[1;32m   1039[0m [38;5;66;03m# error: Too many arguments for "ParserBase"[39;00m
-[0;32m-> 1040[0m [38;5;28;01mreturn[39;00m [43mmapping[49m[43m[[49m[43mengine[49m[43m][49m[43m([49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43mf[49m[43m,[49m[43m [49m[38;5;241;43m*[39;49m[38;5;241;43m*[39;49m[38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43moptions[49m[43m)[49m
-
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/io/parsers/c_parser_wrapper.py:51[0m, in [0;36mCParserWrapper.__init__[0;34m(self, src, **kwds)[0m
-[1;32m     48[0m kwds[[38;5;124m"[39m[38;5;124musecols[39m[38;5;124m"[39m] [38;5;241m=[39m [38;5;28mself[39m[38;5;241m.[39musecols
-[1;32m     50[0m [38;5;66;03m# open handles[39;00m
-[0;32m---> 51[0m [38;5;28;43mself[39;49m[38;5;241;43m.[39;49m[43m_open_handles[49m[43m([49m[43msrc[49m[43m,[49m[43m [49m[43mkwds[49m[43m)[49m
-[1;32m     52[0m [38;5;28;01massert[39;00m [38;5;28mself[39m[38;5;241m.[39mhandles [38;5;129;01mis[39;00m [38;5;129;01mnot[39;00m [38;5;28;01mNone[39;00m
-[1;32m     54[0m [38;5;66;03m# Have to pass int, would break tests using TextReader directly otherwise :([39;00m
-
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/io/parsers/base_parser.py:222[0m, in [0;36mParserBase._open_handles[0;34m(self, src, kwds)[0m
-[1;32m    218[0m [38;5;28;01mdef[39;00m [38;5;21m_open_handles[39m([38;5;28mself[39m, src: FilePathOrBuffer, kwds: [38;5;28mdict[39m[[38;5;28mstr[39m, Any]) [38;5;241m-[39m[38;5;241m>[39m [38;5;28;01mNone[39;00m:
-[1;32m    219[0m     [38;5;124;03m"""[39;00m
-[1;32m    220[0m [38;5;124;03m    Let the readers open IOHandles after they are done with their potential raises.[39;00m
-[1;32m    221[0m [38;5;124;03m    """[39;00m
-[0;32m--> 222[0m     [38;5;28mself[39m[38;5;241m.[39mhandles [38;5;241m=[39m [43mget_handle[49m[43m([49m
-[1;32m    223[0m [43m        [49m[43msrc[49m[43m,[49m
-[1;32m    224[0m [43m        [49m[38;5;124;43m"[39;49m[38;5;124;43mr[39;49m[38;5;124;43m"[39;49m[43m,[49m
-[1;32m    225[0m [43m        [49m[43mencoding[49m[38;5;241;43m=[39;49m[43mkwds[49m[38;5;241;43m.[39;49m[43mget[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mencoding[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;28;43;01mNone[39;49;00m[43m)[49m[43m,[49m
-[1;32m    226[0m [43m        [49m[43mcompression[49m[38;5;241;43m=[39;49m[43mkwds[49m[38;5;241;43m.[39;49m[43mget[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mcompression[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;28;43;01mNone[39;49;00m[43m)[49m[43m,[49m
-[1;32m    227[0m [43m        [49m[43mmemory_map[49m[38;5;241;43m=[39;49m[43mkwds[49m[38;5;241;43m.[39;49m[43mget[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mmemory_map[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;28;43;01mFalse[39;49;00m[43m)[49m[43m,[49m
-[1;32m    228[0m [43m        [49m[43mstorage_options[49m[38;5;241;43m=[39;49m[43mkwds[49m[38;5;241;43m.[39;49m[43mget[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mstorage_options[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;28;43;01mNone[39;49;00m[43m)[49m[43m,[49m
-[1;32m    229[0m [43m        [49m[43merrors[49m[38;5;241;43m=[39;49m[43mkwds[49m[38;5;241;43m.[39;49m[43mget[49m[43m([49m[38;5;124;43m"[39;49m[38;5;124;43mencoding_errors[39;49m[38;5;124;43m"[39;49m[43m,[49m[43m [49m[38;5;124;43m"[39;49m[38;5;124;43mstrict[39;49m[38;5;124;43m"[39;49m[43m)[49m[43m,[49m
-[1;32m    230[0m [43m    [49m[43m)[49m
-
-File [0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.8/site-packages/pandas/io/common.py:702[0m, in [0;36mget_handle[0;34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)[0m
-[1;32m    697[0m [38;5;28;01melif[39;00m [38;5;28misinstance[39m(handle, [38;5;28mstr[39m):
-[1;32m    698[0m     [38;5;66;03m# Check whether the filename is to be opened in binary mode.[39;00m
-[1;32m    699[0m     [38;5;66;03m# Binary mode does not support 'encoding' and 'newline'.[39;00m
-[1;32m    700[0m     [38;5;28;01mif[39;00m ioargs[38;5;241m.[39mencoding [38;5;129;01mand[39;00m [38;5;124m"[39m[38;5;124mb[39m[38;5;124m"[39m [38;5;129;01mnot[39;00m [38;5;129;01min[39;00m ioargs[38;5;241m.[39mmode:
-[1;32m    701[0m         [38;5;66;03m# Encoding[39;00m
-[0;32m--> 702[0m         handle [38;5;241m=[39m [38;5;28;43mopen[39;49m[43m([49m
-[1;32m    703[0m [43m            [49m[43mhandle[49m[43m,[49m
-[1;32m    704[0m [43m            [49m[43mioargs[49m[38;5;241;43m.[39;49m[43mmode[49m[43m,[49m
-[1;32m    705[0m [43m            [49m[43mencoding[49m[38;5;241;43m=[39;49m[43mioargs[49m[38;5;241;43m.[39;49m[43mencoding[49m[43m,[49m
-[1;32m    706[0m [43m            [49m[43merrors[49m[38;5;241;43m=[39;49m[43merrors[49m[43m,[49m
-[1;32m    707[0m [43m            [49m[43mnewline[49m[38;5;241;43m=[39;49m[38;5;124;43m"[39;49m[38;5;124;43m"[39;49m[43m,[49m
-[1;32m    708[0m [43m        [49m[43m)[49m
-[1;32m    709[0m     [38;5;28;01melse[39;00m:
-[1;32m    710[0m         [38;5;66;03m# Binary mode[39;00m
-[1;32m    711[0m         handle [38;5;241m=[39m [38;5;28mopen[39m(handle, ioargs[38;5;241m.[39mmode)
-
-[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/fmrieprep-denoise-metrics/dataset-ds000228/dataset-ds000228_desc-movement_phenotype.tsv'
-FileNotFoundError: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/fmrieprep-denoise-metrics/dataset-ds000228/dataset-ds000228_desc-movement_phenotype.tsv'
+[0;31mFileNotFoundError[0m: [Errno No file matching the supplied arguments:atlas_name=schaefer7networks, dimension=400, dataset=ds000228] metric=qcfc
+FileNotFoundError: [Errno No file matching the supplied arguments:atlas_name=schaefer7networks, dimension=400, dataset=ds000228] metric=qcfc
 

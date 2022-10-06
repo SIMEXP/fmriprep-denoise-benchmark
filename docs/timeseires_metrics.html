@@ -118,11 +118,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/introductions.html">
-   Introductions
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../research_report/software_implemetation.html">
    Software implementation
   </a>
@@ -135,11 +130,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../research_report/results.html">
    Results
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/discussions.html">
-   Discussions
   </a>
  </li>
  <li class="toctree-l1">
@@ -442,6 +432,14 @@ title="Print to PDF"
 <div class="section" id="timeseries-and-metrics">
 <h2>timeseries and metrics<a class="headerlink" href="#timeseries-and-metrics" title="Permalink to this headline">#</a></h2>
 <ol>
+<li><p>Create a symbolic link of the metrics to the <code class="docutils literal notranslate"><span class="pre">inputs/</span></code> directory</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $SCRATCH/fmriprep-denoise-benchmark/ 
+rm -rf inputs/  # when you clone the project, this should be empty
+ln -s $SCRATCH/fmriprep-denoise-benchmark/ inputs
+</pre></div>
+</div>
+<p>This way when the book built is triggered, it will not download data from zenodo.</p>
+</li>
 <li><p><code class="docutils literal notranslate"><span class="pre">generate_timeseries_slurm_scripts.py</span></code>:</p>
 <p>Extract time series with different atlases.
 The scripts generates slurm to extract time series with different atlases.
@@ -466,15 +464,9 @@ It should be something looking like this:</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">slurm_metric/*/*.sh</span></code>:</p>
 <p>Caculate metrics on denoising quality per atlas.
 Use this line to submit all jobs at once.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/slurm_metrics/*/*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/slurm_metrics/metrics*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
 </pre></div>
 </div>
-</li>
-<li><p>Create a symbolic link of the metrics to the <code class="docutils literal notranslate"><span class="pre">inputs/</span></code> directory</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>ln -s $SCRATCH/fmriprep-denoise-benchmark/metrics inputs/fmrieprep-denoise-metrics
-</pre></div>
-</div>
-<p>This way when the book built is triggered, it will not download data from zenodo.</p>
 </li>
 </ol>
 </div>

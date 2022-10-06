@@ -1,0 +1,117 @@
+Traceback (most recent call last):
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/home/haoting/.pyenv/versions/3.7.14/lib/python3.7/asyncio/base_events.py", line 587, in run_until_complete
+    return future.result()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 664, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import warnings
+
+warnings.filterwarnings('ignore')
+import pandas as pd
+from myst_nb import glue
+from fmriprep_denoise.visualization import tables, utils
+
+path_root = utils.get_data_root()
+fmriprep_version = 'fmriprep-20.2.1lts'
+
+desc = tables.lazy_demographic('ds000228', fmriprep_version, path_root)
+desc = desc.style.set_table_attributes('style="font-size: 12px"')
+
+glue('ds000228_desc', desc)
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mFileNotFoundError[0m                         Traceback (most recent call last)
+[0;32m/tmp/ipykernel_28631/3006744342.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      9[0m [0mfmriprep_version[0m [0;34m=[0m [0;34m'fmriprep-20.2.1lts'[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     10[0m [0;34m[0m[0m
+[0;32m---> 11[0;31m [0mdesc[0m [0;34m=[0m [0mtables[0m[0;34m.[0m[0mlazy_demographic[0m[0;34m([0m[0;34m'ds000228'[0m[0;34m,[0m [0mfmriprep_version[0m[0;34m,[0m [0mpath_root[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     12[0m [0mdesc[0m [0;34m=[0m [0mdesc[0m[0;34m.[0m[0mstyle[0m[0;34m.[0m[0mset_table_attributes[0m[0;34m([0m[0;34m'style="font-size: 12px"'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     13[0m [0;34m[0m[0m
+
+[0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/tables.py[0m in [0;36mlazy_demographic[0;34m(dataset, fmriprep_version, path_root, gross_fd, fd_thresh, proportion_thresh)[0m
+[1;32m     42[0m     """
+[1;32m     43[0m     _, df, groups = get_descriptive_data(
+[0;32m---> 44[0;31m         [0mdataset[0m[0;34m,[0m [0mfmriprep_version[0m[0;34m,[0m [0mpath_root[0m[0;34m,[0m [0mgross_fd[0m[0;34m,[0m [0mfd_thresh[0m[0;34m,[0m [0mproportion_thresh[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     45[0m     )
+[1;32m     46[0m     [0mn_female[0m [0;34m=[0m [0mdf[0m[0;34m[[0m[0;34m'gender'[0m[0;34m][0m[0;34m.[0m[0msum[0m[0;34m([0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/projects/fmriprep-denoise-benchmark/fmriprep_denoise/visualization/tables.py[0m in [0;36mget_descriptive_data[0;34m(dataset, fmriprep_version, path_root, gross_fd, fd_thresh, proportion_thresh)[0m
+[1;32m    106[0m         [0;34m/[0m [0;34mf'dataset-{dataset}_desc-movement_phenotype.tsv'[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    107[0m     )
+[0;32m--> 108[0;31m     [0mmovements[0m [0;34m=[0m [0mpd[0m[0;34m.[0m[0mread_csv[0m[0;34m([0m[0mmovements[0m[0;34m,[0m [0mindex_col[0m[0;34m=[0m[0;34m[[0m[0;36m0[0m[0;34m,[0m [0;34m-[0m[0;36m1[0m[0;34m][0m[0;34m,[0m [0msep[0m[0;34m=[0m[0;34m'\t'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    109[0m     [0mmovements[0m [0;34m=[0m [0mmovements[0m[0;34m.[0m[0mrename[0m[0;34m([0m[0mindex[0m[0;34m=[0m[0mgroup_name_rename[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    110[0m     [0mmovements[0m [0;34m=[0m [0mmovements[0m[0;34m.[0m[0mreset_index[0m[0;34m([0m[0mlevel[0m[0;34m=[0m[0;34m'groups'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/util/_decorators.py[0m in [0;36mwrapper[0;34m(*args, **kwargs)[0m
+[1;32m    309[0m                     [0mstacklevel[0m[0;34m=[0m[0mstacklevel[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    310[0m                 )
+[0;32m--> 311[0;31m             [0;32mreturn[0m [0mfunc[0m[0;34m([0m[0;34m*[0m[0margs[0m[0;34m,[0m [0;34m**[0m[0mkwargs[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    312[0m [0;34m[0m[0m
+[1;32m    313[0m         [0;32mreturn[0m [0mwrapper[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/io/parsers/readers.py[0m in [0;36mread_csv[0;34m(filepath_or_buffer, sep, delimiter, header, names, index_col, usecols, squeeze, prefix, mangle_dupe_cols, dtype, engine, converters, true_values, false_values, skipinitialspace, skiprows, skipfooter, nrows, na_values, keep_default_na, na_filter, verbose, skip_blank_lines, parse_dates, infer_datetime_format, keep_date_col, date_parser, dayfirst, cache_dates, iterator, chunksize, compression, thousands, decimal, lineterminator, quotechar, quoting, doublequote, escapechar, comment, encoding, encoding_errors, dialect, error_bad_lines, warn_bad_lines, on_bad_lines, delim_whitespace, low_memory, memory_map, float_precision, storage_options)[0m
+[1;32m    584[0m     [0mkwds[0m[0;34m.[0m[0mupdate[0m[0;34m([0m[0mkwds_defaults[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    585[0m [0;34m[0m[0m
+[0;32m--> 586[0;31m     [0;32mreturn[0m [0m_read[0m[0;34m([0m[0mfilepath_or_buffer[0m[0;34m,[0m [0mkwds[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    587[0m [0;34m[0m[0m
+[1;32m    588[0m [0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/io/parsers/readers.py[0m in [0;36m_read[0;34m(filepath_or_buffer, kwds)[0m
+[1;32m    480[0m [0;34m[0m[0m
+[1;32m    481[0m     [0;31m# Create the parser.[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 482[0;31m     [0mparser[0m [0;34m=[0m [0mTextFileReader[0m[0;34m([0m[0mfilepath_or_buffer[0m[0;34m,[0m [0;34m**[0m[0mkwds[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    483[0m [0;34m[0m[0m
+[1;32m    484[0m     [0;32mif[0m [0mchunksize[0m [0;32mor[0m [0miterator[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/io/parsers/readers.py[0m in [0;36m__init__[0;34m(self, f, engine, **kwds)[0m
+[1;32m    809[0m             [0mself[0m[0;34m.[0m[0moptions[0m[0;34m[[0m[0;34m"has_index_names"[0m[0;34m][0m [0;34m=[0m [0mkwds[0m[0;34m[[0m[0;34m"has_index_names"[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
+[1;32m    810[0m [0;34m[0m[0m
+[0;32m--> 811[0;31m         [0mself[0m[0;34m.[0m[0m_engine[0m [0;34m=[0m [0mself[0m[0;34m.[0m[0m_make_engine[0m[0;34m([0m[0mself[0m[0;34m.[0m[0mengine[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    812[0m [0;34m[0m[0m
+[1;32m    813[0m     [0;32mdef[0m [0mclose[0m[0;34m([0m[0mself[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/io/parsers/readers.py[0m in [0;36m_make_engine[0;34m(self, engine)[0m
+[1;32m   1038[0m             )
+[1;32m   1039[0m         [0;31m# error: Too many arguments for "ParserBase"[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0;32m-> 1040[0;31m         [0;32mreturn[0m [0mmapping[0m[0;34m[[0m[0mengine[0m[0;34m][0m[0;34m([0m[0mself[0m[0;34m.[0m[0mf[0m[0;34m,[0m [0;34m**[0m[0mself[0m[0;34m.[0m[0moptions[0m[0;34m)[0m  [0;31m# type: ignore[call-arg][0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m   1041[0m [0;34m[0m[0m
+[1;32m   1042[0m     [0;32mdef[0m [0m_failover_to_python[0m[0;34m([0m[0mself[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/io/parsers/c_parser_wrapper.py[0m in [0;36m__init__[0;34m(self, src, **kwds)[0m
+[1;32m     49[0m [0;34m[0m[0m
+[1;32m     50[0m         [0;31m# open handles[0m[0;34m[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 51[0;31m         [0mself[0m[0;34m.[0m[0m_open_handles[0m[0;34m([0m[0msrc[0m[0;34m,[0m [0mkwds[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     52[0m         [0;32massert[0m [0mself[0m[0;34m.[0m[0mhandles[0m [0;32mis[0m [0;32mnot[0m [0;32mNone[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     53[0m [0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/io/parsers/base_parser.py[0m in [0;36m_open_handles[0;34m(self, src, kwds)[0m
+[1;32m    227[0m             [0mmemory_map[0m[0;34m=[0m[0mkwds[0m[0;34m.[0m[0mget[0m[0;34m([0m[0;34m"memory_map"[0m[0;34m,[0m [0;32mFalse[0m[0;34m)[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    228[0m             [0mstorage_options[0m[0;34m=[0m[0mkwds[0m[0;34m.[0m[0mget[0m[0;34m([0m[0;34m"storage_options"[0m[0;34m,[0m [0;32mNone[0m[0;34m)[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 229[0;31m             [0merrors[0m[0;34m=[0m[0mkwds[0m[0;34m.[0m[0mget[0m[0;34m([0m[0;34m"encoding_errors"[0m[0;34m,[0m [0;34m"strict"[0m[0;34m)[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    230[0m         )
+[1;32m    231[0m [0;34m[0m[0m
+
+[0;32m~/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/pandas/io/common.py[0m in [0;36mget_handle[0;34m(path_or_buf, mode, encoding, compression, memory_map, is_text, errors, storage_options)[0m
+[1;32m    705[0m                 [0mencoding[0m[0;34m=[0m[0mioargs[0m[0;34m.[0m[0mencoding[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m    706[0m                 [0merrors[0m[0;34m=[0m[0merrors[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0;32m--> 707[0;31m                 [0mnewline[0m[0;34m=[0m[0;34m""[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m    708[0m             )
+[1;32m    709[0m         [0;32melse[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mFileNotFoundError[0m: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/denoise-metrics/ds000228/fmriprep-20.2.1lts/dataset-ds000228_desc-movement_phenotype.tsv'
+FileNotFoundError: [Errno 2] No such file or directory: '/home/haoting/projects/fmriprep-denoise-benchmark/inputs/denoise-metrics/ds000228/fmriprep-20.2.1lts/dataset-ds000228_desc-movement_phenotype.tsv'
+

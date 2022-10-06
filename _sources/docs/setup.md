@@ -20,6 +20,20 @@ Please modify the scripts accordingly.
 ## Atlases
 
 After cloning and setting up the project, we will need to get all the atlases for the analysis.
+
+
+### Option 1: Download the atlas
+
+You can download a customised tempalteflow directory with all the data.
+This is binded with our `repro2data` setup.
+
+```bash
+make data
+```
+
+### Option 2: Generate the atlas
+
+Alternatively, you can re-run the scripts.
 We will need to download from `templateflow` and `nilearn`, and organise them in `templateflow` standard.
 This is a shared step for those who wants to build the book and rerun the whole workflow.
 
@@ -46,3 +60,4 @@ This is a shared step for those who wants to build the book and rerun the whole 
     make templateflow
     ```
     If this step is computational too intensive, you can run it in on a computing node.
+

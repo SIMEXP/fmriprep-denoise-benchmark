@@ -28,7 +28,7 @@ from fmriprep_denoise.visualization import figures, tables, utils
 from myst_nb import glue
 
 
-path_root = utils.get_data_root()
+path_root = utils.get_data_root() / "denoise-metrics"
 
 strategy_order = list(utils.GRID_LOCATION.values())
 group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}

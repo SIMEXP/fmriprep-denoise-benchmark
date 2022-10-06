@@ -119,11 +119,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/introductions.html">
-   Introductions
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../research_report/software_implemetation.html">
    Software implementation
   </a>
@@ -136,11 +131,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../research_report/results.html">
    Results
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/discussions.html">
-   Discussions
   </a>
  </li>
  <li class="toctree-l1">
@@ -393,6 +383,18 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#atlases">
    Atlases
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#option-1-download-the-atlas">
+     Option 1: Download the atlas
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#option-2-generate-the-atlas">
+     Option 2: Generate the atlas
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -417,6 +419,18 @@ title="Print to PDF"
   <a class="reference internal nav-link" href="#atlases">
    Atlases
   </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#option-1-download-the-atlas">
+     Option 1: Download the atlas
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#option-2-generate-the-atlas">
+     Option 2: Generate the atlas
+    </a>
+   </li>
+  </ul>
  </li>
 </ul>
 
@@ -447,7 +461,18 @@ to set-up your slack bot email address.
 Please modify the scripts accordingly.</p>
 <div class="section" id="atlases">
 <h2>Atlases<a class="headerlink" href="#atlases" title="Permalink to this headline">#</a></h2>
-<p>After cloning and setting up the project, we will need to get all the atlases for the analysis.
+<p>After cloning and setting up the project, we will need to get all the atlases for the analysis.</p>
+<div class="section" id="option-1-download-the-atlas">
+<h3>Option 1: Download the atlas<a class="headerlink" href="#option-1-download-the-atlas" title="Permalink to this headline">#</a></h3>
+<p>You can download a customised tempalteflow directory with all the data.
+This is binded with our <code class="docutils literal notranslate"><span class="pre">repro2data</span></code> setup.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make data
+</pre></div>
+</div>
+</div>
+<div class="section" id="option-2-generate-the-atlas">
+<h3>Option 2: Generate the atlas<a class="headerlink" href="#option-2-generate-the-atlas" title="Permalink to this headline">#</a></h3>
+<p>Alternatively, you can re-run the scripts.
 We will need to download from <code class="docutils literal notranslate"><span class="pre">templateflow</span></code> and <code class="docutils literal notranslate"><span class="pre">nilearn</span></code>, and organise them in <code class="docutils literal notranslate"><span class="pre">templateflow</span></code> standard.
 This is a shared step for those who wants to build the book and rerun the whole workflow.</p>
 <ol>
@@ -472,6 +497,7 @@ One of the measure require the node-wise distances, so we need to separate the D
 <p>If this step is computational too intensive, you can run it in on a computing node.</p>
 </li>
 </ol>
+</div>
 </div>
 </div>
 

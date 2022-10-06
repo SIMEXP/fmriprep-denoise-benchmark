@@ -121,11 +121,6 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/introductions.html">
-   Introductions
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../research_report/software_implemetation.html">
    Software implementation
   </a>
@@ -138,11 +133,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../research_report/results.html">
    Results
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/discussions.html">
-   Discussions
   </a>
  </li>
  <li class="toctree-l1">
@@ -502,7 +492,7 @@ title="Print to PDF"
 <span class="kn">from</span> <span class="nn">myst_nb</span> <span class="kn">import</span> <span class="n">glue</span>
 
 
-<span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_data_root</span><span class="p">()</span>
+<span class="n">path_root</span> <span class="o">=</span> <span class="n">utils</span><span class="o">.</span><span class="n">get_data_root</span><span class="p">()</span> <span class="o">/</span> <span class="s2">&quot;denoise-metrics&quot;</span>
 
 <span class="n">strategy_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">utils</span><span class="o">.</span><span class="n">GRID_LOCATION</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
 <span class="n">group_order</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;ds000228&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;adult&#39;</span><span class="p">,</span> <span class="s1">&#39;child&#39;</span><span class="p">],</span> <span class="s1">&#39;ds000030&#39;</span><span class="p">:[</span><span class="s1">&#39;control&#39;</span><span class="p">,</span> <span class="s1">&#39;ADHD&#39;</span><span class="p">,</span> <span class="s1">&#39;bipolar&#39;</span><span class="p">,</span> <span class="s1">&#39;schizophrenia&#39;</span><span class="p">]}</span>
@@ -555,23 +545,23 @@ title="Print to PDF"
 This report will serve as a reference point for understanding the remainder of the results.
 In <code class="docutils literal notranslate"><span class="pre">ds000228</span></code>, there was a significant difference in motion during the scan captured by mean framewise displacement
 between the child
-(M = <span class="pasted-text">0.37</span>, SD = <span class="pasted-text">0.29</span>, n = <span class="pasted-text">122</span>)
+(M = , SD = , n = )
 and adult sample
-(M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.09</span>, n = <span class="pasted-text">33</span>;
-t(<span class="pasted-text">148.75</span>) = <span class="pasted-text">-5.99</span>, p = <span class="pasted-text">0.000</span>).
+(M = , SD = , n = ;
+t() = , p = ).
 This is consistent with the existing literature.
 In <code class="docutils literal notranslate"><span class="pre">ds000030</span></code>, the only patient group shows a difference compared to the
 control
-(M = <span class="pasted-text">0.17</span>, SD = <span class="pasted-text">0.14</span>, n = <span class="pasted-text">106</span>)
+(M = , SD = , n = )
 is the schizophrenia group
-(M = <span class="pasted-text">0.22</span>, SD = <span class="pasted-text">0.11</span>, n = <span class="pasted-text">30</span>;
-t(<span class="pasted-text">57.86</span>) = <span class="pasted-text">-2.19</span>, p = <span class="pasted-text">0.033</span>).
+(M = , SD = , n = ;
+t() = , p = ).
 There was no difference between the control and ADHD group
-(M = <span class="pasted-text">0.14</span>, SD = <span class="pasted-text">0.07</span>, n = <span class="pasted-text">35</span>;
-t(<span class="pasted-text">109.85</span>) = <span class="pasted-text">1.61</span>, p = <span class="pasted-text">0.109</span>),
+(M = , SD = , n = ;
+t() = , p = ),
 or the bipolar group
-(M = <span class="pasted-text">0.19</span>, SD = <span class="pasted-text">0.12</span>, n = <span class="pasted-text">41</span>;
-t(<span class="pasted-text">85.21</span>) = <span class="pasted-text">-0.96</span>, p = <span class="pasted-text">0.340</span>).
+(M = , SD = , n = ;
+t() = , p = ).
 In conclusion, adult samples have lower mean framewise displacement than youth samples.</p>
 <div class="cell tag_hide-input tag_remove-output docutils container">
 <div class="cell_input docutils container">
@@ -603,9 +593,6 @@ In conclusion, adult samples have lower mean framewise displacement than youth s
 </div>
 </div>
 <div class="figure align-default" id="fig-meanfd-original">
-<div class="cell_output docutils container">
-<img alt="../_images/results_full-sample_5_0.png" src="../_images/results_full-sample_5_0.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 12 </span><span class="caption-text">Mean framewise displacement of each dataset.</span><a class="headerlink" href="#fig-meanfd-original" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>We found young subjects have higher motion compared to adults,
@@ -652,17 +639,14 @@ ICA-AROMA uses a pre-trained model on healthy subjects to select noise component
 </div>
 </div>
 <div class="figure align-default" id="fig-dof-fig">
-<div class="cell_output docutils container">
-<img alt="../_images/results_full-sample_7_0.png" src="../_images/results_full-sample_7_0.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 13 </span><span class="caption-text">Loss in temporal degrees of freedom breaks down into groups.</span><a class="headerlink" href="#fig-dof-fig" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p><code class="docutils literal notranslate"><span class="pre">compcor</span></code> and <code class="docutils literal notranslate"><span class="pre">aroma</span></code>-based strategies show variability depending on the number of noise components detected.
 The variability is broken down into groups.
 From the lightest hue to the darkest, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000228</span></code> is:
-<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['adult',</span> <span class="pre">'child']</span></code></span>.
+.
 From the lightest hue to the darkest, the order of the group in <code class="docutils literal notranslate"><span class="pre">ds000030</span></code> is:
-<span class="pasted-inline"><code class="output text_plain docutils literal notranslate"><span class="pre">['control',</span> <span class="pre">'ADHD',</span> <span class="pre">'bipolar',</span> <span class="pre">'schizophrenia']</span></code></span>.</p>
+.</p>
 </div>
 </div>
 <p>To compare the loss in the number of volumes from the scrubbing base strategy across datasets,
@@ -683,9 +667,6 @@ With a stringent 0.2 mm threshold, groups with high motion will lose on average 
 </div>
 </div>
 <div class="figure align-default" id="fig-scrubbing-fig">
-<div class="cell_output docutils container">
-<img alt="../_images/results_full-sample_9_0.png" src="../_images/results_full-sample_9_0.png" />
-</div>
 <p class="caption"><span class="caption-number">Fig. 14 </span><span class="caption-text">Loss in the number of volumes in proportion to the full length of the scan.</span><a class="headerlink" href="#fig-scrubbing-fig" title="Permalink to this image">#</a></p>
 <div class="legend">
 <p>Broken down the loss of volumes by groups in each dataset, we can see the trend is similar to the mean framewise displacement result.</p>
