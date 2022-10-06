@@ -26,6 +26,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import seaborn as sns
 from nilearn.plotting import plot_matrix
+from nilearn.connectome import vec_to_sym_matrix
 
 from fmriprep_denoise.visualization import figures, tables, utils
 from myst_nb import glue
@@ -584,4 +585,13 @@ for ds, subfig in zip(datasets, axes):
     cc = pd.read_csv(path_root / ds / f'fmriprep-20.2.1lts/dataset-{ds}_atlas-mist_nroi-ROI_connectome.tsv', sep='\t', index_col=0)
     g = plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=False, axes=subfig, cmap='viridis',
                 reorder='complete', vmax=1, vmin=0.7)
+```
+
+```{code-cell}
+cc = pd.read_csv(path_root / 'ds000030' / f'fmriprep-20.2.1lts/dataset-ds000030_atlas-mist_nroi-64_connectome.tsv', sep='\t', index_col=0)
+
+for strategy in cc.columns:
+    mat = vec_to_sym_matrix(cc[strategy], np.zeros(64))
+    g = plot_matrix(mat, labels=range(1, 65), reorder='complete', title=strategy, vmax=1, vmin=-1)
+plt.show()
 ```
