@@ -28,28 +28,37 @@ ATLAS_COLLECTIONS = {
 
 RESOURCE = {
     'dseg': {
-        'time': "2:00:00",
+        'time': "1:00:00",
         'cpus': 1,
         'mem_per_cpu': 8,
     },
     'probseg':{
-        'time': "2:00:00",
+        'time': "1:00:00",
         'cpus': 1,
-        'mem_per_cpu': 32,
+        'mem_per_cpu': 24,
     }
 }
 
 slurm_preamble = """#!/bin/bash
 #SBATCH --account={slurm_account}
 #SBATCH --job-name={jobname}
-#SBATCH --output={log_output}/{jobname}.out
-#SBATCH --error={log_output}/{jobname}.err
+#SBATCH --output={log_output}/{jobname}.%a.out
+#SBATCH --error={log_output}/{jobname}.%a.err
 #SBATCH --time={time}
 #SBATCH --cpus-per-task={cpus}
 #SBATCH --mem-per-cpu={mem_per_cpu}G
+#SBATCH --array=1-{n_subjects}
 
 # Activate environment
 source {virtualenv}/bin/activate
+
+# All subjects
+SUBJECTS=({subjects})
+"""
+
+slurm_task_array = """
+subject=${SUBJECTS[${SLURM_ARRAY_TASK_ID} - 1 ]}
+echo $subject
 
 # Run the script
 """
@@ -76,22 +85,24 @@ def create_slurm_scripts(args):
     (Path(timeseires_output) / SLURM_JOB_DIR).mkdir(parents=True, exist_ok=True)
     (Path(timeseires_output) / SLURM_LOGS_DIR).mkdir(parents=True, exist_ok=True)
     print("Writing slurm scripts:")
-    for subject in subjects:
-        print(f"\t{subject}")
-        for atlas_type in ATLAS_COLLECTIONS:
-            job_spec = {
-                'slurm_account': args.slurm_account,
-                'jobname': f"timeseries_{dataset}_{fmriprep_version}_sub-{subject}_{atlas_type}",
-                'log_output': str(Path(timeseires_output) / SLURM_LOGS_DIR),
-                'virtualenv': args.virtualenv
-            }
-            job_spec.update(RESOURCE[atlas_type].copy())
-            script_path = Path(timeseires_output) / SLURM_JOB_DIR / f"{job_spec['jobname']}.sh"
-            header = [slurm_preamble.format(**job_spec)]
-            cmd_atlas = create_cmd_inputs(args, subject, dataset, atlas_type, timeseires_output)
-            script = ("\n").join(header + cmd_atlas)
-            with open(script_path, "w") as f:
-                f.write(script)
+
+    for atlas_type in ATLAS_COLLECTIONS:
+        job_spec = {
+            'slurm_account': args.slurm_account,
+            'jobname': f"timeseries_{dataset}_{fmriprep_version}_{atlas_type}",
+            'log_output': str(Path(timeseires_output) / SLURM_LOGS_DIR),
+            'participants_tsv': args.participants_tsv,
+            'virtualenv': args.virtualenv,
+            'n_subjects': len(subjects),
+            'subjects': " ".join(subjects),
+        }
+        job_spec.update(RESOURCE[atlas_type].copy())
+        script_path = Path(timeseires_output) / SLURM_JOB_DIR / f"{job_spec['jobname']}.sh"
+        header = [slurm_preamble.format(**job_spec), slurm_task_array]
+        cmd_atlas = create_cmd_inputs(args, '${subject}', dataset, atlas_type, timeseires_output)
+        script = ("\n").join(header + cmd_atlas)
+        with open(script_path, "w") as f:
+            f.write(script)
     print("Find outputs in " + timeseires_output + "/" + SLURM_JOB_DIR)
     print("Run jobs:")
     print(f"find {timeseires_output}/{SLURM_JOB_DIR}/timeseries_{dataset}_{fmriprep_version}_*.sh -type f | while read file; do sbatch \"$file\"; done")

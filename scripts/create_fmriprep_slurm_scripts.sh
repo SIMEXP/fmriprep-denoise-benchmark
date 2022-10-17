@@ -27,8 +27,8 @@ for v in ${VERSION[*]}; do
         --fmriprep-args=\"--use-aroma\" \
         --email=${EMAIL} \
         --time=24:00:00 \
-        --mem-per-cpu=4096 \
-        --cpus=16 \
+        --mem-per-cpu=16384 \
+        --cpus=1 \
         --container fmriprep-${v}lts
 done
 
@@ -42,8 +42,8 @@ for v in ${VERSION[*]}; do
         --participant-label $subjects \
         --fmriprep-args=\"-t rest --use-aroma\" \
         --time=24:00:00 \
-        --mem-per-cpu=4096 \
-        --cpus=16 \
+        --mem-per-cpu=16384 \
+        --cpus=1 \
         --email=${EMAIL} \
         --container fmriprep-${v}lts
 done

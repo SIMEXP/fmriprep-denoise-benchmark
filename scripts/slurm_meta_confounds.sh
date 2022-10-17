@@ -25,13 +25,13 @@ calculate_degrees_of_freedom inputs/denoise-metrics/ds000228/fmrieprep-20.2.1lts
 
 # 20.2.5
 calculate_degrees_of_freedom inputs/denoise-metrics/ds000228/fmrieprep-20.2.5lts \
-	--fmriprep_path=/scratch/${USER}/ds000228/1663958770/fmriprep \
+	--fmriprep_path=/scratch/${USER}/ds000228/1664056904/fmriprep \
 	--dataset_name=ds000228 \
 	--specifier=task-pixar \
 	--participants_tsv /scratch/${USER}/ds000228/participants.tsv
 
-# calculate_degrees_of_freedom inputs/denoise-metrics/ds000030/fmrieprep-20.2.5lts \
-# 	--fmriprep_path=/scratch/${USER}/ds000030/1663959923/fmriprep \
-# 	--dataset_name=ds000030 \
-# 	--specifier=task-rest \
-# 	--participants_tsv /scratch/${USER}/ds000030/participants.tsv
+calculate_degrees_of_freedom inputs/denoise-metrics/ds000030/fmrieprep-20.2.5lts \
+	--fmriprep_path=/scratch/${USER}/ds000030/1664058034/fmriprep \
+	--dataset_name=ds000030 \
+	--specifier=task-rest \
+	--participants_tsv /scratch/${USER}/ds000030/participants.tsv
