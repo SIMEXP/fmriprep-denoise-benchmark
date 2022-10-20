@@ -135,7 +135,7 @@ def create_atlas_masker(
         Atlas labels
     """
     atlas = fetch_atlas_path(atlas_name, dimension)
-    labels = list(range(atlas.labels.shape[0]))
+    labels = list(range(1, atlas.labels.shape[0] + 1))
 
     if atlas.type == 'dseg':
         masker = NiftiLabelsMasker(

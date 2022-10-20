@@ -150,12 +150,12 @@ def main():
             raise(ValueError)
 
     collection_metric = pd.concat(collection_metric, axis=1)
-    
-    if metric_option == "connectome":
+
+    if metric_option == "connectomes":
         collection_metric.columns = strategy_names.keys()
 
     collection_metric.to_csv(
-        output_path 
+        output_path
         / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_{metric_option}.tsv',
         sep='\t',
     )

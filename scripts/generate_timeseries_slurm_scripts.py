@@ -28,7 +28,7 @@ ATLAS_COLLECTIONS = {
 
 RESOURCE = {
     'dseg': {
-        'time': "1:00:00",
+        'time': "0:30:00",
         'cpus': 1,
         'mem_per_cpu': 8,
     },
