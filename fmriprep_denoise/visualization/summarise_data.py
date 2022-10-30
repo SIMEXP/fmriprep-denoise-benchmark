@@ -1,5 +1,6 @@
 """
-Summarise data for visualisation
+Summarise data for visualisation.
+To retrievel atlas information, you need internet connection.
 """
 from pathlib import Path
 import pandas as pd
@@ -11,7 +12,7 @@ atlas_name = None
 dimension = None
 qc = 'stringent'
 datasets = ['ds000228', 'ds000030']
-fmriprep_version = 'fmriprep-20.2.1lts'
+fmriprep_version = 'fmriprep-20.2.5lts'
 input_root = None
 output_root = None
 

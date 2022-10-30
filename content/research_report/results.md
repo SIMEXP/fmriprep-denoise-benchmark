@@ -207,11 +207,19 @@ for ax, dataset in zip(axs, datasets):
     sns.barplot(
         x='value',
         y='strategy',
+        data=confounds_phenotype[confounds_phenotype['type'] == 'dof_loss'],
+        ci=95,
+        color='red',
+        linewidth=1,
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
         data=confounds_phenotype[confounds_phenotype['type'] == 'compcor'],
         ci=95,
         color='blue',
         linewidth=1,
-        edgecolor='blue',
         ax=ax,
     )
     sns.barplot(
@@ -221,7 +229,6 @@ for ax, dataset in zip(axs, datasets):
         ci=95,
         color='orange',
         linewidth=1,
-        edgecolor='orange',
         ax=ax,
     )
     sns.barplot(
@@ -233,7 +240,6 @@ for ax, dataset in zip(axs, datasets):
         ci=95,
         color='darkgrey',
         linewidth=1,
-        edgecolor='darkgrey',
         ax=ax,
     )
     sns.barplot(
@@ -245,15 +251,15 @@ for ax, dataset in zip(axs, datasets):
         ci=95,
         color='grey',
         linewidth=1,
-        edgecolor='grey',
         ax=ax,
     )
-    ax.set_xlim(0, 80)
-    ax.set_xlabel('Number of regressors')
+    ax.set_xlim(0, 120)
+    ax.set_xlabel('Degrees of freedom loss')
     ax.set_title(dataset)
 
-colors = ['blue', 'orange', 'darkgrey', 'grey']
+colors = ['red', 'blue', 'orange', 'darkgrey', 'grey']
 labels = [
+    'Censored volumes',
     'CompCor \nregressors',
     'ICA-AROMA \npartial regressors',
     'Head motion and \ntissue signal',
@@ -579,19 +585,33 @@ the error bars represent its standard deviations.
 ### Similarity of the denoised connectomes 
 
 ```{code-cell}
+import matplotlib as mpl
+
+cmap = mpl.cm.viridis
+
 fig = plt.figure(figsize=(11, 5))
-axes = fig.subplots(1, 2)
+subfigs = fig.subfigures(1, 2, width_ratios=[12, 1])
+axes = subfigs[0].subplots(1, 2, sharex=False, sharey=False)
+subfigs[0].subplots_adjust(wspace=0.3)
+subfigs[0].suptitle("Similarity of the connectome generated from different denoise strategies:\nUsing MIST atlas as an example.")
 for ds, subfig in zip(datasets, axes):
-    cc = pd.read_csv(path_root / ds / f'fmriprep-20.2.1lts/dataset-{ds}_atlas-mist_nroi-ROI_connectome.tsv', sep='\t', index_col=0)
-    g = plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=False, axes=subfig, cmap='viridis',
-                reorder='complete', vmax=1, vmin=0.7)
+    cc = pd.read_csv(path_root / ds / f'fmriprep-20.2.1lts/dataset-{ds}_atlas-mist_nroi-444_connectome.tsv', sep='\t', index_col=0)
+    g = plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=False, axes=subfig, cmap=cmap,
+                    title=ds, reorder='complete', vmax=1, vmin=0.7)
+# make colorbar
+ax = subfigs[1].subplots(1, 1, sharex=False, sharey=False)
+norm = mpl.colors.Normalize(vmin=0.7, vmax=1)
+cb1 = mpl.colorbar.ColorbarBase(ax, cmap=cmap, norm=norm, orientation='vertical')
+cb1.set_label('Pearson\' correlation')
+subfigs[-1].subplots_adjust(right=0.2)
+plt.show()
 ```
 
 ```{code-cell}
-cc = pd.read_csv(path_root / 'ds000030' / f'fmriprep-20.2.1lts/dataset-ds000030_atlas-mist_nroi-64_connectome.tsv', sep='\t', index_col=0)
+cc = pd.read_csv(path_root / 'ds000030' / f'fmriprep-20.2.1lts/dataset-ds000030_atlas-mist_nroi-444_connectome.tsv', sep='\t', index_col=0)
 
 for strategy in cc.columns:
-    mat = vec_to_sym_matrix(cc[strategy], np.zeros(64))
-    g = plot_matrix(mat, labels=range(1, 65), reorder='complete', title=strategy, vmax=1, vmin=-1)
+    mat = vec_to_sym_matrix(cc[strategy], np.zeros(444))
+    g = plot_matrix(mat, labels=None, reorder='complete', title=strategy, vmax=1, vmin=-1)
 plt.show()
 ```

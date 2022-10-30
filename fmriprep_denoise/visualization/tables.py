@@ -20,7 +20,7 @@ def lazy_demographic(
 
     fmriprep_version : str {fmrieprep-20.2.1lts, fmrieprep-20.2.5lts}
         fMRIPrep version used for preporcessin.
-        
+
     path_root : pathlib.Path
         Root of the metrics output.
 
@@ -66,7 +66,7 @@ def get_descriptive_data(
 ):
     """
     Get the data frame of all descriptive data needed for a dataset.
-    
+
     Parameters
     ----------
 
@@ -102,7 +102,7 @@ def get_descriptive_data(
         )
     # load basic data
     movements = (
-        path_root / dataset / fmriprep_version 
+        path_root / dataset / fmriprep_version
         / f'dataset-{dataset}_desc-movement_phenotype.tsv'
     )
     movements = pd.read_csv(movements, index_col=[0, -1], sep='\t')
@@ -110,19 +110,28 @@ def get_descriptive_data(
     movements = movements.reset_index(level='groups')
 
     path_dof = (
-        path_root / dataset / fmriprep_version 
+        path_root / dataset / fmriprep_version
         / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
     )
     confounds_phenotype = pd.read_csv(
         path_dof, header=[0, 1], index_col=0, sep='\t'
     )
 
+    # Calculate total dof loss
+    strategies = confounds_phenotype.columns.get_level_values(0).unique()
+    for strategy in strategies:
+        confounds_phenotype[(strategy, 'dof_loss')] = \
+            confounds_phenotype[(strategy, 'total')] + \
+                confounds_phenotype[(strategy, 'excised_vol')]
+
+    # filter data by gross fd
     if gross_fd is not None:
         keep_gross_fd = movements['mean_framewise_displacement'] <= gross_fd
         keep_gross_fd = movements.index[keep_gross_fd]
     else:
         keep_gross_fd = movements.index
 
+    # filter data by proportion vol scrubbed
     if fd_thresh is not None and proportion_thresh is not None:
         scrub_label = (fd2label[fd_thresh], 'excised_vol_proportion')
         keep_scrub = confounds_phenotype[scrub_label] <= proportion_thresh
