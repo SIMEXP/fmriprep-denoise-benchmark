@@ -54,8 +54,8 @@ def parse_args():
     parser.add_argument(
         '--metric',
         action='store',
-        default='connectome',
-        help='Metric to build {connectome, qcfc, modularity}',
+        default='connectomes',
+        help='Metric to build {connectomes, qcfc, modularity}',
     )
     return parser.parse_args()
 
@@ -96,12 +96,12 @@ def main():
             fd_thresh=motion_qc['fd_thresh'],
             proportion_thresh=motion_qc['proportion_thresh'],
         )
-        print('\tLoaded connectome...')
+        print('\tLoaded connectomes...')
 
         if metric_option == 'connectome':
             cur_strategy_average = connectome.mean(axis=0)
             collection_metric.append(cur_strategy_average)
-            print('\tAverage connectome...')
+            print('\tAverage connectomes...')
 
         elif metric_option == 'modularity':
             # louvain_modularity
@@ -151,7 +151,7 @@ def main():
 
     collection_metric = pd.concat(collection_metric, axis=1)
 
-    if metric_option == "connectome":
+    if metric_option == "connectomes":
         collection_metric.columns = strategy_names.keys()
 
     collection_metric.to_csv(
