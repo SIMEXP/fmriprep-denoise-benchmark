@@ -120,35 +120,32 @@ def main():
                 full_length if sample_mask is None else len(sample_mask)
             )
             excised_vol = full_length - ts_length
-            excised_vol_pro = excised_vol / full_length
             regressors = reduced_confounds.columns.tolist()
-            fixed = len(regressors)
-            total = fixed
-            aroma = 0
-            compcor = 0
+            compcor = sum('comp_cor' in i for i in regressors)
+            high_pass = sum('cosine' in i for i in regressors)
+            fixed = total - compcor if 'compcor' in strategy_name \
+                else len(regressors)
+            total = len(regressors)
+
             if 'aroma' in strategy_name:
                 path_aroma_ic = img.split('space-')[0] + 'AROMAnoiseICs.csv'
                 with open(path_aroma_ic, 'r') as f:
                     aroma = len(f.readline().split(','))
-                aroma = fixed + aroma
-            compcor = sum('comp_cor' in i for i in regressors)
-            high_pass = sum('cosine' in i for i in regressors)
-            if 'compcor' in strategy_name:
-                fixed = len(regressors) - compcor
-                compcor = fixed + compcor
-                total = compcor
-            if 'aroma' in strategy_name:
-                aroma = fixed + aroma
-                total = aroma
+                total = fixed + aroma
+            else:
+                aroma = 0
+
+            if 'scrub' in strategy_name:
+                total += excised_vol
 
             stats = {
                 (strategy_name, 'excised_vol'): excised_vol,
-                (strategy_name, 'excised_vol_proportion'): excised_vol_pro,
                 (strategy_name, 'high_pass'): high_pass,
                 (strategy_name, 'fixed_regressors'): fixed,
                 (strategy_name, 'compcor'): compcor,
                 (strategy_name, 'aroma'): aroma,
                 (strategy_name, 'total'): total,
+                (strategy_name, 'full_length'): full_length,
             }
             if info.get(sub):
                 info[sub].update(stats)

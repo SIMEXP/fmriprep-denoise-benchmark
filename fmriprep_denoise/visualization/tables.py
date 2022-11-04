@@ -117,12 +117,6 @@ def get_descriptive_data(
         path_dof, header=[0, 1], index_col=0, sep='\t'
     )
 
-    # Calculate total dof loss
-    strategies = confounds_phenotype.columns.get_level_values(0).unique()
-    for strategy in strategies:
-        confounds_phenotype[(strategy, 'dof_loss')] = \
-            confounds_phenotype[(strategy, 'total')] + \
-                confounds_phenotype[(strategy, 'excised_vol')]
 
     # filter data by gross fd
     if gross_fd is not None:

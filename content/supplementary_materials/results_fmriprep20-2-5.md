@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-# Results
+# Results: fmriprep20.2.5
 
 ```{code-cell}
 :tags: [hide-input, remove-output]
@@ -33,7 +33,7 @@ from myst_nb import glue
 
 
 path_root = utils.get_data_root() / "denoise-metrics"
-fmriprep_version = 'fmriprep-20.2.1lts'
+fmriprep_version = 'fmriprep-20.2.5lts'
 
 strategy_order = list(utils.GRID_LOCATION.values())
 group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
@@ -585,8 +585,6 @@ the error bars represent its standard deviations.
 ### Similarity of the denoised connectomes 
 
 ```{code-cell}
-:tags: [hide-input, remove-output]
-
 import matplotlib as mpl
 
 cmap = mpl.cm.viridis
@@ -595,6 +593,7 @@ fig = plt.figure(figsize=(11, 5))
 subfigs = fig.subfigures(1, 2, width_ratios=[12, 1])
 axes = subfigs[0].subplots(1, 2, sharex=False, sharey=False)
 subfigs[0].subplots_adjust(wspace=0.3)
+subfigs[0].suptitle("Similarity of the connectome generated from different denoise strategies:\nUsing MIST atlas as an example.")
 for ds, subfig in zip(datasets, axes):
     cc = pd.read_csv(path_root / ds / fmriprep_version / f'dataset-{ds}_atlas-mist_nroi-444_connectome.tsv', sep='\t', index_col=0)
     g = plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=False, axes=subfig, cmap=cmap,
@@ -605,36 +604,14 @@ norm = mpl.colors.Normalize(vmin=0.7, vmax=1)
 cb1 = mpl.colorbar.ColorbarBase(ax, cmap=cmap, norm=norm, orientation='vertical')
 cb1.set_label('Pearson\' correlation')
 subfigs[-1].subplots_adjust(right=0.2)
-glue('similarity_denoised_connectomes', fig, display=False)
-```
-
-```{glue:figure} similarity_denoised_connectomes
-:name: "fig:similarity_denoised_connectomes"
-
-Similarity of the connectome generated from different denoise strategies: Using MIST atlas as an example.
-```
-
-
-```{code-cell}
-meta_2021 = pd.read_csv(path_root / 'ds000030_fmriprep-20-2-1lts_summary.tsv', sep='\t', index_col=[0, 1], header=[0, 1])
-measures = meta_2021.columns.levels[0]
-for m in measures:
-    meta_2021 = pd.read_csv(path_root / 'ds000030_fmriprep-20-2-1lts_summary.tsv', sep='\t', index_col=[0, 1], header=[0, 1]).loc['full_sample', m]
-    meta_2025 = pd.read_csv(path_root / 'ds000030_fmriprep-20-2-5lts_summary.tsv', sep='\t', index_col=[0, 1], header=[0, 1]).loc['full_sample', m]
-
-    sorted_atlas = sorted(meta_2021.columns)
-    meta_2021 = meta_2021.reindex(sorted_atlas, axis=1)
-    meta_2025 = meta_2025.reindex(sorted_atlas, axis=1)
-
-    corr = pd.DataFrame(np.corrcoef(meta_2021, meta_2025)[11:, :11], index=meta_2025.index, columns=meta_2021.index)
-    plt.figure()
-    plt.imshow(corr, vmax=1, vmin=0)
-    plt.xlabel('20.2.1')
-    plt.ylabel('20.2.5')
-    plt.title(m)
-
-    plt.xticks(range(11), corr.columns, rotation=90)
-    plt.yticks(range(11), corr.index)
-    plt.colorbar()
 plt.show()
 ```
+<!-- 
+```{code-cell}
+cc = pd.read_csv(path_root / 'ds000030' / fmriprep_version /'dataset-ds000030_atlas-mist_nroi-444_connectome.tsv', sep='\t', index_col=0)
+
+for strategy in cc.columns:
+    mat = vec_to_sym_matrix(cc[strategy], np.zeros(444))
+    g = plot_matrix(mat, labels=None, reorder='complete', title=strategy, vmax=1, vmin=-1)
+plt.show()
+``` -->
