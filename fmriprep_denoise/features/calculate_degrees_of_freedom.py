@@ -123,9 +123,10 @@ def main():
             regressors = reduced_confounds.columns.tolist()
             compcor = sum('comp_cor' in i for i in regressors)
             high_pass = sum('cosine' in i for i in regressors)
+            total = len(regressors)
             fixed = total - compcor if 'compcor' in strategy_name \
                 else len(regressors)
-            total = len(regressors)
+
 
             if 'aroma' in strategy_name:
                 path_aroma_ic = img.split('space-')[0] + 'AROMAnoiseICs.csv'
