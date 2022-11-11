@@ -199,6 +199,13 @@ for ax, dataset in zip(axs, datasets):
         fd_thresh=stringent['fd_thresh'],
         proportion_thresh=stringent['proportion_thresh'],
     )
+
+    # change up the data a bit for plotting
+    confounds_phenotype.loc[:, ('aroma', 'aroma')] += confounds_phenotype.loc[:, ('aroma', 'fixed_regressors')]
+    confounds_phenotype.loc[:, ('aroma+gsr', 'aroma')] += confounds_phenotype.loc[:, ('aroma+gsr', 'fixed_regressors')]
+    confounds_phenotype.loc[:, ('compcor', 'compcor')] += confounds_phenotype.loc[:, ('compcor', 'fixed_regressors')]
+    confounds_phenotype.loc[:, ('compcor6', 'compcor')] += confounds_phenotype.loc[:, ('compcor6', 'fixed_regressors')]
+
     confounds_phenotype = confounds_phenotype.reset_index()
     confounds_phenotype = confounds_phenotype.melt(
         id_vars=['index'],
@@ -207,7 +214,7 @@ for ax, dataset in zip(axs, datasets):
     sns.barplot(
         x='value',
         y='strategy',
-        data=confounds_phenotype[confounds_phenotype['type'] == 'dof_loss'],
+        data=confounds_phenotype[confounds_phenotype['type'] == 'total'],
         ci=95,
         color='red',
         linewidth=1,
@@ -308,55 +315,6 @@ Certain sub-sample uses fewer regressors with the `aroma` and `aroma+gsr` strate
 The reason potentially lies in the implementation of ICA-AROMA. 
 ICA-AROMA uses a pre-trained model on healthy subjects to select noise components {cite:p}`aroma`.
 
-```{code-cell}
-:tags: [hide-input, remove-output]
-
-fig = plt.figure(constrained_layout=True, figsize=(11, 2))
-axs = fig.subplots(1, 2, sharey=True)
-
-for ax, dataset in zip(axs, datasets):
-    (
-        confounds_phenotype,
-        participant_groups,
-        groups,
-    ) = utils._get_participants_groups(
-        dataset,
-        fmriprep_version,
-        path_root,
-        gross_fd=stringent['gross_fd'],
-        fd_thresh=stringent['fd_thresh'],
-        proportion_thresh=stringent['proportion_thresh'],
-    )
-
-    selected = [
-        col
-        for col, strategy in zip(
-            confounds_phenotype.columns,
-            confounds_phenotype.columns.get_level_values(0),
-        )
-        if 'scrub' in strategy and 'gsr' not  in strategy 
-    ]
-    confounds_phenotype = confounds_phenotype.loc[:, selected]
-    confounds_phenotype = confounds_phenotype.reset_index()
-    confounds_phenotype = confounds_phenotype.melt(
-        id_vars=['index'],
-        var_name=['strategy', 'type'],
-    )
-
-    sns.boxplot(
-        x='value',
-        y='strategy',
-        data=confounds_phenotype[
-            confounds_phenotype['type'] == 'excised_vol_proportion'
-        ],
-        ax=ax,
-    )
-    ax.set_xlabel('Proportion of removed volumes to scan length')
-    ax.set_title(dataset)
-    ax.set_xlim((-0.1, 1.1))
-
-glue(f'scrubbing-fig_cleaned', fig, display=False)
-```
 
 To compare the loss in the number of volumes from the scrubbing base strategy across datasets,
 we calculate the proportion of volume loss to the number of volumes in a full scan ({numref}`fig:scrubbing-fig_cleaned`).
@@ -367,16 +325,6 @@ In `ds000030`, we see a similar trend mirroring the mean framewise displacement 
 The schizophrenia group shows the highest amount of volumes scrubbed,
 followed by the bipolar group, and comparable results between the control group and ADHD group.
 With a stringent 0.2 mm threshold, groups with high motion will lose on average close to half of the volumes. 
-
-```{glue:figure} scrubbing-fig_cleaned
-:name: "fig:scrubbing-fig_cleaned"
-
-Loss in number of volumes in proportion to the full length of the scan after quality control, 
-break down by groups in each dataset,
-after applying the stringent quality control threshold.
-
-We can see the trend is similar to mean framewise displacement result. 
-```
 
 In the next section, we report the three functional connectivity-based metrics and break down the effect on each dataset.
 We combined all atlases in the current report as the trends in each atlas are similar.
