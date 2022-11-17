@@ -6,55 +6,70 @@ jupytext:
     format_version: 0.13
     jupytext_version: 1.14.1
 kernelspec:
-  display_name: Python 3
+  display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
 
 # Results
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, remove-output]
 
 import warnings
 
 warnings.filterwarnings('ignore')
 from pathlib import Path
+
 import numpy as np
 import pandas as pd
+
+import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+
 import seaborn as sns
+
 from nilearn.plotting import plot_matrix
 from nilearn.connectome import vec_to_sym_matrix
 
+from statsmodels.stats.weightstats import ttest_ind
+
 from fmriprep_denoise.visualization import figures, tables, utils
+from fmriprep_denoise.features.derivatives import get_qc_criteria
+
 from myst_nb import glue
+import ipywidgets as widgets
+from ipywidgets import interactive
 
 
 path_root = utils.get_data_root() / "denoise-metrics"
-fmriprep_version = 'fmriprep-20.2.1lts'
-
 strategy_order = list(utils.GRID_LOCATION.values())
 group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
 
+fmriprep_version = 'fmriprep-20.2.1lts'
 ```
 
-## Comparisons on the impacts of strategies on connectomes
-<!-- Please advice on the threshold here -->
-<!-- stringent -->
-```{code-cell}
-:tags: [hide-input]
-from fmriprep_denoise.features.derivatives import get_qc_criteria
+## Sample and subgroup size change based on quality control criteria
 
-stringent = get_qc_criteria('stringent')
-ds000228 = tables.lazy_demographic('ds000228', fmriprep_version, path_root, **stringent)
-ds000030 = tables.lazy_demographic('ds000030', fmriprep_version, path_root, **stringent)
+```{code-cell} ipython3
+def demographic_table(criteria_name):
+    criteria = get_qc_criteria(criteria_name)
+    ds000228 = tables.lazy_demographic('ds000228', fmriprep_version, path_root, **criteria)
+    ds000030 = tables.lazy_demographic('ds000030', fmriprep_version, path_root, **criteria)
 
-desc = pd.concat({'ds000228': ds000228, 'ds000030': ds000030}, axis=1, names=['dataset'])
-desc = desc.style.set_table_attributes('style="font-size: 12px"')
+    desc = pd.concat({'ds000228': ds000228, 'ds000030': ds000030}, axis=1, names=['dataset'])
+    desc = desc.style.set_table_attributes('style="font-size: 12px"')
+    display(desc)
 
-glue('demographic_stringent', desc, display=False) 
+criteria_name = widgets.Select(
+    options=['stringent', 'minimal', None],
+    value='stringent',
+    description='Threshould: ',
+    disabled=False
+)
+
+interactive(demographic_table, criteria_name=criteria_name)
 ```
 
 To evaluate the impact of denoising strategy on connectomes in a practical scenario, 
@@ -70,11 +85,10 @@ For report in the full sample, please see [the supplemental material](../supplem
 Sample demographic information after removing subjects with high motion.
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, remove-output]
 
-from statsmodels.stats.weightstats import ttest_ind
-
+# statistic report
 for_plotting = {}
 
 datasets = ['ds000228', 'ds000030']
@@ -128,9 +142,9 @@ or the bipolar group
 t({glue:text}`ds000030_df_bipolar_qc:.2f`) = {glue:text}`ds000030_t_bipolar_qc:.2f`, p = {glue:text}`ds000030_p_bipolar_qc:.3f`).
 In conclusion, adult samples have lower mean framewise displacement than youth samples.
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, remove-output]
-        
+
 def significant_notation(item_pairs, max_value, sig, ax):
     x1, x2 = item_pairs
     y, h, col = max_value + 0.01, 0.01, 'k'
@@ -181,7 +195,7 @@ glue('meanFD-stringent', fig, display=False)
 Mean framewise displacement of each dataset after excluding subjects with high motion.
 ```
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, remove-output]
 
 fig = plt.figure(constrained_layout=True, figsize=(11, 5))
@@ -336,8 +350,9 @@ please see the supplemental material for
 
 ### QC-FC
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, hide-output]
+
 path_ds000228 = path_root / "ds000228_fmriprep-20-2-1lts_summary.tsv"
 path_ds000030 =  path_root / "ds000030_fmriprep-20-2-1lts_summary.tsv"
 ds000228 = pd.read_csv(path_ds000228, sep='\t', index_col=[0, 1], header=[0, 1])
@@ -422,7 +437,7 @@ the error bars represent the standard deviations.
 
 ### Distance-dependent of motion after denoising
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, remove-output]
 
 data_long = data['corr_motion_distance'].reset_index().melt(id_vars=id_vars, value_name='Pearson\'s correlation')
@@ -461,7 +476,7 @@ the error bars represent its standard deviations.
 
 ### Network modularity
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, remove-output]
 
 data_long = data['modularity'].reset_index().melt(id_vars=id_vars, value_name='Mean modularity quality (a.u.)')
@@ -530,9 +545,9 @@ The bar indicates the average Pearson's correlation between mean framewise displ
 the error bars represent its standard deviations. 
 ```
 
-### Similarity of the denoised connectomes 
+### Similarity of the denoised connectomes
 
-```{code-cell}
+```{code-cell} ipython3
 :tags: [hide-input, remove-output]
 
 import matplotlib as mpl
@@ -562,8 +577,7 @@ glue('similarity_denoised_connectomes', fig, display=False)
 Similarity of the connectome generated from different denoise strategies: Using MIST atlas as an example.
 ```
 
-
-```{code-cell}
+```{code-cell} ipython3
 meta_2021 = pd.read_csv(path_root / 'ds000030_fmriprep-20-2-1lts_summary.tsv', sep='\t', index_col=[0, 1], header=[0, 1])
 measures = meta_2021.columns.levels[0]
 for m in measures:
