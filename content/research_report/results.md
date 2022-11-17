@@ -11,6 +11,7 @@ kernelspec:
   name: python3
 ---
 
+(launch:thebe)=
 # Results
 
 ```{code-cell} ipython3
