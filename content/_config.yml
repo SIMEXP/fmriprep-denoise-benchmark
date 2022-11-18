@@ -37,3 +37,8 @@ html:
   use_issues_button: true
   use_repository_button: true
   announcement: "⚠️This is a working draft for discussion and feedback!⚠️"
+
+launch_buttons:
+  notebook_interface: "classic" # The interface interactive links will activate ["classic", "jupyterlab"]
+  binderhub_url: "https://mybinder.org"
+  thebe: true
