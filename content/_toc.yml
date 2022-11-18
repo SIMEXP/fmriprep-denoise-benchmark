@@ -8,7 +8,7 @@ parts:
     chapters:
     - file: research_report/software_implemetation.md
     - file: research_report/benchmark_methods.md
-    - file: research_report/results.md
+    - file: research_report/results_loss-of-degrees-of-freedom.md
     - file: research_report/contributions.md
     - file: research_report/references.md
   - caption: Appendices and supplemental material
