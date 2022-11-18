@@ -15,31 +15,20 @@ kernelspec:
 # Loss of degrees of freedoms
 
 ```{code-cell} ipython3
-:tags: [hide-input, remove-output]
+:tags: [hide-input]
 
 import warnings
 
 warnings.filterwarnings('ignore')
-from pathlib import Path
 
-import numpy as np
-import pandas as pd
-
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
 import seaborn as sns
 
-from nilearn.plotting import plot_matrix
-from nilearn.connectome import vec_to_sym_matrix
-
-from statsmodels.stats.weightstats import ttest_ind
-
-from fmriprep_denoise.visualization import figures, tables, utils
+from fmriprep_denoise.visualization import utils
 from fmriprep_denoise.features.derivatives import get_qc_criteria
 
-from myst_nb import glue
 import ipywidgets as widgets
 from ipywidgets import interactive
 
@@ -145,7 +134,9 @@ def loss_degree_of_freedom(criteria_name, fmriprep_version):
     ]
     axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
     display(fig)
+```
 
+```{code-cell} ipython3
 
 criteria_name = widgets.Select(
     options=['stringent', 'minimal', None],
