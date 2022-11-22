@@ -54,7 +54,7 @@ for dataset, baseline_group in zip(datasets, baseline_groups):
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mTypeError[0m                                 Traceback (most recent call last)
-[0;32m/tmp/ipykernel_14394/4215049233.py[0m in [0;36m<module>[0;34m[0m
+[0;32m/tmp/ipykernel_20779/4215049233.py[0m in [0;36m<module>[0;34m[0m
 [1;32m      6[0m [0mbaseline_groups[0m [0;34m=[0m [0;34m[[0m[0;34m'adult'[0m[0;34m,[0m [0;34m'control'[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
 [1;32m      7[0m [0;32mfor[0m [0mdataset[0m[0;34m,[0m [0mbaseline_group[0m [0;32min[0m [0mzip[0m[0;34m([0m[0mdatasets[0m[0;34m,[0m [0mbaseline_groups[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
 [0;32m----> 8[0;31m     [0m_[0m[0;34m,[0m [0mdata[0m[0;34m,[0m [0mgroups[0m [0;34m=[0m [0mtables[0m[0;34m.[0m[0mget_descriptive_data[0m[0;34m([0m[0mdataset[0m[0;34m,[0m [0mpath_root[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m

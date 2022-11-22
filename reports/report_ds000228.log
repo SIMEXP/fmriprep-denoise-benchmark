@@ -37,7 +37,7 @@ for atlas in atlases:
 
 [0;31m---------------------------------------------------------------------------[0m
 [0;31mAttributeError[0m                            Traceback (most recent call last)
-[0;32m/tmp/ipykernel_14336/4207074690.py[0m in [0;36m<module>[0;34m[0m
+[0;32m/tmp/ipykernel_20752/4207074690.py[0m in [0;36m<module>[0;34m[0m
 [1;32m     13[0m [0;32mfor[0m [0matlas[0m [0;32min[0m [0matlases[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
 [1;32m     14[0m     [0;32mfor[0m [0mgroup[0m [0;32min[0m [0mgroups[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
 [0;32m---> 15[0;31m         [0mfig[0m [0;34m=[0m [0mfigures[0m[0;34m.[0m[0mplot_motion_resid[0m[0;34m([0m[0mdataset[0m[0;34m,[0m [0mpath_root[0m[0;34m,[0m [0matlas[0m[0;34m,[0m [0mgroup[0m[0;34m=[0m[0mgroup[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m

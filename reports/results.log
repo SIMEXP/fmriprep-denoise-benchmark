@@ -17,25 +17,49 @@ Traceback (most recent call last):
     raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
 nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
 ------------------
-fig = plt.figure(figsize=(11, 5))
-fig.title('Similarity of the denoised connectomes')
+# statistic report
+for_plotting = {}
 
-axes = fig.subplots(1, 2)
-for ds, subfig in zip(datasets, axes):
-    cc = pd.read_csv(path_root / ds / f'fmriprep-20.2.1lts/dataset-{ds}_atlas-mist_nroi-ROI_connectome.tsv', sep='\t', index_col=0)
-    g = plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=False, axes=subfig, 
-                reorder='complete', vmax=1, vmin=0.7)
+datasets = ['ds000228', 'ds000030']
+baseline_groups = ['adult', 'control']
+for dataset, baseline_group in zip(datasets, baseline_groups):
+    _, data, _ = tables.get_descriptive_data(dataset, fmriprep_version, path_root, **stringent)
+    baseline = data[data['groups'] == baseline_group]
+    for group in group_order[dataset]:
+        compare = data[data['groups'] == group]
+        glue(
+            f'{dataset}_{group}_mean_qc',
+            compare['mean_framewise_displacement'].mean(),
+        )
+        glue(
+            f'{dataset}_{group}_sd_qc',
+            compare['mean_framewise_displacement'].std(),
+        )
+        glue(
+            f'{dataset}_{group}_n_qc',
+            compare.shape[0],
+        )
+        if group != baseline_group:
+            t_stats, pval, df = ttest_ind(
+                baseline['mean_framewise_displacement'],
+                compare['mean_framewise_displacement'],
+                usevar='unequal',
+            )
+            glue(f'{dataset}_t_{group}_qc', t_stats)
+            glue(f'{dataset}_p_{group}_qc', pval)
+            glue(f'{dataset}_df_{group}_qc', df)
+    for_plotting.update({dataset: data})
 ------------------
 
 [0;31m---------------------------------------------------------------------------[0m
-[0;31mAttributeError[0m                            Traceback (most recent call last)
-[0;32m/tmp/ipykernel_25782/1965003236.py[0m in [0;36m<module>[0;34m[0m
-[1;32m      1[0m [0mfig[0m [0;34m=[0m [0mplt[0m[0;34m.[0m[0mfigure[0m[0;34m([0m[0mfigsize[0m[0;34m=[0m[0;34m([0m[0;36m11[0m[0;34m,[0m [0;36m5[0m[0;34m)[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0;32m----> 2[0;31m [0mfig[0m[0;34m.[0m[0mtitle[0m[0;34m([0m[0;34m'Similarity of the denoised connectomes'[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[0m[1;32m      3[0m [0;34m[0m[0m
-[1;32m      4[0m [0maxes[0m [0;34m=[0m [0mfig[0m[0;34m.[0m[0msubplots[0m[0;34m([0m[0;36m1[0m[0;34m,[0m [0;36m2[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
-[1;32m      5[0m [0;32mfor[0m [0mds[0m[0;34m,[0m [0msubfig[0m [0;32min[0m [0mzip[0m[0;34m([0m[0mdatasets[0m[0;34m,[0m [0maxes[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;31mNameError[0m                                 Traceback (most recent call last)
+[0;32m/tmp/ipykernel_31086/2612168393.py[0m in [0;36m<module>[0;34m[0m
+[1;32m      5[0m [0mbaseline_groups[0m [0;34m=[0m [0;34m[[0m[0;34m'adult'[0m[0;34m,[0m [0;34m'control'[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
+[1;32m      6[0m [0;32mfor[0m [0mdataset[0m[0;34m,[0m [0mbaseline_group[0m [0;32min[0m [0mzip[0m[0;34m([0m[0mdatasets[0m[0;34m,[0m [0mbaseline_groups[0m[0;34m)[0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
+[0;32m----> 7[0;31m     [0m_[0m[0;34m,[0m [0mdata[0m[0;34m,[0m [0m_[0m [0;34m=[0m [0mtables[0m[0;34m.[0m[0mget_descriptive_data[0m[0;34m([0m[0mdataset[0m[0;34m,[0m [0mfmriprep_version[0m[0;34m,[0m [0mpath_root[0m[0;34m,[0m [0;34m**[0m[0mstringent[0m[0;34m)[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m      8[0m     [0mbaseline[0m [0;34m=[0m [0mdata[0m[0;34m[[0m[0mdata[0m[0;34m[[0m[0;34m'groups'[0m[0;34m][0m [0;34m==[0m [0mbaseline_group[0m[0;34m][0m[0;34m[0m[0;34m[0m[0m
+[1;32m      9[0m     [0;32mfor[0m [0mgroup[0m [0;32min[0m [0mgroup_order[0m[0;34m[[0m[0mdataset[0m[0;34m][0m[0;34m:[0m[0;34m[0m[0;34m[0m[0m
 
-[0;31mAttributeError[0m: 'Figure' object has no attribute 'title'
-AttributeError: 'Figure' object has no attribute 'title'
+[0;31mNameError[0m: name 'stringent' is not defined
+NameError: name 'stringent' is not defined
 

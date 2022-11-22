@@ -1,0 +1,160 @@
+Traceback (most recent call last):
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/jupyter_cache/executors/utils.py", line 56, in single_nb_execution
+    record_timing=False,
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 1204, in execute
+    return NotebookClient(nb=nb, resources=resources, km=km, **kwargs).execute()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 84, in wrapped
+    return just_run(coro(*args, **kwargs))
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/util.py", line 62, in just_run
+    return loop.run_until_complete(coro)
+  File "/home/haoting/.pyenv/versions/3.7.14/lib/python3.7/asyncio/base_events.py", line 587, in run_until_complete
+    return future.result()
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 664, in async_execute
+    cell, index, execution_count=self.code_cells_executed + 1
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 965, in async_execute_cell
+    await self._check_raise_for_error(cell, cell_index, exec_reply)
+  File "/home/haoting/.virtualenvs/fmriprep-denoise-benchmark/lib/python3.7/site-packages/nbclient/client.py", line 862, in _check_raise_for_error
+    raise CellExecutionError.from_cell_and_msg(cell, exec_reply_content)
+nbclient.exceptions.CellExecutionError: An error occurred while executing the following cell:
+------------------
+import warnings
+
+warnings.filterwarnings('ignore')
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
+
+import seaborn as sns
+
+from nilearn.plotting import plot_matrix
+from nilearn.connectome import vec_to_sym_matrix
+
+from statsmodels.stats.weightstats import ttest_ind
+
+from fmriprep_denoise.visualization import figures, tables, utils
+from fmriprep_denoise.features.derivatives import get_qc_criteria
+
+from myst_nb import glue
+import ipywidgets as widgets
+from ipywidgets import interactive
+
+
+path_root = utils.get_data_root() / "denoise-metrics"
+strategy_order = list(utils.GRID_LOCATION.values())
+group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
+datasets = ['ds000228', 'ds000030']
+
+fmriprep_version = 'fmriprep-20.2.1lts'
+
+fig = plt.figure(constrained_layout=True, figsize=(11, 5))
+axs = fig.subplots(1, 2, sharey=True)
+for ax, dataset in zip(axs, datasets):
+    (
+        confounds_phenotype,
+        participant_groups,
+        groups,
+    ) = utils._get_participants_groups(
+        dataset,
+        fmriprep_version,
+        path_root,
+        gross_fd=stringent['gross_fd'],
+        fd_thresh=stringent['fd_thresh'],
+        proportion_thresh=stringent['proportion_thresh'],
+    )
+
+    # change up the data a bit for plotting
+    confounds_phenotype.loc[:, ('aroma', 'aroma')] += confounds_phenotype.loc[:, ('aroma', 'fixed_regressors')]
+    confounds_phenotype.loc[:, ('aroma+gsr', 'aroma')] += confounds_phenotype.loc[:, ('aroma+gsr', 'fixed_regressors')]
+    confounds_phenotype.loc[:, ('compcor', 'compcor')] += confounds_phenotype.loc[:, ('compcor', 'fixed_regressors')]
+    confounds_phenotype.loc[:, ('compcor6', 'compcor')] += confounds_phenotype.loc[:, ('compcor6', 'fixed_regressors')]
+
+    confounds_phenotype = confounds_phenotype.reset_index()
+    confounds_phenotype = confounds_phenotype.melt(
+        id_vars=['index'],
+        var_name=['strategy', 'type'],
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[confounds_phenotype['type'] == 'total'],
+        ci=95,
+        color='red',
+        linewidth=1,
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[confounds_phenotype['type'] == 'compcor'],
+        ci=95,
+        color='blue',
+        linewidth=1,
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[confounds_phenotype['type'] == 'aroma'],
+        ci=95,
+        color='orange',
+        linewidth=1,
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[
+            confounds_phenotype['type'] == 'fixed_regressors'
+        ],
+        ci=95,
+        color='darkgrey',
+        linewidth=1,
+        ax=ax,
+    )
+    sns.barplot(
+        x='value',
+        y='strategy',
+        data=confounds_phenotype[
+            confounds_phenotype['type'] == 'high_pass'
+        ],
+        ci=95,
+        color='grey',
+        linewidth=1,
+        ax=ax,
+    )
+    ax.set_xlim(0, 120)
+    ax.set_xlabel('Degrees of freedom loss')
+    ax.set_title(dataset)
+
+colors = ['red', 'blue', 'orange', 'darkgrey', 'grey']
+labels = [
+    'Censored volumes',
+    'CompCor \nregressors',
+    'ICA-AROMA \npartial regressors',
+    'Head motion and \ntissue signal',
+    'Discrete cosine-basis \nregressors',
+]
+handles = [
+    mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)
+]
+axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
+
+------------------
+
+[0;31m---------------------------------------------------------------------------[0m
+[0;31mNameError[0m                                 Traceback (most recent call last)
+[0;32m/tmp/ipykernel_37067/1172516907.py[0m in [0;36m<module>[0;34m[0m
+[1;32m     44[0m         [0mfmriprep_version[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     45[0m         [0mpath_root[0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0;32m---> 46[0;31m         [0mgross_fd[0m[0;34m=[0m[0mstringent[0m[0;34m[[0m[0;34m'gross_fd'[0m[0;34m][0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[0m[1;32m     47[0m         [0mfd_thresh[0m[0;34m=[0m[0mstringent[0m[0;34m[[0m[0;34m'fd_thresh'[0m[0;34m][0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+[1;32m     48[0m         [0mproportion_thresh[0m[0;34m=[0m[0mstringent[0m[0;34m[[0m[0;34m'proportion_thresh'[0m[0;34m][0m[0;34m,[0m[0;34m[0m[0;34m[0m[0m
+
+[0;31mNameError[0m: name 'stringent' is not defined
+NameError: name 'stringent' is not defined
+

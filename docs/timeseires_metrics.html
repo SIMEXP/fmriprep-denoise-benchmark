@@ -49,6 +49,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="Preprocessing fMRI data" href="fmriprep.html" />
@@ -107,7 +109,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="../index.html">
-                    Abstract
+                    Summary
                 </a>
             </li>
         </ul>
@@ -128,8 +130,8 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/results.html">
-   Results
+  <a class="reference internal" href="../research_report/results-group.html">
+   Results: dataset level
   </a>
  </li>
  <li class="toctree-l1">
@@ -152,21 +154,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../supplementary_materials/CITATION.html">
    fMRIPrep preprocessing details
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../supplementary_materials/results_full-sample.html">
-   Full sample motion profile and loss in degrees of freedom
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../supplementary_materials/report_ds000228.html">
-   ds000228
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../supplementary_materials/report_ds000030.html">
-   ds000030
   </a>
  </li>
  <li class="toctree-l1">
@@ -482,8 +469,8 @@ Use this line to submit all jobs at once.</p>
     {
         requestKernel: true,
         binderOptions: {
-            repo: "binder-examples/jupyter-stacks-datascience",
-            ref: "master",
+            repo: "SIMEXP/fmriprep-denoise-benchmark",
+            ref: "main",
         },
         codeMirrorConfig: {
             theme: "abcdef",

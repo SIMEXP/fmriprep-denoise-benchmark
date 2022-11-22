@@ -49,11 +49,13 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Results" href="results.html" />
+    <link rel="next" title="Results: dataset level" href="results-group.html" />
     <link rel="prev" title="Software implementation" href="software_implemetation.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
@@ -110,7 +112,7 @@ const thebe_selector_output = ".output, .cell_output"
         <ul class="nav bd-sidenav bd-sidenav__home-link">
             <li class="toctree-l1">
                 <a class="reference internal" href="../index.html">
-                    Abstract
+                    Summary
                 </a>
             </li>
         </ul>
@@ -131,8 +133,8 @@ const thebe_selector_output = ".output, .cell_output"
   </a>
  </li>
  <li class="toctree-l1">
-  <a class="reference internal" href="results.html">
-   Results
+  <a class="reference internal" href="results-group.html">
+   Results: dataset level
   </a>
  </li>
  <li class="toctree-l1">
@@ -155,21 +157,6 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="../supplementary_materials/CITATION.html">
    fMRIPrep preprocessing details
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../supplementary_materials/results_full-sample.html">
-   Full sample motion profile and loss in degrees of freedom
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../supplementary_materials/report_ds000228.html">
-   ds000228
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../supplementary_materials/report_ds000030.html">
-   ds000030
   </a>
  </li>
  <li class="toctree-l1">
@@ -277,6 +264,24 @@ title="Launch on Binder"
   </span>
 <span class="headerbtn__text-container">Binder</span>
 </a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="initThebeSBT()"
+  class="headerbtn headerbtn-launch-thebe"
+  data-toggle="tooltip"
+data-placement="left"
+title="Launch Thebe"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-play"></i>
+  </span>
+<span class="headerbtn__text-container">Live Code</span>
+</button>
 
       </li>
       
@@ -602,7 +607,7 @@ For more information on the dataset please refer to <span id="id1">Richardson <e
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_4a068_" style="font-size: 12px">
+<table id="T_a010d_" style="font-size: 12px">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
@@ -613,58 +618,58 @@ For more information on the dataset please refer to <span id="id1">Richardson <e
   </thead>
   <tbody>
     <tr>
-      <th id="T_4a068_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_4a068_row0_col0" class="data row0 col0" >155.000000</td>
-      <td id="T_4a068_row0_col1" class="data row0 col1" >33.000000</td>
-      <td id="T_4a068_row0_col2" class="data row0 col2" >122.000000</td>
+      <th id="T_a010d_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_a010d_row0_col0" class="data row0 col0" >155.000000</td>
+      <td id="T_a010d_row0_col1" class="data row0 col1" >33.000000</td>
+      <td id="T_a010d_row0_col2" class="data row0 col2" >122.000000</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_4a068_row1_col0" class="data row1 col0" >10.555189</td>
-      <td id="T_4a068_row1_col1" class="data row1 col1" >24.772727</td>
-      <td id="T_4a068_row1_col2" class="data row1 col2" >6.709461</td>
+      <th id="T_a010d_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_a010d_row1_col0" class="data row1 col0" >10.555189</td>
+      <td id="T_a010d_row1_col1" class="data row1 col1" >24.772727</td>
+      <td id="T_a010d_row1_col2" class="data row1 col2" >6.709461</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_4a068_row2_col0" class="data row2 col0" >8.071957</td>
-      <td id="T_4a068_row2_col1" class="data row2 col1" >5.308521</td>
-      <td id="T_4a068_row2_col2" class="data row2 col2" >2.330938</td>
+      <th id="T_a010d_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_a010d_row2_col0" class="data row2 col0" >8.071957</td>
+      <td id="T_a010d_row2_col1" class="data row2 col1" >5.308521</td>
+      <td id="T_a010d_row2_col2" class="data row2 col2" >2.330938</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_4a068_row3_col0" class="data row3 col0" >3.518138</td>
-      <td id="T_4a068_row3_col1" class="data row3 col1" >18.000000</td>
-      <td id="T_4a068_row3_col2" class="data row3 col2" >3.518138</td>
+      <th id="T_a010d_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_a010d_row3_col0" class="data row3 col0" >3.518138</td>
+      <td id="T_a010d_row3_col1" class="data row3 col1" >18.000000</td>
+      <td id="T_a010d_row3_col2" class="data row3 col2" >3.518138</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_4a068_row4_col0" class="data row4 col0" >5.300000</td>
-      <td id="T_4a068_row4_col1" class="data row4 col1" >21.000000</td>
-      <td id="T_4a068_row4_col2" class="data row4 col2" >4.895210</td>
+      <th id="T_a010d_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_a010d_row4_col0" class="data row4 col0" >5.300000</td>
+      <td id="T_a010d_row4_col1" class="data row4 col1" >21.000000</td>
+      <td id="T_a010d_row4_col2" class="data row4 col2" >4.895210</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_4a068_row5_col0" class="data row5 col0" >7.680000</td>
-      <td id="T_4a068_row5_col1" class="data row5 col1" >23.000000</td>
-      <td id="T_4a068_row5_col2" class="data row5 col2" >5.980000</td>
+      <th id="T_a010d_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_a010d_row5_col0" class="data row5 col0" >7.680000</td>
+      <td id="T_a010d_row5_col1" class="data row5 col1" >23.000000</td>
+      <td id="T_a010d_row5_col2" class="data row5 col2" >5.980000</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_4a068_row6_col0" class="data row6 col0" >10.975000</td>
-      <td id="T_4a068_row6_col1" class="data row6 col1" >28.000000</td>
-      <td id="T_4a068_row6_col2" class="data row6 col2" >8.397500</td>
+      <th id="T_a010d_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_a010d_row6_col0" class="data row6 col0" >10.975000</td>
+      <td id="T_a010d_row6_col1" class="data row6 col1" >28.000000</td>
+      <td id="T_a010d_row6_col2" class="data row6 col2" >8.397500</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_4a068_row7_col0" class="data row7 col0" >39.000000</td>
-      <td id="T_4a068_row7_col1" class="data row7 col1" >39.000000</td>
-      <td id="T_4a068_row7_col2" class="data row7 col2" >12.300000</td>
+      <th id="T_a010d_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_a010d_row7_col0" class="data row7 col0" >39.000000</td>
+      <td id="T_a010d_row7_col1" class="data row7 col1" >39.000000</td>
+      <td id="T_a010d_row7_col2" class="data row7 col2" >12.300000</td>
     </tr>
     <tr>
-      <th id="T_4a068_level0_row8" class="row_heading level0 row8" >n_female</th>
-      <td id="T_4a068_row8_col0" class="data row8 col0" >84.000000</td>
-      <td id="T_4a068_row8_col1" class="data row8 col1" >20.000000</td>
-      <td id="T_4a068_row8_col2" class="data row8 col2" >64.000000</td>
+      <th id="T_a010d_level0_row8" class="row_heading level0 row8" >n_female</th>
+      <td id="T_a010d_row8_col0" class="data row8 col0" >84.000000</td>
+      <td id="T_a010d_row8_col1" class="data row8 col1" >20.000000</td>
+      <td id="T_a010d_row8_col2" class="data row8 col2" >64.000000</td>
     </tr>
   </tbody>
 </table>
@@ -722,7 +727,7 @@ Demographic information per condition can be found in <a class="reference intern
 <div class="cell_output docutils container">
 <div class="output text_html"><style type="text/css">
 </style>
-<table id="T_dc84b_" style="font-size: 12px">
+<table id="T_138a1_" style="font-size: 12px">
   <thead>
     <tr>
       <th class="blank level0" >&nbsp;</th>
@@ -735,76 +740,76 @@ Demographic information per condition can be found in <a class="reference intern
   </thead>
   <tbody>
     <tr>
-      <th id="T_dc84b_level0_row0" class="row_heading level0 row0" >count</th>
-      <td id="T_dc84b_row0_col0" class="data row0 col0" >212.000000</td>
-      <td id="T_dc84b_row0_col1" class="data row0 col1" >106.000000</td>
-      <td id="T_dc84b_row0_col2" class="data row0 col2" >35.000000</td>
-      <td id="T_dc84b_row0_col3" class="data row0 col3" >41.000000</td>
-      <td id="T_dc84b_row0_col4" class="data row0 col4" >30.000000</td>
+      <th id="T_138a1_level0_row0" class="row_heading level0 row0" >count</th>
+      <td id="T_138a1_row0_col0" class="data row0 col0" >212.000000</td>
+      <td id="T_138a1_row0_col1" class="data row0 col1" >106.000000</td>
+      <td id="T_138a1_row0_col2" class="data row0 col2" >35.000000</td>
+      <td id="T_138a1_row0_col3" class="data row0 col3" >41.000000</td>
+      <td id="T_138a1_row0_col4" class="data row0 col4" >30.000000</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row1" class="row_heading level0 row1" >mean</th>
-      <td id="T_dc84b_row1_col0" class="data row1 col0" >33.231132</td>
-      <td id="T_dc84b_row1_col1" class="data row1 col1" >31.773585</td>
-      <td id="T_dc84b_row1_col2" class="data row1 col2" >32.485714</td>
-      <td id="T_dc84b_row1_col3" class="data row1 col3" >34.731707</td>
-      <td id="T_dc84b_row1_col4" class="data row1 col4" >37.200000</td>
+      <th id="T_138a1_level0_row1" class="row_heading level0 row1" >mean</th>
+      <td id="T_138a1_row1_col0" class="data row1 col0" >33.231132</td>
+      <td id="T_138a1_row1_col1" class="data row1 col1" >31.773585</td>
+      <td id="T_138a1_row1_col2" class="data row1 col2" >32.485714</td>
+      <td id="T_138a1_row1_col3" class="data row1 col3" >34.731707</td>
+      <td id="T_138a1_row1_col4" class="data row1 col4" >37.200000</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row2" class="row_heading level0 row2" >std</th>
-      <td id="T_dc84b_row2_col0" class="data row2 col0" >9.287324</td>
-      <td id="T_dc84b_row2_col1" class="data row2 col1" >8.861133</td>
-      <td id="T_dc84b_row2_col2" class="data row2 col2" >10.190455</td>
-      <td id="T_dc84b_row2_col3" class="data row2 col3" >8.919149</td>
-      <td id="T_dc84b_row2_col4" class="data row2 col4" >9.159130</td>
+      <th id="T_138a1_level0_row2" class="row_heading level0 row2" >std</th>
+      <td id="T_138a1_row2_col0" class="data row2 col0" >9.287324</td>
+      <td id="T_138a1_row2_col1" class="data row2 col1" >8.861133</td>
+      <td id="T_138a1_row2_col2" class="data row2 col2" >10.190455</td>
+      <td id="T_138a1_row2_col3" class="data row2 col3" >8.919149</td>
+      <td id="T_138a1_row2_col4" class="data row2 col4" >9.159130</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row3" class="row_heading level0 row3" >min</th>
-      <td id="T_dc84b_row3_col0" class="data row3 col0" >21.000000</td>
-      <td id="T_dc84b_row3_col1" class="data row3 col1" >21.000000</td>
-      <td id="T_dc84b_row3_col2" class="data row3 col2" >21.000000</td>
-      <td id="T_dc84b_row3_col3" class="data row3 col3" >21.000000</td>
-      <td id="T_dc84b_row3_col4" class="data row3 col4" >22.000000</td>
+      <th id="T_138a1_level0_row3" class="row_heading level0 row3" >min</th>
+      <td id="T_138a1_row3_col0" class="data row3 col0" >21.000000</td>
+      <td id="T_138a1_row3_col1" class="data row3 col1" >21.000000</td>
+      <td id="T_138a1_row3_col2" class="data row3 col2" >21.000000</td>
+      <td id="T_138a1_row3_col3" class="data row3 col3" >21.000000</td>
+      <td id="T_138a1_row3_col4" class="data row3 col4" >22.000000</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row4" class="row_heading level0 row4" >25%</th>
-      <td id="T_dc84b_row4_col0" class="data row4 col0" >25.000000</td>
-      <td id="T_dc84b_row4_col1" class="data row4 col1" >24.000000</td>
-      <td id="T_dc84b_row4_col2" class="data row4 col2" >24.000000</td>
-      <td id="T_dc84b_row4_col3" class="data row4 col3" >26.000000</td>
-      <td id="T_dc84b_row4_col4" class="data row4 col4" >29.250000</td>
+      <th id="T_138a1_level0_row4" class="row_heading level0 row4" >25%</th>
+      <td id="T_138a1_row4_col0" class="data row4 col0" >25.000000</td>
+      <td id="T_138a1_row4_col1" class="data row4 col1" >24.000000</td>
+      <td id="T_138a1_row4_col2" class="data row4 col2" >24.000000</td>
+      <td id="T_138a1_row4_col3" class="data row4 col3" >26.000000</td>
+      <td id="T_138a1_row4_col4" class="data row4 col4" >29.250000</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row5" class="row_heading level0 row5" >50%</th>
-      <td id="T_dc84b_row5_col0" class="data row5 col0" >31.000000</td>
-      <td id="T_dc84b_row5_col1" class="data row5 col1" >29.000000</td>
-      <td id="T_dc84b_row5_col2" class="data row5 col2" >29.000000</td>
-      <td id="T_dc84b_row5_col3" class="data row5 col3" >35.000000</td>
-      <td id="T_dc84b_row5_col4" class="data row5 col4" >39.500000</td>
+      <th id="T_138a1_level0_row5" class="row_heading level0 row5" >50%</th>
+      <td id="T_138a1_row5_col0" class="data row5 col0" >31.000000</td>
+      <td id="T_138a1_row5_col1" class="data row5 col1" >29.000000</td>
+      <td id="T_138a1_row5_col2" class="data row5 col2" >29.000000</td>
+      <td id="T_138a1_row5_col3" class="data row5 col3" >35.000000</td>
+      <td id="T_138a1_row5_col4" class="data row5 col4" >39.500000</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row6" class="row_heading level0 row6" >75%</th>
-      <td id="T_dc84b_row6_col0" class="data row6 col0" >41.000000</td>
-      <td id="T_dc84b_row6_col1" class="data row6 col1" >39.750000</td>
-      <td id="T_dc84b_row6_col2" class="data row6 col2" >40.000000</td>
-      <td id="T_dc84b_row6_col3" class="data row6 col3" >42.000000</td>
-      <td id="T_dc84b_row6_col4" class="data row6 col4" >44.750000</td>
+      <th id="T_138a1_level0_row6" class="row_heading level0 row6" >75%</th>
+      <td id="T_138a1_row6_col0" class="data row6 col0" >41.000000</td>
+      <td id="T_138a1_row6_col1" class="data row6 col1" >39.750000</td>
+      <td id="T_138a1_row6_col2" class="data row6 col2" >40.000000</td>
+      <td id="T_138a1_row6_col3" class="data row6 col3" >42.000000</td>
+      <td id="T_138a1_row6_col4" class="data row6 col4" >44.750000</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row7" class="row_heading level0 row7" >max</th>
-      <td id="T_dc84b_row7_col0" class="data row7 col0" >50.000000</td>
-      <td id="T_dc84b_row7_col1" class="data row7 col1" >50.000000</td>
-      <td id="T_dc84b_row7_col2" class="data row7 col2" >50.000000</td>
-      <td id="T_dc84b_row7_col3" class="data row7 col3" >50.000000</td>
-      <td id="T_dc84b_row7_col4" class="data row7 col4" >49.000000</td>
+      <th id="T_138a1_level0_row7" class="row_heading level0 row7" >max</th>
+      <td id="T_138a1_row7_col0" class="data row7 col0" >50.000000</td>
+      <td id="T_138a1_row7_col1" class="data row7 col1" >50.000000</td>
+      <td id="T_138a1_row7_col2" class="data row7 col2" >50.000000</td>
+      <td id="T_138a1_row7_col3" class="data row7 col3" >50.000000</td>
+      <td id="T_138a1_row7_col4" class="data row7 col4" >49.000000</td>
     </tr>
     <tr>
-      <th id="T_dc84b_level0_row8" class="row_heading level0 row8" >n_female</th>
-      <td id="T_dc84b_row8_col0" class="data row8 col0" >98.000000</td>
-      <td id="T_dc84b_row8_col1" class="data row8 col1" >54.000000</td>
-      <td id="T_dc84b_row8_col2" class="data row8 col2" >17.000000</td>
-      <td id="T_dc84b_row8_col3" class="data row8 col3" >19.000000</td>
-      <td id="T_dc84b_row8_col4" class="data row8 col4" >8.000000</td>
+      <th id="T_138a1_level0_row8" class="row_heading level0 row8" >n_female</th>
+      <td id="T_138a1_row8_col0" class="data row8 col0" >98.000000</td>
+      <td id="T_138a1_row8_col1" class="data row8 col1" >54.000000</td>
+      <td id="T_138a1_row8_col2" class="data row8 col2" >17.000000</td>
+      <td id="T_138a1_row8_col3" class="data row8 col3" >19.000000</td>
+      <td id="T_138a1_row8_col4" class="data row8 col4" >8.000000</td>
     </tr>
   </tbody>
 </table>
@@ -1139,8 +1144,8 @@ with age and sex as covariates.</p>
     {
         requestKernel: true,
         binderOptions: {
-            repo: "binder-examples/jupyter-stacks-datascience",
-            ref: "master",
+            repo: "SIMEXP/fmriprep-denoise-benchmark",
+            ref: "main",
         },
         codeMirrorConfig: {
             theme: "abcdef",
@@ -1169,10 +1174,10 @@ with age and sex as covariates.</p>
             <p class="prev-next-title">Software implementation</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="results.html" title="next page">
+    <a class='right-next' id="next-link" href="results-group.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Results</p>
+        <p class="prev-next-title">Results: dataset level</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
