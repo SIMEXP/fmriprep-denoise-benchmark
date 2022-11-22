@@ -120,6 +120,7 @@ def main():
                 full_length if sample_mask is None else len(sample_mask)
             )
             excised_vol = full_length - ts_length
+            excised_vol_pro = excised_vol / full_length
             regressors = reduced_confounds.columns.tolist()
             compcor = sum('comp_cor' in i for i in regressors)
             high_pass = sum('cosine' in i for i in regressors)
@@ -141,6 +142,7 @@ def main():
 
             stats = {
                 (strategy_name, 'excised_vol'): excised_vol,
+                (strategy_name, 'excised_vol_proportion'): excised_vol_pro,
                 (strategy_name, 'high_pass'): high_pass,
                 (strategy_name, 'fixed_regressors'): fixed,
                 (strategy_name, 'compcor'): compcor,
