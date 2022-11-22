@@ -3,6 +3,7 @@ inputs/*
 tmp/
 draft/
 *.drawio.bkp
+_*.md
 
 # HCP
 logs/

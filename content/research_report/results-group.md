@@ -22,6 +22,9 @@ import pandas as pd
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
+import matplotlib as mpl
+
+from nilearn.plotting import plot_matrix
 
 import seaborn as sns
 
@@ -53,10 +56,13 @@ def demographic_table(criteria_name, fmriprep_version):
 
     desc = pd.concat({'ds000228': ds000228, 'ds000030': ds000030}, axis=1, names=['dataset'])
     desc = desc.style.set_table_attributes('style="font-size: 12px"')
+    print("Generating new tables...")
+
     display(desc)
 
 
 def statistic_report(criteria_name, fmriprep_version, dataset):
+
     criteria = get_qc_criteria(criteria_name)
     for_plotting = {}
     baseline_group = datasets_baseline[dataset]
@@ -90,7 +96,7 @@ def significant_notation(item_pairs, max_value, sig, ax):
 
 
 def plot_mean_fd(criteria_name, fmriprep_version):
-    
+    print("Generating new graphs...")
     fig = plt.figure(figsize=(7, 5))
     axs = fig.subplots(1, 2, sharey=True)
     for ax, dataset in zip(axs, datasets):
@@ -282,53 +288,104 @@ fmriprep_version = widgets.Dropdown(
 interactive(loss_degree_of_freedom, criteria_name=criteria_name, fmriprep_version=fmriprep_version)
 ```
 
-## QC/FC
+## Benchmark metrics by fMRIPrep version and dataset
+
+We filtered the preprocessed datasets with a stringent gross motion cut-off. 
+Here you can brows the results by fMRIPrep version and dataset.
 
 ```{code-cell} ipython3
-path_ds000228 = path_root / "ds000228_fmriprep-20-2-1lts_summary.tsv"
-path_ds000030 =  path_root / "ds000030_fmriprep-20-2-1lts_summary.tsv"
-ds000228 = pd.read_csv(path_ds000228, sep='\t', index_col=[0, 1], header=[0, 1])
-ds000030  = pd.read_csv(path_ds000030, sep='\t', index_col=[0, 1], header=[0, 1])
+def qcfc(fmriprep_version, dataset):
 
-data = pd.concat({'ds000228': ds000228, 'ds000030':ds000030}, names=['datasets'])
-id_vars = data.index.names
+    criteria_name = 'stringent'
+    
+    path_data = path_root / f"{dataset}_{fmriprep_version.replace('.', '-')}_desc-{criteria_name}_summary.tsv"
+    data = pd.read_csv(path_data, sep='\t', index_col=[0, 1], header=[0, 1])
+    id_vars = data.index.names
 
-# Plotting
-data_long = data['qcfc_fdr_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
-data_long = data_long.set_index(keys=['datasets'])
-fig = plt.figure(figsize=(11, 5))
-axs = fig.subplots(1, 2, sharey=True)
-for dataset, ax in zip(['ds000228', 'ds000030'], axs):
-    df = data_long.loc[dataset, :]
+    # Plotting
+    df = data['qcfc_fdr_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
+    fig = plt.figure(figsize=(17, 11))
+    axs = fig.subplots(2, 3)
+    fig.subplots_adjust(hspace=0.5, wspace=0.5)
+
     sns.barplot(
-        y='Percentage %', x='strategy', data=df, ax=ax,
+        y='Percentage %', x='strategy', data=df, ax=axs[0, 0],
         order=strategy_order, ci=None,
-        # hue_order=['full_sample']
         hue_order=group_order[dataset]
     )
-    sns.stripplot(y='Percentage %', x='strategy', data=df, ax=ax, 
+    sns.stripplot(y='Percentage %', x='strategy', data=df, ax=axs[0, 0], 
                   order=strategy_order, hue_order=group_order[dataset])
-    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
-    ax.set_title(f'dataset-{dataset}')
-    # Improve the legend
-    # handles, labels = ax.get_legend_handles_labels()
-    # lgd_idx = len(group_order[dataset])
-    # ax.legend(handles[lgd_idx:], labels[lgd_idx:])
+    axs[0, 0].set_title('Significant QC/FC in connectomes')
+    axs[0, 0].set_ylim(0, 100)
 
-data_long = data['qcfc_mad'].reset_index().melt(id_vars=id_vars, value_name='Median absolute deviation')
-data_long = data_long.set_index(keys=['datasets'])
-fig = plt.figure(figsize=(13, 5))
-axs = fig.subplots(1, 2, sharey=True)
-for dataset, ax in zip(['ds000228', 'ds000030'], axs):
-    df = data_long.loc[dataset, :]
+
+    df = data['qcfc_mad'].reset_index().melt(id_vars=id_vars, value_name='Median absolute deviation')
+
     sns.barplot(
-        y='Median absolute deviation', x='strategy', data=df, ax=ax,
-        order=strategy_order, ci='sd',
+        y='Median absolute deviation', x='strategy', data=df, ax=axs[0, 1],
+        order=strategy_order, ci=95,
         # hue_order=['full_sample']
         hue_order=group_order[dataset]
     )
-    ax.set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
-    ax.set_title(f'dataset-{dataset}')
+
+    axs[0, 1].set_title('Median absolute deviation of QC/FC')
+    axs[0, 1].set_ylim(0, 0.25)
+    
+
+    df = data['corr_motion_distance'].reset_index().melt(id_vars=id_vars, value_name='Pearson\'s correlation')
+    sns.barplot(
+        y='Pearson\'s correlation', x='strategy', data=df, ax=axs[0, 2],
+        order=strategy_order, ci=95, 
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    axs[0, 2].set_title('Distance-dependent of motion')
+
+    
+    df = data['corr_motion_modularity'].reset_index().melt(id_vars=id_vars, value_name='Pearson\'s correlation')
+
+    sns.barplot(
+        y='Pearson\'s correlation', x='strategy', data=df, ax=axs[1, 0],
+        order=strategy_order, ci=95, 
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    axs[1, 0].set_title('Correlation between motion and network modularity')
+    
+    df = data['modularity'].reset_index().melt(id_vars=id_vars, value_name='Mean modularity quality (a.u.)')
+
+    sns.barplot(
+        y='Mean modularity quality (a.u.)', x='strategy', data=df, ax=axs[1, 1],
+        order=strategy_order, ci=95, 
+        # hue_order=['full_sample']
+        hue_order=group_order[dataset]
+    )
+    axs[1, 1].set_title('Mean network modularity')
+    
+    cc = pd.read_csv(path_root / dataset / fmriprep_version / f'dataset-{dataset}_atlas-mist_nroi-444_connectome.tsv', 
+                     sep='\t', index_col=0)
+    plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=True, axes=axs[1, 2], cmap=mpl.cm.viridis,
+                title="Connectome similarity", reorder='complete', vmax=1, vmin=0.7)
+    for i in range(2):
+        for j in range(2):
+            axs[i, j].set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    axs[0, 2].set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
+    
+    
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+dataset = widgets.Dropdown(
+    options=['ds000228', 'ds000030'],
+    value='ds000228',
+    description='Dataset : ',
+    disabled=False
+)
+
+interactive(qcfc, fmriprep_version=fmriprep_version, dataset=dataset)
 ```
 
 ```{code-cell} ipython3
