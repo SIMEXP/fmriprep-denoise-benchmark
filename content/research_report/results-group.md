@@ -42,13 +42,8 @@ strategy_order = list(utils.GRID_LOCATION.values())
 group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
 datasets = ['ds000228', 'ds000030']
 datasets_baseline = {'ds000228': 'adult', 'ds000030': 'control'}
-```
 
-# Results
 
-## Sample and subgroup size change based on quality control criteria
-
-```{code-cell} ipython3
 def demographic_table(criteria_name, fmriprep_version):
     criteria = get_qc_criteria(criteria_name)
     ds000228 = tables.lazy_demographic('ds000228', fmriprep_version, path_root, **criteria)
@@ -135,7 +130,17 @@ def plot_mean_fd(criteria_name, fmriprep_version):
                 significant_notation((0, i), max_value + 0.03 * (i - 1), notation, ax)
 ```
 
+# Results: dataset level
+
+Here we provides alternative visualisation of the benchmark results from the manuscript.
+The Jupyter Book can only display static images. 
+Please click on the launch botton to lunch the binder instance for interactive data viewing.
+
+## Sample and subgroup size change based on quality control criteria
+
 ```{code-cell} ipython3
+:tags: [hide-input]
+
 criteria_name = widgets.Dropdown(
     options=['stringent', 'minimal', None],
     value='stringent',
@@ -152,6 +157,8 @@ interactive(demographic_table, criteria_name=criteria_name, fmriprep_version=fmr
 ```
 
 ```{code-cell} ipython3
+:tags: [hide-input]
+
 criteria_name = widgets.Dropdown(
     options=['stringent', 'minimal', None],
     value='stringent',
@@ -268,9 +275,7 @@ def loss_degree_of_freedom(criteria_name, fmriprep_version):
         mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)
     ]
     axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
-```
 
-```{code-cell} ipython3
 criteria_name = widgets.Dropdown(
     options=['stringent', 'minimal', None],
     value='stringent',
@@ -294,6 +299,8 @@ We filtered the preprocessed datasets with a stringent gross motion cut-off.
 Here you can brows the results by fMRIPrep version and dataset.
 
 ```{code-cell} ipython3
+:tags: [hide-input]
+
 def qcfc(fmriprep_version, dataset):
 
     criteria_name = 'stringent'
@@ -388,6 +395,3 @@ dataset = widgets.Dropdown(
 interactive(qcfc, fmriprep_version=fmriprep_version, dataset=dataset)
 ```
 
-```{code-cell} ipython3
-
-```
