@@ -6,8 +6,8 @@ from statsmodels.stats import multitest
 
 
 def calculate_median_absolute(x):
-    """Calculate Absolute median"""
-    return (x - x.median()).abs().median()
+    """Calculate Absolute median value"""
+    return x.abs().median()
 
 
 def fdr(x, alpha=0.05, method='fdr_bh'):

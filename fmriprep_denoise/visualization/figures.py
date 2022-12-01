@@ -37,7 +37,7 @@ def plot_motion_resid(
         dataset, fmriprep_version, metric, atlas_name, dimension, path_root,
     )
     qcfc_sig = utils._qcfc_fdr(files_qcfc, labels, group=group)
-    qcfc_mad = utils._get_qcfc_median_absolute(files_qcfc, labels, group=group)
+    qcfc_mad = utils._get_qcfc_absolute_median(files_qcfc, labels, group=group)
 
     if len(files_qcfc) == 1 and not isinstance(dimension, type(None)):
         qcfc_per_edge = utils._get_qcfc_metric(
@@ -96,8 +96,7 @@ def _plot_single_motion_resid(qcfc_sig, qcfc_mad, long_qcfc):
                     ax=ax,
                 )
                 g.set_title(cur_strategy, fontsize='small')
-                mad = qcfc_mad['data'][cur_strategy].values
-                g.axvline(mad, linewidth=1, linestyle='--', color='r')
+                g.axvline(0, linewidth=1, linestyle='--', color='r')
                 xlabel = "Pearson's correlation" if i == 2 else None
                 g.set(xlabel=xlabel)
             else:

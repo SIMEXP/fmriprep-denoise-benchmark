@@ -394,4 +394,3 @@ dataset = widgets.Dropdown(
 
 interactive(qcfc, fmriprep_version=fmriprep_version, dataset=dataset)
 ```
-

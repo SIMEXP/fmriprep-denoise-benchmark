@@ -432,8 +432,8 @@ def _qcfc_fdr(file_qcfc, labels, group):
     }
 
 
-def _get_qcfc_median_absolute(file_qcfc, labels, group):
-    """Calculate absolute median and prepare for plotting."""
+def _get_qcfc_absolute_median(file_qcfc, labels, group):
+    """Calculate absolute median value and prepare for plotting."""
     qcfc_per_edge = _get_qcfc_metric(
         file_qcfc, metric='correlation', group=group
     )
@@ -445,14 +445,14 @@ def _get_qcfc_median_absolute(file_qcfc, labels, group):
 
     if len(qcfc_median_absolute) == 1:
         qcfc_median_absolute = qcfc_median_absolute[0]
-        title = 'Median absolute deviation\nof QC-FC'
+        title = 'Absolute median value \nof QC-FC'
     else:
         qcfc_median_absolute = pd.concat(qcfc_median_absolute, axis=1)
-        title = 'Median absolute deviation of QC-FC'
+        title = 'Absolute median value of QC-FC'
     return {
         'data': pd.DataFrame(qcfc_median_absolute).T,
         'order': list(GRID_LOCATION.values()),
         'title': title,
         'xlim': (0.00, 0.3),
-        'label': 'Median absolute deviation',
+        'label': 'Absolute median value',
     }
