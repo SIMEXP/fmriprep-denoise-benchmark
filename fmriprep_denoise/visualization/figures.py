@@ -11,7 +11,7 @@ from fmriprep_denoise.visualization import utils
 
 
 def plot_motion_resid(
-    dataset, fmriprep_version, path_root, atlas_name=None, dimension=None, group='full_sample'
+    dataset, fmriprep_version, path_root, atlas_name=None, dimension=None, group='full_sample', fdr=False
 ):
     """
     Dirty and quick plot for residual motion impact on functional connectivity.
@@ -30,13 +30,17 @@ def plot_motion_resid(
     group : str
         Default to full sampe ('full_sample'), or string value under the
         dataset's groups column.
+
+    fdr : boolean
+        Default to False.
+        Perform FDR correction or not on the qc/fc p values.
     """
     # One cannot use specific dimension but use wild card in atlas
     metric = 'qcfc'
     files_qcfc, labels = utils._get_connectome_metric_paths(
         dataset, fmriprep_version, metric, atlas_name, dimension, path_root,
     )
-    qcfc_sig = utils._qcfc_fdr(files_qcfc, labels, group=group)
+    qcfc_sig = utils._qcfc_pvalue(files_qcfc, labels, group=group, fdr=fdr)
     qcfc_mad = utils._get_qcfc_absolute_median(files_qcfc, labels, group=group)
 
     if len(files_qcfc) == 1 and not isinstance(dimension, type(None)):

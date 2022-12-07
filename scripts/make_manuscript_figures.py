@@ -29,10 +29,10 @@ if __name__ == "__main__":
 
     # Plotting
     fig_sig_qcfc, axs_sig_qcfc = plt.subplots(1, 2, sharey=True, constrained_layout=True)
-    fig_sig_qcfc.suptitle('Significant QC/FC in connectomes')
+    fig_sig_qcfc.suptitle(r'Significant QC/FC in connectomes (uncorrrected, $\alpha=0.05$)')
 
     fig_med_qcfc, axs_med_qcfc = plt.subplots(1, 2, sharey=True, constrained_layout=True)
-    fig_med_qcfc.suptitle('Absolute median values of QC/FC')
+    fig_med_qcfc.suptitle('Medians of absolute values of QC/FC')
 
     fig_dist, axs_dist = plt.subplots(1, 2, sharey=True, constrained_layout=True)
     fig_dist.suptitle('Distance-dependent of motion')
@@ -47,14 +47,16 @@ if __name__ == "__main__":
         path_data = path_root / f"{dataset}_{fmriprep_version.replace('.', '-')}_desc-{criteria_name}_summary.tsv"
         data = pd.read_csv(path_data, sep='\t', index_col=[0, 1], header=[0, 1])
         id_vars = data.index.names
-        df = data['qcfc_fdr_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
+        # df = data['qcfc_fdr_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
+        df = data['qcfc_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
+
         sns.barplot(
             y='Percentage %', x='strategy', data=df, ax=axs_sig_qcfc[i],
-            order=strategy_order, ci=None,
+            order=strategy_order, ci=95,
             hue_order=group_order[dataset]
         )
-        sns.stripplot(y='Percentage %', x='strategy', data=df, ax=axs_sig_qcfc[i],
-                    order=strategy_order, hue_order=group_order[dataset])
+        # sns.stripplot(y='Percentage %', x='strategy', data=df, ax=axs_sig_qcfc[i],
+        #             order=strategy_order, hue_order=group_order[dataset])
         axs_sig_qcfc[i].set_title(dataset)
         axs_sig_qcfc[i].set_ylim(0, 100)
         axs_sig_qcfc[i].set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')

@@ -8,7 +8,7 @@ from repo2data.repo2data import Repo2Data
 
 from fmriprep_denoise.features import (
     partial_correlation,
-    fdr,
+    significant_level,
     calculate_median_absolute,
     get_atlas_pairwise_distance,
 )
@@ -124,7 +124,7 @@ def prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, path
     pandas.DataFrame
         Summary metrics by group, by strategy
     """
-    ds_qcfc_sig, ds_qcfc_median_absolute, ds_corr_distance = [], [], []
+    ds_qcfc_sig, ds_qcfc_sig_fdr, ds_qcfc_median_absolute, ds_corr_distance = [], [], [], []
     file_qcfc, qcfc_labels = _get_connectome_metric_paths(
         dataset, fmriprep_version, 'qcfc', atlas_name, dimension, path_root
         )
@@ -134,9 +134,19 @@ def prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, path
         # significant correlation between motion and edges
         qcfc_pvalue = _qcfc_bygroup('pvalue', p)
         qcfc_pvalue = qcfc_pvalue.melt(var_name=['groups', 'strategy'])
-        qcfc_pvalue['fdr'] = qcfc_pvalue.groupby(['groups', 'strategy'])['value'].transform(fdr)
+
+        # fdr correction
+        qcfc_pvalue['fdr'] = qcfc_pvalue.groupby(['groups', 'strategy'])['value'].transform(significant_level, correction='fdr_bh')
         qcfc_sig = qcfc_pvalue.groupby(['groups', 'strategy']).apply(
             lambda x: 100 * x.fdr.sum() / x.fdr.shape[0]
+        )
+        qcfc_sig = pd.DataFrame(qcfc_sig, columns=[label])
+        ds_qcfc_sig_fdr.append(qcfc_sig)
+
+        # uncorrected p values
+        qcfc_pvalue['p_value'] = qcfc_pvalue.groupby(['groups', 'strategy'])['value'].transform(significant_level)
+        qcfc_sig = qcfc_pvalue.groupby(['groups', 'strategy']).apply(
+            lambda x: 100 * x.p_value.sum() / x.p_value.shape[0]
         )
         qcfc_sig = pd.DataFrame(qcfc_sig, columns=[label])
         ds_qcfc_sig.append(qcfc_sig)
@@ -157,14 +167,17 @@ def prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, path
         ds_corr_distance.append(corr_distance_qcfc)
 
     ds_qcfc_sig = pd.concat(ds_qcfc_sig, axis=1)
-    ds_qcfc_sig.columns = pd.MultiIndex.from_product([['qcfc_fdr_significant'], ds_qcfc_sig.columns])
+    ds_qcfc_sig.columns = pd.MultiIndex.from_product([['qcfc_significant'], ds_qcfc_sig.columns])
+
+    ds_qcfc_sig_fdr = pd.concat(ds_qcfc_sig_fdr, axis=1)
+    ds_qcfc_sig_fdr.columns = pd.MultiIndex.from_product([['qcfc_fdr_significant'], ds_qcfc_sig_fdr.columns])
 
     ds_qcfc_median_absolute = pd.concat(ds_qcfc_median_absolute, axis=1)
     ds_qcfc_median_absolute.columns = pd.MultiIndex.from_product([['qcfc_mad'], ds_qcfc_median_absolute.columns])
 
     ds_corr_distance = pd.concat(ds_corr_distance, axis=1)
     ds_corr_distance.columns = pd.MultiIndex.from_product([['corr_motion_distance'], ds_corr_distance.columns])
-    return pd.concat([ds_qcfc_sig, ds_qcfc_median_absolute, ds_corr_distance], axis=1)
+    return pd.concat([ds_qcfc_sig, ds_qcfc_sig_fdr, ds_qcfc_median_absolute, ds_corr_distance], axis=1)
 
 
 def prepare_modularity_plotting(dataset, fmriprep_version, atlas_name, dimension, path_root, qc):
@@ -403,23 +416,30 @@ def _corr_modularity_motion(movement, files_network, labels):
     return corr_modularity, network_mod
 
 
-def _qcfc_fdr(file_qcfc, labels, group):
-    """Do FDR correction on qc-fc p-values."""
+def _qcfc_pvalue(file_qcfc, labels, group, fdr):
+    """Get qc-fc p-values."""
     sig_per_edge = _get_qcfc_metric(file_qcfc, metric='pvalue', group=group)
 
     long_qcfc_sig = []
+
     for df, label in zip(sig_per_edge, labels):
         df = df.melt()
-        df['fdr'] = df.groupby('variable')['value'].transform(fdr)
-        df = df.groupby('variable').apply(
-            lambda x: 100 * x.fdr.sum() / x.fdr.shape[0]
-        )
+        if fdr:
+            df['fdr'] = df.groupby('variable')['value'].transform(significant_level, correction='fdr_bh')
+            df = df.groupby('variable').apply(
+                lambda x: 100 * x.fdr.sum() / x.fdr.shape[0]
+            )
+        else:
+            df['p_value'] = df.groupby('variable')['value'].transform(significant_level)
+            df = df.groupby('variable').apply(
+                lambda x: 100 * x.p_value.sum() / x.p_value.shape[0]
+            )
         df = pd.DataFrame(df, columns=[label])
         long_qcfc_sig.append(df)
 
     if len(long_qcfc_sig) == 1:
         long_qcfc_sig = long_qcfc_sig[0]
-        long_qcfc_sig.columns = ['p_corrected']
+        long_qcfc_sig.columns = ['p_value']
     else:
         long_qcfc_sig = pd.concat(long_qcfc_sig, axis=1)
 

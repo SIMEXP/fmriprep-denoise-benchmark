@@ -10,7 +10,7 @@ def calculate_median_absolute(x):
     return x.abs().median()
 
 
-def fdr(x, alpha=0.05, method='fdr_bh'):
+def significant_level(x, alpha=0.05, correction=None):
     """
     Apply FDR correction to a pandas.Series p-value object.
 
@@ -23,7 +23,8 @@ def fdr(x, alpha=0.05, method='fdr_bh'):
     alpha : float
         Alpha threshold.
 
-    method : str
+    method : None or str
+        Default as None for no multiple comparison
         Mutiple comparison methods.
         See statsmodels.stats.multitest.multipletests
 
@@ -32,7 +33,10 @@ def fdr(x, alpha=0.05, method='fdr_bh'):
     ndarray, boolean
         Mask for data passing multiple comparison test.
     """
-    res, _, _, _ = multitest.multipletests(x, alpha=alpha, method=method)
+    if isinstance(correction, str):
+        res, _, _, _ = multitest.multipletests(x, alpha=alpha, method=correction)
+    else:
+        res = x < 0.05
     return res
 
 
