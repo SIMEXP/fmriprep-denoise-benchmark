@@ -6,16 +6,16 @@ import pandas as pd
 
 from sklearn.utils import Bunch
 
-STRATEGY_FILE = 'benchmark_strategies.json'
+STRATEGY_FILE = "benchmark_strategies.json"
 
 PHENOTYPE_INFO = {
-    'ds000228': {
-        'columns': ['Age', 'Gender', 'Child_Adult'],
-        'replace': {'Age': 'age', 'Gender': 'gender', 'Child_Adult': 'groups'},
+    "ds000228": {
+        "columns": ["Age", "Gender", "Child_Adult"],
+        "replace": {"Age": "age", "Gender": "gender", "Child_Adult": "groups"},
     },
-    'ds000030': {
-        'columns': ['age', 'gender', 'diagnosis'],
-        'replace': {'diagnosis': 'groups'},
+    "ds000030": {
+        "columns": ["age", "gender", "diagnosis"],
+        "replace": {"diagnosis": "groups"},
     },
 }
 
@@ -26,7 +26,7 @@ def fetch_fmriprep_derivative(
     path_fmriprep_derivative,
     specifier,
     subject=None,
-    space='MNI152NLin2009cAsym',
+    space="MNI152NLin2009cAsym",
     aroma=False,
 ):
     """Fetch fmriprep derivative and return nilearn.dataset.fetch* like output.
@@ -66,42 +66,42 @@ def fetch_fmriprep_derivative(
 
     # participants tsv from the main dataset
     if not participant_tsv_path.is_file():
-        raise FileNotFoundError(f'Cannot find {participant_tsv_path}')
-    if participant_tsv_path.name != 'participants.tsv':
+        raise FileNotFoundError(f"Cannot find {participant_tsv_path}")
+    if participant_tsv_path.name != "participants.tsv":
         raise FileNotFoundError(
-            f'File {participant_tsv_path} is not a BIDS participant file.'
+            f"File {participant_tsv_path} is not a BIDS participant file."
         )
     participant_tsv = pd.read_csv(
-        participant_tsv_path, index_col=['participant_id'], sep='\t'
+        participant_tsv_path, index_col=["participant_id"], sep="\t"
     )
     # images and confound files
     if subject is None:
-        subject_dirs = path_fmriprep_derivative.glob('sub-*/')
+        subject_dirs = path_fmriprep_derivative.glob("sub-*/")
     elif isinstance(subject, str):
-        subject_dirs = path_fmriprep_derivative.glob(f'sub-{subject}/')
+        subject_dirs = path_fmriprep_derivative.glob(f"sub-{subject}/")
     elif isinstance(subject, list):
         subject_dirs = []
         for s in subject:
-            s_path = path_fmriprep_derivative / f'sub-{s}'
+            s_path = path_fmriprep_derivative / f"sub-{s}"
             if s_path.is_dir():
                 subject_dirs.append(s_path)
     else:
-        raise ValueError('Unsupported input for subject.')
+        raise ValueError("Unsupported input for subject.")
 
     func_img_path, confounds_tsv_path, include_subjects = [], [], []
     for subject_dir in subject_dirs:
         subject = subject_dir.name
-        desc = 'smoothAROMAnonaggr' if aroma else 'preproc'
-        space = 'MNI152NLin6Asym' if aroma else space
+        desc = "smoothAROMAnonaggr" if aroma else "preproc"
+        space = "MNI152NLin6Asym" if aroma else space
         cur_func = (
             subject_dir
-            / 'func'
-            / f'{subject}_{specifier}_space-{space}_desc-{desc}_bold.nii.gz'
+            / "func"
+            / f"{subject}_{specifier}_space-{space}_desc-{desc}_bold.nii.gz"
         )
         cur_confound = (
             subject_dir
-            / 'func'
-            / f'{subject}_{specifier}_desc-confounds_timeseries.tsv'
+            / "func"
+            / f"{subject}_{specifier}_desc-confounds_timeseries.tsv"
         )
 
         if cur_func.is_file() and cur_confound.is_file():
@@ -135,20 +135,17 @@ def get_prepro_strategy(strategy_name=None):
         Denosing strategy parameter to pass to load_confounds.
     """
     strategy_file = Path(__file__).parent / STRATEGY_FILE
-    with open(strategy_file, 'r') as file:
+    with open(strategy_file, "r") as file:
         benchmark_strategies = json.load(file)
 
-    if (
-        isinstance(strategy_name, str)
-        and strategy_name not in benchmark_strategies
-    ):
+    if isinstance(strategy_name, str) and strategy_name not in benchmark_strategies:
         raise NotImplementedError(
             f"Strategy '{strategy_name}' is not implemented. Select from the"
-            f'following: {[*benchmark_strategies]}'
+            f"following: {[*benchmark_strategies]}"
         )
 
     if strategy_name is None:
-        print('Process all strategies.')
+        print("Process all strategies.")
         return benchmark_strategies
     (f"Process strategy '{strategy_name}'.")
     return {strategy_name: benchmark_strategies[strategy_name]}
@@ -172,22 +169,22 @@ def generate_movement_summary(data):
     """
     # get motion QC related metrics from confound files
     group_mean_fd = pd.DataFrame()
-    group_mean_fd.index = group_mean_fd.index.set_names('participant_id')
+    group_mean_fd.index = group_mean_fd.index.set_names("participant_id")
     for confounds in data.confounds:
-        subject_id = confounds.split('/')[-1].split('_')[0]
-        confounds = pd.read_csv(confounds, sep='\t')
-        mean_fd = confounds['framewise_displacement'].mean()
-        group_mean_fd.loc[subject_id, 'mean_framewise_displacement'] = mean_fd
+        subject_id = confounds.split("/")[-1].split("_")[0]
+        confounds = pd.read_csv(confounds, sep="\t")
+        mean_fd = confounds["framewise_displacement"].mean()
+        group_mean_fd.loc[subject_id, "mean_framewise_displacement"] = mean_fd
 
     # load gender and age as confounds for the developmental dataset
     participants = data.phenotypic.copy()
 
-    covar = participants.loc[:, PHENOTYPE_INFO[data.dataset_name]['columns']]
-    fix_col_name = PHENOTYPE_INFO[data.dataset_name].get('replace', False)
+    covar = participants.loc[:, PHENOTYPE_INFO[data.dataset_name]["columns"]]
+    fix_col_name = PHENOTYPE_INFO[data.dataset_name].get("replace", False)
     if isinstance(fix_col_name, dict):
         covar = covar.rename(columns=fix_col_name)
-    covar.loc[covar['gender'] == 'F', 'gender'] = 1
-    covar.loc[covar['gender'] == 'M', 'gender'] = 0
-    covar['gender'] = covar['gender'].astype('float')
-    covar['age'] = covar['age'].astype('float')
-    return pd.concat((group_mean_fd, covar), axis=1, join='inner')
+    covar.loc[covar["gender"] == "F", "gender"] = 1
+    covar.loc[covar["gender"] == "M", "gender"] = 0
+    covar["gender"] = covar["gender"].astype("float")
+    covar["age"] = covar["age"].astype("float")
+    return pd.concat((group_mean_fd, covar), axis=1, join="inner")

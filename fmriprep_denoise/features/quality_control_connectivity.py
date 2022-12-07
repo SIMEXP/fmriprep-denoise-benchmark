@@ -65,7 +65,7 @@ def partial_correlation(x, y, cov=None):
         r, p_val = stats.pearsonr(resid_x, resid_y)
     else:
         r, p_val = stats.pearsonr(x, y)
-    return {'correlation': r, 'pvalue': p_val}
+    return {"correlation": r, "pvalue": p_val}
 
 
 def qcfc(movement, connectomes, covarates=None):
@@ -114,7 +114,7 @@ def qcfc(movement, connectomes, covarates=None):
         # QC-FC
         metric = partial_correlation(
             connectomes[edge_id].values,
-            connectomes['mean_framewise_displacement'].values,
+            connectomes["mean_framewise_displacement"].values,
             connectomes[cov_names].values,
         )
         qcfc_edge.append(metric)

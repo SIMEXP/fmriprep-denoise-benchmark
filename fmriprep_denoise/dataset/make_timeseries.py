@@ -17,56 +17,54 @@ def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
         description=(
-            'Generate connectome based on denoising strategy for '
-            'fmriprep processed dataset.'
+            "Generate connectome based on denoising strategy for "
+            "fmriprep processed dataset."
         ),
     )
     parser.add_argument(
-        'output_path',
-        action='store',
+        "output_path",
+        action="store",
         type=str,
-        help='output path for connectome.',
+        help="output path for connectome.",
     )
     parser.add_argument(
-        '--fmriprep_path',
-        action='store',
+        "--fmriprep_path",
+        action="store",
         type=str,
-        help='Path to a fmriprep dataset.',
+        help="Path to a fmriprep dataset.",
     )
     parser.add_argument(
-        '--dataset_name', action='store', type=str, help='Dataset name.'
+        "--dataset_name", action="store", type=str, help="Dataset name."
     )
+    parser.add_argument("--subject", action="store", type=str, help="subject id.")
     parser.add_argument(
-        '--subject', action='store', type=str, help='subject id.'
-    )
-    parser.add_argument(
-        '--specifier',
-        action='store',
+        "--specifier",
+        action="store",
         type=str,
         help=(
-            'Text in a fmriprep file name, in between '
-            'sub-<subject>_ses-<session>_and `space-<template>`.'
+            "Text in a fmriprep file name, in between "
+            "sub-<subject>_ses-<session>_and `space-<template>`."
         ),
     )
     parser.add_argument(
-        '--participants_tsv',
-        action='store',
+        "--participants_tsv",
+        action="store",
         type=str,
-        help='Path to participants.tsv in the original BIDS dataset.',
+        help="Path to participants.tsv in the original BIDS dataset.",
     )
     parser.add_argument(
-        '--atlas',
-        action='store',
+        "--atlas",
+        action="store",
         type=str,
-        help='Atlas name (schaefer7networks, MIST, difumo, gordon333)',
+        help="Atlas name (schaefer7networks, MIST, difumo, gordon333)",
     )
     parser.add_argument(
-        '--strategy-name',
-        action='store',
+        "--strategy-name",
+        action="store",
         default=None,
         help=(
-            'Denoise strategy name (see benchmark_strategies.json).'
-            'Process all strategy if None.'
+            "Denoise strategy name (see benchmark_strategies.json)."
+            "Process all strategy if None."
         ),
     )
     return parser.parse_args()
@@ -84,7 +82,7 @@ def main():
     participant_tsv = Path(args.participants_tsv)
     output_root = Path(args.output_path)
 
-    ts_output = output_root / f'atlas-{atlas_name}'
+    ts_output = output_root / f"atlas-{atlas_name}"
     ts_output.mkdir(exist_ok=True, parents=True)
 
     benchmark_strategies = get_prepro_strategy(strategy_name)
@@ -109,5 +107,5 @@ def main():
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

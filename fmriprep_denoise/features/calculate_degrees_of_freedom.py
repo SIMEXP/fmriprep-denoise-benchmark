@@ -15,34 +15,34 @@ from fmriprep_denoise.dataset.fmriprep import (
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
-        description='Extract confound degree of freedome info.',
+        description="Extract confound degree of freedome info.",
     )
     parser.add_argument(
-        'output_path', action='store', type=str, help='Output path data.'
+        "output_path", action="store", type=str, help="Output path data."
     )
     parser.add_argument(
-        '--fmriprep_path',
-        action='store',
+        "--fmriprep_path",
+        action="store",
         type=str,
-        help='Path to a fmriprep dataset.',
+        help="Path to a fmriprep dataset.",
     )
     parser.add_argument(
-        '--dataset_name', action='store', type=str, help='Dataset name.'
+        "--dataset_name", action="store", type=str, help="Dataset name."
     )
     parser.add_argument(
-        '--specifier',
-        action='store',
+        "--specifier",
+        action="store",
         type=str,
         help=(
-            'Text in a fmriprep file name, '
-            'in between sub-<subject>_ses-<session>_and `space-<template>`.'
+            "Text in a fmriprep file name, "
+            "in between sub-<subject>_ses-<session>_and `space-<template>`."
         ),
     )
     parser.add_argument(
-        '--participants_tsv',
-        action='store',
+        "--participants_tsv",
+        action="store",
         type=str,
-        help='Path to participants.tsv in the original BIDS dataset.',
+        help="Path to participants.tsv in the original BIDS dataset.",
     )
     return parser.parse_args()
 
@@ -58,23 +58,23 @@ def main():
 
     output_root.mkdir(exist_ok=True, parents=True)
     path_movement = Path(
-        output_root / f'dataset-{dataset_name}_desc-movement_phenotype.tsv'
+        output_root / f"dataset-{dataset_name}_desc-movement_phenotype.tsv"
     )
 
     path_dof = Path(
-        output_root / f'dataset-{dataset_name}_desc-confounds_phenotype.tsv'
+        output_root / f"dataset-{dataset_name}_desc-confounds_phenotype.tsv"
     )
 
     full_data = fetch_fmriprep_derivative(
         dataset_name, participant_tsv, fmriprep_path, fmriprep_specifier
     )
 
-    if dataset_name == 'ds000030':
+    if dataset_name == "ds000030":
         # read relevant files,
         participants = full_data.phenotypic.copy()
-        mask_quality = participants['ghost_NoGhost'] == 'No_ghost'
+        mask_quality = participants["ghost_NoGhost"] == "No_ghost"
         participants = participants[mask_quality].index.tolist()
-        subjects = [p.split('-')[-1] for p in participants]
+        subjects = [p.split("-")[-1] for p in participants]
         full_data = fetch_fmriprep_derivative(
             dataset_name,
             participant_tsv,
@@ -84,10 +84,10 @@ def main():
         )
     movement = generate_movement_summary(full_data)
     movement = movement.sort_index()
-    movement.to_csv(path_movement, sep='\t')
-    print('Generate movement stats.')
+    movement.to_csv(path_movement, sep="\t")
+    print("Generate movement stats.")
 
-    subjects = [p.split('-')[-1] for p in movement.index]
+    subjects = [p.split("-")[-1] for p in movement.index]
 
     benchmark_strategies = get_prepro_strategy()
     data_aroma = fetch_fmriprep_derivative(
@@ -107,57 +107,53 @@ def main():
     )
     info = {}
     for strategy_name, parameters in benchmark_strategies.items():
-        print(f'Denoising: {strategy_name}')
+        print(f"Denoising: {strategy_name}")
         print(parameters)
-        func_data = data_aroma.func if 'aroma' in strategy_name else data.func
+        func_data = data_aroma.func if "aroma" in strategy_name else data.func
         for img in func_data:
-            sub = img.split('/')[-1].split('_')[0]
+            sub = img.split("/")[-1].split("_")[0]
             reduced_confounds, sample_mask = get_confounds(
                 strategy_name, parameters, img
             )
             full_length = reduced_confounds.shape[0]
-            ts_length = (
-                full_length if sample_mask is None else len(sample_mask)
-            )
+            ts_length = full_length if sample_mask is None else len(sample_mask)
             excised_vol = full_length - ts_length
             excised_vol_pro = excised_vol / full_length
             regressors = reduced_confounds.columns.tolist()
-            compcor = sum('comp_cor' in i for i in regressors)
-            high_pass = sum('cosine' in i for i in regressors)
+            compcor = sum("comp_cor" in i for i in regressors)
+            high_pass = sum("cosine" in i for i in regressors)
             total = len(regressors)
-            fixed = total - compcor if 'compcor' in strategy_name \
-                else len(regressors)
+            fixed = total - compcor if "compcor" in strategy_name else len(regressors)
 
-
-            if 'aroma' in strategy_name:
-                path_aroma_ic = img.split('space-')[0] + 'AROMAnoiseICs.csv'
-                with open(path_aroma_ic, 'r') as f:
-                    aroma = len(f.readline().split(','))
+            if "aroma" in strategy_name:
+                path_aroma_ic = img.split("space-")[0] + "AROMAnoiseICs.csv"
+                with open(path_aroma_ic, "r") as f:
+                    aroma = len(f.readline().split(","))
                 total = fixed + aroma
             else:
                 aroma = 0
 
-            if 'scrub' in strategy_name:
+            if "scrub" in strategy_name:
                 total += excised_vol
 
             stats = {
-                (strategy_name, 'excised_vol'): excised_vol,
-                (strategy_name, 'excised_vol_proportion'): excised_vol_pro,
-                (strategy_name, 'high_pass'): high_pass,
-                (strategy_name, 'fixed_regressors'): fixed,
-                (strategy_name, 'compcor'): compcor,
-                (strategy_name, 'aroma'): aroma,
-                (strategy_name, 'total'): total,
-                (strategy_name, 'full_length'): full_length,
+                (strategy_name, "excised_vol"): excised_vol,
+                (strategy_name, "excised_vol_proportion"): excised_vol_pro,
+                (strategy_name, "high_pass"): high_pass,
+                (strategy_name, "fixed_regressors"): fixed,
+                (strategy_name, "compcor"): compcor,
+                (strategy_name, "aroma"): aroma,
+                (strategy_name, "total"): total,
+                (strategy_name, "full_length"): full_length,
             }
             if info.get(sub):
                 info[sub].update(stats)
             else:
                 info[sub] = stats
-    confounds_stats = pd.DataFrame.from_dict(info, orient='index')
+    confounds_stats = pd.DataFrame.from_dict(info, orient="index")
     confounds_stats = confounds_stats.sort_index()
-    confounds_stats.to_csv(path_dof, sep='\t')
+    confounds_stats.to_csv(path_dof, sep="\t")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

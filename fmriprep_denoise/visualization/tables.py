@@ -1,13 +1,25 @@
 import pandas as pd
 
 
-fd2label = {0.5: 'scrubbing.5', 0.2: 'scrubbing.2'}
-group_name_rename = {'CONTROL':'control', 'BIPOLAR': 'bipolar', 'SCHZ':'schizophrenia'}
-group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
+fd2label = {0.5: "scrubbing.5", 0.2: "scrubbing.2"}
+group_name_rename = {
+    "CONTROL": "control",
+    "BIPOLAR": "bipolar",
+    "SCHZ": "schizophrenia",
+}
+group_order = {
+    "ds000228": ["adult", "child"],
+    "ds000030": ["control", "ADHD", "bipolar", "schizophrenia"],
+}
 
 
 def lazy_demographic(
-    dataset, fmriprep_version, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    dataset,
+    fmriprep_version,
+    path_root,
+    gross_fd=None,
+    fd_thresh=None,
+    proportion_thresh=None,
 ):
     """
     Very lazy report of demographic information.
@@ -43,17 +55,17 @@ def lazy_demographic(
     _, df, groups = get_descriptive_data(
         dataset, fmriprep_version, path_root, gross_fd, fd_thresh, proportion_thresh
     )
-    n_female = df['gender'].sum()
-    n_female = pd.Series([n_female], index=['n_female'])
-    full = df.describe()['age']
+    n_female = df["gender"].sum()
+    n_female = pd.Series([n_female], index=["n_female"])
+    full = df.describe()["age"]
     full = pd.concat([full, n_female])
-    full.name = 'full sample'
+    full.name = "full sample"
 
     desc = [full]
     for g in groups:
-        sub_group = df[df['groups'] == g].describe()['age']
-        n_female = df.loc[df['groups'] == g, 'gender'].sum()
-        n_female = pd.Series([n_female], index=['n_female'])
+        sub_group = df[df["groups"] == g].describe()["age"]
+        n_female = df.loc[df["groups"] == g, "gender"].sum()
+        n_female = pd.Series([n_female], index=["n_female"])
         sub_group = pd.concat([sub_group, n_female])
         sub_group.name = g
         desc.append(sub_group)
@@ -62,7 +74,12 @@ def lazy_demographic(
 
 
 def get_descriptive_data(
-    dataset, fmriprep_version, path_root, gross_fd=None, fd_thresh=None, proportion_thresh=None
+    dataset,
+    fmriprep_version,
+    path_root,
+    gross_fd=None,
+    fd_thresh=None,
+    proportion_thresh=None,
 ):
     """
     Get the data frame of all descriptive data needed for a dataset.
@@ -97,37 +114,38 @@ def get_descriptive_data(
     """
     if not fd2label.get(fd_thresh, False) and fd_thresh is not None:
         raise ValueError(
-            'We did not generate metric with scrubbing threshold set at '
-            f'framewise displacement = {fd_thresh} mm.'
+            "We did not generate metric with scrubbing threshold set at "
+            f"framewise displacement = {fd_thresh} mm."
         )
     # load basic data
     movements = (
-        path_root / dataset / fmriprep_version
-        / f'dataset-{dataset}_desc-movement_phenotype.tsv'
+        path_root
+        / dataset
+        / fmriprep_version
+        / f"dataset-{dataset}_desc-movement_phenotype.tsv"
     )
-    movements = pd.read_csv(movements, index_col=[0, -1], sep='\t')
+    movements = pd.read_csv(movements, index_col=[0, -1], sep="\t")
     movements = movements.rename(index=group_name_rename)
-    movements = movements.reset_index(level='groups')
+    movements = movements.reset_index(level="groups")
 
     path_dof = (
-        path_root / dataset / fmriprep_version
-        / f'dataset-{dataset}_desc-confounds_phenotype.tsv'
+        path_root
+        / dataset
+        / fmriprep_version
+        / f"dataset-{dataset}_desc-confounds_phenotype.tsv"
     )
-    confounds_phenotype = pd.read_csv(
-        path_dof, header=[0, 1], index_col=0, sep='\t'
-    )
-
+    confounds_phenotype = pd.read_csv(path_dof, header=[0, 1], index_col=0, sep="\t")
 
     # filter data by gross fd
     if gross_fd is not None:
-        keep_gross_fd = movements['mean_framewise_displacement'] <= gross_fd
+        keep_gross_fd = movements["mean_framewise_displacement"] <= gross_fd
         keep_gross_fd = movements.index[keep_gross_fd]
     else:
         keep_gross_fd = movements.index
 
     # filter data by proportion vol scrubbed
     if fd_thresh is not None and proportion_thresh is not None:
-        scrub_label = (fd2label[fd_thresh], 'excised_vol_proportion')
+        scrub_label = (fd2label[fd_thresh], "excised_vol_proportion")
         keep_scrub = confounds_phenotype[scrub_label] <= proportion_thresh
         keep_scrub = confounds_phenotype.index[keep_scrub]
     else:
@@ -135,7 +153,7 @@ def get_descriptive_data(
     mask_motion = keep_gross_fd.intersection(keep_scrub)
 
     if dataset not in group_order:
-        groups = movements['groups'].unique().tolist()
+        groups = movements["groups"].unique().tolist()
     else:
         groups = group_order[dataset]
     movements = movements.loc[mask_motion, :]

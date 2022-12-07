@@ -7,10 +7,10 @@ from nilearn.connectome import ConnectivityMeasure
 from fmriprep_denoise.visualization import tables
 
 
-MOTION_QC_FILE = 'motion_qc.json'
+MOTION_QC_FILE = "motion_qc.json"
 project_root = Path(__file__).parents[2]
-inputs = project_root / 'inputs'
-group_info_column = {'ds000228': 'Child_Adult', 'ds000030': 'diagnosis'}
+inputs = project_root / "inputs"
+group_info_column = {"ds000228": "Child_Adult", "ds000030": "diagnosis"}
 
 
 def get_qc_criteria(strategy_name=None):
@@ -31,18 +31,18 @@ def get_qc_criteria(strategy_name=None):
         Motion quality control parameter to pass to filter subjects.
     """
     motion_qc_file = Path(__file__).parent / MOTION_QC_FILE
-    with open(motion_qc_file, 'r') as file:
+    with open(motion_qc_file, "r") as file:
         qc_strategies = json.load(file)
 
     if isinstance(strategy_name, str) and strategy_name not in qc_strategies:
         raise NotImplementedError(
             f"Strategy '{strategy_name}' is not implemented. Select from the"
-            f'following: None, {[*qc_strategies]}'
+            f"following: None, {[*qc_strategies]}"
         )
 
     if strategy_name is None:
-        print('No motion QC.')
-        return {'gross_fd': None, 'fd_thresh': None, 'proportion_thresh': None}
+        print("No motion QC.")
+        return {"gross_fd": None, "fd_thresh": None, "proportion_thresh": None}
     (f"Process strategy '{strategy_name}'.")
     return qc_strategies[strategy_name]
 
@@ -91,12 +91,12 @@ def compute_connectome(
         atlas, extracted_path, participant_id, file_pattern
     )
     correlation_measure = ConnectivityMeasure(
-        kind='correlation', vectorize=True, discard_diagonal=True
+        kind="correlation", vectorize=True, discard_diagonal=True
     )
     subject_conn = correlation_measure.fit_transform(valid_ts)
     subject_conn = pd.DataFrame(subject_conn, index=valid_ids)
     if subject_conn.shape[0] != phenotype.shape[0]:
-        print('take conjunction of the phenotype and connectome.')
+        print("take conjunction of the phenotype and connectome.")
         idx = subject_conn.index.intersection(phenotype.index)
         subject_conn, phenotype = (
             subject_conn.loc[idx, :],
@@ -123,37 +123,31 @@ def check_extraction(input_path, extracted_path_root=None):
     pathlib.Path
         Correct file path of the extracted dataset.
     """
-    dir_name = input_path.name.split('.tar')[0]
-    extracted_path_root = (
-        inputs if extracted_path_root is None else extracted_path_root
-    )
+    dir_name = input_path.name.split(".tar")[0]
+    extracted_path_root = inputs if extracted_path_root is None else extracted_path_root
 
     extracted_path = extracted_path_root / dir_name
 
     if not extracted_path.is_dir() and input_path.is_file():
-        print(
-            f'Cannot file extracted file at {extracted_path}. ' 'Extracting...'
-        )
-        with tarfile.open(input_path, 'r:gz') as tar:
+        print(f"Cannot file extracted file at {extracted_path}. " "Extracting...")
+        with tarfile.open(input_path, "r:gz") as tar:
             tar.extractall(extracted_path_root)
     return extracted_path
 
 
-def _load_valid_timeseries(
-    atlas, extracted_path, participant_id, file_pattern
-):
+def _load_valid_timeseries(atlas, extracted_path, participant_id, file_pattern):
     """Load time series from tsv file."""
     valid_ids, valid_ts = [], []
     for subject in participant_id:
-        subject_path = extracted_path / f'atlas-{atlas}' / subject
+        subject_path = extracted_path / f"atlas-{atlas}" / subject
         file_path = list(
-            subject_path.glob(f'{subject}_*_{file_pattern}_timeseries.tsv')
+            subject_path.glob(f"{subject}_*_{file_pattern}_timeseries.tsv")
         )
         if len(file_path) > 1:
-            raise ValueError('Found more than one valid file.' f'{file_path}')
+            raise ValueError("Found more than one valid file." f"{file_path}")
         file_path = file_path[0]
         if file_path.stat().st_size > 1:
-            ts = pd.read_csv(file_path, sep='\t', header=0)
+            ts = pd.read_csv(file_path, sep="\t", header=0)
             valid_ids.append(subject)
             valid_ts.append(ts.values)
         else:

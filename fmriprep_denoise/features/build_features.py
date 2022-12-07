@@ -14,48 +14,48 @@ from fmriprep_denoise.features import qcfc, louvain_modularity
 
 
 # another very bad special case handling
-group_info_column = {'ds000228': 'Child_Adult', 'ds000030': 'diagnosis'}
+group_info_column = {"ds000228": "Child_Adult", "ds000030": "diagnosis"}
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
         formatter_class=argparse.RawTextHelpFormatter,
-        description='Generate denoise metric based on denoising strategies.',
+        description="Generate denoise metric based on denoising strategies.",
     )
     parser.add_argument(
-        'input_path',
-        action='store',
+        "input_path",
+        action="store",
         type=str,
-        help='Input path to the timeseries collection.',
+        help="Input path to the timeseries collection.",
     )
     parser.add_argument(
-        'output_path',
-        action='store',
+        "output_path",
+        action="store",
         type=str,
-        help='output path for metrics.',
+        help="output path for metrics.",
     )
     parser.add_argument(
-        '--atlas',
-        action='store',
+        "--atlas",
+        action="store",
         type=str,
-        help='Atlas name (schaefer7networks, mist, difumo, gordon333)',
+        help="Atlas name (schaefer7networks, mist, difumo, gordon333)",
     )
     parser.add_argument(
-        '--dimension',
-        action='store',
-        help='Number of ROI. See meta data of each atlas to get valid inputs.',
+        "--dimension",
+        action="store",
+        help="Number of ROI. See meta data of each atlas to get valid inputs.",
     )
     parser.add_argument(
-        '--qc',
-        action='store',
+        "--qc",
+        action="store",
         default=None,
-        help='Automatic motion QC thresholds.',
+        help="Automatic motion QC thresholds.",
     )
     parser.add_argument(
-        '--metric',
-        action='store',
-        default='connectomes',
-        help='Metric to build {connectomes, qcfc, modularity}',
+        "--metric",
+        action="store",
+        default="connectomes",
+        help="Metric to build {connectomes, qcfc, modularity}",
     )
     return parser.parse_args()
 
@@ -83,7 +83,7 @@ def main():
 
     collection_metric = []
     for strategy_name in strategy_names.keys():
-        file_pattern = f'atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}'
+        file_pattern = f"atlas-{atlas}_nroi-{dimension}_desc-{strategy_name}"
         print(strategy_name)
         connectome, phenotype = compute_connectome(
             atlas,
@@ -92,62 +92,62 @@ def main():
             fmriprep_ver,
             path_root,
             file_pattern,
-            gross_fd=motion_qc['gross_fd'],
-            fd_thresh=motion_qc['fd_thresh'],
-            proportion_thresh=motion_qc['proportion_thresh'],
+            gross_fd=motion_qc["gross_fd"],
+            fd_thresh=motion_qc["fd_thresh"],
+            proportion_thresh=motion_qc["proportion_thresh"],
         )
-        print('\tLoaded connectomes...')
+        print("\tLoaded connectomes...")
 
-        if metric_option == 'connectome':
+        if metric_option == "connectome":
             cur_strategy_average = connectome.mean(axis=0)
             collection_metric.append(cur_strategy_average)
-            print('\tAverage connectomes...')
+            print("\tAverage connectomes...")
 
-        elif metric_option == 'modularity':
+        elif metric_option == "modularity":
             # louvain_modularity
             qs = Parallel(n_jobs=4)(
-                delayed(louvain_modularity)(vect)
-                for vect in connectome.values.tolist())
+                delayed(louvain_modularity)(vect) for vect in connectome.values.tolist()
+            )
             modularity = pd.DataFrame(
                 qs, columns=[strategy_name], index=connectome.index
             )
             collection_metric.append(modularity)
-            print('\tModularity...')
+            print("\tModularity...")
 
-        elif metric_option == 'qcfc':
+        elif metric_option == "qcfc":
             metric = qcfc(
-                phenotype.loc[:, 'mean_framewise_displacement'],
+                phenotype.loc[:, "mean_framewise_displacement"],
                 connectome,
-                phenotype.loc[:, ['age', 'gender']],
+                phenotype.loc[:, ["age", "gender"]],
             )
             metric = pd.DataFrame(metric)
             columns = [
-                ('full_sample', f'{strategy_name}_{col}') for col in metric.columns
+                ("full_sample", f"{strategy_name}_{col}") for col in metric.columns
             ]
             columns = pd.MultiIndex.from_tuples(columns)
             metric.columns = columns
             collection_metric.append(metric)
-            print('\tQC-FC...')
+            print("\tQC-FC...")
 
             # QC-FC by group
-            groups = phenotype['groups'].unique()
+            groups = phenotype["groups"].unique()
             for group in groups:
-                group_mask = phenotype['groups'] == group
+                group_mask = phenotype["groups"] == group
                 # make sure values are numerical
                 subgroup = phenotype[group_mask].index
                 metric = qcfc(
-                    phenotype.loc[subgroup, 'mean_framewise_displacement'],
+                    phenotype.loc[subgroup, "mean_framewise_displacement"],
                     connectome.loc[subgroup, :],
-                    phenotype.loc[subgroup, ['age', 'gender']],
+                    phenotype.loc[subgroup, ["age", "gender"]],
                 )
                 metric = pd.DataFrame(metric)
                 metric.columns = [
-                    (group, f'{strategy_name}_{col}') for col in metric.columns
+                    (group, f"{strategy_name}_{col}") for col in metric.columns
                 ]
                 collection_metric.append(metric)
 
         else:
-            raise(ValueError)
+            raise (ValueError)
 
     collection_metric = pd.concat(collection_metric, axis=1)
 
@@ -156,10 +156,10 @@ def main():
 
     collection_metric.to_csv(
         output_path
-        / f'dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_{metric_option}.tsv',
-        sep='\t',
+        / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_{metric_option}.tsv",
+        sep="\t",
     )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
