@@ -103,15 +103,19 @@ if __name__ == "__main__":
     fig_dist, axs_dist = plt.subplots(1, 2, sharey=True, constrained_layout=True)
     fig_dist.suptitle("Distance-dependent of motion")
 
-    fig_modularity_motion, axs_modularity_motion = plt.subplots(
-        1, 2, sharey=True, constrained_layout=True
-    )
-    fig_modularity_motion.suptitle("Correlation between motion and network modularity")
+    fig_modularity = plt.figure(constrained_layout=True, figsize=(6.4, 9.6))
+    subfigs_modularity = fig_modularity.subfigures(2, 1, wspace=0.07)
 
-    fig_modularity, axs_modularity = plt.subplots(
-        1, 2, sharey=True, constrained_layout=True
+    axs_modularity = subfigs_modularity[0].subplots(
+        1, 2, sharey=True
     )
-    fig_modularity.suptitle("Mean network modularity")
+    subfigs_modularity[0].suptitle("Mean network modularity")
+
+
+    axs_modularity_motion = subfigs_modularity[1].subplots(
+        1, 2, sharey=True
+    )
+    subfigs_modularity[1].suptitle("Correlation between motion and network modularity")
 
     for i, dataset in enumerate(datasets):
         path_data = (
@@ -257,7 +261,4 @@ if __name__ == "__main__":
     fig_sig_qcfc_fdr.savefig(Path(__file__).parents[1] / "outputs" / "sig_qcfc_fdr.png")
     fig_med_qcfc.savefig(Path(__file__).parents[1] / "outputs" / "median_qcfc.png")
     fig_dist.savefig(Path(__file__).parents[1] / "outputs" / "distance_qcfc.png")
-    fig_modularity_motion.savefig(
-        Path(__file__).parents[1] / "outputs" / "modularity_qcfc.png"
-    )
     fig_modularity.savefig(Path(__file__).parents[1] / "outputs" / "modularity.png")
