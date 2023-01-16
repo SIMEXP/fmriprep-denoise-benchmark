@@ -35,7 +35,7 @@ def parse_args():
         action="store",
         choices=datasets,
         type=str,
-        help="Dataset name."
+        help="Dataset name.",
     )
     parser.add_argument(
         "--qc",

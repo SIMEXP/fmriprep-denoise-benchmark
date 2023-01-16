@@ -241,16 +241,19 @@ def prepare_modularity_plotting(
     )
     _, movement, _ = get_descriptive_data(dataset, fmriprep_version, path_root, **qc)
 
-    ds_mean_corr, ds_mean_modularity = [], []
+    ds_mean_corr, ds_mean_modularity, ds_sd_modularity = [], [], []
     for file_network, label in zip(files_network, modularity_labels):
         label = label.replace(f"dataset-{dataset}_", "")
 
         modularity = pd.read_csv(file_network, sep="\t", index_col=0)
         modularity = pd.concat([movement["groups"], modularity], axis=1)
 
-        mean_by_group = _calculate_mean_modularity(modularity, label)
+        mean_by_group, sd_by_group = _calculate_descriptive_modularity(
+            modularity, label
+        )
         corr_modularity = _calculate_corr_modularity(modularity, movement, label)
         ds_mean_modularity.append(mean_by_group)
+        ds_sd_modularity.append(sd_by_group)
         ds_mean_corr.append(corr_modularity)
 
     # modularity
@@ -258,13 +261,16 @@ def prepare_modularity_plotting(
     ds_mean_modularity.columns = pd.MultiIndex.from_product(
         [["modularity"], ds_mean_modularity.columns]
     )
-
+    ds_sd_modularity = pd.concat(ds_sd_modularity, axis=1)
+    ds_sd_modularity.columns = pd.MultiIndex.from_product(
+        [["modularity_sd"], ds_sd_modularity.columns]
+    )
     # motion and modularity
     ds_mean_corr = pd.concat(ds_mean_corr, axis=1)
     ds_mean_corr.columns = pd.MultiIndex.from_product(
         [["corr_motion_modularity"], ds_mean_corr.columns]
     )
-    return pd.concat([ds_mean_modularity, ds_mean_corr], axis=1)
+    return pd.concat([ds_mean_modularity, ds_sd_modularity, ds_mean_corr], axis=1)
 
 
 def _qcfc_bygroup(metric, p):
@@ -322,15 +328,23 @@ def _calculate_corr_modularity(modularity, movement, label):
     return corr_modularity
 
 
-def _calculate_mean_modularity(modularity, label):
-    """Calculate mean network modularity by groups."""
+def _calculate_descriptive_modularity(modularity, label):
+    """Calculate mean and sd of network modularity by groups."""
 
     # by group
-    mean_by_group = modularity.groupby(["groups"]).mean().reset_index()
+    mean_by_group = modularity.groupby(["groups"]).mean()
+    mean_by_group = mean_by_group.reset_index()
     mean_by_group = mean_by_group.melt(
         id_vars=["groups"], var_name="strategy", value_name=label
     )
     mean_by_group = mean_by_group.set_index(["groups", "strategy"])
+
+    sd_by_group = modularity.groupby(["groups"]).std()
+    sd_by_group = sd_by_group.reset_index()
+    sd_by_group = sd_by_group.melt(
+        id_vars=["groups"], var_name="strategy", value_name=label
+    )
+    sd_by_group = sd_by_group.set_index(["groups", "strategy"])
 
     # full sample
     mean_full_sample = modularity.iloc[:, 1:].mean()
@@ -340,7 +354,16 @@ def _calculate_mean_modularity(modularity, label):
     mean_full_sample = mean_full_sample.to_frame()
     mean_full_sample.columns = [label]
 
-    return pd.concat([mean_full_sample, mean_by_group])
+    sd_full_sample = modularity.iloc[:, 1:].mean()
+    sd_full_sample.index = pd.MultiIndex.from_product(
+        [["full_sample"], sd_full_sample.index], names=["groups", "strategy"]
+    )
+    sd_full_sample = sd_full_sample.to_frame()
+    sd_full_sample.columns = [label]
+    return (
+        pd.concat([mean_full_sample, mean_by_group]),
+        pd.concat([sd_full_sample, sd_by_group]),
+    )
 
 
 def _get_participants_groups(
