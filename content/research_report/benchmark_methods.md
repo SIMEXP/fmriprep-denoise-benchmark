@@ -236,7 +236,7 @@ with age and sex as covariates.
 
 <!-- description TBA -->
 
-```{figure} ../images/denoise-benchmark-workflow.png
+```{figure} ../images/fig2-benchmark.png
 ---
 height: 500px
 name: fig-denoise-benchmark-workflow

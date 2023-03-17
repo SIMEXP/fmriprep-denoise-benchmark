@@ -24,13 +24,13 @@ def load_data(path_root, criteria_name, fmriprep_version):
         _, data, _ = tables.get_descriptive_data(
             dataset, fmriprep_version, path_root, **criteria
         )
-        stats[dataset] = _statistic_report(dataset, baseline_group, data)
+        stats[dataset] = _statistic_report_group(dataset, baseline_group, data)
     return stats
 
 
-def _statistic_report(dataset, baseline_group, data):
-    """Mean framewise displacement t test between groups."""
-    for_plotting = {"dataframe": data, "stats": {}}
+def _statistic_report_group(dataset, baseline_group, data):
+    """Mean framewise displacement t test between groups, baseline sex differences."""
+    for_plotting = {"dataframe": data, "stats_group": {}}
     baseline = data[data["groups"] == baseline_group]
     for i, group in enumerate(group_order[dataset]):
         if group != baseline_group:
@@ -40,10 +40,19 @@ def _statistic_report(dataset, baseline_group, data):
                 compare["mean_framewise_displacement"],
                 usevar="unequal",
             )
-            for_plotting["stats"].update(
+            for_plotting["stats_group"].update(
                 {i: {"t_stats": t_stats, "p_value": pval, "df": df}}
             )
 
+    male = baseline[baseline['gender']==0]
+    female = baseline[baseline['gender']==1]
+
+    t_stats, pval, df = ttest_ind(
+        male["mean_framewise_displacement"],
+        female["mean_framewise_displacement"],
+        usevar="unequal",
+    )
+    for_plotting["stats_sex"] = {"t_stats": t_stats, "p_value": pval, "df": df}
     return for_plotting
 
 
@@ -58,9 +67,16 @@ def _significant_notation(item_pairs, max_value, sig, ax):
 def plot_stats(stats):
     """Plot mean framewise displacement by dataset."""
     print("Generating new graphs...")
-    fig = plt.figure(figsize=(7, 5))
-    axs = fig.subplots(1, 2, sharey=True)
-    for ax, dataset in zip(axs, datasets):
+    fig = plt.figure(figsize=(7.5, 9))
+    axs = fig.subplots(2, 2, sharey=True)
+    # by group
+    palette = sns.color_palette(n_colors=7)
+    colors_fd = {
+        'ds000228': [palette[0], palette[1]],
+        'ds000030': [palette[0]] + palette[2:5]
+    }
+    colors_sex = palette[5:]
+    for ax, dataset in zip(axs[0], datasets):
         df = stats[dataset]["dataframe"]
         mean_fd = df["mean_framewise_displacement"].mean()
         sd_fd = df["mean_framewise_displacement"].std()
@@ -76,26 +92,71 @@ def plot_stats(stats):
             data=df,
             ax=ax,
             order=group_order[dataset],
+            palette=colors_fd[dataset]
         )
         ax.set_xticklabels(
-            group_order[dataset], rotation=45, ha="right", rotation_mode="anchor"
+            group_order[dataset],
+            # rotation=45, ha="right", rotation_mode="anchor"
         )
         ax.set_title(
-            f"{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$"
+            f"{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}; $N={df.shape[0]}$"
         )
 
         # statistical annotation
         max_value = df["Mean Framewise Displacement (mm)"].max()
-        for i in stats[dataset]["stats"]:
-            if stats[dataset]["stats"][i]["p_value"] < 0.005:
-                notation = "***"
-            elif stats[dataset]["stats"][i]["p_value"] < 0.01:
-                notation = "**"
-            elif stats[dataset]["stats"][i]["p_value"] < 0.05:
-                notation = "*"
-            else:
-                notation = None
+        stacker = 0
+        for i in stats[dataset]["stats_group"]:
+            notation = _get_pvalue_star(stats[dataset]["stats_group"][i]["p_value"])
+            if stats[dataset]["stats_group"][i]["p_value"] < 0.05:
+                stacker += 1
+                _significant_notation((0, i), max_value + 0.02 * stacker, notation, ax)
 
-            if stats[dataset]["stats"][i]["p_value"] < 0.05:
-                _significant_notation((0, i), max_value + 0.03 * (i - 1), notation, ax)
-    return fig
+    # by sex in baseline only
+    for ax, dataset in zip(axs[1], datasets):
+        df = stats[dataset]["dataframe"]
+        df = df[df["groups"] == datasets_baseline[dataset]]
+        mean_fd = df["mean_framewise_displacement"].mean()
+        sd_fd = df["mean_framewise_displacement"].std()
+
+        df.loc[df["gender"] == 1, "gender"] = "Female"
+        df.loc[df["gender"] == 0, "gender"] = "Male"
+
+        df = df.rename(
+            columns={
+                "mean_framewise_displacement": "Mean Framewise Displacement (mm)",
+                "gender": "Sex"
+            }
+        )
+        sns.boxplot(
+            y="Mean Framewise Displacement (mm)",
+            x="Sex",
+            data=df,
+            ax=ax,
+            order=["Male", "Female"],
+            palette=colors_sex
+        )
+        ax.set_xticklabels(
+            ["Male", "Female"],
+            # rotation=45, ha="right", rotation_mode="anchor"
+        )
+        ax.set_title(
+            f"Sex difference in {datasets_baseline[dataset]}"
+        )
+        # statistical annotation
+        max_value = df["Mean Framewise Displacement (mm)"].max()
+        notation = _get_pvalue_star(stats[dataset]["stats_sex"]["p_value"])
+
+        if stats[dataset]["stats_sex"]["p_value"] < 0.05:
+            _significant_notation((0, 1), max_value, notation, ax)
+    return fig.tight_layout()
+
+
+def _get_pvalue_star(p_value):
+    if p_value < 0.005:
+        return "***"
+    elif p_value < 0.01:
+        return "**"
+    elif p_value < 0.05:
+        return "*"
+    else:
+        return None

@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from fmriprep_denoise.visualization import utils
 
+
 strategy_order = list(utils.GRID_LOCATION.values())
 
 measures = {
@@ -29,7 +30,7 @@ measures = {
     "distance": {
         "var_name": "corr_motion_distance",
         "label": "Pearson's correlation, absolute value",
-        "title": "Distance-dependent of motion",
+        "title": "DM-FC",
         "ylim": (0, 0.33),
     },
     "modularity": {

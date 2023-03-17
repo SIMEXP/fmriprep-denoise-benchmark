@@ -100,7 +100,7 @@ The denoising workflow is implemented through `nilearn`.
 {numref}`fig-fmriprep-nilearn-denoise` presents the graphic summary of the workflow.
 
 
-```{figure} ../images/fmriprep-nilearn-denoise.png
+```{figure} ../images/fig-1-masker.png
 ---
 height: 500px
 name: fig-fmriprep-nilearn-denoise

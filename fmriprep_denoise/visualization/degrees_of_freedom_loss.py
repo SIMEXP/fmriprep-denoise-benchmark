@@ -63,6 +63,8 @@ def plot_stats(confounds_phenotypes):
             id_vars=["index"],
             var_name=["strategy", "type"],
         )
+        confounds_phenotype["value"] /= full_length
+        confounds_phenotype["value"] *= 100
         sns.barplot(
             x="strategy",
             y="value",
@@ -108,8 +110,8 @@ def plot_stats(confounds_phenotypes):
             linewidth=1,
             ax=ax,
         )
-        ax.set_ylim(0, full_length)
-        ax.set_ylabel(f"Degrees of freedom loss\n(Full length: {full_length})")
+        ax.set_ylim(0, 100)
+        ax.set_ylabel(f"% Degrees of freedom loss\n(Full length: {full_length})")
         ax.set_title(dataset)
         ax.set_xticklabels(
             strategy_order, rotation=45, ha="right", rotation_mode="anchor"
