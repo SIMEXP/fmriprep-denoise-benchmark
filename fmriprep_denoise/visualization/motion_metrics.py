@@ -1,5 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 import seaborn as sns
 from fmriprep_denoise.visualization import utils
 
@@ -37,7 +38,7 @@ measures = {
         "var_name": "modularity",
         "label": "Mean modularity quality (a.u.)",
         "title": "Mean network modularity",
-        "ylim": (0, 0.52),
+        "ylim": (0, 0.63),
     },
     "modularity_motion": {
         "var_name": "corr_motion_modularity",
@@ -69,6 +70,11 @@ def load_data(path_root, datasets, criteria_name, fmriprep_version, measure_name
 
 
 def plot_stats(data, measure):
+    palette = sns.color_palette("colorblind", n_colors=7)
+    paired_palette = [palette[0]]
+    for p in palette[1:4]:
+        paired_palette.extend((p, p))
+    paired_palette.extend((palette[-3], palette[-2], palette[-1], palette[-1]))
     fig, axs = plt.subplots(1, 2, sharey=True, constrained_layout=True)
     fig.suptitle(
         measure["title"],
@@ -83,10 +89,25 @@ def plot_stats(data, measure):
             ax=axs[i],
             order=strategy_order,
             ci=95,
+            palette=paired_palette
         )
         axs[i].set_title(dataset)
         axs[i].set_ylim(measure["ylim"])
         axs[i].set_xticklabels(
             strategy_order, rotation=45, ha="right", rotation_mode="anchor"
         )
+        for i, bar in enumerate(axs[i].patches):
+            if i > 0 and i % 2 == 0 and i!=8:  # only give gsr hatch
+                bar.set_hatch('///')
+    labels = ["No GSR", "With GSR"]
+    hatches = ["", "///"]
+    handles = [
+        mpatches.Patch(
+        edgecolor='black',
+        facecolor='white',
+        hatch=h, label=l
+        )
+        for h, l in zip(hatches, labels)
+    ]
+    axs[1].legend(handles=handles)
     return fig

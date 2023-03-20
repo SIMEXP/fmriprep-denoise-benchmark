@@ -70,6 +70,7 @@ def plot_stats(stats):
     fig = plt.figure(figsize=(7.5, 9))
     axs = fig.subplots(2, 2, sharey=True)
     # by group
+    sns.set_palette("colorblind")
     palette = sns.color_palette(n_colors=7)
     colors_fd = {
         'ds000228': [palette[0], palette[1]],
@@ -148,7 +149,8 @@ def plot_stats(stats):
 
         if stats[dataset]["stats_sex"]["p_value"] < 0.05:
             _significant_notation((0, 1), max_value, notation, ax)
-    return fig.tight_layout()
+    fig.tight_layout()
+    return fig
 
 
 def _get_pvalue_star(p_value):

@@ -72,7 +72,7 @@ def plot_ranking(data):
 
             R = (12 - mat) / 12 / 2
             circles = [plt.Circle((j,i), radius=r) for r, j, i in zip(R.values.flat, x.flat, y.flat)]
-            col = PatchCollection(circles, array=mat.values.flatten(), cmap="cividis_r")
+            col = PatchCollection(circles, array=mat.values.flatten(), cmap="rocket_r")
             axs[i, j].add_collection(col)
 
             axs[i, j].set(xticks=np.arange(mat.shape[1]), yticks=np.arange(mat.shape[0]),

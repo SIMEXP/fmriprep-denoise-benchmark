@@ -29,7 +29,8 @@ def load_data(path_root, datasets, criteria_name, fmriprep_version):
 
 
 def plot_stats(confounds_phenotypes):
-
+    sns.set_palette("colorblind")
+    palette = sns.color_palette(n_colors=5)
     fig = plt.figure(constrained_layout=True, figsize=(11, 5))
     axs = fig.subplots(1, 2, sharey=True)
     fig.suptitle(
@@ -70,7 +71,7 @@ def plot_stats(confounds_phenotypes):
             y="value",
             data=confounds_phenotype[confounds_phenotype["type"] == "total"],
             ci=95,
-            color="red",
+            color=palette[4],
             linewidth=1,
             ax=ax,
         )
@@ -79,7 +80,7 @@ def plot_stats(confounds_phenotypes):
             y="value",
             data=confounds_phenotype[confounds_phenotype["type"] == "compcor"],
             ci=95,
-            color="blue",
+            color=palette[0],
             linewidth=1,
             ax=ax,
         )
@@ -88,7 +89,7 @@ def plot_stats(confounds_phenotypes):
             y="value",
             data=confounds_phenotype[confounds_phenotype["type"] == "aroma"],
             ci=95,
-            color="orange",
+            color=palette[2],
             linewidth=1,
             ax=ax,
         )
@@ -97,7 +98,7 @@ def plot_stats(confounds_phenotypes):
             y="value",
             data=confounds_phenotype[confounds_phenotype["type"] == "fixed_regressors"],
             ci=95,
-            color="darkgrey",
+            color=palette[1],
             linewidth=1,
             ax=ax,
         )
@@ -106,7 +107,7 @@ def plot_stats(confounds_phenotypes):
             y="value",
             data=confounds_phenotype[confounds_phenotype["type"] == "high_pass"],
             ci=95,
-            color="grey",
+            color=palette[3],
             linewidth=1,
             ax=ax,
         )
@@ -117,7 +118,7 @@ def plot_stats(confounds_phenotypes):
             strategy_order, rotation=45, ha="right", rotation_mode="anchor"
         )
 
-    colors = ["red", "blue", "orange", "darkgrey", "grey"]
+    colors = [palette[4], palette[0], palette[2], palette[1], palette[3]]
     labels = [
         "Censored volumes",
         "CompCor \nregressors",
@@ -126,7 +127,7 @@ def plot_stats(confounds_phenotypes):
         "Discrete cosine-basis \nregressors",
     ]
     handles = [mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)]
-    axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
+    axs[1].legend(handles=handles, loc=0)
     return fig
 
 

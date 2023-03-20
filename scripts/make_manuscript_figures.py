@@ -6,15 +6,12 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 import matplotlib as mpl
 
-from nilearn.plotting import plot_matrix
-from nilearn.plotting.matrix_plotting import _reorder_matrix
-
 import seaborn as sns
 
 from statsmodels.stats.weightstats import ttest_ind
 
-from fmriprep_denoise.visualization import tables, utils
-from fmriprep_denoise.features.derivatives import get_qc_criteria
+from fmriprep_denoise.visualization import utils
+from fmriprep_denoise.visualization import connectivity_similarity, degrees_of_freedom_loss, mean_framewise_displacement, motion_metrics
 
 
 group_order = {
@@ -31,234 +28,85 @@ if __name__ == "__main__":
     path_root = utils.get_data_root() / "denoise-metrics"
     strategy_order = list(utils.GRID_LOCATION.values())
 
-    # connectome similarity needs a bit more work
-    fig_similarity, axs_similarity = plt.subplots(
-        1, 2, figsize=(9, 4.8), constrained_layout=True
-    )
-    fig_similarity.suptitle("Similarity of denoised connectome by strategy")
+    # mean fd
+    stats = mean_framewise_displacement.load_data(path_root, criteria_name, fmriprep_version)
+    fig_fd = mean_framewise_displacement.plot_stats(stats)
+    fig_fd.savefig(Path(__file__).parents[1] / "outputs" / "mean_fd.png")
 
-    average_connectomes = []
-    for dataset in datasets:
-        connectomes_path = path_root.glob(
-            f"{dataset}/{fmriprep_version}/*connectome.tsv"
-        )
-        connectomes_correlations = []
-        for p in connectomes_path:
-            cc = pd.read_csv(p, sep="\t", index_col=0)
-            connectomes_correlations.append(cc.corr().values)
-        average_connectome = pd.DataFrame(
-            np.mean(connectomes_correlations, axis=0),
-            columns=cc.columns,
-            index=cc.columns,
-        )
-        average_connectomes.append(average_connectome)
-
-    # Average the two averages and cluster the correlation matrix
-    _, labels = _reorder_matrix(
-        np.mean(average_connectomes, axis=0), list(cc.columns), "complete"
-    )
-
-    for i, d in enumerate(average_connectomes):
-        if i == 1:
-            cbar = True
-        else:
-            cbar = False
-        # reorder each matrix and plot
-        current_mat = average_connectomes[i].loc[labels, labels]
-        sns.heatmap(
-            current_mat,
-            square=True,
-            ax=axs_similarity[i],
-            vmin=0.6,
-            vmax=1,
-            linewidth=0.5,
-            cbar=cbar,
-        )
-        axs_similarity[i].set_title(datasets[i])
-        axs_similarity[i].set_xticklabels(
-            labels, rotation=45, ha="right", rotation_mode="anchor"
-        )
+    # connectomes
+    average_connectomes = connectivity_similarity.load_data(path_root, datasets, fmriprep_version)
+    fig_similarity = connectivity_similarity.plot_stats(average_connectomes)
     fig_similarity.savefig(Path(__file__).parents[1] / "outputs" / "connectomes.png")
 
-    # Plotting
-    fig_sig_qcfc, axs_sig_qcfc = plt.subplots(
-        1, 2, sharey=True, constrained_layout=True
-    )
-    fig_sig_qcfc.suptitle(
-        r"Significant QC/FC in connectomes (uncorrrected, $\alpha=0.05$)"
-    )
-
-    fig_sig_qcfc_fdr, axs_sig_qcfc_fdr = plt.subplots(
-        1, 2, sharey=True, constrained_layout=True
-    )
-    fig_sig_qcfc_fdr.suptitle(
-        r"Significant QC/FC in connectomes (FDR corrected, $\alpha=0.05$)"
+    # loss of degrees of freedom
+    data = degrees_of_freedom_loss.load_data(path_root, datasets, criteria_name, fmriprep_version)
+    fig_degrees_of_freedom = degrees_of_freedom_loss.plot_stats(data)
+    fig_degrees_of_freedom.savefig(
+        Path(__file__).parents[1] / "outputs" / "loss_degrees_of_freedom.png"
     )
 
-    fig_med_qcfc, axs_med_qcfc = plt.subplots(
-        1, 2, sharey=True, constrained_layout=True
-    )
-    fig_med_qcfc.suptitle("Medians of absolute values of QC/FC")
+    # Plotting metrics
+    metrics = {
+        'p_values': "sig_qcfc",
+        'fdr_p_values': "sig_qcfc_fdr",
+        'median': "median_qcfc",
+        'distance': "distance_qcfc",
+    }
 
-    fig_dist, axs_dist = plt.subplots(1, 2, sharey=True, constrained_layout=True)
-    fig_dist.suptitle("Distance-dependent of motion")
+    for m in metrics:
+        data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, m)
+        fig = motion_metrics.plot_stats(data, measure)
+        fig.savefig(Path(__file__).parents[1] / "outputs" / f"{metrics[m]}.png")
+
+
+    data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, "fmriprep-20.2.5lts", 'p_values')
+    fig = motion_metrics.plot_stats(data, measure)
+    fig.savefig(Path(__file__).parents[1] / "outputs" / f"sig_qcfc_alt_fmriprep.png")
+
+    # customised code for mean netnor modularity as we are combining two figures
+    palette = sns.color_palette("colorblind", n_colors=7)
+    paired_palette = [palette[0]]
+    for p in palette[1:4]:
+        paired_palette.extend((p, p))
+    paired_palette.extend((palette[-3], palette[-2], palette[-1], palette[-1]))
 
     fig_modularity = plt.figure(constrained_layout=True, figsize=(6.4, 9.6))
     subfigs_modularity = fig_modularity.subfigures(2, 1, wspace=0.07)
+    for j, m in enumerate(['modularity', 'modularity_motion']):
+        data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, m)
+        subfigs_modularity[j].suptitle(
+            measure["title"], weight="heavy", fontsize="x-large"
+        )
+        axs_modularity = subfigs_modularity[j].subplots(1, 2, sharey=True)
+        for i, dataset in enumerate(data):
+            sns.barplot(
+                y=measure["label"],
+                x="strategy",
+                data=data[dataset],
+                ax=axs_modularity[i],
+                order=strategy_order,
+                ci=95,
+                palette=paired_palette
+            )
+            axs_modularity[i].set_title(dataset)
+            axs_modularity[i].set_ylim(measure["ylim"])
+            axs_modularity[i].set_xticklabels(
+                strategy_order, rotation=45, ha="right", rotation_mode="anchor"
+            )
+            for i, bar in enumerate(axs_modularity[i].patches):
+                if i > 0 and i % 2 == 0 and i!=8:  # only give gsr hatch
+                    bar.set_hatch('///')
+        if j ==0:
+            labels = ["No GSR", "With GSR"]
+            hatches = ["", "///"]
+            handles = [
+                mpatches.Patch(
+                edgecolor='black',
+                facecolor='white',
+                hatch=h, label=l
+                )
+                for h, l in zip(hatches, labels)
+            ]
+            axs_modularity[1].legend(handles=handles)
 
-    axs_modularity = subfigs_modularity[0].subplots(
-        1, 2, sharey=True
-    )
-    subfigs_modularity[0].suptitle("Mean network modularity")
-
-
-    axs_modularity_motion = subfigs_modularity[1].subplots(
-        1, 2, sharey=True
-    )
-    subfigs_modularity[1].suptitle("Correlation between motion and network modularity")
-
-    for i, dataset in enumerate(datasets):
-        path_data = (
-            path_root
-            / f"{dataset}_{fmriprep_version.replace('.', '-')}_desc-{criteria_name}_summary.tsv"
-        )
-        data = pd.read_csv(path_data, sep="\t", index_col=[0, 1], header=[0, 1])
-        id_vars = data.index.names
-
-        # uncorrected qc-fc
-        df = (
-            data["qcfc_significant"]
-            .reset_index()
-            .melt(id_vars=id_vars, value_name="Percentage %")
-        )
-
-        sns.barplot(
-            y="Percentage %",
-            x="strategy",
-            data=df,
-            ax=axs_sig_qcfc[i],
-            order=strategy_order,
-            ci=95,
-            hue_order=group_order[dataset],
-        )
-        axs_sig_qcfc[i].set_title(dataset)
-        axs_sig_qcfc[i].set_ylim(0, 60)
-        axs_sig_qcfc[i].set_xticklabels(
-            strategy_order, rotation=45, ha="right", rotation_mode="anchor"
-        )
-
-        # fdr corrected
-        df = (
-            data["qcfc_fdr_significant"]
-            .reset_index()
-            .melt(id_vars=id_vars, value_name="Percentage %")
-        )
-        sns.barplot(
-            y="Percentage %",
-            x="strategy",
-            data=df,
-            ax=axs_sig_qcfc_fdr[i],
-            order=strategy_order,
-            ci=95,
-            hue_order=group_order[dataset],
-        )
-        axs_sig_qcfc_fdr[i].set_title(dataset)
-        axs_sig_qcfc_fdr[i].set_ylim(0, 60)
-        axs_sig_qcfc_fdr[i].set_xticklabels(
-            strategy_order, rotation=45, ha="right", rotation_mode="anchor"
-        )
-
-        # median value
-        df = (
-            data["qcfc_mad"]
-            .reset_index()
-            .melt(id_vars=id_vars, value_name="Absolute median values")
-        )
-
-        sns.barplot(
-            y="Absolute median values",
-            x="strategy",
-            data=df,
-            ax=axs_med_qcfc[i],
-            order=strategy_order,
-            ci=95,
-            # hue_order=['full_sample']
-            hue_order=group_order[dataset],
-        )
-
-        axs_med_qcfc[i].set_title(dataset)
-        axs_med_qcfc[i].set_ylim(0, 0.25)
-        axs_med_qcfc[i].set_xticklabels(
-            strategy_order, rotation=45, ha="right", rotation_mode="anchor"
-        )
-
-        # distance dependent
-        df = (
-            data["corr_motion_distance"]
-            .reset_index()
-            .melt(id_vars=id_vars, value_name="Pearson's correlation")
-        )
-        sns.barplot(
-            y="Pearson's correlation",
-            x="strategy",
-            data=df,
-            ax=axs_dist[i],
-            order=strategy_order,
-            ci=95,
-            # hue_order=['full_sample']
-            hue_order=group_order[dataset],
-        )
-        axs_dist[i].set_title(dataset)
-        axs_dist[i].set_xticklabels(
-            strategy_order, rotation=45, ha="right", rotation_mode="anchor"
-        )
-
-        # correlation between motion and modularity
-        df = (
-            data["corr_motion_modularity"]
-            .reset_index()
-            .melt(id_vars=id_vars, value_name="Pearson's correlation")
-        )
-
-        sns.barplot(
-            y="Pearson's correlation",
-            x="strategy",
-            data=df,
-            ax=axs_modularity_motion[i],
-            order=strategy_order,
-            ci=95,
-            # hue_order=['full_sample']
-            hue_order=group_order[dataset],
-        )
-        axs_modularity_motion[i].set_title(dataset)
-        axs_modularity_motion[i].set_xticklabels(
-            strategy_order, rotation=45, ha="right", rotation_mode="anchor"
-        )
-
-        # average modularity
-        df = (
-            data["modularity"]
-            .reset_index()
-            .melt(id_vars=id_vars, value_name="Mean modularity quality (a.u.)")
-        )
-
-        sns.barplot(
-            y="Mean modularity quality (a.u.)",
-            x="strategy",
-            data=df,
-            ax=axs_modularity[i],
-            order=strategy_order,
-            ci=95,
-            # hue_order=['full_sample']
-            hue_order=group_order[dataset],
-        )
-        axs_modularity[i].set_title(dataset)
-        axs_modularity[i].set_xticklabels(
-            strategy_order, rotation=45, ha="right", rotation_mode="anchor"
-        )
-
-    fig_sig_qcfc.savefig(Path(__file__).parents[1] / "outputs" / "sig_qcfc.png")
-    fig_sig_qcfc_fdr.savefig(Path(__file__).parents[1] / "outputs" / "sig_qcfc_fdr.png")
-    fig_med_qcfc.savefig(Path(__file__).parents[1] / "outputs" / "median_qcfc.png")
-    fig_dist.savefig(Path(__file__).parents[1] / "outputs" / "distance_qcfc.png")
     fig_modularity.savefig(Path(__file__).parents[1] / "outputs" / "modularity.png")
