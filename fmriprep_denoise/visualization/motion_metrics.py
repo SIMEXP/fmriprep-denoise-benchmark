@@ -75,6 +75,7 @@ def plot_stats(data, measure):
     for p in palette[1:4]:
         paired_palette.extend((p, p))
     paired_palette.extend((palette[-3], palette[-2], palette[-1], palette[-1]))
+
     fig, axs = plt.subplots(1, 2, sharey=True, constrained_layout=True)
     fig.suptitle(
         measure["title"],
@@ -111,3 +112,35 @@ def plot_stats(data, measure):
     ]
     axs[1].legend(handles=handles)
     return fig
+
+
+def plot_joint_scatter(path_root, dataset, fmriprep_version):
+    """Joint scatter plot for mean frame wise displacement against network modularity."""
+    parcel = 'atlas-difumo_nroi-64'
+    path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_{parcel}_modularity.tsv"
+    modularity = pd.read_csv(path_data, sep='\t', index_col=0)
+    path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_desc-movement_phenotype.tsv"
+    motion = pd.read_csv(path_data, sep='\t', index_col=0)
+    data = pd.concat([modularity, motion.loc[modularity.index, :]], axis=1)
+
+    data = data.drop('groups', axis=1)
+    data.index.name ='participants'
+    data = data.reset_index()
+    data = data.loc[:, ['participants', 'mean_framewise_displacement', 'baseline', 'scrubbing.2', 'scrubbing.2+gsr']]
+    data = data.melt(id_vars=['participants', 'mean_framewise_displacement'], var_name='Strategy', value_name='Modularity quality (a.u.)')
+    data = data.rename(columns={'mean_framewise_displacement': 'Mean Framewise Displacement (mm)'})
+
+    palette = sns.color_palette("colorblind", n_colors=3)
+    p = sns.jointplot(
+        data=data,
+        x="Modularity quality (a.u.)",
+        y="Mean Framewise Displacement (mm)",
+        hue="Strategy",
+        palette=palette,
+    )
+    p.fig.suptitle(
+        f"Distribution of mean frame wise displacement\nagainst network modularity:\n{dataset} / {fmriprep_version}",
+        weight="heavy",
+    )
+    p.fig.tight_layout()
+    return p

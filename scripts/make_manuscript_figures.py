@@ -31,18 +31,18 @@ if __name__ == "__main__":
     # mean fd
     stats = mean_framewise_displacement.load_data(path_root, criteria_name, fmriprep_version)
     fig_fd = mean_framewise_displacement.plot_stats(stats)
-    fig_fd.savefig(Path(__file__).parents[1] / "outputs" / "mean_fd.png")
+    fig_fd.savefig(Path(__file__).parents[1] / "outputs" / "mean_fd.png", transparent=True)
 
     # connectomes
     average_connectomes = connectivity_similarity.load_data(path_root, datasets, fmriprep_version)
     fig_similarity = connectivity_similarity.plot_stats(average_connectomes)
-    fig_similarity.savefig(Path(__file__).parents[1] / "outputs" / "connectomes.png")
+    fig_similarity.savefig(Path(__file__).parents[1] / "outputs" / "connectomes.png", transparent=True)
 
     # loss of degrees of freedom
     data = degrees_of_freedom_loss.load_data(path_root, datasets, criteria_name, fmriprep_version)
     fig_degrees_of_freedom = degrees_of_freedom_loss.plot_stats(data)
     fig_degrees_of_freedom.savefig(
-        Path(__file__).parents[1] / "outputs" / "loss_degrees_of_freedom.png"
+        Path(__file__).parents[1] / "outputs" / "loss_degrees_of_freedom.png", transparent=True
     )
 
     # Plotting metrics
@@ -56,12 +56,12 @@ if __name__ == "__main__":
     for m in metrics:
         data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, m)
         fig = motion_metrics.plot_stats(data, measure)
-        fig.savefig(Path(__file__).parents[1] / "outputs" / f"{metrics[m]}.png")
+        fig.savefig(Path(__file__).parents[1] / "outputs" / f"{metrics[m]}.png", transparent=True)
 
 
     data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, "fmriprep-20.2.5lts", 'p_values')
     fig = motion_metrics.plot_stats(data, measure)
-    fig.savefig(Path(__file__).parents[1] / "outputs" / f"sig_qcfc_alt_fmriprep.png")
+    fig.savefig(Path(__file__).parents[1] / "outputs" / f"sig_qcfc_alt_fmriprep.png", transparent=True)
 
     # customised code for mean netnor modularity as we are combining two figures
     palette = sns.color_palette("colorblind", n_colors=7)
@@ -109,4 +109,8 @@ if __name__ == "__main__":
             ]
             axs_modularity[1].legend(handles=handles)
 
-    fig_modularity.savefig(Path(__file__).parents[1] / "outputs" / "modularity.png")
+    fig_modularity.savefig(Path(__file__).parents[1] / "outputs" / "modularity.png", transparent=True)
+
+    fig_joint = motion_metrics.plot_joint_scatter(
+        path_root, dataset='ds000228', fmriprep_version=fmriprep_version)
+    fig_joint.savefig(Path(__file__).parents[1] / "outputs" / "meanfd_modularity.png", transparent=True)

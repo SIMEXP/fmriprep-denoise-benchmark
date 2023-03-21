@@ -15,28 +15,11 @@ kernelspec:
 :tags: [hide-input]
 
 import warnings
-
 warnings.filterwarnings('ignore')
-
-import pandas as pd
-import numpy as np
-
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import matplotlib as mpl
-
-from nilearn.plotting import plot_matrix
-
-import seaborn as sns
-
-from statsmodels.stats.weightstats import ttest_ind
-
-from fmriprep_denoise.visualization import tables, utils
-from fmriprep_denoise.features.derivatives import get_qc_criteria
 
 import ipywidgets as widgets
 from ipywidgets import interactive
-
+from fmriprep_denoise.visualization import utils
 
 path_root = utils.get_data_root() / "denoise-metrics"
 strategy_order = list(utils.GRID_LOCATION.values())
@@ -55,6 +38,10 @@ Please click on the launch botton to lunch the binder instance for interactive d
 
 ```{code-cell} ipython3
 :tags: [hide-input]
+
+import pandas as pd
+from fmriprep_denoise.visualization import tables
+from fmriprep_denoise.features.derivatives import get_qc_criteria
 
 def demographic_table(criteria_name, fmriprep_version):
     criteria = get_qc_criteria(criteria_name)
@@ -305,72 +292,27 @@ interactive(notebook_plot_modularity_motion, criteria_name=criteria_name, fmripr
 ```
 
 ```{code-cell} ipython3
-criteria_name = 'stringent'
-dataset = 'ds000228'
-fmriprep_version = 'fmriprep-20.2.1lts'
-parcel = 'atlas-difumo_nroi-64'
-path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_{parcel}_modularity.tsv"
-modularity = pd.read_csv(path_data, sep='\t', index_col=0)
-path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_desc-movement_phenotype.tsv"
-motion = pd.read_csv(path_data, sep='\t', index_col=0)
-data = pd.concat([modularity, motion.loc[modularity.index, :]], axis=1)
+from fmriprep_denoise.visualization import motion_metrics
 
-plt.figure()
-sns.regplot('baseline', 'mean_framewise_displacement', data=data)
-sns.regplot('scrubbing.2', 'mean_framewise_displacement', data=data)
-sns.regplot('scrubbing.2+gsr', 'mean_framewise_displacement', data=data)
-plt.xlabel('network modularity')
-plt.title(dataset + ': scrubbing.2')
-palette = sns.color_palette(n_colors=12)
-colors = [palette[0], palette[1], palette[2]]
-labels = [
-    "baseline",
-    "scrubbing.2",
-    "scrubbing.2+gsr"
-]
-handles = [mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)]
-plt.legend(handles=handles)
+def notebook_plot_joint_scatter(dataset, fmriprep_version):
+    motion_metrics.plot_joint_scatter(path_root, dataset, fmriprep_version)
 
-plt.figure()
-sns.regplot('baseline', 'mean_framewise_displacement', data=data)
-sns.regplot('simple', 'mean_framewise_displacement', data=data)
-sns.regplot('simple+gsr', 'mean_framewise_displacement', data=data)
-plt.xlabel('network modularity')
-plt.title(dataset + ': simple')
+    
+dataset = widgets.Dropdown(
+    options=['ds000228', 'ds000030'],
+    value='ds000228',
+    description='Dataset: ',
+    disabled=False
+)
 
-palette = sns.color_palette(n_colors=12)
-colors = [palette[0], palette[1], palette[2]]
-labels = [
-    "baseline",
-    "scrubbing.2",
-    "scrubbing.2+gsr"
-]
-handles = [mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)]
-plt.legend(handles=handles)
-```
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
 
-```{code-cell} ipython3
-criteria_name = 'stringent'
-dataset = 'ds000030'
-fmriprep_version = 'fmriprep-20.2.1lts'
-parcel = 'atlas-difumo_nroi-64'
-path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_{parcel}_modularity.tsv"
-modularity = pd.read_csv(path_data, sep='\t', index_col=0)
-path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_desc-movement_phenotype.tsv"
-motion = pd.read_csv(path_data, sep='\t', index_col=0)
-data = pd.concat([modularity, motion.loc[modularity.index, :]], axis=1)
-plt.figure()
-sns.regplot('baseline', 'mean_framewise_displacement', data=data)
-sns.regplot('scrubbing.2', 'mean_framewise_displacement', data=data)
-sns.regplot('scrubbing.2+gsr', 'mean_framewise_displacement', data=data)
-plt.xlabel('network modularity')
-plt.title(dataset + ': scrubbing.2')
-plt.figure()
-sns.regplot('baseline', 'mean_framewise_displacement', data=data)
-sns.regplot('simple', 'mean_framewise_displacement', data=data)
-sns.regplot('simple+gsr', 'mean_framewise_displacement', data=data)
-plt.xlabel('network modularity')
-plt.title(dataset + ': simple')
+interactive(notebook_plot_joint_scatter, dataset=dataset, fmriprep_version=fmriprep_version)
 ```
 
 ```{code-cell} ipython3
@@ -378,8 +320,4 @@ from fmriprep_denoise.visualization import strategy_ranking
 
 data = strategy_ranking.load_data(path_root, datasets)
 fig = strategy_ranking.plot_ranking(data)
-```
-
-```{code-cell} ipython3
-
 ```
