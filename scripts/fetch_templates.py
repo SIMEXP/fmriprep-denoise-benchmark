@@ -1,6 +1,8 @@
 """
 Set up templateflow in customised directory.
 Download atlases that are relevant.
+
+This is no longer need for curious curator. We uploaded all the atlas on osf.
 """
 import os
 from pathlib import Path

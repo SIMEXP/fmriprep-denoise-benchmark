@@ -21,7 +21,7 @@ def parse_args():
         description="Summarise denoising metrics for visualization and save at the top level of the denoise metric outputs directory.",
     )
     parser.add_argument(
-        "output_root", action="store", defaut=None, help="Output root path data."
+        "output_root", action="store", default=None, help="Output root path data."
     )
     parser.add_argument(
         "--fmriprep_version",

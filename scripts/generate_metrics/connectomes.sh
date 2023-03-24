@@ -1,3 +1,4 @@
+# Generate connectomes. Run on interactive nodes.
 #!/bin/bash
 
 OUTPUT="inputs/denoise-metrics/"
