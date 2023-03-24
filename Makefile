@@ -18,7 +18,7 @@ atlas:
 
 data:
 	@echo "Download input data to build the report"
-	if [ ! -d inputs/denoise-metrics ]; then wget -c -O denoise-metrics.tar.gz "https://zenodo.org/record/7362211/files/denoise-metrics.tar.gz?download=1" && mkdir -p inputs && tar xf denoise-metrics.tar.gz -C inputs && rm denoise-metrics.tar.gz; fi
+	if [ ! -d inputs/denoise-metrics ]; then wget -c -O denoise-metrics.tar.gz "https://zenodo.org/record/7764979/files/denoise-metrics.tar.gz?download=1" && mkdir -p inputs && tar xf denoise-metrics.tar.gz -C inputs && rm denoise-metrics.tar.gz; fi
 
 book: inputs/denoise-metrics
 	jb build content --all

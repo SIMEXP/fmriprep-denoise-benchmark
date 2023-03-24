@@ -25,7 +25,7 @@ make book
 - `inputs/` is reserved to store data for building the JupyterBook.
   To build the book, one will need all the metrics from the study.
   The metrics are here:
-  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7221351.svg)](https://doi.org/10.5281/zenodo.7221351)
+  [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7764979.svg)](https://doi.org/10.5281/zenodo.7764979)
 
 - Custom code is located in `fmriprep_denoise/`. This project is installable.
 

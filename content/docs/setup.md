@@ -51,3 +51,8 @@ I separate the template fetching from template flowset up as the computing node 
     ```
     If this step is computational too intensive, you can run it in on a computing node.
 
+3. Calculate the centroid of the customised DiFuMo
+
+    ```bash
+    python scripts/calculate_centroids.py
+    ```

@@ -90,7 +90,7 @@ def plot_stats(data, measure):
             ax=axs[i],
             order=strategy_order,
             ci=95,
-            palette=paired_palette
+            palette=paired_palette,
         )
         axs[i].set_title(dataset)
         axs[i].set_ylim(measure["ylim"])
@@ -98,16 +98,12 @@ def plot_stats(data, measure):
             strategy_order, rotation=45, ha="right", rotation_mode="anchor"
         )
         for i, bar in enumerate(axs[i].patches):
-            if i > 0 and i % 2 == 0 and i!=8:  # only give gsr hatch
-                bar.set_hatch('///')
+            if i > 0 and i % 2 == 0 and i != 8:  # only give gsr hatch
+                bar.set_hatch("///")
     labels = ["No GSR", "With GSR"]
     hatches = ["", "///"]
     handles = [
-        mpatches.Patch(
-        edgecolor='black',
-        facecolor='white',
-        hatch=h, label=l
-        )
+        mpatches.Patch(edgecolor="black", facecolor="white", hatch=h, label=l)
         for h, l in zip(hatches, labels)
     ]
     axs[1].legend(handles=handles)
@@ -116,19 +112,44 @@ def plot_stats(data, measure):
 
 def plot_joint_scatter(path_root, dataset, fmriprep_version):
     """Joint scatter plot for mean frame wise displacement against network modularity."""
-    parcel = 'atlas-difumo_nroi-64'
-    path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_{parcel}_modularity.tsv"
-    modularity = pd.read_csv(path_data, sep='\t', index_col=0)
-    path_data = path_root / dataset/ fmriprep_version/ f"dataset-{dataset}_desc-movement_phenotype.tsv"
-    motion = pd.read_csv(path_data, sep='\t', index_col=0)
+    parcel = "atlas-difumo_nroi-64"
+    path_data = (
+        path_root
+        / dataset
+        / fmriprep_version
+        / f"dataset-{dataset}_{parcel}_modularity.tsv"
+    )
+    modularity = pd.read_csv(path_data, sep="\t", index_col=0)
+    path_data = (
+        path_root
+        / dataset
+        / fmriprep_version
+        / f"dataset-{dataset}_desc-movement_phenotype.tsv"
+    )
+    motion = pd.read_csv(path_data, sep="\t", index_col=0)
     data = pd.concat([modularity, motion.loc[modularity.index, :]], axis=1)
 
-    data = data.drop('groups', axis=1)
-    data.index.name ='participants'
+    data = data.drop("groups", axis=1)
+    data.index.name = "participants"
     data = data.reset_index()
-    data = data.loc[:, ['participants', 'mean_framewise_displacement', 'baseline', 'scrubbing.2', 'scrubbing.2+gsr']]
-    data = data.melt(id_vars=['participants', 'mean_framewise_displacement'], var_name='Strategy', value_name='Modularity quality (a.u.)')
-    data = data.rename(columns={'mean_framewise_displacement': 'Mean Framewise Displacement (mm)'})
+    data = data.loc[
+        :,
+        [
+            "participants",
+            "mean_framewise_displacement",
+            "baseline",
+            "scrubbing.2",
+            "scrubbing.2+gsr",
+        ],
+    ]
+    data = data.melt(
+        id_vars=["participants", "mean_framewise_displacement"],
+        var_name="Strategy",
+        value_name="Modularity quality (a.u.)",
+    )
+    data = data.rename(
+        columns={"mean_framewise_displacement": "Mean Framewise Displacement (mm)"}
+    )
 
     palette = sns.color_palette("colorblind", n_colors=3)
     p = sns.jointplot(

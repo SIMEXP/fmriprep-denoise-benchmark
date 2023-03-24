@@ -44,8 +44,8 @@ def _statistic_report_group(dataset, baseline_group, data):
                 {i: {"t_stats": t_stats, "p_value": pval, "df": df}}
             )
 
-    male = baseline[baseline['gender']==0]
-    female = baseline[baseline['gender']==1]
+    male = baseline[baseline["gender"] == 0]
+    female = baseline[baseline["gender"] == 1]
 
     t_stats, pval, df = ttest_ind(
         male["mean_framewise_displacement"],
@@ -73,8 +73,8 @@ def plot_stats(stats):
     sns.set_palette("colorblind")
     palette = sns.color_palette(n_colors=7)
     colors_fd = {
-        'ds000228': [palette[0], palette[1]],
-        'ds000030': [palette[0]] + palette[2:5]
+        "ds000228": [palette[0], palette[1]],
+        "ds000030": [palette[0]] + palette[2:5],
     }
     colors_sex = palette[5:]
     for ax, dataset in zip(axs[0], datasets):
@@ -93,7 +93,7 @@ def plot_stats(stats):
             data=df,
             ax=ax,
             order=group_order[dataset],
-            palette=colors_fd[dataset]
+            palette=colors_fd[dataset],
         )
         ax.set_xticklabels(
             group_order[dataset],
@@ -125,7 +125,7 @@ def plot_stats(stats):
         df = df.rename(
             columns={
                 "mean_framewise_displacement": "Mean Framewise Displacement (mm)",
-                "gender": "Sex"
+                "gender": "Sex",
             }
         )
         sns.boxplot(
@@ -134,15 +134,13 @@ def plot_stats(stats):
             data=df,
             ax=ax,
             order=["Male", "Female"],
-            palette=colors_sex
+            palette=colors_sex,
         )
         ax.set_xticklabels(
             ["Male", "Female"],
             # rotation=45, ha="right", rotation_mode="anchor"
         )
-        ax.set_title(
-            f"Sex difference in {datasets_baseline[dataset]}"
-        )
+        ax.set_title(f"Sex difference in {datasets_baseline[dataset]}")
         # statistical annotation
         max_value = df["Mean Framewise Displacement (mm)"].max()
         notation = _get_pvalue_star(stats[dataset]["stats_sex"]["p_value"])

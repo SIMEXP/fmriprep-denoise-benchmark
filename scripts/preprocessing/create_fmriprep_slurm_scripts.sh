@@ -1,3 +1,4 @@
+# create fMRIPrep SLURM scripts, run from project root
 #!/bin/bash
 
 CONTAINER_PATH="/lustre03/project/6003287/containers"
@@ -33,7 +34,7 @@ for v in ${VERSION[*]}; do
 done
 
 echo ds000030
-subjects=$(cat inputs/ds000030_valid-subjects.txt)
+subjects=$(cat scripts/preprocessing/ds000030_valid-subjects.txt)
 for v in ${VERSION[*]}; do
     echo "Slurm files for fmriprep-${v}"
     ${FMRIPREP_SLURM}/singularity_run.bash \
