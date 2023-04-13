@@ -39,6 +39,7 @@ def load_data(path_root, datasets, criteria_name="stringent"):
                 ascending = m != "modularity"
                 r = (
                     data[d]
+                    .query("groups=='full_sample'")
                     .groupby("strategy")[measure["label"]]
                     .describe()["mean"]
                     .sort_values(ascending=ascending)

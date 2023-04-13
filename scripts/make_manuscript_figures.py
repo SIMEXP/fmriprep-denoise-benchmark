@@ -11,6 +11,7 @@ from fmriprep_denoise.visualization import (
     degrees_of_freedom_loss,
     mean_framewise_displacement,
     motion_metrics,
+    strategy_ranking,
 )
 
 group_order = {
@@ -100,15 +101,19 @@ if __name__ == "__main__":
         )
         axs_modularity = subfigs_modularity[j].subplots(1, 2, sharey=True)
         for i, dataset in enumerate(data):
+            df = data[dataset].query("groups=='full_sample'")
+            baseline_values = df.query("strategy=='baseline'")
+            baseline_mean = baseline_values[measure["label"]].mean()
             sns.barplot(
                 y=measure["label"],
                 x="strategy",
-                data=data[dataset],
+                data=df,
                 ax=axs_modularity[i],
                 order=strategy_order,
                 ci=95,
                 palette=paired_palette,
             )
+            axs_modularity[i].axhline(baseline_mean, ls="-.", c=paired_palette[0])
             axs_modularity[i].set_title(dataset)
             axs_modularity[i].set_ylim(measure["ylim"])
             axs_modularity[i].set_xticklabels(
@@ -136,4 +141,12 @@ if __name__ == "__main__":
     fig_joint.savefig(
         Path(__file__).parents[1] / "outputs" / "meanfd_modularity.png",
         transparent=True,
+    )
+
+    data = strategy_ranking.load_data(path_root, datasets)
+    fig_ranking = strategy_ranking.plot_ranking(data)
+
+    fig_ranking.savefig(
+        Path(__file__).parents[1] / "outputs" / "strategy_ranking.png",
+        transparent=True
     )

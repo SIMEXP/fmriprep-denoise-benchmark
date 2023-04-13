@@ -13,14 +13,14 @@ measures = {
         "label": "Percentage %",
         "title": "Significant QC-FC in connectomes\n"
         + r"(uncorrrected, $\alpha=0.05$)",
-        "ylim": (0, 60),
+        "ylim": (0, 70),
     },
     "fdr_p_values": {
         "var_name": "qcfc_fdr_significant",
         "label": "Percentage %",
         "title": "Significant QC-FC in connectomes\n"
         + r"(FDR corrected, $\alpha=0.05$)",
-        "ylim": (0, 25),
+        "ylim": (0, 35),
     },
     "median": {
         "var_name": "qcfc_mad",
@@ -32,7 +32,7 @@ measures = {
         "var_name": "corr_motion_distance",
         "label": "Pearson's correlation, absolute value",
         "title": "DM-FC",
-        "ylim": (0, 0.33),
+        "ylim": (0, 0.65),
     },
     "modularity": {
         "var_name": "modularity",
@@ -83,15 +83,20 @@ def plot_stats(data, measure):
         fontsize="x-large",
     )
     for i, dataset in enumerate(data):
+        df = data[dataset].query("groups=='full_sample'")
+        baseline_values = df.query("strategy=='baseline'")
+        baseline_mean = baseline_values[measure["label"]].mean()
         sns.barplot(
             y=measure["label"],
             x="strategy",
-            data=data[dataset],
+            data=df,
             ax=axs[i],
             order=strategy_order,
             ci=95,
             palette=paired_palette,
         )
+        # horizontal line baseline
+        axs[i].axhline(baseline_mean, ls="-.", c=paired_palette[0])
         axs[i].set_title(dataset)
         axs[i].set_ylim(measure["ylim"])
         axs[i].set_xticklabels(
@@ -128,7 +133,6 @@ def plot_joint_scatter(path_root, dataset, fmriprep_version):
     )
     motion = pd.read_csv(path_data, sep="\t", index_col=0)
     data = pd.concat([modularity, motion.loc[modularity.index, :]], axis=1)
-
     data = data.drop("groups", axis=1)
     data.index.name = "participants"
     data = data.reset_index()

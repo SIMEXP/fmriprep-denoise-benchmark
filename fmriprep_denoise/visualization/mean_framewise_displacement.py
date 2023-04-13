@@ -100,7 +100,9 @@ def plot_stats(stats):
             # rotation=45, ha="right", rotation_mode="anchor"
         )
         ax.set_title(
-            f"{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}; $N={df.shape[0]}$"
+            f"{dataset}\n"
+            f"Motion in dataset subgroups\n"
+            f"Mean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}; $N={df.shape[0]}$"
         )
 
         # statistical annotation

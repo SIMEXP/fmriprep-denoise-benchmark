@@ -146,8 +146,8 @@ def get_descriptive_data(
     # filter data by proportion vol scrubbed
     if fd_thresh is not None and proportion_thresh is not None:
         scrub_label = (fd2label[fd_thresh], "excised_vol_proportion")
-        keep_scrub = confounds_phenotype[scrub_label] <= proportion_thresh
-        keep_scrub = confounds_phenotype.index[keep_scrub]
+        exclude_scrub = confounds_phenotype[scrub_label] > proportion_thresh
+        keep_scrub = confounds_phenotype.index[~exclude_scrub]
     else:
         keep_scrub = confounds_phenotype.index
     mask_motion = keep_gross_fd.intersection(keep_scrub)
