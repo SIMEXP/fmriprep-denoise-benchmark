@@ -1,9 +1,12 @@
 ---
-title: "Benchmark denoising strategies on fMRIPrep outputs"
+title: "A reproducible benchmark of resting-state fMRI denoising strategies using fMRIPrep and Nilearn"
 tags:
+  - reproducibility
+  - nilearn
   - fMRIPrep
-  - denoising
-  - fMRI
+  - nuisance regressor
+  - resting-state fMRI
+  - functional connectivity
 authors:
   - name: Hao-Ting Wang
     affiliation: "1, 7"
@@ -47,7 +50,7 @@ affiliations:
   index: 6
 - name: Psychology Department, Université de Montréal, Montréal, Québec, Canada
   index: 7
-date: 14 April 2023
+date: 17 April 2023
 bibliography: paper.bib
 ---
 
