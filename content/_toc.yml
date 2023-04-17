@@ -10,7 +10,7 @@ parts:
     # - file: research_report/benchmark_methods.md
     - file: research_report/results-group.md
     # - file: research_report/contributions.md
-    # - file: research_report/references.md
+    - file: research_report/references.md
   - caption: Appendices and supplemental material
     chapters:
     - file: supplementary_materials/CITATION.md
