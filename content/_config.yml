@@ -1,9 +1,9 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: "Maintainable implementation of re-executable benchmark to track changes overtime"
-author: Hao-Ting Wang, Natasha Clarke, Steven L Meisler, Hanad Sharmarke, François Paugam, Nicolas Gensollen, Bertrand Thirion, Christopher J Markiewicz, Pierre Bellec
-copyright: "2022"
+title: "A reproducible benchmark of resting-state fMRI denoising strategies using fMRIPrep and Nilearn"
+author: Hao-Ting Wang, Steven L Meisler, Hanad Sharmarke, Natasha Clarke, Nicolas Gensollen, Christopher J Markiewicz, François Paugam, Bertrand Thirion, Pierre Bellec
+copyright: "2023"
 logo: logo.png
 only_build_toc_files: true
 
