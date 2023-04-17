@@ -115,7 +115,7 @@ def plot_stats(data, measure):
     return fig
 
 
-def plot_joint_scatter(path_root, dataset, fmriprep_version):
+def plot_joint_scatter(path_root, dataset, base_strategy, fmriprep_version):
     """Joint scatter plot for mean frame wise displacement against network modularity."""
     parcel = "atlas-difumo_nroi-64"
     path_data = (
@@ -142,8 +142,8 @@ def plot_joint_scatter(path_root, dataset, fmriprep_version):
             "participants",
             "mean_framewise_displacement",
             "baseline",
-            "scrubbing.2",
-            "scrubbing.2+gsr",
+            base_strategy,
+            f"{base_strategy}+gsr",
         ],
     ]
     data = data.melt(

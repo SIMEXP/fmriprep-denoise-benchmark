@@ -136,10 +136,15 @@ if __name__ == "__main__":
     )
 
     fig_joint = motion_metrics.plot_joint_scatter(
-        path_root, dataset="ds000228", fmriprep_version=fmriprep_version
+        path_root,
+        dataset="ds000030",
+        base_strategy="scrubbing.2",
+        fmriprep_version=fmriprep_version,
     )
     fig_joint.savefig(
-        Path(__file__).parents[1] / "outputs" / "meanfd_modularity.png",
+        Path(__file__).parents[1]
+        / "outputs"
+        / "ds000030_scrubbing.2_meanfd_modularity.png",
         transparent=True,
     )
 
@@ -147,6 +152,5 @@ if __name__ == "__main__":
     fig_ranking = strategy_ranking.plot_ranking(data)
 
     fig_ranking.savefig(
-        Path(__file__).parents[1] / "outputs" / "strategy_ranking.png",
-        transparent=True
+        Path(__file__).parents[1] / "outputs" / "strategy_ranking.png", transparent=True
     )

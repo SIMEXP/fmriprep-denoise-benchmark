@@ -30,6 +30,7 @@ def load_data(path_root, criteria_name, fmriprep_version):
 
 def _statistic_report_group(dataset, baseline_group, data):
     """Mean framewise displacement t test between groups, baseline sex differences."""
+    print(f"===={dataset}====")
     for_plotting = {"dataframe": data, "stats_group": {}}
     baseline = data[data["groups"] == baseline_group]
     for i, group in enumerate(group_order[dataset]):
@@ -38,21 +39,30 @@ def _statistic_report_group(dataset, baseline_group, data):
             t_stats, pval, df = ttest_ind(
                 baseline["mean_framewise_displacement"],
                 compare["mean_framewise_displacement"],
-                usevar="unequal",
+                usevar="pooled",
             )
             for_plotting["stats_group"].update(
                 {i: {"t_stats": t_stats, "p_value": pval, "df": df}}
             )
+            print(group, for_plotting["stats_group"][i])
 
     male = baseline[baseline["gender"] == 0]
     female = baseline[baseline["gender"] == 1]
-
+    print(
+        f"male M = {male['mean_framewise_displacement'].mean()}\n"
+        f"\tSD = {male['mean_framewise_displacement'].std()}"
+    )
+    print(
+        f"female M = {female['mean_framewise_displacement'].mean()}\n"
+        f"\tSD = {female['mean_framewise_displacement'].std()}"
+    )
     t_stats, pval, df = ttest_ind(
         male["mean_framewise_displacement"],
         female["mean_framewise_displacement"],
-        usevar="unequal",
+        usevar="pooled",
     )
     for_plotting["stats_sex"] = {"t_stats": t_stats, "p_value": pval, "df": df}
+    print("male vs female: ", for_plotting["stats_sex"])
     return for_plotting
 
 
