@@ -121,23 +121,8 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/software_implemetation.html">
-   Software implementation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/benchmark_methods.html">
-   Benchmark methods
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../research_report/results-group.html">
    Results: dataset level
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/contributions.html">
-   Contributions
   </a>
  </li>
  <li class="toctree-l1">
@@ -451,9 +436,8 @@ Please modify the scripts accordingly.</p>
 <p>After cloning and setting up the project, we will need to get all the atlases for the analysis.</p>
 <div class="section" id="option-1-download-the-atlas">
 <h3>Option 1: Download the atlas<a class="headerlink" href="#option-1-download-the-atlas" title="Permalink to this headline">#</a></h3>
-<p>You can download a customised tempalteflow directory with all the data.
-This is binded with our <code class="docutils literal notranslate"><span class="pre">repro2data</span></code> setup.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make data
+<p>You can download a customised tempalteflow directory, untar into <code class="docutils literal notranslate"><span class="pre">inputs/</span></code>.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make atlas
 </pre></div>
 </div>
 </div>
@@ -461,14 +445,11 @@ This is binded with our <code class="docutils literal notranslate"><span class="
 <h3>Option 2: Generate the atlas<a class="headerlink" href="#option-2-generate-the-atlas" title="Permalink to this headline">#</a></h3>
 <p>Alternatively, you can re-run the scripts.
 We will need to download from <code class="docutils literal notranslate"><span class="pre">templateflow</span></code> and <code class="docutils literal notranslate"><span class="pre">nilearn</span></code>, and organise them in <code class="docutils literal notranslate"><span class="pre">templateflow</span></code> standard.
-This is a shared step for those who wants to build the book and rerun the whole workflow.</p>
+This is a shared step for those who wants to rerun the whole workflow.
+I separate the template fetching from template flowset up as the computing node of the HCP doesn’t have network access.</p>
 <ol>
 <li><p>Download all the atlases (require network access):</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/fetch_templates.py
-</pre></div>
-</div>
-<p>Or you can use the make command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make atlas
 </pre></div>
 </div>
 </li>
@@ -477,11 +458,12 @@ One of the measure require the node-wise distances, so we need to separate the D
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bash scripts/setup_templateflow.sh
 </pre></div>
 </div>
-<p>Or the Make command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make templateflow
+<p>If this step is computational too intensive, you can run it in on a computing node.</p>
+</li>
+<li><p>Calculate the centroid of the customised DiFuMo</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python scripts/calculate_centroids.py
 </pre></div>
 </div>
-<p>If this step is computational too intensive, you can run it in on a computing node.</p>
 </li>
 </ol>
 </div>

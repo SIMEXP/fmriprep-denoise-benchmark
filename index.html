@@ -53,7 +53,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Software implementation" href="research_report/software_implemetation.html" />
+    <link rel="next" title="Results: dataset level" href="research_report/results-group.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -120,23 +120,8 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="research_report/software_implemetation.html">
-   Software implementation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="research_report/benchmark_methods.html">
-   Benchmark methods
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="research_report/results-group.html">
    Results: dataset level
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="research_report/contributions.html">
-   Contributions
   </a>
  </li>
  <li class="toctree-l1">
@@ -433,17 +418,26 @@ title="Print to PDF"
                 
   <div class="tex2jax_ignore mathjax_ignore section" id="summary">
 <h1>Summary<a class="headerlink" href="#summary" title="Permalink to this headline">#</a></h1>
-<p>Various fMRI denoising benchmark has been published in the past,
-however without a re-executable benchmark with unified preprocessing steps,
-the generalisability of those conclusions are unclear.
-The impact of the denoising strategies has yet to be evaluated on the popular minimal preprocessing tool fMRIPrep.
-The confound output of fMRIPrep presented the users with a range of possible nusianse regressors.
-While users are benifted from a wide selection of regressors,
-without understanding of the literature one can pick a combination of regressors that reintroduce noise to the signal.
-Current work aims to introduce an application programming interface (API) to standardise fMRIPrep confounds retrieval,
-and provide benchmarks of different strategies using functional connectivity generated from resting state data.
-The main tool is a part of
-<a class="reference external" href="https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds"><code class="docutils literal notranslate"><span class="pre">nilearn</span></code></a>.</p>
+<p>Reducing contributions from non-neuronal sources is a crucial step in functional magnetic resonance imaging (fMRI) analyses.
+Many viable strategies for denoising fMRI are used in the literature,
+and practitioners rely on denoising benchmarks for guidance in the selection of an appropriate choice for their study.
+However, fMRI denoising software is an ever-evolving field, and the benchmarks can quickly become obsolete as the techniques or implementations change.
+In this work, we present a fully reproducible denoising benchmark featuring a range of denoising strategies and evaluation metrics,
+built primarily on the fMRIPrep <span id="id1">[<a class="reference internal" href="research_report/references.html#id38" title="Oscar Esteban, Christopher Markiewicz, Ross W Blair, Craig Moodie, Ayse Ilkay Isik, Asier Erramuzpe Aliaga, James Kent, Mathias Goncalves, Elizabeth DuPre, Madeleine Snyder, Hiroyuki Oya, Satrajit Ghosh, Jessey Wright, Joke Durnez, Russell Poldrack, and Krzysztof Jacek Gorgolewski. fMRIPrep: a robust preprocessing pipeline for functional MRI. Nature Methods, 2018. doi:10.1038/s41592-018-0235-4.">Esteban <em>et al.</em>, 2018</a>]</span> and Nilearn <span id="id2">[<a class="reference internal" href="research_report/references.html#id60" title="Alexandre Abraham, Fabian Pedregosa, Michael Eickenberg, Philippe Gervais, Andreas Mueller, Jean Kossaifi, Alexandre Gramfort, Bertrand Thirion, and Gael Varoquaux. Machine learning for neuroimaging with scikit-learn. Frontiers in Neuroinformatics, 2014. doi:10.3389/fninf.2014.00014.">Abraham <em>et al.</em>, 2014</a>]</span> software packages.
+We apply this reproducible benchmark to investigate the robustness of the conclusions across two different datasets and two versions of fMRIPrep.
+The majority of benchmark results were consistent with prior literature.
+Scrubbing, a technique which excludes time points with excessive motion,
+combined with global signal regression, is generally effective at noise removal.
+Scrubbing however disrupts the continuous sampling of brain images and is incompatible with some statistical analyses,
+e.g. auto-regressive modeling. In this case, a simple strategy using motion parameters,
+average activity in select brain compartments, and global signal regression should be preferred.
+Importantly, we found that certain denoising strategies behave inconsistently across datasets and/or versions of fMRIPrep,
+or had a different behavior than in previously published benchmarks, especially ICA-AROMA.
+These results demonstrate that a reproducible denoising benchmark can effectively assess the robustness of conclusions across multiple datasets and software versions.
+Technologies such as BIDS-App <span id="id3">[<a class="reference internal" href="research_report/references.html#id67">Gorgolewski <em>et al.</em>, n.d.</a>]</span>, the Jupyter Book <span id="id4">[<a class="reference internal" href="research_report/references.html#id68">Granger and Pérez, n.d.</a>]</span> and Neurolibre <span id="id5">[<a class="reference internal" href="research_report/references.html#id69">Karakuzu <em>et al.</em>, n.d.</a>]</span> provided the infrastructure to publish the metadata and report figures.
+Readers can reproduce the report figures beyond the ones reported in the published manuscript.
+With the denoising benchmark, we hope to provide useful guidelines for the community,
+and that our software infrastructure will facilitate continued development as the state-of-the-art advances.</p>
 <p><img alt="Overview of API.\label{top_level_fig}" src="_images/api_summary.png" /></p>
 <p><strong><span class="fa fa-key"></span> Keywords:</strong>
 <code class="docutils literal notranslate"><span class="pre">reproducibility</span></code>,
@@ -487,10 +481,10 @@ The main tool is a part of
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='right-next' id="next-link" href="research_report/software_implemetation.html" title="next page">
+    <a class='right-next' id="next-link" href="research_report/results-group.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Software implementation</p>
+        <p class="prev-next-title">Results: dataset level</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

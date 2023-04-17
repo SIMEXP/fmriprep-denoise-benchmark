@@ -15,34 +15,48 @@ kernelspec:
 :tags: [hide-input]
 
 import warnings
-
 warnings.filterwarnings('ignore')
-
-import pandas as pd
-
-import matplotlib.pyplot as plt
-import matplotlib.patches as mpatches
-import matplotlib as mpl
-
-from nilearn.plotting import plot_matrix
-
-import seaborn as sns
-
-from statsmodels.stats.weightstats import ttest_ind
-
-from fmriprep_denoise.visualization import tables, utils
-from fmriprep_denoise.features.derivatives import get_qc_criteria
 
 import ipywidgets as widgets
 from ipywidgets import interactive
-
+from fmriprep_denoise.visualization import utils
 
 path_root = utils.get_data_root() / "denoise-metrics"
 strategy_order = list(utils.GRID_LOCATION.values())
-group_order = {'ds000228': ['adult', 'child'], 'ds000030':['control', 'ADHD', 'bipolar', 'schizophrenia']}
+group_order = {'ds000228': ['adult', 'child'],  'ds000030': ['control', 'ADHD', 'bipolar', 'schizophrenia']}
 datasets = ['ds000228', 'ds000030']
 datasets_baseline = {'ds000228': 'adult', 'ds000030': 'control'}
+```
 
+# Results: dataset level
+
+Here we provides alternative visualisation of the benchmark results from the manuscript.
+Please click on the launch botton to lunch the Binder instance for interactive data viewing.
+
+The benchmark was performed on two Long-Term Support (LTS) versions of fMRIPrep (20.2.1 and 20.2.5) and two OpenNeuro datasets (ds000228 and ds000030).
+For the demographic information and gross mean framewise displacement, it is possible to generate the report based on three levels of quality control filters (no filter, minimal, stringent).
+
+## Sample and subgroup size change based on quality control criteria
+
+We would like to perform the benchmark on subjects with reasonable qulaity of data to reflect the descisions researchers make in data analysis. 
+We modified the criteria for filtering data from Parkes 2018 to suit our dataset better and ensure enough time points for functional connectivity analysis.
+
+The stringent threshold removes subjects based on two criteria:
+1. removes subjects with mean framewise displacement above 0.25 mm
+2. removes subjects with more than 80% of the volumes missing when filtering the time series with a 0.2 mm framewise displacement.
+
+Parkes 2018 used a stricter criteria for remaining volumes (20%). However this will removed close to or more than 50% of the subjects from the datasets. 
+
+In addition, we included the minimal threshold from Parkes 2018
+(removes subjects with mean framewise displacement above 0.55 mm)
+for readers to expore.
+
+```{code-cell} ipython3
+:tags: [hide-input]
+
+import pandas as pd
+from fmriprep_denoise.visualization import tables
+from fmriprep_denoise.features.derivatives import get_qc_criteria
 
 def demographic_table(criteria_name, fmriprep_version):
     criteria = get_qc_criteria(criteria_name)
@@ -54,92 +68,6 @@ def demographic_table(criteria_name, fmriprep_version):
     print("Generating new tables...")
 
     display(desc)
-
-
-def statistic_report(criteria_name, fmriprep_version, dataset):
-
-    criteria = get_qc_criteria(criteria_name)
-    for_plotting = {}
-    baseline_group = datasets_baseline[dataset]
-    _, data, _ = tables.get_descriptive_data(dataset, fmriprep_version, path_root, **criteria)
-
-    for_plotting.update({dataset: data})
-    for_plotting.update({'stats': {}})
-    baseline = data[data['groups'] == baseline_group]
-    for i, group in enumerate(group_order[dataset]):
-        compare = data[data['groups'] == group]
-        if group != baseline_group:
-            t_stats, pval, df = ttest_ind(
-                baseline['mean_framewise_displacement'],
-                compare['mean_framewise_displacement'],
-                usevar='unequal',
-            )
-            for_plotting['stats'].update(
-                {i: {
-                    't_stats': t_stats,
-                    'p_value': pval, 
-                    'df': df}
-                })
-    return for_plotting
-
-
-def significant_notation(item_pairs, max_value, sig, ax):
-    x1, x2 = item_pairs
-    y, h, col = max_value + 0.01, 0.01, 'k'
-    ax.plot([x1, x1, x2, x2], [y, y+h, y+h, y], lw=1.5, c=col)
-    ax.text((x1+x2)*.5, y+h, sig, ha='center', va='bottom', color=col)
-
-
-def plot_mean_fd(criteria_name, fmriprep_version):
-    print("Generating new graphs...")
-    fig = plt.figure(figsize=(7, 5))
-    axs = fig.subplots(1, 2, sharey=True)
-    for ax, dataset in zip(axs, datasets):
-        for_plotting = statistic_report(criteria_name, fmriprep_version, dataset)
-        df = for_plotting[dataset]
-        mean_fd = df['mean_framewise_displacement'].mean()
-        sd_fd = df['mean_framewise_displacement'].std()
-        df = df.rename(
-            columns={
-                'mean_framewise_displacement': 'Mean Framewise Displacement (mm)',
-                'groups': 'Groups'
-            }
-        )
-        sns.boxplot(
-            y='Mean Framewise Displacement (mm)', x='Groups', data=df, ax=ax,
-            order=group_order[dataset]
-        )
-        ax.set_xticklabels(group_order[dataset], rotation=45, ha='right', rotation_mode='anchor')
-        ax.set_title(
-            f'{dataset}\nMean\u00B1SD={mean_fd:.2f}\u00B1{sd_fd:.2f}\n$N={df.shape[0]}$'
-        )
-
-        # statistical annotation
-        max_value = df['Mean Framewise Displacement (mm)'].max()
-        for i in for_plotting['stats']:
-            if for_plotting['stats'][i]['p_value'] < 0.005:
-                notation = "***"
-            elif for_plotting['stats'][i]['p_value'] < 0.01:
-                notation = "**"
-            elif for_plotting['stats'][i]['p_value'] < 0.05:
-                notation = "*"
-            else:
-                notation = None
-
-            if for_plotting['stats'][i]['p_value'] < 0.05:
-                significant_notation((0, i), max_value + 0.03 * (i - 1), notation, ax)
-```
-
-# Results: dataset level
-
-Here we provides alternative visualisation of the benchmark results from the manuscript.
-The Jupyter Book can only display static images. 
-Please click on the launch botton to lunch the binder instance for interactive data viewing.
-
-## Sample and subgroup size change based on quality control criteria
-
-```{code-cell} ipython3
-:tags: [hide-input]
 
 criteria_name = widgets.Dropdown(
     options=['stringent', 'minimal', None],
@@ -156,9 +84,25 @@ fmriprep_version = widgets.Dropdown(
 interactive(demographic_table, criteria_name=criteria_name, fmriprep_version=fmriprep_version)
 ```
 
+You can also use different exclusion criteria to explore the motion profiles of different subgroups in the dataset.
+
+
+## Motion profile of each dataset
+
+We can see overall the adults have less gross motion than children in ds000228. 
+Between different clinical groups in ds000030, the schizophrania group displays a marked difference in motion comparing to the healthy control.
+
 ```{code-cell} ipython3
 :tags: [hide-input]
 
+from fmriprep_denoise.visualization import mean_framewise_displacement
+
+
+def notebook_plot_mean_fd(criteria_name, fmriprep_version):
+    stats = mean_framewise_displacement.load_data(path_root, criteria_name, fmriprep_version) 
+    mean_framewise_displacement.plot_stats(stats)
+
+    
 criteria_name = widgets.Dropdown(
     options=['stringent', 'minimal', None],
     value='stringent',
@@ -171,110 +115,44 @@ fmriprep_version = widgets.Dropdown(
     description='Preporcessing version : ',
     disabled=False
 )
-interactive(plot_mean_fd, criteria_name=criteria_name, fmriprep_version=fmriprep_version)
+interactive(notebook_plot_mean_fd, criteria_name=criteria_name, fmriprep_version=fmriprep_version)
 ```
 
-## Loss of degrees of freedoms
+## Similarity amongst denoised connectomes
+
+We plotted the correlations among connectomes denoised with different denoisng strategies to get a general sense of the data.
+
+We see connectome denoised with or without global signal regressor.formed two separate clusters.
+The baseline and ICA-AROMA denoised connectome do not belong to any clusters. 
+ICA-AROMA potentially captures much more different source of noise than the others.
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import connectivity_similarity
+
+def notebook_plot_connectomes(fmriprep_version):
+    average_connectomes = connectivity_similarity.load_data(path_root, datasets, fmriprep_version) 
+    connectivity_similarity.plot_stats(average_connectomes)
+
+
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+interactive(notebook_plot_connectomes, fmriprep_version=fmriprep_version)
+```
+
+## Loss of temporal degrees of freedom
 
 ```{code-cell} ipython3
 :tags: [hide-input]
 
-def loss_degree_of_freedom(criteria_name, fmriprep_version):
-    criteria = get_qc_criteria(criteria_name)
-    fig = plt.figure(constrained_layout=True, figsize=(11, 5))
-    axs = fig.subplots(1, 2, sharey=True)
-    print('Generating new graph')
-    for ax, dataset in zip(axs, datasets):
-        (
-            confounds_phenotype,
-            participant_groups,
-            groups,
-        ) = utils._get_participants_groups(
-            dataset,
-            fmriprep_version,
-            path_root,
-            gross_fd=criteria['gross_fd'],
-            fd_thresh=criteria['fd_thresh'],
-            proportion_thresh=criteria['proportion_thresh'],
-        )
+from fmriprep_denoise.visualization import degrees_of_freedom_loss
 
-        # change up the data a bit for plotting
-        full_length = confounds_phenotype.iloc[0, -1]
-        confounds_phenotype.loc[:, ('aroma', 'aroma')] += confounds_phenotype.loc[:, ('aroma', 'fixed_regressors')]
-        confounds_phenotype.loc[:, ('aroma+gsr', 'aroma')] += confounds_phenotype.loc[:, ('aroma+gsr', 'fixed_regressors')]
-        confounds_phenotype.loc[:, ('compcor', 'compcor')] += confounds_phenotype.loc[:, ('compcor', 'fixed_regressors')]
-        confounds_phenotype.loc[:, ('compcor6', 'compcor')] += confounds_phenotype.loc[:, ('compcor6', 'fixed_regressors')]
-
-        confounds_phenotype = confounds_phenotype.reset_index()
-        confounds_phenotype = confounds_phenotype.melt(
-            id_vars=['index'],
-            var_name=['strategy', 'type'],
-        )
-        sns.barplot(
-            x='value',
-            y='strategy',
-            data=confounds_phenotype[confounds_phenotype['type'] == 'total'],
-            ci=95,
-            color='red',
-            linewidth=1,
-            ax=ax,
-        )
-        sns.barplot(
-            x='value',
-            y='strategy',
-            data=confounds_phenotype[confounds_phenotype['type'] == 'compcor'],
-            ci=95,
-            color='blue',
-            linewidth=1,
-            ax=ax,
-        )
-        sns.barplot(
-            x='value',
-            y='strategy',
-            data=confounds_phenotype[confounds_phenotype['type'] == 'aroma'],
-            ci=95,
-            color='orange',
-            linewidth=1,
-            ax=ax,
-        )
-        sns.barplot(
-            x='value',
-            y='strategy',
-            data=confounds_phenotype[
-                confounds_phenotype['type'] == 'fixed_regressors'
-            ],
-            ci=95,
-            color='darkgrey',
-            linewidth=1,
-            ax=ax,
-        )
-        sns.barplot(
-            x='value',
-            y='strategy',
-            data=confounds_phenotype[
-                confounds_phenotype['type'] == 'high_pass'
-            ],
-            ci=95,
-            color='grey',
-            linewidth=1,
-            ax=ax,
-        )
-        ax.set_xlim(0, full_length)
-        ax.set_xlabel(f'Degrees of freedom loss\n(Full length: {full_length})')
-        ax.set_title(dataset)
-
-    colors = ['red', 'blue', 'orange', 'darkgrey', 'grey']
-    labels = [
-        'Censored volumes',
-        'CompCor \nregressors',
-        'ICA-AROMA \npartial regressors',
-        'Head motion and \ntissue signal',
-        'Discrete cosine-basis \nregressors',
-    ]
-    handles = [
-        mpatches.Patch(color=c, label=l) for c, l in zip(colors, labels)
-    ]
-    axs[1].legend(handles=handles, bbox_to_anchor=(1.7, 1))
+def notebook_plot_loss_degrees_of_freedom(criteria_name, fmriprep_version):
+    data = degrees_of_freedom_loss.load_data(path_root, datasets, criteria_name, fmriprep_version) 
+    degrees_of_freedom_loss.plot_stats(data)
 
 criteria_name = widgets.Dropdown(
     options=['stringent', 'minimal', None],
@@ -290,108 +168,209 @@ fmriprep_version = widgets.Dropdown(
     disabled=False
 )
 
-interactive(loss_degree_of_freedom, criteria_name=criteria_name, fmriprep_version=fmriprep_version)
+interactive(notebook_plot_loss_degrees_of_freedom, criteria_name=criteria_name, fmriprep_version=fmriprep_version)
 ```
 
-## Benchmark metrics by fMRIPrep version and dataset
-
-We filtered the preprocessed datasets with a stringent gross motion cut-off. 
-Here you can brows the results by fMRIPrep version and dataset.
+## Quality control / functional connectivity (QC-FC)
 
 ```{code-cell} ipython3
-:tags: [hide-input]
+from fmriprep_denoise.visualization import motion_metrics
 
-def qcfc(fmriprep_version, dataset):
-
-    criteria_name = 'stringent'
+def notebook_plot_qcfc(criteria_name, fmriprep_version):
+    data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, 'p_values')
+    motion_metrics.plot_stats(data, measure)
     
-    path_data = path_root / f"{dataset}_{fmriprep_version.replace('.', '-')}_desc-{criteria_name}_summary.tsv"
-    data = pd.read_csv(path_data, sep='\t', index_col=[0, 1], header=[0, 1])
-    id_vars = data.index.names
+# criteria_name = widgets.Dropdown(
+#     options=['stringent', 'minimal', None],
+#     value='stringent',
+#     description='Threshould: ',
+#     disabled=False
+# )
 
-    # Plotting
-    df = data['qcfc_fdr_significant'].reset_index().melt(id_vars=id_vars, value_name='Percentage %')
-    fig = plt.figure(figsize=(17, 11))
-    axs = fig.subplots(2, 3)
-    fig.subplots_adjust(hspace=0.5, wspace=0.5)
-
-    sns.barplot(
-        y='Percentage %', x='strategy', data=df, ax=axs[0, 0],
-        order=strategy_order, ci=None,
-        hue_order=group_order[dataset]
-    )
-    sns.stripplot(y='Percentage %', x='strategy', data=df, ax=axs[0, 0], 
-                  order=strategy_order, hue_order=group_order[dataset])
-    axs[0, 0].set_title('Significant QC/FC in connectomes')
-    axs[0, 0].set_ylim(0, 100)
-
-
-    df = data['qcfc_mad'].reset_index().melt(id_vars=id_vars, value_name='Median absolute deviation')
-
-    sns.barplot(
-        y='Median absolute deviation', x='strategy', data=df, ax=axs[0, 1],
-        order=strategy_order, ci=95,
-        # hue_order=['full_sample']
-        hue_order=group_order[dataset]
-    )
-
-    axs[0, 1].set_title('Median absolute deviation of QC/FC')
-    axs[0, 1].set_ylim(0, 0.25)
-    
-
-    df = data['corr_motion_distance'].reset_index().melt(id_vars=id_vars, value_name='Pearson\'s correlation')
-    sns.barplot(
-        y='Pearson\'s correlation', x='strategy', data=df, ax=axs[0, 2],
-        order=strategy_order, ci=95, 
-        # hue_order=['full_sample']
-        hue_order=group_order[dataset]
-    )
-    axs[0, 2].set_title('Distance-dependent of motion')
-
-    
-    df = data['corr_motion_modularity'].reset_index().melt(id_vars=id_vars, value_name='Pearson\'s correlation')
-
-    sns.barplot(
-        y='Pearson\'s correlation', x='strategy', data=df, ax=axs[1, 0],
-        order=strategy_order, ci=95, 
-        # hue_order=['full_sample']
-        hue_order=group_order[dataset]
-    )
-    axs[1, 0].set_title('Correlation between motion and network modularity')
-    
-    df = data['modularity'].reset_index().melt(id_vars=id_vars, value_name='Mean modularity quality (a.u.)')
-
-    sns.barplot(
-        y='Mean modularity quality (a.u.)', x='strategy', data=df, ax=axs[1, 1],
-        order=strategy_order, ci=95, 
-        # hue_order=['full_sample']
-        hue_order=group_order[dataset]
-    )
-    axs[1, 1].set_title('Mean network modularity')
-    
-    cc = pd.read_csv(path_root / dataset / fmriprep_version / f'dataset-{dataset}_atlas-mist_nroi-444_connectome.tsv', 
-                     sep='\t', index_col=0)
-    plot_matrix(cc.corr().values, labels=list(cc.columns), colorbar=True, axes=axs[1, 2], cmap=mpl.cm.viridis,
-                title="Connectome similarity", reorder='complete', vmax=1, vmin=0.7)
-    for i in range(2):
-        for j in range(2):
-            axs[i, j].set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
-    axs[0, 2].set_xticklabels(strategy_order, rotation=45, ha='right', rotation_mode='anchor')
-    
-    
 fmriprep_version = widgets.Dropdown(
     options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
     value='fmriprep-20.2.1lts',
     description='Preporcessing version : ',
     disabled=False
 )
+
+interactive(notebook_plot_qcfc, criteria_name='stringent', fmriprep_version=fmriprep_version)
+```
+
+### False discovery rate corrected QC-FC
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import motion_metrics
+
+def notebook_plot_qcfc_fdr(criteria_name, fmriprep_version):
+    data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, 'fdr_p_values')
+    motion_metrics.plot_stats(data, measure)
+
+    
+# criteria_name = widgets.Dropdown(
+#     options=['stringent', 'minimal', None],
+#     value='stringent',
+#     description='Threshould: ',
+#     disabled=False
+# )
+
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+
+interactive(notebook_plot_qcfc_fdr, criteria_name='stringent', fmriprep_version=fmriprep_version)
+```
+
+### Medians of absolute values of QC-FC
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import motion_metrics
+
+def notebook_plot_qcfc_median(criteria_name, fmriprep_version):
+    data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, 'median')
+    motion_metrics.plot_stats(data, measure)
+
+    
+# criteria_name = widgets.Dropdown(
+#     options=['stringent', 'minimal', None],
+#     value='stringent',
+#     description='Threshould: ',
+#     disabled=False
+# )
+
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+
+interactive(notebook_plot_qcfc_median, criteria_name='stringent', fmriprep_version=fmriprep_version)
+```
+
+## Residual distance-dependent effects of subject motion on functional connectivity (DM-FC)
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import motion_metrics
+
+def notebook_plot_distance(criteria_name, fmriprep_version):
+    data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, 'distance')
+    motion_metrics.plot_stats(data, measure)
+
+    
+# criteria_name = widgets.Dropdown(
+#     options=['stringent', 'minimal', None],
+#     value='stringent',
+#     description='Threshould: ',
+#     disabled=False
+# )
+
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+
+interactive(notebook_plot_distance, criteria_name='stringent', fmriprep_version=fmriprep_version)
+```
+
+## Louvain network modularity
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import motion_metrics
+
+def notebook_plot_modularity(criteria_name, fmriprep_version):
+    data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, 'modularity')
+    motion_metrics.plot_stats(data, measure)
+
+    
+# criteria_name = widgets.Dropdown(
+#     options=['stringent', 'minimal', None],
+#     value='stringent',
+#     description='Threshould: ',
+#     disabled=False
+# )
+
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+
+interactive(notebook_plot_modularity, criteria_name='stringent', fmriprep_version=fmriprep_version)
+```
+
+### Average Pearson’s correlation between mean framewise displacement and Louvain network modularity after denoising
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import motion_metrics
+
+def notebook_plot_modularity_motion(criteria_name, fmriprep_version):
+    data, measure = motion_metrics.load_data(path_root, datasets, criteria_name, fmriprep_version, 'modularity_motion')
+    motion_metrics.plot_stats(data, measure)
+
+    
+# criteria_name = widgets.Dropdown(
+#     options=['stringent', 'minimal', None],
+#     value='stringent',
+#     description='Threshould: ',
+#     disabled=False
+# )
+
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+
+interactive(notebook_plot_modularity_motion, criteria_name='stringent', fmriprep_version=fmriprep_version)
+```
+
+### Correlation between mean framewise displacement and Louvain network modularity after denoising.
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import motion_metrics
+
+def notebook_plot_joint_scatter(dataset, base_strategy, fmriprep_version):
+    motion_metrics.plot_joint_scatter(path_root, dataset, base_strategy, fmriprep_version)
+
+    
 dataset = widgets.Dropdown(
     options=['ds000228', 'ds000030'],
     value='ds000228',
-    description='Dataset : ',
+    description='Dataset: ',
     disabled=False
 )
 
-interactive(qcfc, fmriprep_version=fmriprep_version, dataset=dataset)
+fmriprep_version = widgets.Dropdown(
+    options=['fmriprep-20.2.1lts', 'fmriprep-20.2.5lts'],
+    value='fmriprep-20.2.1lts',
+    description='Preporcessing version : ',
+    disabled=False
+)
+
+base_strategy = widgets.Dropdown(
+    options=['simple', 'srubbing.5', 'srubbing.2', 'aroma'],
+    value='simple',
+    description='Base denoise strategy ',
+    disabled=False
+)
+
+
+interactive(notebook_plot_joint_scatter, dataset=dataset, base_strategy=base_strategy, fmriprep_version=fmriprep_version)
 ```
 
+## Ranking strategies from best to worst, based on four benchmark metrics
+
+```{code-cell} ipython3
+from fmriprep_denoise.visualization import strategy_ranking
+
+data = strategy_ranking.load_data(path_root, datasets)
+fig = strategy_ranking.plot_ranking(data)
+```

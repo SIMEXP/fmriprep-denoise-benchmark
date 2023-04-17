@@ -24,28 +24,23 @@ After cloning and setting up the project, we will need to get all the atlases fo
 
 ### Option 1: Download the atlas
 
-You can download a customised tempalteflow directory with all the data.
-This is binded with our `repro2data` setup.
+You can download a customised tempalteflow directory, untar into `inputs/`.
 
 ```bash
-make data
+make atlas
 ```
 
 ### Option 2: Generate the atlas
 
 Alternatively, you can re-run the scripts.
 We will need to download from `templateflow` and `nilearn`, and organise them in `templateflow` standard.
-This is a shared step for those who wants to build the book and rerun the whole workflow.
+This is a shared step for those who wants to rerun the whole workflow.
+I separate the template fetching from template flowset up as the computing node of the HCP doesn't have network access.
 
 1. Download all the atlases (require network access):
 
     ```bash
     python scripts/fetch_templates.py
-    ```
-    Or you can use the make command:
-    
-    ```bash
-    make atlas
     ```
 
 2. Process the atlases and organise the files to templateflow standard.
@@ -54,10 +49,10 @@ This is a shared step for those who wants to build the book and rerun the whole 
     ```bash
     bash scripts/setup_templateflow.sh
     ```
-    Or the Make command:
-    
-    ```bash
-    make templateflow
-    ```
     If this step is computational too intensive, you can run it in on a computing node.
 
+3. Calculate the centroid of the customised DiFuMo
+
+    ```bash
+    python scripts/calculate_centroids.py
+    ```

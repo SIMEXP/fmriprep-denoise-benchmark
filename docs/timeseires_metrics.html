@@ -120,23 +120,8 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/software_implemetation.html">
-   Software implementation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/benchmark_methods.html">
-   Benchmark methods
-  </a>
- </li>
- <li class="toctree-l1">
   <a class="reference internal" href="../research_report/results-group.html">
    Results: dataset level
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="../research_report/contributions.html">
-   Contributions
   </a>
  </li>
  <li class="toctree-l1">
@@ -421,16 +406,32 @@ title="Print to PDF"
 <ol>
 <li><p>Create a symbolic link of the metrics to the <code class="docutils literal notranslate"><span class="pre">inputs/</span></code> directory</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>mkdir $SCRATCH/fmriprep-denoise-benchmark/ 
-rm -rf inputs/  # when you clone the project, this should be empty
-ln -s $SCRATCH/fmriprep-denoise-benchmark/ inputs
 </pre></div>
 </div>
-<p>This way when the book built is triggered, it will not download data from zenodo.</p>
 </li>
 <li><p><code class="docutils literal notranslate"><span class="pre">generate_timeseries_slurm_scripts.py</span></code>:</p>
 <p>Extract time series with different atlases.
-The scripts generates slurm to extract time series with different atlases.
-We created two separate scripts for descrete and probability atlas due to different memory requrement.
+The scripts generates slurm to extract time series with different atlases. Here’s the docs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">generate_timeseries_slurm_scripts</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+                                            <span class="p">[</span><span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">account</span> <span class="n">SLURM_ACCOUNT</span><span class="p">]</span>
+                                            <span class="n">scratch_path</span> <span class="n">fmriprep_output</span>
+                                            <span class="n">participants_tsv</span> <span class="n">virtualenv</span>
+
+<span class="n">create</span> <span class="n">timeseries</span> <span class="n">extraction</span> <span class="n">scripts</span>
+
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+<span class="n">scratch_path</span>          <span class="n">Path</span> <span class="n">to</span> <span class="n">scratch</span> <span class="n">space</span><span class="o">.</span>
+<span class="n">fmriprep_output</span>       <span class="n">Path</span> <span class="n">to</span> <span class="n">fMRIPrep</span> <span class="n">output</span> <span class="n">directory</span><span class="o">.</span>
+<span class="n">participants_tsv</span>      <span class="n">Path</span> <span class="n">to</span> <span class="n">participants</span><span class="o">.</span><span class="n">tsv</span> <span class="ow">in</span> <span class="n">the</span> <span class="n">original</span> <span class="n">BIDS</span> <span class="n">dataset</span><span class="o">.</span>
+<span class="n">virtualenv</span>            <span class="n">Path</span> <span class="n">to</span> <span class="n">virtual</span> <span class="n">environment</span> <span class="n">of</span> <span class="n">this</span> <span class="n">project</span><span class="o">.</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+<span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+<span class="o">--</span><span class="n">slurm</span><span class="o">-</span><span class="n">account</span> <span class="n">SLURM_ACCOUNT</span>
+                        <span class="n">SLURM</span> <span class="n">account</span> <span class="k">for</span> <span class="n">job</span> <span class="n">submission</span> <span class="p">(</span><span class="n">default</span><span class="p">:</span> <span class="n">rrg</span><span class="o">-</span><span class="n">pbellec</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We created two separate scripts for descrete and probability atlas due to different memory requrement.
 You will find the output under:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>/scratch/${USER}/fmriprep-denoise-benchmark/giga_timeseries/{DATASET_NAME}/{FMRIPREP_VERSION}/{UNIXTIME}/.slurm
 </pre></div>
@@ -448,17 +449,42 @@ It should be something looking like this:</p>
 </pre></div>
 </div>
 </li>
-<li><p><code class="docutils literal notranslate"><span class="pre">slurm_metric/*/*.sh</span></code>:</p>
+<li><p><code class="docutils literal notranslate"><span class="pre">generate_metrics/*/slurm/metrics*.sh</span></code>:</p>
 <p>Caculate metrics on denoising quality per atlas.
 Use this line to submit all jobs at once.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/slurm_metrics/metrics*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>find scripts/generate_metrics/slurm/metrics*.sh -type f <span class="p">|</span> <span class="k">while</span> <span class="nb">read</span> file<span class="p">;</span> <span class="k">do</span> sbatch <span class="nv">$file</span><span class="p">;</span> <span class="k">done</span>
 </pre></div>
 </div>
+<p>The extra scripts in <code class="docutils literal notranslate"><span class="pre">generate_metrics/</span></code> are for running directly on a computing node.</p>
 </li>
 </ol>
 </div>
 <div class="section" id="build-the-book">
 <h2>Build the book<a class="headerlink" href="#build-the-book" title="Permalink to this headline">#</a></h2>
+<p>To improve build time, we need to summarise the metrics further.
+If you generated the data from scratch, you will need to run the following command.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">summarise_metadata</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span>
+                          <span class="p">[</span><span class="o">--</span><span class="n">fmriprep_version</span> <span class="p">{</span><span class="n">fmriprep</span><span class="o">-</span><span class="mf">20.2.1</span><span class="n">lts</span><span class="p">,</span><span class="n">fmriprep</span><span class="o">-</span><span class="mf">20.2.5</span><span class="n">lts</span><span class="p">}]</span>
+                          <span class="p">[</span><span class="o">--</span><span class="n">dataset_name</span> <span class="p">{</span><span class="n">ds000228</span><span class="p">,</span><span class="n">ds000030</span><span class="p">}]</span>
+                          <span class="p">[</span><span class="o">--</span><span class="n">qc</span> <span class="p">{</span><span class="n">stringent</span><span class="p">,</span><span class="n">minimal</span><span class="p">,</span><span class="kc">None</span><span class="p">}]</span>
+                          <span class="n">output_root</span>
+
+<span class="n">Summarise</span> <span class="n">denoising</span> <span class="n">metrics</span> <span class="k">for</span> <span class="n">visualization</span> <span class="ow">and</span> <span class="n">save</span> <span class="n">at</span> <span class="n">the</span> <span class="n">top</span> <span class="n">level</span> <span class="n">of</span> <span class="n">the</span> <span class="n">denoise</span> <span class="n">metric</span> <span class="n">outputs</span> <span class="n">directory</span><span class="o">.</span>
+
+<span class="n">positional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="n">output_root</span>           <span class="n">Output</span> <span class="n">root</span> <span class="n">path</span> <span class="n">data</span><span class="o">.</span>
+
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">--</span><span class="n">fmriprep_version</span> <span class="p">{</span><span class="n">fmriprep</span><span class="o">-</span><span class="mf">20.2.1</span><span class="n">lts</span><span class="p">,</span><span class="n">fmriprep</span><span class="o">-</span><span class="mf">20.2.5</span><span class="n">lts</span><span class="p">}</span>
+                        <span class="n">Path</span> <span class="n">to</span> <span class="n">a</span> <span class="n">fmriprep</span> <span class="n">dataset</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">dataset_name</span> <span class="p">{</span><span class="n">ds000228</span><span class="p">,</span><span class="n">ds000030</span><span class="p">}</span>
+                        <span class="n">Dataset</span> <span class="n">name</span><span class="o">.</span>
+  <span class="o">--</span><span class="n">qc</span> <span class="p">{</span><span class="n">stringent</span><span class="p">,</span><span class="n">minimal</span><span class="p">,</span><span class="kc">None</span><span class="p">}</span>
+                        <span class="n">Automatic</span> <span class="n">motion</span> <span class="n">QC</span> <span class="n">thresholds</span><span class="o">.</span>
+</pre></div>
+</div>
+<p>Now you can build the book:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">book</span>
 </pre></div>
 </div>
