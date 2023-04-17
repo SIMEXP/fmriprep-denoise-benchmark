@@ -14,18 +14,21 @@ authors:
   - name: Hanad Sharmarke
     affiliation: 1
     orchid:
+  - name: Natasha Clarke
+    affiliation: 1
+    orchid: 
   - name: François Paugam
     affiliation: 4
     orchid:
   - name: Nicolas Gensollen
     affiliation: 5
     orchid: 0000-0001-7199-9753
-  - name: Bertrand Thirion
-    affiliation: 5
-    orchid: 0000-0001-5018-7895
   - name: Christopher J Markiewicz
     affiliation: 6
     orchid: 0000-0002-6533-164X
+  - name: Bertrand Thirion
+    affiliation: 5
+    orchid: 0000-0001-5018-7895
   - name: Pierre Bellec
     affiliation: "1, 7"
     orchid: 0000-0002-9111-0699
@@ -44,35 +47,47 @@ affiliations:
   index: 6
 - name: Psychology Department, Université de Montréal, Montréal, Québec, Canada
   index: 7
-date: 05 October 2021
+date: 14 April 2023
 bibliography: paper.bib
 ---
 
 # Summary
 
-Various fMRI denoising benchmark has been published in the past, 
-however the impact of the denoising strategies has yet to be evaluated on the popular minimal preprocessing tool fMRIPrep [@fmriprep1].
-The confound output of fMRIPrep presented the users with a range of possible nusianse regressors.
-While users are benifted from a wide selection of regressors, 
-without understanding of the literature one can pick a combination of regressors that reintroduce noise to the signal.
-Current work aims to introduce an application programming interface (API) to standardise fMRIPrep confounds retrieval,
-and provide benchmarks of different strategies using functional connectivity generated from resting state data.
-The main tool is a part of 
-[`nilearn`](https://nilearn.github.io/stable/modules/generated/nilearn.interfaces.fmriprep.load_confounds.html#nilearn.interfaces.fmriprep.load_confounds) [@nilearn].
+Reducing contributions from non-neuronal sources is a crucial step in functional magnetic resonance imaging (fMRI) analyses.
+Many viable strategies for denoising fMRI are used in the literature, 
+and practitioners rely on denoising benchmarks for guidance in the selection of an appropriate choice for their study.
+However, fMRI denoising software is an ever-evolving field, and the benchmarks can quickly become obsolete as the techniques or implementations change.
+In this work, we present a fully reproducible denoising benchmark featuring a range of denoising strategies and evaluation metrics,
+built primarily on the fMRIPrep [@fmriprep1] and Nilearn [@nilearn] software packages.
+We apply this reproducible benchmark to investigate the robustness of the conclusions across two different datasets and two versions of fMRIPrep.
+The majority of benchmark results were consistent with prior literature.
+Scrubbing, a technique which excludes time points with excessive motion,
+combined with global signal regression, is generally effective at noise removal.
+Scrubbing however disrupts the continuous sampling of brain images and is incompatible with some statistical analyses,
+e.g. auto-regressive modeling. In this case, a simple strategy using motion parameters,
+average activity in select brain compartments, and global signal regression should be preferred.
+Importantly, we found that certain denoising strategies behave inconsistently across datasets and/or versions of fMRIPrep,
+or had a different behavior than in previously published benchmarks, especially ICA-AROMA.
+These results demonstrate that a reproducible denoising benchmark can effectively assess the robustness of conclusions across multiple datasets and software versions.
+Technologies such as BIDS-App [@bidsapp], the Jupyter Book [@jupyter] and Neurolibre [@neurolibre] provided the infrastructure to publish the metadata and report figures.
+Readers can reproduce the report figures beyond the ones reported in the published manuscript.
+With the denoising benchmark, we hope to provide useful guidelines for the community, 
+and that our software infrastructure will facilitate continued development as the state-of-the-art advances. 
 
 ![Overview of API.\label{top_level_fig}](./content/images/api_summary.png)
 
 # Acknowledgements
 
-The initial API was started by Hanad Sharmarke and Pierre Bellec.
-The implementation was completed by Hao-Ting Wang, Steven Meisler, François Paugam, and Pierre Bellec.
-Hao-Ting Wang migrated the code base to `nilearn`.
-Nicolas Gensollen and Bertrand Thirion reviewed the code migrated to `nilearn`.
-We thank Chris Markiewicz for feedbacks related to fMRIPrep.
+The initial API was started by Hanad Sharmarke and Pierre Bellec. 
+The implementation was completed by Hao-Ting Wang, Steven Meisler, François Paugam, and Pierre Bellec. 
+Hao-Ting Wang migrated the code base to Nilearn. 
+Nicolas Gensollen and Bertrand Thirion reviewed the code migrated to Nilearn. 
+We thank Chris Markiewicz for feedback related to fMRIPrep.
 
-Hao-Ting Wang and Pierre Bellec drafted the paper.
+Hao-Ting Wang and Pierre Bellec drafted the initial version of the paper, with critical feedback from Natasha Clarke. 
 
-Please see the [original repository](https://github.com/SIMEXP/load_confounds#contributors-) for a full history of development and contributors.
+Please see the original repository for a history of initial development and [contributors](https://github.com/SIMEXP/load_confounds#contributors-), 
+and this [issue](https://github.com/nilearn/nilearn/issues/2777 ) for a history of the integration in Nilearn and all the linked Pull Requests.
 
 <!-- Funding -->
 
