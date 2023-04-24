@@ -29,7 +29,7 @@ GRID_LOCATION = {
     (2, 0): "compcor",
     (2, 1): "compcor6",
     (2, 2): "aroma",
-    (2, 3): "aroma+gsr",
+    # (2, 3): "aroma+gsr",
 }
 
 palette = sns.color_palette("Paired", n_colors=12)

@@ -24,7 +24,7 @@ def load_data(path_root, datasets, criteria_name, fmriprep_version):
             fd_thresh=criteria["fd_thresh"],
             proportion_thresh=criteria["proportion_thresh"],
         )
-        confounds_phenotypes[dataset] = confounds_phenotype
+        confounds_phenotypes[dataset] = confounds_phenotype[strategy_order]
     return confounds_phenotypes
 
 
@@ -48,9 +48,6 @@ def plot_stats(confounds_phenotypes):
         full_length = confounds_phenotype.iloc[0, -1]
         confounds_phenotype.loc[:, ("aroma", "aroma")] += confounds_phenotype.loc[
             :, ("aroma", "fixed_regressors")
-        ]
-        confounds_phenotype.loc[:, ("aroma+gsr", "aroma")] += confounds_phenotype.loc[
-            :, ("aroma+gsr", "fixed_regressors")
         ]
         confounds_phenotype.loc[:, ("compcor", "compcor")] += confounds_phenotype.loc[
             :, ("compcor", "fixed_regressors")

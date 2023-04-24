@@ -5,6 +5,11 @@ import seaborn as sns
 
 from nilearn.plotting.matrix_plotting import _reorder_matrix
 
+from fmriprep_denoise.visualization import utils
+
+
+strategies= list(utils.GRID_LOCATION.values())
+
 
 def load_data(path_root, datasets, fmriprep_version):
     """Average connetome similarity across different parcellations."""
@@ -15,7 +20,7 @@ def load_data(path_root, datasets, fmriprep_version):
         )
         connectomes_correlations = []
         for p in connectomes_path:
-            cc = pd.read_csv(p, sep="\t", index_col=0)
+            cc = pd.read_csv(p, sep="\t", index_col=0)[strategies]
             connectomes_correlations.append(cc.corr().values)
         average_connectome = pd.DataFrame(
             np.mean(connectomes_correlations, axis=0),
@@ -55,15 +60,15 @@ def plot_stats(
 
     """
     fig_similarity, axs_similarity = plt.subplots(
-        1, 2, figsize=(9, 4.8), constrained_layout=True
+        1, 2, figsize=(10.3, 4.8), constrained_layout=True
     )
     if horizontal:
         fig_similarity, axs_similarity = plt.subplots(
-            2, 1, figsize=(4.8, 9), constrained_layout=True
+            2, 1, figsize=(4.8, 10.3), constrained_layout=True
         )
 
     fig_similarity.suptitle(
-        "Similarity of denoised connectomes \nby strategy",
+        "Similarity of denoised connectomes by strategy",
         weight="heavy",
         fontsize="x-large",
     )

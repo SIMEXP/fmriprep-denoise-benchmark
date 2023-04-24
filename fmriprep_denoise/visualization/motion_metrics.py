@@ -13,20 +13,20 @@ measures = {
         "label": "Percentage %",
         "title": "Significant QC-FC in connectomes\n"
         + r"(uncorrrected, $\alpha=0.05$)",
-        "ylim": (0, 70),
+        "ylim": (0, 50),
     },
     "fdr_p_values": {
         "var_name": "qcfc_fdr_significant",
         "label": "Percentage %",
         "title": "Significant QC-FC in connectomes\n"
         + r"(FDR corrected, $\alpha=0.05$)",
-        "ylim": (0, 35),
+        "ylim": (0, 25),
     },
     "median": {
         "var_name": "qcfc_mad",
         "label": "Absolute values of QC-FC",
         "title": "Medians of absolute values of QC-FC",
-        "ylim": (0, 0.25),
+        "ylim": (0, 0.15),
     },
     "distance": {
         "var_name": "corr_motion_distance",
@@ -44,7 +44,7 @@ measures = {
         "var_name": "corr_motion_modularity",
         "label": "Pearson's correlation, absolute value",
         "title": "Correlation between motion and network modularity",
-        "ylim": (0, 0.62),
+        "ylim": (0, 0.42),
     },
 }
 
@@ -58,18 +58,23 @@ def load_data(path_root, datasets, criteria_name, fmriprep_version, measure_name
             / f"{dataset}_{fmriprep_version.replace('.', '-')}_desc-{criteria_name}_summary.tsv"
         )
         df = pd.read_csv(path_data, sep="\t", index_col=[0, 1], header=[0, 1])
-        id_vars = df.index.names
+        selected_strategy = pd.DataFrame()
+        for strategy in strategy_order:
+            selected_strategy = pd.concat(
+                (selected_strategy, df.loc[(slice(None), strategy), :])
+            )
+        id_vars = selected_strategy.index.names
         if "absolute" in measure["label"]:
-            df = df[measure["var_name"]].abs()
+            selected_strategy = selected_strategy[measure["var_name"]].abs()
         else:
-            df = df[measure["var_name"]]
-        data[dataset] = df.reset_index().melt(
+            selected_strategy = selected_strategy[measure["var_name"]]
+        data[dataset] = selected_strategy.reset_index().melt(
             id_vars=id_vars, value_name=measure["label"]
         )
     return data, measure
 
 
-def plot_stats(data, measure):
+def plot_stats(data, measure, group="full_sample"):
     palette = sns.color_palette("colorblind", n_colors=7)
     paired_palette = [palette[0]]
     for p in palette[1:4]:
@@ -83,7 +88,7 @@ def plot_stats(data, measure):
         fontsize="x-large",
     )
     for i, dataset in enumerate(data):
-        df = data[dataset].query("groups=='full_sample'")
+        df = data[dataset].query(f"groups=='{group}'")
         baseline_values = df.query("strategy=='baseline'")
         baseline_mean = baseline_values[measure["label"]].mean()
         sns.barplot(
