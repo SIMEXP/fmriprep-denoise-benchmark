@@ -11,13 +11,13 @@ If you wish to use the produced metrics to generate the book, feel free to skip 
     We need to build the fMRIPrep singularity containers version `20.2.1` (fMRIPrep-slurm default) and `20.2.5`.
     For details, please find the documentation on [niprep](https://www.nipreps.org/apps/singularity/).
     Alternatively, you can execute the script prepared `get_fmriprep.sh`. 
-    We recommand building the container in a tmux session.
+    We recommend building the container in a tmux session.
     This will take a few hours!
     Run it before going home.
 
 2. `preprocessing/get_datasets.sh`:
 
-    While runing Step 1 you can get the OpenNeuro datasets in parallel.
+    While running Step 1 you can get the OpenNeuro datasets in parallel.
     Run the script in a tmux session.
     This will take an hour or so.
 

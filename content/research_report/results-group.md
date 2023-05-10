@@ -37,21 +37,21 @@ datasets_baseline = {"ds000228": "adult", "ds000030": "control"}
 Here we provides alternative visualisation of the benchmark results from the manuscript.
 Please click on the launch button to lunch the Binder instance for interactive data viewing.
 
-The benchmark was performed on two Long-Term Support (LTS) versions of fMRIPrep (`20.2.1` and `20.2.5`) and two OpenNeuro datasets (`ds000228` and `ds000030`).
+The benchmark was performed on two Long-Term Support (LTS) versions of fMRIPrep (`20.2.1` and `20.2.5`) and two OpenNeuro datasets (`ds000228` {cite:p}`ds000228:1.1.0` and `ds000030` {cite:p}`ds000030:1.0.0`).
 For the demographic information and gross mean framewise displacement, it is possible to generate the report based on three levels of quality control filters (no filter, minimal, stringent).
 
 ## Sample and subgroup size change based on quality control criteria
 
 We would like to perform the benchmark on subjects with reasonable qulaity of data to reflect the decisions researchers make in data analysis.
-We modified the criteria for filtering data from Parkes 2018 to suit our dataset better and ensure enough time points for functional connectivity analysis.
+We modified the criteria for filtering data from {cite:p}`parkes_evaluation_2018` to suit our dataset better and ensure enough time points for functional connectivity analysis.
 
 The stringent threshold removes subjects based on two criteria:
 1. removes subjects with mean framewise displacement above 0.25 mm
 2. removes subjects with more than 80% of the volumes missing when filtering the time series with a 0.2 mm framewise displacement.
 
-Parkes 2018 used a stricter criteria for remaining volumes (20%). However this will removed close to or more than 50% of the subjects from the datasets.
+Parkes and colleagues {cite:p}`parkes_evaluation_2018` used a stricter criteria for remaining volumes (20%). However this will removed close to or more than 50% of the subjects from the datasets.
 
-In addition, we included the minimal threshold from Parkes 2018
+In addition, we included the minimal threshold from {cite:p}`parkes_evaluation_2018`
 (removes subjects with mean framewise displacement above 0.55 mm)
 for readers to expore.
 
@@ -143,7 +143,7 @@ interactive(
 We plotted the correlations among connectomes denoised with different denoisng strategies to get a general sense of the data.
 
 We see connectome denoised with or without global signal regressor formed two separate clusters.
-The baseline and ICA-AROMA denoised connectome do not belong to any clusters.
+The baseline and ICA-AROMA {cite:p}`aroma` denoised connectome do not belong to any clusters.
 ICA-AROMA potentially captures much more different source of noise than the others.
 
 ```{code-cell}
@@ -208,7 +208,7 @@ interactive(
 
 ## Quality control / functional connectivity (QC-FC)
 
-QC-FC (Power et al., 2015) quantifies the correlation between mean framewise displacement and functional connectivity.
+QC-FC {cite:p}`power_recent_2015` quantifies the correlation between mean framewise displacement and functional connectivity.
 This is calculated by a partial correlation between mean framewise displacement and connectivity, with age and sex as covariates.
 The denoising methods should aim to reduce the QC-FC value.
 Significance tests associated with the partial correlations were performed,
@@ -293,7 +293,7 @@ interactive(
 
 ## Residual distance-dependent effects of subject motion on functional connectivity (DM-FC)
 
-To determine the residual distance-dependence of subject movement, we first calculated the Euclidean distance between the centers of mass of each pair of parcels (Power et al., 2012).
+To determine the residual distance-dependence of subject movement, we first calculated the Euclidean distance between the centers of mass of each pair of parcels {cite:p}`power_scrubbing_2012`.
 Closer parcels generally exhibit greater impact of motion on connectivity.
 We then correlated the distance separating each pair of parcels and the associated QC-FC correlation of the edge connecting those parcels.
 We report the absolute correlation values and expect to see a general trend toward zero correlation after confound regression.
@@ -325,9 +325,9 @@ interactive(
 
 Confound regressors have the potential to remove real signals in addition to motion-related noise.
 In order to evaluate this possibility, we computed modularity quality,
-an explicit quantification of the degree to which there are structured subnetworks in a given network - in this case the denoised connectome (Satterthwaite et al., 2012).
-Modularity quality is quantified by graph community detection based on the Louvain method (Rubinov & Sporns, 2010),
-implemented in the Brain Connectivity Toolbox (Rubinov & Sporns, 2010).
+an explicit quantification of the degree to which there are structured subnetworks in a given network - in this case the denoised connectome {cite:p}`satterthwaite_impact_2012`.
+Modularity quality is quantified by graph community detection based on the Louvain method {cite:p}`rubinov2010`,
+implemented in the Brain Connectivity Toolbox {cite:p}`rubinov2010`.
 
 ```{code-cell}
 from fmriprep_denoise.visualization import motion_metrics

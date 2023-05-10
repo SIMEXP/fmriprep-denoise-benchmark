@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: "A reproducible benchmark of resting-state fMRI denoising strategies using fMRIPrep and Nilearn"
+title: "A reproducible benchmark of denoising strategies in resting-state fMRI connectivity using fMRIPrep and Nilearn"
 author: Hao-Ting Wang, Steven L Meisler, Hanad Sharmarke, Natasha Clarke, Nicolas Gensollen, Christopher J Markiewicz, François Paugam, Bertrand Thirion, Pierre Bellec
 copyright: "2023"
 logo: logo.png
@@ -36,7 +36,7 @@ repository:
 html:
   use_issues_button: true
   use_repository_button: true
-  announcement: "⚠️This is a working draft for discussion and feedback!⚠️"
+  # announcement: "⚠️This is a working draft for discussion and feedback!⚠️"
 
 launch_buttons:
   notebook_interface: "classic" # The interface interactive links will activate ["classic", "jupyterlab"]

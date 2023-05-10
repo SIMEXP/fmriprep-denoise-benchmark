@@ -6,8 +6,6 @@ root: index.md
 parts:
   - caption: Research report
     chapters:
-    # - file: research_report/software_implemetation.md
-    # - file: research_report/benchmark_methods.md
     - file: research_report/results-group.md
     - file: research_report/results-atlas.md
     # - file: research_report/contributions.md
@@ -18,6 +16,7 @@ parts:
     - file: supplementary_materials/ohbm2022abstract.md
   - caption: Workflow documentation
     chapters:
+    - file: docs/software_implemetation.md
     - file: docs/tldr.md
     - file: docs/setup.md
     - file: docs/fmriprep.md

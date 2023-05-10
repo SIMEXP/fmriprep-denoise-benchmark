@@ -50,17 +50,17 @@ affiliations:
   index: 6
 - name: Psychology Department, Université de Montréal, Montréal, Québec, Canada
   index: 7
-date: 17 April 2023
+date: 11 May 2023
 bibliography: paper.bib
 ---
 
 # Summary
 
-Reducing contributions from non-neuronal sources is a crucial step in functional magnetic resonance imaging (fMRI) analyses.
+Reducing contributions from non-neuronal sources is a crucial step in functional magnetic resonance imaging (fMRI) connectivity analyses.
 Many viable strategies for denoising fMRI are used in the literature, 
 and practitioners rely on denoising benchmarks for guidance in the selection of an appropriate choice for their study.
 However, fMRI denoising software is an ever-evolving field, and the benchmarks can quickly become obsolete as the techniques or implementations change.
-In this work, we present a fully reproducible denoising benchmark featuring a range of denoising strategies and evaluation metrics,
+In this work, we present a fully reproducible denoising benchmark featuring a range of denoising strategies and evaluation metrics for connectivity analyses,
 built primarily on the fMRIPrep [@fmriprep1] and Nilearn [@nilearn] software packages.
 We apply this reproducible benchmark to investigate the robustness of the conclusions across two different datasets and two versions of fMRIPrep.
 The majority of benchmark results were consistent with prior literature.
@@ -70,10 +70,9 @@ Scrubbing however disrupts the continuous sampling of brain images and is incomp
 e.g. auto-regressive modeling. In this case, a simple strategy using motion parameters,
 average activity in select brain compartments, and global signal regression should be preferred.
 Importantly, we found that certain denoising strategies behave inconsistently across datasets and/or versions of fMRIPrep,
-or had a different behavior than in previously published benchmarks, especially ICA-AROMA.
+or had a different behavior than in previously published benchmarks.
 These results demonstrate that a reproducible denoising benchmark can effectively assess the robustness of conclusions across multiple datasets and software versions.
-Technologies such as BIDS-App [@bidsapp], the Jupyter Book [@jupyter] and Neurolibre [@neurolibre] provided the infrastructure to publish the metadata and report figures.
-Readers can reproduce the report figures beyond the ones reported in the published manuscript.
+In addition to reproducing core computations, interested readers can also reproduce or modify the figures of the article using the Jupyter Book project [@jupyter] and the Neurolibre [@neurolibre] reproducible preprint server.
 With the denoising benchmark, we hope to provide useful guidelines for the community, 
 and that our software infrastructure will facilitate continued development as the state-of-the-art advances. 
 
@@ -92,6 +91,11 @@ Hao-Ting Wang and Pierre Bellec drafted the initial version of the paper, with c
 Please see the original repository for a history of initial development and [contributors](https://github.com/SIMEXP/load_confounds#contributors-), 
 and this [issue](https://github.com/nilearn/nilearn/issues/2777 ) for a history of the integration in Nilearn and all the linked Pull Requests.
 
-<!-- Funding -->
+The project is funded by IVADO PRF3, CCNA and J Courtois, the neuromind collaboration. 
+HTW and NC funded by Institut de valorisation des données (IVADO) postdoctoral research funding. 
+SLM was funded by the National Institute on Deafness and Other Communication Disorders (NIDCD; Grant 5T32DC000038). 
+CJM funded by NIMH 5R24MH117179. 
+FP funded by Courtois Neuromod. 
+PB funded by Fonds de Recherche du Québec - Santé (FRQ-S). 
 
 # References

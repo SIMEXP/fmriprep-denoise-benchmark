@@ -33,10 +33,10 @@ Please click on the launch button to lunch the Binder instance for interactive d
 
 In the report we used four atlases, three of them came with multiple parcellation schemes.
 
-- Gordon atlas: 333
-- Schaefer 7 network atlas: 100, 200, 300, 400, 500, 600, 800
-- Multiresolution Intrinsic Segmentation Template (MIST): 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 split by the midline)
-- DiFuMo atlas: 64, 128, 256, 512, 1024
+- Gordon atlas {cite:p}`gordon_atlas_2014`: 333
+- Schaefer 7 network atlas {cite:p}`schaefer_local-global_2017`: 100, 200, 300, 400, 500, 600, 800
+- Multiresolution Intrinsic Segmentation Template (MIST) {cite:p}`urchs_mist_2019`: 7, 12, 20, 36, 64, 122, 197, 325, 444, “ROI” (210 parcels, 122 split by the midline)
+- DiFuMo {cite:p}`difumo_2020`: 64, 128, 256, 512, 1024
 
 ## Before we start: Loss of temporal degrees of freedom
 
@@ -83,7 +83,7 @@ interactive(
 
 We can also plot them by each parcellation schemes.
 
-This is the original way Ciric and colleagues (2017) presented their results!
+This is the original way Ciric and colleagues {cite:p}`ciric_benchmarking_2017` presented their results!
 
 ### Gordon atlas
 

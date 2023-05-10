@@ -33,7 +33,7 @@
                             SLURM account for job submission (default: rrg-pbellec)
     ```
 
-    We created two separate scripts for descrete and probability atlas due to different memory requrement.
+    We created two separate scripts for discrete and probability atlas due to different memory requirement.
     You will find the output under:
     ```
     /scratch/${USER}/fmriprep-denoise-benchmark/giga_timeseries/{DATASET_NAME}/{FMRIPREP_VERSION}/{UNIXTIME}/.slurm
@@ -55,7 +55,7 @@
 
 4. `generate_metrics/*/slurm/metrics*.sh`: 
 
-    Caculate metrics on denoising quality per atlas. 
+    Calculate metrics on denoising quality per atlas. 
     Use this line to submit all jobs at once.
 
     ```bash

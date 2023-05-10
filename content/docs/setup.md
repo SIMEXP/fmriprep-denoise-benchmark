@@ -6,7 +6,7 @@ If not otherwise specified, the scripts were executive from the root of the proj
 If you are a member of the SIMEXP team, you can run the script as is;
 otherwise, please install other software and modify the path and variables accordingly. 
 
-We recommand to understand how to create and detach a tmux session before further reading.
+We recommend to understand how to create and detach a tmux session before further reading.
 
 - [tmux cheat sheet](https://tmuxcheatsheet.com/)
 - [How to leave your script running in a tmux session](https://stackoverflow.com/questions/25331471/tmux-detach-while-running-script)
