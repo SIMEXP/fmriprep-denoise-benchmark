@@ -436,25 +436,26 @@ def _corr_modularity_motion(movement, files_network, labels):
     mean_corr, mean_modularity = [], []
     for file_network, label in zip(files_network, labels):
         modularity = pd.read_csv(file_network, sep="\t", index_col=0)
+        modularity = modularity[GRID_LOCATION.values()]  # select strategies
         mean_modularity.append(modularity.mean())
 
         corr_modularity = []
         z_movement = movement.apply(zscore)
-        for column, _ in modularity.iteritems():
+        for strategy in GRID_LOCATION.values():
             cur_data = pd.concat(
                 (
-                    modularity[column],
+                    modularity[strategy],
                     movement[["mean_framewise_displacement"]],
                     z_movement[["age", "gender"]],
                 ),
                 axis=1,
             ).dropna()
             current_strategy = partial_correlation(
-                cur_data[column].values,
+                cur_data[strategy].values,
                 cur_data["mean_framewise_displacement"].values,
                 cur_data[["age", "gender"]].values,
             )
-            current_strategy["strategy"] = column
+            current_strategy["strategy"] = strategy
             corr_modularity.append(current_strategy)
         corr_modularity = pd.DataFrame(corr_modularity).set_index(["strategy"])[
             "correlation"
