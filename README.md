@@ -5,6 +5,8 @@
 The project is a continuation of [load_confounds](https://github.com/SIMEXP/load_confounds).
 The aim is to evaluate the impact of denoising strategy on functional connectivity data, using output processed by fMRIPrep LTS in a reproducible workflow.
 
+Preprint of this project is now on [biorxiv](https://www.biorxiv.org/content/10.1101/2023.04.18.537240)
+
 ## Quick start
 
 ```bash
@@ -32,16 +34,10 @@ make book
 - Preprocessing SLURM scripts are in `script/` 
 
 
-## Poster
+## Poster and presentations
 
-The preliminary results will be presented at OHBM 2022 as a poster. 
-Please find poster number `WTh570`.
+The results will be presented at QBIN science day 2023 as a flash talk, and OHBM 2023 Montreal as a poster :tada:. 
 
-Find the presenter at the 
-[virtual poster session](https://event.fourwaves.com/ohbm-2022/abstracts/d49d130b-7f83-4c87-92f4-e1a8e319502b)
-on __Wednesday, June 8, 2022, 8:30 PM GMT + 1__.
-
-At Glasgow, please contact the presenter on [Twitter](https://twitter.com/HaoTingW713) to schedule a time to chat,
-or come to see the presenter on __Wednesday, June 22, 2022, 12:45 PM__ at the poster hall.
+The preliminary results were be presented at OHBM 2022 as a poster.
 
 ![spoiler](./content/images/ohbm2022_abstract_head.png)
