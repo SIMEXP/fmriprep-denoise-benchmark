@@ -20,7 +20,7 @@ warnings.filterwarnings('ignore')
 from fmriprep_denoise.visualization import figures, utils
 from myst_nb import glue
 
-path_root = utils.get_data_root() / "denoise-metrics"
+path_root = utils.repo2data_path() / "denoise-metrics"
 
 # Load metric data
 dataset = 'ds000228'

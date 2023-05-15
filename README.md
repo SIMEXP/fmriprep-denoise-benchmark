@@ -16,7 +16,6 @@ virtualenv env
 source env/bin/activate
 pip install -r binder/requirements.txt
 pip install .
-make data
 make book
 ```
 

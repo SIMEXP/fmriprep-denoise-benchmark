@@ -23,7 +23,7 @@ from fmriprep_denoise.visualization import figures, utils
 import ipywidgets as widgets
 from ipywidgets import interactive, interact
 
-path_root = utils.get_data_root() / "denoise-metrics"
+path_root = utils.repo2data_path() / "denoise-metrics"
 ```
 
 # Results: atlas level
