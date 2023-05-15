@@ -6,14 +6,14 @@ root: index.md
 parts:
   - caption: Research report
     chapters:
-    - file: research_report/results-group.md
-    - file: research_report/results-atlas.md
-    # - file: research_report/contributions.md
-    - file: research_report/references.md
+    - file: notebooks/results-group.md
+    # - file: notebooks/results-atlas.md
+    # - file: notebooks/contributions.md
+    - file: notebooks/references.md
   - caption: Appendices and supplemental material
     chapters:
-    - file: supplementary_materials/CITATION.md
-    - file: supplementary_materials/ohbm2022abstract.md
+    - file: notebooks/CITATION.md
+    - file: notebooks/ohbm2022abstract.md
   - caption: Workflow documentation
     chapters:
     - file: docs/software_implemetation.md
