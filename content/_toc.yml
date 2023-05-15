@@ -7,7 +7,7 @@ parts:
   - caption: Research report
     chapters:
     - file: notebooks/results-group.md
-    # - file: notebooks/results-atlas.md
+    - file: notebooks/results-atlas.md
     # - file: notebooks/contributions.md
     - file: notebooks/references.md
   - caption: Appendices and supplemental material
