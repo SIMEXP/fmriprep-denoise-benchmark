@@ -5,7 +5,7 @@
 The project is a continuation of [load_confounds](https://github.com/SIMEXP/load_confounds).
 The aim is to evaluate the impact of denoising strategy on functional connectivity data, using output processed by fMRIPrep LTS in a reproducible workflow.
 
-Preprint of this project is now on [biorxiv](https://www.biorxiv.org/content/10.1101/2023.04.18.537240)
+Preprint of this project is now on [biorxiv](https://www.biorxiv.org/content/10.1101/2023.04.18.537240).
 
 ## Quick start
 
