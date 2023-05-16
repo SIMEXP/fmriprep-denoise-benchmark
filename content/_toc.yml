@@ -13,7 +13,7 @@ parts:
   - caption: Appendices and supplemental material
     chapters:
     - file: notebooks/CITATION.md
-    - file: notebooks/ohbm2022abstract.md
+    # - file: notebooks/ohbm2022abstract.md
   - caption: Workflow documentation
     chapters:
     - file: docs/software_implemetation.md
