@@ -25,7 +25,8 @@ fmriprep_version = "fmriprep-20.2.1lts"
 
 
 if __name__ == "__main__":
-    path_root = Path(__file__).parents[1] / "inputs" / "denoise-metrics"
+    path_root = Path(__file__).parents[1] / "inputs" / \
+        "fmriprep-denoise-benchmark" / "denoise-metrics"
     strategy_order = list(utils.GRID_LOCATION.values())
 
     # mean fd

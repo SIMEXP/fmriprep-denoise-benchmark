@@ -47,7 +47,8 @@ def repo2data_path():
 
 def get_data_root():
     """Get motion metric data path root."""
-    default_path = Path(__file__).parents[2] / "inputs"
+    default_path = Path(__file__).parents[2] / \
+        "inputs" / "fmriprep-denoise-benchmark"
     if not (default_path / "data_requirement.json").exists():
         default_path = repo2data_path()
     return default_path
