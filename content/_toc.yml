@@ -8,12 +8,12 @@ parts:
     chapters:
     - file: notebooks/results-group.md
     - file: notebooks/results-atlas.md
-    # - file: notebooks/contributions.md
+    - file: notebooks/contributions.md
     - file: notebooks/references.md
   - caption: Appendices and supplemental material
     chapters:
     - file: notebooks/CITATION.md
-    # - file: notebooks/ohbm2022abstract.md
+    - file: notebooks/ohbm2022abstract.md
   - caption: Workflow documentation
     chapters:
     - file: docs/software_implemetation.md
