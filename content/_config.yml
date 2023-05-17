@@ -11,7 +11,7 @@ only_build_toc_files: true
 # See https://jupyterbook.org/content/execute.html
 execute:
   execute_notebooks: force
-  timeout: 60
+  timeout: -1
 
 # Define the name of the latex output file for PDF builds
 latex:
@@ -39,6 +39,6 @@ html:
   # announcement: "⚠️This is a working draft for discussion and feedback!⚠️"
 
 launch_buttons:
-  notebook_interface        : classic  # The interface interactive links will activate ["classic", "jupyterlab"]
-  binderhub_url             : https://test.conp.cloud  # The URL of the Neurolibre BinderHub
-  thebe                     : false  # Add a thebe button to pages (requires the repository to run on Binder)
+  notebook_interface        : jupyterlab  # The interface interactive links will activate ["classic", "jupyterlab"]
+  # binderhub_url             : https://test.conp.cloud  # The URL of the Neurolibre BinderHub
+  thebe                     : true  # Add a thebe button to pages (requires the repository to run on Binder)
