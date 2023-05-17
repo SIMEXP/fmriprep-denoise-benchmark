@@ -1,5 +1,5 @@
 { 
     "src": "10.5281/zenodo.7764979",
-    "dst": "../inputs",
+    "dst": "../../inputs",
     "projectName": "fmriprep-denoise-benchmark"
 }

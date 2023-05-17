@@ -115,6 +115,10 @@ def show_atlas(ds, f, d):
 
 ### MIST
 
+If selecting `None` for dimension, the figure will summmarise the metrics by each atlas collection.
+
+**The summary statistics are computed on the fly, it might take a bit of time.**
+
 ```{code-cell}
 atlas = "mist"
 
@@ -128,7 +132,7 @@ fmriprep_version = widgets.Dropdown(
 )
 dimension = widgets.Dropdown(
     description="dimensions : ",
-    options=ATLAS_METADATA[atlas]["dimensions"],
+    options=ATLAS_METADATA[atlas]["dimensions"] + [None],
     disabled=False,
 )
 
@@ -143,6 +147,10 @@ def show_atlas(ds, f, d):
 
 ### Schaefer 7 network
 
+If selecting `None` for dimension, the figure will summmarise the metrics by each atlas collection.
+
+**The summary statistics are computed on the fly, it might take a bit of time.**
+
 ```{code-cell}
 atlas = "schaefer7networks"
 
@@ -156,7 +164,7 @@ fmriprep_version = widgets.Dropdown(
 )
 dimension = widgets.Dropdown(
     description="dimensions : ",
-    options=ATLAS_METADATA[atlas]["dimensions"],
+    options=ATLAS_METADATA[atlas]["dimensions"] + [None],
     disabled=False,
 )
 
@@ -171,6 +179,10 @@ def show_atlas(ds, f, d):
 
 ### DiFuMo
 
+If selecting `None` for dimension, the figure will summmarise the metrics by each atlas collection.
+
+**The summary statistics are computed on the fly, it might take a bit of time.**
+
 ```{code-cell}
 atlas = "difumo"
 
@@ -184,7 +196,7 @@ fmriprep_version = widgets.Dropdown(
 )
 dimension = widgets.Dropdown(
     description="dimensions : ",
-    options=ATLAS_METADATA[atlas]["dimensions"],
+    options=ATLAS_METADATA[atlas]["dimensions"] + [None],
     disabled=False,
 )
 
@@ -195,34 +207,4 @@ def show_atlas(ds, f, d):
     figures.plot_motion_resid(ds, f, path_root, atlas_name=atlas, dimension=d)
     figures.plot_distance_dependence(ds, f, path_root, atlas_name=atlas, dimension=d)
     figures.plot_network_modularity(ds, f, path_root, atlas_name=atlas, dimension=d)
-```
-
-## View as atlas collection
-
-You can view the metrics by atlas collections here.
-
-We will summmarise the metrics by each atlas collection.
-
-**The summary statistics are computed on the fly, it might take a bit of time.**
-
-```{code-cell}
-dataset = widgets.Dropdown(
-    options=["ds000228", "ds000030"], description="Dataset : ", disabled=False
-)
-fmriprep_version = widgets.Dropdown(
-    options=["fmriprep-20.2.1lts", "fmriprep-20.2.5lts"],
-    description="fmriprep : ",
-    disabled=False,
-)
-atlas = widgets.Dropdown(
-    description="atlas : ", options=list(ATLAS_METADATA.keys()), disabled=False
-)
-
-
-@interact(ds=dataset, f=fmriprep_version, a=atlas)
-def show_atlas(ds, f, a):
-    print(ds, f, a)
-    figures.plot_motion_resid(ds, f, path_root, atlas_name=a, dimension=None)
-    figures.plot_distance_dependence(ds, f, path_root, atlas_name=a, dimension=None)
-    figures.plot_network_modularity(ds, f, path_root, atlas_name=a, dimension=None)
 ```

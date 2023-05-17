@@ -44,7 +44,8 @@ def download_difumo():
 
 
 def main():
-    tf_dir = Path(__file__).parents[1] / "inputs" / "custome_templateflow"
+    tf_dir = Path(__file__).parents[1] / "inputs" / \
+        "fmriprep-denoise-benchmark" / "custome_templateflow"
     os.environ["TEMPLATEFLOW_HOME"] = str(tf_dir.resolve())
 
     fetch_schaefer()

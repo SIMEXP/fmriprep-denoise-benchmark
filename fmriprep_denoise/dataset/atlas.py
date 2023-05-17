@@ -36,10 +36,14 @@ ATLAS_METADATA = {
     },
 }
 
+TEMPLATEFLOW_DIR = (
+    Path(__file__).parents[2] / "inputs" / "fmriprep-denoise-benchmark" / "custome_templateflow"
+    )
+
 # Include retrieval of these data in README
 
 
-def fetch_atlas_path(atlas_name, dimension):
+def fetch_atlas_path(atlas_name, dimension, tf_dir=TEMPLATEFLOW_DIR):
     """
     Generate a dictionary containing parameters for TemplateFlow quiery.
 
@@ -52,6 +56,9 @@ def fetch_atlas_path(atlas_name, dimension):
     dimension : str or int
         Atlas dimension.
 
+    tf_dir : pathlib.Path or str
+        customeised templateflow directory for the current project
+
     Return
     ------
     sklearn.utils.Bunch
@@ -63,7 +70,8 @@ def fetch_atlas_path(atlas_name, dimension):
         type : str
             'dseg' (for NiftiLabelsMasker) or 'probseg' (for NiftiMapsMasker)
     """
-    tf_dir = Path(__file__).parents[2] / "inputs" / "custome_templateflow"
+    if isinstance(tf_dir, str):
+        tf_dir = Path(tf_dir)
     os.environ["TEMPLATEFLOW_HOME"] = str(tf_dir.resolve())
 
     import templateflow
