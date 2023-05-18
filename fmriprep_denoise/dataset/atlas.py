@@ -37,7 +37,7 @@ ATLAS_METADATA = {
 }
 
 TEMPLATEFLOW_DIR = (
-    Path(__file__).parents[2] / "inputs" / "fmriprep-denoise-benchmark" / "custome_templateflow"
+    Path(__file__).parents[2] / "data" / "fmriprep-denoise-benchmark" / "custome_templateflow"
     )
 
 # Include retrieval of these data in README
