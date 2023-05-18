@@ -40,5 +40,5 @@ html:
 
 launch_buttons:
   notebook_interface        : jupyterlab  # The interface interactive links will activate ["classic", "jupyterlab"]
-  # binderhub_url             : https://test.conp.cloud  # The URL of the Neurolibre BinderHub
-  thebe                     : true  # Add a thebe button to pages (requires the repository to run on Binder)
+  binderhub_url             : https://test.conp.cloud  # The URL of the Neurolibre BinderHub
+  thebe                     : false  # Add a thebe button to pages (requires the repository to run on Binder)
