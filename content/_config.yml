@@ -34,11 +34,11 @@ repository:
 # Add GitHub buttons to your book
 # See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
 html:
-  use_issues_button: true
-  use_repository_button: false
+  use_issues_button: false
+  use_repository_button: true
   # announcement: "⚠️This is a working draft for discussion and feedback!⚠️"
 
 launch_buttons:
   notebook_interface        : classic  # The interface interactive links will activate ["classic", "jupyterlab"]
-  binderhub_url             : https://test.conp.cloud  # The URL of the Neurolibre BinderHub
+  binderhub_url             : https://test.conp.cloud   # The URL of the Neurolibre BinderHub
   thebe                     : false  # Add a thebe button to pages (requires the repository to run on Binder)

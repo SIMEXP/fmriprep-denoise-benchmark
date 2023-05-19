@@ -6,14 +6,14 @@ root: index.md
 parts:
   - caption: Research report
     chapters:
-    - file: notebooks/results-group.ipynb
-    - file: notebooks/results-atlas.ipynb
-    - file: notebooks/contributions.ipynb
-    - file: notebooks/references.ipynb
+    - file: notebooks/results-group
+    - file: notebooks/results-atlas
+    - file: notebooks/contributions
+    - file: notebooks/references
   - caption: Appendices and supplemental material
     chapters:
     - file: notebooks/CITATION.md
-    - file: notebooks/ohbm2022abstract.ipynb
+    - file: notebooks/ohbm2022abstract
   - caption: Workflow documentation
     chapters:
     - file: docs/software_implemetation.md
