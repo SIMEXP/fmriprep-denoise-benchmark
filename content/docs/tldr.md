@@ -14,10 +14,12 @@ or help me edit the manuscript, the instruction is as followed:
 ```{code-block} bash
 git clone --recurse-submodules https://github.com/SIMEXP/fmriprep-denoise-benchmark.git
 cd fmriprep-denoise-benchmark
-virtualenv env 
-sourse env/bin/activate
+virtualenv env
+source env/bin/activate
 pip install -r binder/requirements.txt
-make all
+pip install .
+make data
+make book
 ```
 :::
 

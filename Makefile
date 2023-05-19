@@ -18,5 +18,5 @@ data:
 book:
 	jb build content --all
 
-figures: inputs/fmriprep-denoise-benchmark/denoise-metrics
+figures: data/fmriprep-denoise-benchmark/denoise-metrics
 	$(PYTHON) scripts/make_manuscript_figures.py

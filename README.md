@@ -16,6 +16,7 @@ virtualenv env
 source env/bin/activate
 pip install -r binder/requirements.txt
 pip install .
+make data
 make book
 ```
 
@@ -25,7 +26,7 @@ make book
 
 - `content/` is the source of the JupyterBook.
 
-- `inputs/` is reserved to store data for building the JupyterBook.
+- `data/` is reserved to store data for building the JupyterBook.
   To build the book, one will need all the metrics from the study.
   The metrics are here:
   [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.7764979.svg)](https://doi.org/10.5281/zenodo.7764979)

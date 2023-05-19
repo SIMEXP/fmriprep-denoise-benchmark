@@ -9,7 +9,7 @@ from fmriprep_denoise.visualization import tables
 
 MOTION_QC_FILE = "motion_qc.json"
 project_root = Path(__file__).parents[2]
-inputs = project_root / "inputs"
+inputs = project_root / "data"
 group_info_column = {"ds000228": "Child_Adult", "ds000030": "diagnosis"}
 
 

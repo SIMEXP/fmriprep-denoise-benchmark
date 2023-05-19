@@ -1,6 +1,6 @@
 # set up the project after cloneing
 # Move templates to locations you need them to be
-# This is saved for record keeping. To download the files please use command `make atlas``
+# This is saved for record keeping. To download the files please use command `make data``
 #!/bin/bash
 
 # mist

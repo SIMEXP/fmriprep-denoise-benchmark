@@ -24,10 +24,12 @@ After cloning and setting up the project, we will need to get all the atlases fo
 
 ### Option 1: Download the atlas
 
-You can download a customised tempalteflow directory, untar into `inputs/`.
+You can download the customised tempalteflow directory, untar into `data/`.
+For the purpose of separating processing and book building, we will copy the templates to `inputs/custome_templateflow`
 
 ```bash
-make atlas
+make data
+cp -r data/fmriprep-denoise-benchmark/custome_templateflow inputs/custome_templateflow
 ```
 
 ### Option 2: Generate the atlas
