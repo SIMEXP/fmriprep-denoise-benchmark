@@ -13,28 +13,28 @@ authors:
     orcid: 0000-0003-4078-2038
   - name: Steven L Meisler
     affiliation: "2, 3"
-    orchid: 0000-0002-8888-1572
+    orcid: 0000-0002-8888-1572
   - name: Hanad Sharmarke
     affiliation: 1
-    orchid:
+    orcid:
   - name: Natasha Clarke
     affiliation: 1
-    orchid: 
+    orcid: 
   - name: François Paugam
     affiliation: 4
-    orchid:
+    orcid:
   - name: Nicolas Gensollen
     affiliation: 5
-    orchid: 0000-0001-7199-9753
+    orcid: 0000-0001-7199-9753
   - name: Christopher J Markiewicz
     affiliation: 6
-    orchid: 0000-0002-6533-164X
+    orcid: 0000-0002-6533-164X
   - name: Bertrand Thirion
     affiliation: 5
-    orchid: 0000-0001-5018-7895
+    orcid: 0000-0001-5018-7895
   - name: Pierre Bellec
     affiliation: "1, 7"
-    orchid: 0000-0002-9111-0699
+    orcid: 0000-0002-9111-0699
 affiliations:
 - name: Centre de recherche de l'Institut universitaire de gériatrie de Montréal (CRIUGM), Montréal, Québec, Canada
   index: 1
@@ -91,7 +91,7 @@ Hao-Ting Wang and Pierre Bellec drafted the initial version of the paper, with c
 Please see the original repository for a history of initial development and [contributors](https://github.com/SIMEXP/load_confounds#contributors-), 
 and this [issue](https://github.com/nilearn/nilearn/issues/2777 ) for a history of the integration in Nilearn and all the linked Pull Requests.
 
-The project is funded by IVADO PRF3, CCNA and J Courtois, the neuromind collaboration. 
+The project is funded by IVADO PRF3, CCNA and Courtois Foundation, the neuromind collaboration. 
 HTW and NC funded by Institut de valorisation des données (IVADO) postdoctoral research funding. 
 SLM was funded by the National Institute on Deafness and Other Communication Disorders (NIDCD; Grant 5T32DC000038). 
 CJM funded by NIMH 5R24MH117179. 
