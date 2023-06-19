@@ -1,0 +1,66 @@
+cff-version: "1.2.0"
+authors:
+- family-names: Wang
+  given-names: Hao-Ting
+  orcid: "https://orcid.org/0000-0003-4078-2038"
+- family-names: Meisler
+  given-names: Steven L
+  orcid: "https://orcid.org/0000-0002-8888-1572"
+- family-names: Sharmarke
+  given-names: Hanad
+- family-names: Clarke
+  given-names: Natasha
+- family-names: Paugam
+  given-names: François
+- family-names: Gensollen
+  given-names: Nicolas
+  orcid: "https://orcid.org/0000-0001-7199-9753"
+- family-names: Markiewicz
+  given-names: Christopher J
+  orcid: "https://orcid.org/0000-0002-6533-164X"
+- family-names: Thirion
+  given-names: Bertrand
+  orcid: "https://orcid.org/0000-0001-5018-7895"
+- family-names: Bellec
+  given-names: Pierre
+  orcid: "https://orcid.org/0000-0002-9111-0699"
+doi: 10.5281
+message: To reference this work, please cite our reproducible preprint
+  in NeuroLibre.
+preferred-citation:
+  authors:
+  - family-names: Wang
+    given-names: Hao-Ting
+    orcid: "https://orcid.org/0000-0003-4078-2038"
+  - family-names: Meisler
+    given-names: Steven L
+    orcid: "https://orcid.org/0000-0002-8888-1572"
+  - family-names: Sharmarke
+    given-names: Hanad
+  - family-names: Clarke
+    given-names: Natasha
+  - family-names: Paugam
+    given-names: François
+  - family-names: Gensollen
+    given-names: Nicolas
+    orcid: "https://orcid.org/0000-0001-7199-9753"
+  - family-names: Markiewicz
+    given-names: Christopher J
+    orcid: "https://orcid.org/0000-0002-6533-164X"
+  - family-names: Thirion
+    given-names: Bertrand
+    orcid: "https://orcid.org/0000-0001-5018-7895"
+  - family-names: Bellec
+    given-names: Pierre
+    orcid: "https://orcid.org/0000-0002-9111-0699"
+  date-published: 2023-06-19
+  doi: 10.55458/neurolibre.00012
+  journal: NeuroLibre Reproducible Preprints
+  publisher:
+    name: NeuroLibre
+  title: A reproducible benchmark of resting-state fMRI denoising
+    strategies using fMRIPrep and Nilearn
+  type: preprint
+  url: "https://neurolibre.org/papers/10.55458/neurolibre.00012"
+title: A reproducible benchmark of resting-state fMRI denoising
+  strategies using fMRIPrep and Nilearn
