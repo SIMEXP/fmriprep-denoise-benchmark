@@ -61,13 +61,20 @@ if __name__ == "__main__":
         Path(__file__).parents[1] / "outputs" / "loss_degrees_of_freedom_subgroups.png",
         transparent=True,
     )
-    # P
+    data = degrees_of_freedom_loss.load_data(
+        path_root, datasets, "minimal", fmriprep_version
+    )
+    fig_degrees_of_freedom = degrees_of_freedom_loss.plot_stats(data, plot_subgroup=True)
+    fig_degrees_of_freedom.savefig(
+        Path(__file__).parents[1] / "outputs" / "loss_degrees_of_freedom_subgroups_qc-minimal.png",
+        transparent=True,
+    )
     data = degrees_of_freedom_loss.load_data(
         path_root, datasets, None, fmriprep_version
     )
     fig_degrees_of_freedom = degrees_of_freedom_loss.plot_stats(data, plot_subgroup=True)
     fig_degrees_of_freedom.savefig(
-        Path(__file__).parents[1] / "outputs" / "loss_degrees_of_freedom_subgroups_noQC.png",
+        Path(__file__).parents[1] / "outputs" / "loss_degrees_of_freedom_subgroups_qc-none.png",
         transparent=True,
     )
     # Plotting metrics
