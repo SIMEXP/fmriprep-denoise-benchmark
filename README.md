@@ -8,6 +8,17 @@ The aim is to evaluate the impact of denoising strategy on functional connectivi
 **Preprint of the manuscript is now on [biorxiv](https://www.biorxiv.org/content/10.1101/2023.04.18.537240).
 The reporducible Jupyter Book preprint is on [NeuroLibre](https://neurolibre.org/papers/10.55458/neurolibre.00012).**
 
+## Recommandations for those who thought this project is a software
+
+Bad news, this is not a software but a research project. 
+It's more similar to your regular data science project. 
+In other words, the code in this repository reflects the research done for the manuscript, and is not suitable for production level application.
+
+Some useful part of the code has been extracted and further reviewed within SIMEXP lab for deplyment on generic fmriprep derivatives as docker images.
+
+ - *time series and connectome workflow*: [`giga_connectome`](https://github.com/SIMEXP/giga_connectome).
+ - *motion quality control metrics*: [`giga_auto_qc`](https://github.com/SIMEXP/giga_auto_qc).
+
 ## Quick start
 
 ```bash
@@ -37,12 +48,3 @@ make book
 - Custom code is located in `fmriprep_denoise/`. This project is installable.
 
 - Preprocessing SLURM scripts, and scripts for creating figure for manuscript are in `scripts/`. 
-
-
-## Poster and presentations
-
-The results will be presented at QBIN science day 2023 as a flash talk, and OHBM 2023 Montreal as a poster :tada:. 
-
-The preliminary results were presented at OHBM 2022 as a poster.
-
-![spoiler](./content/images/ohbm2022_abstract_head.png)

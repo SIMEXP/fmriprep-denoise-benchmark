@@ -36,7 +36,7 @@ def _rank_degrees_of_freedom(path_root, criteria_name, v, d):
     """Rank the loss of temporal degrees of freedom."""
     dof = degrees_of_freedom_loss.load_data(path_root, [d], criteria_name, v)
     current_ranking = {
-            s: [dof[d].loc[:, (s, "total")].mean()] for s in strategy_order
+            s: [dof[d]["confounds_stats"].loc[:, (s, "total")].mean()] for s in strategy_order
         }
     order = pd.DataFrame(current_ranking).T.sort_values(0)
     order.index = order.index.set_names(["strategy"])
