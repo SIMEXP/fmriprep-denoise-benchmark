@@ -2,6 +2,7 @@
 This project is a continuation of **Benchmark denoising strategies on fMRIPrep output**. 
 The aim is to adapt the original denoising workflow to utilize HALFpipe outputs.
 
+<img width="561" alt="Screenshot 2025-04-30 at 10 30 14 PM" src="https://github.com/user-attachments/assets/5a848bf7-c2ee-4395-ae5d-c13ef543c5e5" />
 
 
 
