@@ -1,3 +1,10 @@
+#**Update Feburary 2025**
+This project is a continuation of **Benchmark denoising strategies on fMRIPrep output**. 
+The aim is to adapt the original denoising workflow to utilize HALFpipe outputs.
+
+
+
+
 # Benchmark denoising strategies on fMRIPrep output
 
 [![DOI](https://neurolibre.org/papers/10.55458/neurolibre.00012/status.svg)](https://doi.org/10.55458/neurolibre.00012)
