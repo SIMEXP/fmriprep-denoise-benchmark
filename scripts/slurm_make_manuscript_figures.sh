@@ -13,8 +13,8 @@ source /home/seann/scratch/denoise/fmriprep-denoise-benchmark/denoise/bin/activa
 
 cd /home/seann/scratch/denoise/fmriprep-denoise-benchmark/scripts
 
-python make_manuscript_figures.py
+# python make_manuscript_figures.py
 
-# python make_manuscript_figures_multifmriprep.py
+python make_manuscript_figures_multifmriprep.py
 
 # python plot.py

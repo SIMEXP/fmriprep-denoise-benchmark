@@ -33,12 +33,21 @@ output_dir.mkdir(parents=True, exist_ok=True)
 
 # Utility
 strategy_order = list(utils.GRID_LOCATION.values())
-strategy_order = [s for s in strategy_order if s not in excluded_strategies]
+# strategy_order = [s for s in strategy_order if s not in excluded_strategies]
+strategy_order = ["scrubbing.5+gsr","simple+gsr","compcor","scrubbing.5","simple","aroma","baseline"]
 
 # Plotting function for Loss vs Quality
 def plot_loss_vs_quality(data, output_dir, version_filter):
     sns.set(style="whitegrid", context="talk")
-    filtered_df = data.xs(version_filter, level='version')
+
+    
+    # --- keep ONE .xs() call only -----------------------------
+    if version_filter is not None:
+        filtered_df = data.xs(version_filter, level="version")
+    else:
+        filtered_df = data
+    # ----------------------------------------------------------
+
     results = []
 
     for dataset in filtered_df.index.levels[0]:
@@ -81,112 +90,253 @@ def plot_loss_vs_quality(data, output_dir, version_filter):
 # MAIN
 if __name__ == "__main__":
 
-    for version in fmriprep_versions:
+    # ---------------------------------------------------------------
+    #  Collect data once per *version* and plot them side-by-side
+    # ---------------------------------------------------------------
+    # --- 3a. CONNECTOME SIMILARITY ---------------------------------
+    average_connectomes = {
+        v: connectivity_similarity
+            .load_data(path_root, datasets, v)[fixed_dataset]   # grab the DS-specific DF
+        for v in fmriprep_versions
+    }
 
-        # Mean Framewise Displacement
-        stats = mean_framewise_displacement.load_data(path_root, criteria_name, version)
-        fig_fd = mean_framewise_displacement.plot_stats(stats)
-        fig_fd.savefig(output_dir / f"mean_fd_{version}.png", transparent=True)
+    fig_similarity = connectivity_similarity.plot_stats(
+        average_connectomes,                       # keys == versions
+        strategy_order=strategy_order,
+        show_colorbar=True,
+        horizontal=False                           # 1 × 2 layout
+    )
+    fig_similarity.savefig(output_dir / "connectomes_versions.png", transparent=True)
 
-        # Connectome Similarity
-        average_connectomes = connectivity_similarity.load_data(path_root, datasets, version)
-        fig_similarity = connectivity_similarity.plot_stats(
-            average_connectomes, strategy_order=strategy_order, show_colorbar=True, horizontal=False
-        )
-        fig_similarity.savefig(output_dir / f"connectomes_{version}.png", transparent=True)
+    # --- 3b. LOSS OF DOF -------------------------------------------
+    confounds_versions = {
+        v: degrees_of_freedom_loss
+            .load_data(path_root, datasets, criteria_name, v)[fixed_dataset]
+        for v in fmriprep_versions
+    }
 
-        # Loss of Degrees of Freedom
-        data = degrees_of_freedom_loss.load_data(path_root, datasets, criteria_name, version)
-        fig_dof = degrees_of_freedom_loss.plot_stats(data)
-        fig_dof.savefig(output_dir / f"loss_degrees_of_freedom_{version}.png", transparent=True)
+    fig_dof = degrees_of_freedom_loss.plot_stats(confounds_versions)
+    fig_dof.savefig(output_dir / "loss_degrees_of_freedom_versions.png", transparent=True)
 
-        fig_dof_subgroup = degrees_of_freedom_loss.plot_stats(data, plot_subgroup=True)
-        fig_dof_subgroup.savefig(output_dir / f"loss_degrees_of_freedom_subgroups_{version}.png", transparent=True)
+    fig_dof_sub = degrees_of_freedom_loss.plot_stats(
+        confounds_versions, plot_subgroup=True
+    )
+    fig_dof_sub.savefig(output_dir / "loss_degrees_of_freedom_subgroups_versions.png",
+                        transparent=True)
 
-        # Motion Metrics
-        metrics = {
-            "p_values": "sig_qcfc",
-            "fdr_p_values": "sig_qcfc_fdr",
-            "median": "median_qcfc",
-            "distance": "distance_qcfc",
-        }
-        for m in metrics:
-            data_m, measure = motion_metrics.load_data(path_root, datasets, criteria_name, version, m)
-            for dataset in data_m:
-                data_m[dataset] = data_m[dataset][~data_m[dataset]["strategy"].isin(excluded_strategies)]
-            fig = motion_metrics.plot_stats(data_m, measure)
-            fig.savefig(output_dir / f"{metrics[m]}_{version}.png", transparent=True)
+    # --- 3c. MOTION METRICS ----------------------------------------
+    metrics = {
+        "p_values":       "sig_qcfc",
+        "fdr_p_values":   "sig_qcfc_fdr",
+        "median":         "median_qcfc",
+        "distance":       "distance_qcfc",
+    }
+    for m in metrics:
+        mm_versions = {}
+        for v in fmriprep_versions:
+            data_v, measure = motion_metrics.load_data(
+                path_root, datasets, criteria_name, v, m
+            )
+            df = data_v[fixed_dataset]
+            df = df[~df["strategy"].isin(excluded_strategies)]
+            mm_versions[v] = df
+        fig = motion_metrics.plot_stats(mm_versions, measure)
+        fig.savefig(output_dir / f"{metrics[m]}_versions.png", transparent=True)
 
-        # Modularity Special Combined Plot
-        palette = sns.color_palette("colorblind", n_colors=7)
-        paired_palette = [palette[0]]
-        for p in palette[1:4]:
-            paired_palette.extend((p, p))
-        paired_palette.extend((palette[-3], palette[-2], palette[-1], palette[-1]))
+    # --- 3d.  MODULARITY PAIR (special two-row plot) ---------------
+    palette = sns.color_palette("colorblind", n_colors=7)
+    paired_palette = [palette[0]]
+    for p in palette[1:4]:
+        paired_palette.extend((p, p))
+    paired_palette.extend((palette[-3], palette[-2], palette[-1], palette[-1]))
 
-        fig_modularity = plt.figure(constrained_layout=True, figsize=(6.4, 9.6))
-        subfigs_modularity = fig_modularity.subfigures(2, 1, wspace=0.07)
+    fig_mod = plt.figure(constrained_layout=True, figsize=(6.4, 9.6))
+    subfigs_mod = fig_mod.subfigures(2, 1, wspace=0.07)   # 2 rows = two metrics
 
-        for j, m in enumerate(["modularity", "modularity_motion"]):
-            data_m, measure = motion_metrics.load_data(path_root, datasets, criteria_name, version, m)
-            for dataset in data_m:
-                data_m[dataset] = data_m[dataset][~data_m[dataset]["strategy"].isin(excluded_strategies)]
-            axs_modularity = subfigs_modularity[j].subplots(1, 2, sharey=True)
-            for i, dataset in enumerate(data_m):
-                df = data_m[dataset].query("groups=='full_sample'")
-                baseline_values = df.query("strategy=='baseline'")
-                baseline_mean = baseline_values[measure["label"]].mean()
-                sns.barplot(
-                    y=measure["label"],
-                    x="strategy",
-                    data=df,
-                    ax=axs_modularity[i],
-                    order=strategy_order,
-                    ci=95,
-                    palette=paired_palette,
-                )
-                axs_modularity[i].axhline(baseline_mean, ls="-.", c=paired_palette[0])
-                axs_modularity[i].set_title(dataset)
-                axs_modularity[i].set_ylim(measure["ylim"])
-                axs_modularity[i].set_xticklabels(strategy_order, rotation=45, ha="right", rotation_mode="anchor")
+    for row, metric_name in enumerate(["modularity", "modularity_motion"]):
+        metric_versions = {}
+        for v in fmriprep_versions:
+            d_v, measure = motion_metrics.load_data(
+                path_root, datasets, criteria_name, v, metric_name
+            )
+            metric_versions[v] = d_v[fixed_dataset][
+                ~d_v[fixed_dataset]["strategy"].isin(excluded_strategies)
+            ]
+        axs = subfigs_mod[row].subplots(1, 2, sharey=True)  # 1 × 2 = versions
+        for col, (v, df) in enumerate(metric_versions.items()):
+            baseline_mean = df.query("strategy=='baseline'")[measure["label"]].mean()
+            sns.barplot(
+                x="strategy",
+                y=measure["label"],
+                data=df.query("groups=='full_sample'"),
+                order=strategy_order,
+                palette=paired_palette,
+                ci=95,
+                ax=axs[col],
+            )
+            axs[col].axhline(baseline_mean, ls="-.", c=paired_palette[0])
+            axs[col].set_title(v)
+            axs[col].set_ylim(measure["ylim"])
+            axs[col].set_xticklabels(strategy_order, rotation=45, ha="right")
 
-            if j == 0:
-                labels = ["No GSR", "With GSR"]
-                hatches = ["", "///"]
-                handles = [mpatches.Patch(edgecolor="black", facecolor="white", hatch=h, label=l) for h, l in zip(hatches, labels)]
-                axs_modularity[1].legend(handles=handles)
+        if row == 0:
+            labels = ["No GSR", "With GSR"]
+            hatches = ["", "///"]
+            handles = [
+                mpatches.Patch(edgecolor="black", facecolor="white", hatch=h, label=l)
+                for h, l in zip(hatches, labels)
+            ]
+            axs[1].legend(handles=handles)
 
-        fig_modularity.savefig(output_dir / f"modularity_{version}.png", transparent=True)
+    fig_mod.savefig(output_dir / "modularity_versions.png", transparent=True)
 
-        data_rank = strategy_ranking.load_data(path_root, datasets)
+   # ---------------------------------------------------------------
+    # 3e. STRATEGY RANKING  +  prepare table for the scatter plot
+    # ---------------------------------------------------------------
+    rank_versions = strategy_ranking.load_data(path_root, datasets)
 
-        # Flatten MultiIndex columns
-        if isinstance(data_rank.columns, pd.MultiIndex):
-            data_rank.columns = ['_'.join(filter(None, col)) for col in data_rank.columns.values]
+    # keep only the ranking columns and add the expected column-level names
+    rank_versions = rank_versions[[c for c in rank_versions.columns
+                                if c[0] == "ranking"]]
+    rank_versions.columns = pd.MultiIndex.from_tuples(
+        rank_versions.columns, names=["measure", "strategy"]
+    )
 
-        # Find only ranking columns
-        ranking_cols = [col for col in data_rank.columns if col.startswith('ranking_')]
+    # 🔑  1.  MAKE A COPY **BEFORE** YOU TOUCH THE INDEX ORDER
+    scatter_table = rank_versions.copy()
+    scatter_table.index = scatter_table.index.set_names(
+        ["dataset", "version", "metrics"]
+    )
 
-        # Remove excluded strategies
-        for strategy in excluded_strategies:
-            ranking_cols = [col for col in ranking_cols if not col.endswith(strategy)]
+    # 🔄  2.  NOW swap levels for the heat-map
+    rank_versions = rank_versions.swaplevel("dataset", "version")
+    rank_versions.index = rank_versions.index.set_names(
+        ["dataset", "version", "metrics"]
+    )
 
-        # Subset to just those columns
-        data_rank = data_rank[ranking_cols]
+    # tell the helper to plot two versions across, one dataset down
+    strategy_ranking.datasets          = fmriprep_versions   # columns
+    strategy_ranking.fmriprep_versions = datasets            # rows
 
-        # Rebuild MultiIndex with named levels
-        data_rank.columns = pd.MultiIndex.from_tuples(
-            [('ranking', col.replace('ranking_', '')) for col in data_rank.columns],
-            names=["measure", "strategy"]
-        )
-
-        # Plot
-        fig_ranking = strategy_ranking.plot_ranking(data_rank)
-        fig_ranking.savefig(output_dir / f"strategy_ranking_{version}.png", transparent=True)
-
-        # Loss of DOF vs Quality
+    fig_ranking = strategy_ranking.plot_ranking(rank_versions)
+    fig_ranking.savefig(output_dir / "strategy_ranking_versions.png",
+                        transparent=True)
+    
+    # --- 3f.  LOSS-vs-QUALITY SCATTERS -----------------------------
+    for v in fmriprep_versions:                # two versions → two PNGs
         plot_loss_vs_quality(
-            data=strategy_ranking.load_data(path_root, datasets),
+            data=scatter_table,                # has a 'version' level
             output_dir=output_dir,
-            version_filter=version,
+            version_filter=v
         )
+    # ---------------------------------------------------------------
+
+    # for version in fmriprep_versions:
+
+    #     # Mean Framewise Displacement
+    #     stats = mean_framewise_displacement.load_data(path_root, criteria_name, version)
+    #     fig_fd = mean_framewise_displacement.plot_stats(stats)
+    #     fig_fd.savefig(output_dir / f"mean_fd_{version}.png", transparent=True)
+
+    #     # Connectome Similarity
+    #     average_connectomes = connectivity_similarity.load_data(path_root, datasets, version)
+    #     fig_similarity = connectivity_similarity.plot_stats(
+    #         average_connectomes, strategy_order=strategy_order, show_colorbar=True, horizontal=False
+    #     )
+    #     fig_similarity.savefig(output_dir / f"connectomes_{version}.png", transparent=True)
+
+    #     # Loss of Degrees of Freedom
+    #     data = degrees_of_freedom_loss.load_data(path_root, datasets, criteria_name, version)
+    #     fig_dof = degrees_of_freedom_loss.plot_stats(data)
+    #     fig_dof.savefig(output_dir / f"loss_degrees_of_freedom_{version}.png", transparent=True)
+
+    #     fig_dof_subgroup = degrees_of_freedom_loss.plot_stats(data, plot_subgroup=True)
+    #     fig_dof_subgroup.savefig(output_dir / f"loss_degrees_of_freedom_subgroups_{version}.png", transparent=True)
+
+    #     # Motion Metrics
+    #     metrics = {
+    #         "p_values": "sig_qcfc",
+    #         "fdr_p_values": "sig_qcfc_fdr",
+    #         "median": "median_qcfc",
+    #         "distance": "distance_qcfc",
+    #     }
+    #     for m in metrics:
+    #         data_m, measure = motion_metrics.load_data(path_root, datasets, criteria_name, version, m)
+    #         for dataset in data_m:
+    #             data_m[dataset] = data_m[dataset][~data_m[dataset]["strategy"].isin(excluded_strategies)]
+    #         fig = motion_metrics.plot_stats(data_m, measure)
+    #         fig.savefig(output_dir / f"{metrics[m]}_{version}.png", transparent=True)
+
+    #     # Modularity Special Combined Plot
+    #     palette = sns.color_palette("colorblind", n_colors=7)
+    #     paired_palette = [palette[0]]
+    #     for p in palette[1:4]:
+    #         paired_palette.extend((p, p))
+    #     paired_palette.extend((palette[-3], palette[-2], palette[-1], palette[-1]))
+
+    #     fig_modularity = plt.figure(constrained_layout=True, figsize=(6.4, 9.6))
+    #     subfigs_modularity = fig_modularity.subfigures(2, 1, wspace=0.07)
+
+    #     for j, m in enumerate(["modularity", "modularity_motion"]):
+    #         data_m, measure = motion_metrics.load_data(path_root, datasets, criteria_name, version, m)
+    #         for dataset in data_m:
+    #             data_m[dataset] = data_m[dataset][~data_m[dataset]["strategy"].isin(excluded_strategies)]
+    #         axs_modularity = subfigs_modularity[j].subplots(1, 2, sharey=True)
+    #         for i, dataset in enumerate(data_m):
+    #             df = data_m[dataset].query("groups=='full_sample'")
+    #             baseline_values = df.query("strategy=='baseline'")
+    #             baseline_mean = baseline_values[measure["label"]].mean()
+    #             sns.barplot(
+    #                 y=measure["label"],
+    #                 x="strategy",
+    #                 data=df,
+    #                 ax=axs_modularity[i],
+    #                 order=strategy_order,
+    #                 ci=95,
+    #                 palette=paired_palette,
+    #             )
+    #             axs_modularity[i].axhline(baseline_mean, ls="-.", c=paired_palette[0])
+    #             axs_modularity[i].set_title(dataset)
+    #             axs_modularity[i].set_ylim(measure["ylim"])
+    #             axs_modularity[i].set_xticklabels(strategy_order, rotation=45, ha="right", rotation_mode="anchor")
+
+    #         if j == 0:
+    #             labels = ["No GSR", "With GSR"]
+    #             hatches = ["", "///"]
+    #             handles = [mpatches.Patch(edgecolor="black", facecolor="white", hatch=h, label=l) for h, l in zip(hatches, labels)]
+    #             axs_modularity[1].legend(handles=handles)
+
+    #     fig_modularity.savefig(output_dir / f"modularity_{version}.png", transparent=True)
+
+    #     data_rank = strategy_ranking.load_data(path_root, datasets)
+
+    #     # Flatten MultiIndex columns
+    #     if isinstance(data_rank.columns, pd.MultiIndex):
+    #         data_rank.columns = ['_'.join(filter(None, col)) for col in data_rank.columns.values]
+
+    #     # Find only ranking columns
+    #     ranking_cols = [col for col in data_rank.columns if col.startswith('ranking_')]
+
+    #     # Remove excluded strategies
+    #     for strategy in excluded_strategies:
+    #         ranking_cols = [col for col in ranking_cols if not col.endswith(strategy)]
+
+    #     # Subset to just those columns
+    #     data_rank = data_rank[ranking_cols]
+
+    #     # Rebuild MultiIndex with named levels
+    #     data_rank.columns = pd.MultiIndex.from_tuples(
+    #         [('ranking', col.replace('ranking_', '')) for col in data_rank.columns],
+    #         names=["measure", "strategy"]
+    #     )
+
+    #     # Plot
+    #     fig_ranking = strategy_ranking.plot_ranking(data_rank)
+    #     fig_ranking.savefig(output_dir / f"strategy_ranking_{version}.png", transparent=True)
+
+    #     # Loss of DOF vs Quality
+    #     plot_loss_vs_quality(
+    #         data=strategy_ranking.load_data(path_root, datasets),
+    #         output_dir=output_dir,
+    #         version_filter=version,
+    #     )
