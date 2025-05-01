@@ -1,0 +1,68 @@
+python transition_timeseries.py \
+    --input_file /path/to/halfpipe/sub-pixar001_task-pixar_feature-corrMatrixCompCor_atlas-Schaefer2018_timeseries.tsv \
+    --output_dir /path/to/reformatted/output \
+    --subject sub-pixar001 \
+    --task pixar \
+    --space MNI152NLin2009cAsym \
+    --atlas Schaefer2018 \
+    --nroi 434 \
+    --desc baseline \
+    --subset_nroi 100
+
+    
+
+python transition_timeseries.py \
+    --input_dir /home/seann/scratch/halfpipe_test/test13/derivatives/halfpipe \
+    --output_dir /home/seann/scratch/halfpipe_test/test13/derivatives/denoise \
+    --task pixar \
+    --space MNI152NLin2009cAsym \
+    --nroi 434 
+
+   
+python transition_timeseries.py \
+    --input_dir /path/to/halfpipe/derivatives/halfpipe/ \
+    --output_dir /path/to/reformatted/output/ \
+    --task pixar \
+    --space MNI152NLin2009cAsym \
+    --atlas schaefer7networks \
+    --nroi 434 \
+    --desc baseline \
+    --subset_nroi 100   
+
+
+python transition_timeseries.py \
+    --input_dir /home/seann/scratch/halfpipe_test/test14/derivatives_3.25.2025/halfpipe \
+    --output_dir /home/seann/scratch/halfpipe_test/test14/derivatives_3.25.2025/denoise \
+    --task pixar \
+    --space MNI152NLin2009cAsym \
+    --nroi 434 
+
+
+
+halfpipe_path="/home/seann/scratch/halfpipe_test/test14/derivatives_3.25.2025/halfpipe"
+
+find "$halfpipe_path" -type d -path "*/func/task-*" | while read task_dir; do
+  sub_id=$(echo "$task_dir" | grep -o "sub-[^/]*")
+  echo "Checking $sub_id..."
+  file_count=$(find "$task_dir" -type f | wc -l)
+  echo "$sub_id $file_count"
+done | sort | tee /dev/tty | awk '
+  {
+    count[$2]++; data[$1]=$2
+  }
+  END {
+    # Find most common count
+    max=0
+    for (c in count) {
+      if (count[c] > max) {
+        max = count[c]
+        common = c
+      }
+    }
+    for (id in data) {
+      if (data[id] != common) print id
+    }
+  }
+' > inconsistent-subject-list.txt
+
+echo "Done. See inconsistent-subject-list.txt for subjects with differing task-* file counts."

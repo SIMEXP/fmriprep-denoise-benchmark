@@ -56,6 +56,18 @@ def parse_args():
         action="store",
         default="connectomes",
         help="Metric to build {connectomes, qcfc, modularity}",
+    ) 
+    parser.add_argument(
+        "--dataset",
+        type=str,
+        default=None,
+        help="Override dataset name (default: extracted from input_path)",
+    )
+    parser.add_argument(
+        "--fmriprep_ver",
+        type=str,
+        default=None,
+        help="Override fMRIPrep version (default: extracted from input_path)",
     )
     return parser.parse_args()
 
@@ -69,8 +81,13 @@ def main():
     dimension = args.dimension
 
     print(input_path)
-    dataset = input_path.parents[0].name
-    fmriprep_ver = input_path.name
+    # dataset = input_path.parents[0].name
+    # fmriprep_ver = input_path.name
+
+    # Use overrides if provided, otherwise extract from input_path
+    dataset = args.dataset if args.dataset else input_path.parents[0].name
+    fmriprep_ver = args.fmriprep_ver if args.fmriprep_ver else input_path.name
+
     path_root = Path(args.output_path).absolute()
     output_path = path_root / dataset / fmriprep_ver
     output_path.mkdir(parents=True, exist_ok=True)

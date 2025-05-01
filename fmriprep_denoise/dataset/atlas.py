@@ -11,7 +11,7 @@ from sklearn.utils import Bunch
 
 ATLAS_METADATA = {
     "schaefer7networks": {
-        "atlas": "Schaefer2018",
+        "atlas": "schaefer7networks",
         "template": "MNI152NLin2009cAsym",
         "resolution": 2,
         "dimensions": [100, 200, 300, 400, 500, 600, 800],
@@ -34,6 +34,12 @@ ATLAS_METADATA = {
         "resolution": 3,
         "dimensions": [333],
     },
+    "Schaefer2018": {
+        "atlas": "Schaefer2018Combined",
+        "template": "MNI152NLin6Asym",
+        "resolution": 2,
+        "dimensions": [434],
+    }
 }
 
 TEMPLATEFLOW_DIR = (
@@ -45,37 +51,53 @@ TEMPLATEFLOW_DIR = (
 
 def fetch_atlas_path(atlas_name, dimension, tf_dir=TEMPLATEFLOW_DIR):
     """
-    Generate a dictionary containing parameters for TemplateFlow quiery.
+    Retrieve the path to the atlas files, either from TemplateFlow or a custom location.
 
     Parameters
     ----------
-
     atlas_name : str
-        Atlas name. Must be a key in ATLAS_METADATA.
+        Atlas name. Must be a key in ATLAS_METADATA or a custom atlas.
 
     dimension : str or int
         Atlas dimension.
 
     tf_dir : pathlib.Path or str
-        customeised templateflow directory for the current project
+        Custom TemplateFlow directory (if needed).
 
-    Return
-    ------
+    Returns
+    -------
     sklearn.utils.Bunch
-        Containing the following fields:
-        maps : str
-            Path to atlas map.
-        labels : pandas.DataFrame
-            The corresponding pandas dataframe of the atlas
-        type : str
-            'dseg' (for NiftiLabelsMasker) or 'probseg' (for NiftiMapsMasker)
+        Contains:
+            maps : str
+                Path to atlas map (NIfTI file).
+            labels : pandas.DataFrame
+                Corresponding atlas labels.
+            type : str
+                'dseg' for NiftiLabelsMasker or 'probseg' for NiftiMapsMasker.
     """
-    if isinstance(tf_dir, str):
-        tf_dir = Path(tf_dir)
-    os.environ["TEMPLATEFLOW_HOME"] = str(tf_dir.resolve())
 
+    # Paths to custom atlases
+    custom_atlas_paths = {
+        "Schaefer2018Combined": {
+            "nii": "/home/seann/projects/def-cmoreau/All_user_common_folder/atlas/atlas_enigma/atlas-Schaefer2018Combined_dseg.nii.gz",
+            "tsv": "/home/seann/projects/def-cmoreau/All_user_common_folder/atlas/atlas_enigma/atlas-Schaefer2018Combined_dseg.tsv",
+        }
+    }
+
+    print(f"Fetching atlas: {atlas_name} with dimension: {dimension}")
+    
+    # Check if the atlas is a custom atlas
+    if atlas_name in custom_atlas_paths:
+        print(f"Using custom atlas: {atlas_name}")
+        img_path = custom_atlas_paths[atlas_name]["nii"]
+        label_path = custom_atlas_paths[atlas_name]["tsv"]
+        labels = pd.read_csv(label_path, delimiter="\t")
+        atlas_type = "dseg"  # Likely a segmentation atlas (adjust if needed)
+
+        return Bunch(maps=img_path, labels=labels, type=atlas_type)
+
+    # If not a custom atlas, fall back to TemplateFlow
     import templateflow
-
     cur_atlas_meta = ATLAS_METADATA[atlas_name].copy()
 
     parameters = {
@@ -89,12 +111,12 @@ def fetch_atlas_path(atlas_name, dimension, tf_dir=TEMPLATEFLOW_DIR):
         parameters["desc"] = f"{dimension}dimensionsSegmented"
     else:
         parameters["desc"] = str(dimension)
+
     img_path = templateflow.api.get(
         cur_atlas_meta["template"], raise_empty=True, **parameters
     )
     img_path = str(img_path)
-    if atlas_name == "schaefer7networks":
-        parameters.pop("resolution")
+
     parameters["extension"] = ".tsv"
     label_path = templateflow.api.get(
         cur_atlas_meta["template"], raise_empty=True, **parameters

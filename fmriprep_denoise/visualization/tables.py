@@ -1,7 +1,13 @@
 import pandas as pd
 
-
+# changed to match json 
 fd2label = {0.5: "scrubbing.5", 0.2: "scrubbing.2"}
+
+# fd2label = {0.1: "corrMatrixScrub", 0.2: "corrMatrixScrubGSR", 0.3: "corrMatrixMotion", 0.4: "corrMatrixMotionGSR", 0.5: "corrMatrixCompCor", 0.6: "corrMatrixICA"}
+
+
+# fd2label = {0.1: "Scrub", 0.2: "ScrubGSR", 0.3: "Motion", 0.4: "MotionGSR", 0.5: "CompCor", 0.6: "ICA"} #needed to match confounds phenotype tsv when running make_maniscript_figures
+
 group_name_rename = {
     "CONTROL": "control",
     "BIPOLAR": "bipolar",

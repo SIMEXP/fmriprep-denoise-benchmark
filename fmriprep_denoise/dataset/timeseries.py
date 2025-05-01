@@ -8,6 +8,12 @@ from fmriprep_denoise.dataset.atlas import (
     get_atlas_dimensions,
 )
 
+import logging
+
+
+# Configure logging. Adjust level as needed (DEBUG for detailed output).
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
+
 
 def generate_timeseries_per_dimension(
     atlas_name, output, benchmark_strategies, data_aroma, data
@@ -65,31 +71,80 @@ def generate_timeseries_per_dimension(
                 )
 
 
+# def get_confounds(strategy_name, parameters, img):
+#     """
+#     Get confounds and sample mask.
+
+#     Parameters
+#     ----------
+
+#     strategy_name : str
+#         Denoise strategy name.
+
+#     parameters : dict
+#         Denoise parameter passed to load_confounds or load_confounds_strategy.
+
+#     img : str
+#         Path of the processed functional image to be denoised.
+
+#     Returns
+#     -------
+#     See docs of load_confounds
+
+#     """
+#     if strategy_name == "baseline":
+#         reduced_confounds, sample_mask = load_confounds(img, **parameters)
+#     else:
+#         reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
+#     return reduced_confounds, sample_mask
+
+#passing "aroma" to load_confounds instead of load_confounds_strategy to avoid strategy='full' is not triggered inside. fmriprep was not run to output desc-smoothAROMAnonaggr_bold.nii.gz
 def get_confounds(strategy_name, parameters, img):
     """
     Get confounds and sample mask.
 
     Parameters
     ----------
-
     strategy_name : str
         Denoise strategy name.
-
     parameters : dict
         Denoise parameter passed to load_confounds or load_confounds_strategy.
-
     img : str
         Path of the processed functional image to be denoised.
 
     Returns
     -------
-    See docs of load_confounds
-
+    reduced_confounds : pd.DataFrame or None
+    sample_mask : list or None
     """
+    logging.debug(f"Called get_confounds with strategy_name: {strategy_name}, "
+                  f"parameters: {parameters}, img: {img}")
+
     if strategy_name == "baseline":
+        logging.debug("Using baseline branch with load_confounds()")
         reduced_confounds, sample_mask = load_confounds(img, **parameters)
+    elif "aroma" in strategy_name.lower():
+        logging.debug("Strategy contains 'aroma'. Filtering parameters and using load_confounds()")
+        valid_keys = {"global_signal", "motion", "wm_csf", "compcor", "high_pass", "scrub"}
+        clean_parameters = {k: v for k, v in parameters.items() if k in valid_keys}
+        logging.debug(f"Filtered parameters for aroma: {clean_parameters}")
+        reduced_confounds, sample_mask = load_confounds(img, **clean_parameters)
     else:
+        logging.debug("Using non-baseline, non-aroma branch with load_confounds_strategy()")
         reduced_confounds, sample_mask = load_confounds_strategy(img, **parameters)
+
+    # Log details of returned confounds (e.g., shape or error if missing attribute)
+    if reduced_confounds is not None:
+        try:
+            shape = reduced_confounds.shape
+        except Exception as e:
+            shape = f"Could not determine shape: {e}"
+        logging.debug(f"Returned reduced_confounds with shape: {shape}")
+    else:
+        logging.debug("Returned reduced_confounds is None")
+    
+    logging.debug(f"Returned sample_mask: {sample_mask}")
+
     return reduced_confounds, sample_mask
 
 

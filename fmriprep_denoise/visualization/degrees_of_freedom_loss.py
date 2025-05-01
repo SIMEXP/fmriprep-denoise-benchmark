@@ -154,9 +154,9 @@ def _organise_data(confounds_phenotype):
     confounds_phenotype.loc[:, ("compcor", "compcor")] += confounds_phenotype.loc[
         :, ("compcor", "fixed_regressors")
     ]
-    confounds_phenotype.loc[:, ("compcor6", "compcor")] += confounds_phenotype.loc[
-        :, ("compcor6", "fixed_regressors")
-    ]
+    # confounds_phenotype.loc[:, ("compcor6", "compcor")] += confounds_phenotype.loc[
+    #     :, ("compcor6", "fixed_regressors")
+    # ]
 
     confounds_phenotype = confounds_phenotype.reset_index()
     confounds_phenotype = confounds_phenotype.melt(
@@ -243,11 +243,11 @@ def _descriptive_stats(dataset, confounds_phenotype):
         "scrubbing.5",
         "excised_vol",
     )
-    _report_descriptive_stats(
-        confounds_phenotype,
-        "scrubbing.2",
-        "excised_vol",
-    )
+    # _report_descriptive_stats(
+    #     confounds_phenotype,
+    #     "scrubbing.2",
+    #     "excised_vol",
+    # )
 
 
 def _report_descriptive_stats(confounds_phenotype, strategy, variable):

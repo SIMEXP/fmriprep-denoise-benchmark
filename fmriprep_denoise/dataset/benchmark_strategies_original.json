@@ -1,0 +1,48 @@
+{
+    "baseline": {
+        "strategy": ["high_pass"]
+    },
+    "simple": {
+        "denoise_strategy": "simple"
+    },
+    "simple+gsr": {
+        "denoise_strategy": "simple",
+        "global_signal": "basic"
+    },
+    "scrubbing.5": {
+        "denoise_strategy": "scrubbing",
+        "fd_threshold": 0.5,
+        "std_dvars_threshold": null
+    },
+    "scrubbing.5+gsr": {
+        "denoise_strategy": "scrubbing",
+        "global_signal": "basic",
+        "fd_threshold": 0.5,
+        "std_dvars_threshold": null
+    },
+    "scrubbing.2": {
+        "denoise_strategy": "scrubbing",
+        "fd_threshold": 0.2,
+        "std_dvars_threshold": null
+    },
+    "scrubbing.2+gsr": {
+        "denoise_strategy": "scrubbing",
+        "global_signal": "basic",
+        "fd_threshold": 0.2,
+        "std_dvars_threshold": null
+    },
+    "compcor": {
+        "denoise_strategy": "compcor"
+    },
+    "compcor6": {
+        "denoise_strategy": "compcor",
+        "n_compcor": 5
+    },
+    "aroma": {
+        "denoise_strategy": "ica_aroma"
+    },
+    "aroma+gsr": {
+        "denoise_strategy": "ica_aroma",
+        "global_signal": "basic"
+    }
+}

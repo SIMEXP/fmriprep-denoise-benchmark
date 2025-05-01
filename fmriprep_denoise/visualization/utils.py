@@ -2,6 +2,7 @@ from pathlib import Path
 
 import pandas as pd
 import seaborn as sns
+import numpy as np
 
 from scipy.stats import zscore, spearmanr
 from repo2data.repo2data import Repo2Data
@@ -17,6 +18,23 @@ from fmriprep_denoise.visualization.tables import (
     group_name_rename,
 )
 
+import logging
+
+logging.basicConfig(level=logging.DEBUG, format='%(levelname)s: %(message)s')
+
+# GRID_LOCATION = {
+#     (0, 0): "baseline",
+#     (0, 2): "simple",
+#     (0, 3): "simple+gsr",
+#     (1, 0): "scrubbing.5",
+#     (1, 1): "scrubbing.5+gsr",
+#     (1, 2): "scrubbing.2",
+#     (1, 3): "scrubbing.2+gsr",
+#     (2, 0): "compcor",
+#     (2, 1): "compcor6",
+#     (2, 2): "aroma",
+#     (2, 3): "aroma+gsr",
+# }
 
 GRID_LOCATION = {
     (0, 0): "baseline",
@@ -24,17 +42,27 @@ GRID_LOCATION = {
     (0, 3): "simple+gsr",
     (1, 0): "scrubbing.5",
     (1, 1): "scrubbing.5+gsr",
-    (1, 2): "scrubbing.2",
-    (1, 3): "scrubbing.2+gsr",
     (2, 0): "compcor",
-    (2, 1): "compcor6",
     (2, 2): "aroma",
-    # (2, 3): "aroma+gsr",
 }
+
+# GRID_LOCATION = {
+#     (0, 0): "corrMatrixMotion",
+#     (0, 2): "corrMatrixMotionGSR",
+#     (0, 3): "corrMatrixScrub",
+#     (1, 0): "corrMatrixScrubGSR",
+# }
+
+# GRID_LOCATION_dof = {
+#     (0, 0): "Motion",
+#     (0, 2): "MotionGSR",
+#     (0, 3): "Scrub",
+#     (1, 0): "ScrubGSR",
+# }
+
 
 palette = sns.color_palette("Paired", n_colors=12)
 palette_dict = {name: c for c, name in zip(palette[1:], GRID_LOCATION.values())}
-
 
 # download data
 def repo2data_path():
@@ -59,36 +87,47 @@ def _get_palette(order):
     return [palette_dict[item] for item in order]
 
 
-def _get_connectome_metric_paths(
-    dataset, fmriprep_version, metric, atlas_name, dimension, path_root
-):
-    """Load connectome motion metrics with some give labels."""
-    atlas_name = "*" if isinstance(atlas_name, type(None)) else atlas_name
-    dimension = (
-        "*"
-        if isinstance(atlas_name, type(None)) or isinstance(dimension, type(None))
-        else dimension
+def _get_connectome_metric_paths(dataset, fmriprep_version, metric, atlas_name, dimension, path_root):
+    """Load connectome motion metrics with some given labels."""
+    # Use wildcards if parameters are None.
+    atlas_name = "*" if atlas_name is None else atlas_name
+    dimension = "*" if dimension is None else dimension
+
+    # Construct the relative glob pattern.
+    rel_pattern = (
+        f"{dataset}/{fmriprep_version}/"
+        f"dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_"
+        f"{metric}.tsv"
     )
-    files = list(
-        path_root.glob(
-            (
-                f"{dataset}/{fmriprep_version}/"
-                f"dataset-{dataset}_atlas-{atlas_name}_nroi-{dimension}_"
-                f"{metric}.tsv"
-            )
-        )
-    )
+    # Construct the full search path pattern by combining with path_root.
+    full_pattern = path_root / rel_pattern
+
+    print("DEBUG: Searching for files with relative pattern:", rel_pattern)
+    print("DEBUG: Full search path pattern:", full_pattern)
+
+    # Optionally, list the contents of the target directory.
+    search_directory = path_root / dataset / fmriprep_version
+    try:
+        dir_contents = list(search_directory.iterdir())
+        print("DEBUG: Contents of directory", search_directory, ":", dir_contents)
+    except Exception as e:
+        print("ERROR: Could not access directory", search_directory, ":", e)
+
+    # Search for files matching the pattern.
+    files = list(path_root.glob(rel_pattern))
+    print("DEBUG: Found files:", files)
+
     if not files:
-        raise FileNotFoundError(
-            "No file matching the supplied arguments:"
-            f"atlas_name={atlas_name}, "
-            f"dimension={dimension}, "
-            f"dataset={dataset}",
-            f"metric={metric}",
+        error_msg = (
+            f"No file matching the supplied arguments: atlas_name={atlas_name}, "
+            f"dimension={dimension}, dataset={dataset}, metric={metric}. "
+            f"Full search pattern was: {full_pattern}"
         )
+        print("ERROR:", error_msg)
+        raise FileNotFoundError(error_msg)
+        
     labels = [file.name.split(f"_{metric}")[0] for file in files]
     return files, labels
-
 
 def prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, path_root):
     """
@@ -130,6 +169,18 @@ def prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, path
         dataset, fmriprep_version, "qcfc", atlas_name, dimension, path_root
     )
 
+    # excluded_rois_paths = {
+    # "fmriprep-25.0.0": "/home/seann/scratch/halfpipe_test/test14/derivatives_3.25.2025/denoise_0.8subjectthreshold/rois_dropped.csv",
+    # "fmriprep-20.2.7": "/home/seann/scratch/halfpipe_test/test15/derivatives_3.24.2025/denoise_0.8subjectthreshold/rois_dropped.csv",
+    # }
+    excluded_rois_paths = {
+    "fmriprep-25.0.0": "/home/seann/scratch/halfpipe_test/test14/derivatives/denoise_0.8subjectthreshold/rois_dropped.csv",
+    "fmriprep-20.2.7": "/home/seann/scratch/halfpipe_test/test15/derivatives/denoise_0.8subjectthreshold/rois_dropped.csv",
+    }
+    excluded_rois_path = excluded_rois_paths.get(fmriprep_version, None)
+
+
+
     for p, label in zip(file_qcfc, qcfc_labels):
         label = label.replace(f"dataset-{dataset}_", "")
         # significant correlation between motion and edges
@@ -165,12 +216,62 @@ def prepare_qcfc_plotting(dataset, fmriprep_version, atlas_name, dimension, path
         # distance dependency
         cur_atlas_name = label.split("atlas-")[-1].split("_")[0]
         cur_dimension = label.split("nroi-")[-1].split("_")[0]
-        pairwise_distance = get_atlas_pairwise_distance(cur_atlas_name, cur_dimension)
-        cols = qcfc.columns
-        corr_distance_qcfc, _ = spearmanr(pairwise_distance.iloc[:, -1], qcfc)
-        corr_distance_qcfc = pd.DataFrame(
-            corr_distance_qcfc[1:, 0], index=cols, columns=[label]
+        # pairwise_distance = get_atlas_pairwise_distance(cur_atlas_name, cur_dimension)
+        # pairwise_distance = get_atlas_pairwise_distance(
+        #     cur_atlas_name,
+        #     cur_dimension,
+        #     excluded_rois_path="/home/seann/scratch/halfpipe_test/test14/derivatives/denoise_0.9subjectthreshold/rois_dropped.csv"
+        # )
+
+        pairwise_distance = get_atlas_pairwise_distance(
+            cur_atlas_name,
+            cur_dimension,
+            excluded_rois_path=excluded_rois_path
         )
+        cols = qcfc.columns
+        # corr_distance_qcfc, _ = spearmanr(pairwise_distance.iloc[:, -1], qcfc)
+        condensed_distances = pairwise_distance["distance"].values
+
+        # Debug safety check
+        if condensed_distances.shape[0] != qcfc.shape[0]:
+            raise ValueError(
+                f"Distance vector and QCFC matrix are mismatched: "
+                f"{condensed_distances.shape[0]} distances vs {qcfc.shape[0]} QCFC values"
+            )
+        
+        print(f"Distance shape: {condensed_distances.shape}")
+        print(f"QCFC shape: {qcfc.shape}")
+        print("NaNs in distance?", np.isnan(condensed_distances).any())
+        print("NaNs in QCFC?", qcfc.isna().any().any())
+        print("Infs in distance?", np.isinf(condensed_distances).any())
+        print("All distances constant?", np.all(condensed_distances == condensed_distances[0]))
+
+        # corr_distance_qcfc, _ = spearmanr(condensed_distances, qcfc)
+       
+        # corr_distance_qcfc = pd.DataFrame(
+        #     corr_distance_qcfc[1:, 0], index=cols, columns=[label]
+        # )
+
+        results = []
+        for col in qcfc.columns:
+            y = qcfc[col].values
+
+            # Skip columns that are all constant or contain NaNs
+            if np.isnan(y).any():
+                print(f"Skipping {col} due to NaNs.")
+                results.append(np.nan)
+                continue
+            elif np.std(y) == 0:
+                print(f"Skipping {col} due to constant values.")
+                results.append(np.nan)
+                continue
+
+            r, _ = spearmanr(condensed_distances, y)
+            results.append(r)
+
+        corr_distance_qcfc = pd.DataFrame(results, index=qcfc.columns, columns=[label])
+
+
         ds_corr_distance.append(corr_distance_qcfc)
 
     ds_qcfc_sig = pd.concat(ds_qcfc_sig, axis=1)
@@ -288,45 +389,98 @@ def _qcfc_bygroup(metric, p):
     return df
 
 
+# def _calculate_corr_modularity(modularity, movement, label):
+#     """Calculate correlation between motion and network modularity by groups."""
+#     # motion and modularity
+#     corr_modularity = []
+#     z_movement = movement[["mean_framewise_displacement", "age", "gender"]].apply(
+#         zscore
+#     )
+
+#     # full sample
+#     for strategy, value in modularity.iloc[:, 1:].iteritems():
+#         current_df = partial_correlation(
+#             value,
+#             movement["mean_framewise_displacement"],
+#             z_movement[["age", "gender"]],
+#         )
+#         current_df["strategy"] = strategy
+#         current_df["groups"] = "full_sample"
+#         corr_modularity.append(current_df)
+
+#     # by group
+#     modularity_long = modularity.reset_index().melt(
+#         id_vars=["index", "groups"], var_name="strategy"
+#     )
+#     for (group, strategy), df in modularity_long.groupby(["groups", "strategy"]):
+#         df = df.set_index("index")
+#         current_df = partial_correlation(
+#             df["value"],
+#             movement.loc[df.index, "mean_framewise_displacement"].values,
+#             z_movement.loc[df.index, ["age", "gender"]].values,
+#         )
+#         current_df["strategy"] = strategy
+#         current_df["groups"] = group
+#         corr_modularity.append(current_df)
+
+#     corr_modularity = pd.DataFrame(corr_modularity).set_index(["groups", "strategy"])[
+#         "correlation"
+#     ]
+#     corr_modularity.name = label
+#     return corr_modularity
+
 def _calculate_corr_modularity(modularity, movement, label):
     """Calculate correlation between motion and network modularity by groups."""
-    # motion and modularity
     corr_modularity = []
-    z_movement = movement[["mean_framewise_displacement", "age", "gender"]].apply(
-        zscore
-    )
+    z_movement = movement[["mean_framewise_displacement", "age", "gender"]].apply(zscore)
 
-    # full sample
-    for strategy, value in modularity.iloc[:, 1:].iteritems():
-        current_df = partial_correlation(
-            value,
-            movement["mean_framewise_displacement"],
-            z_movement[["age", "gender"]],
-        )
+    # Full sample
+    for strategy, value in modularity.iloc[:, 1:].items():
+        x = value.values
+        y = movement["mean_framewise_displacement"].values
+        covariates = z_movement[["age", "gender"]].values
+
+        if not (np.isfinite(x).all() and np.isfinite(y).all() and np.isfinite(covariates).all()):
+            logging.debug(f"[FULL SAMPLE] Skipping strategy '{strategy}' due to NaNs or Infs.")
+            continue
+        if np.std(x) == 0 or np.std(y) == 0:
+            logging.debug(f"[FULL SAMPLE] Skipping strategy '{strategy}' due to constant values.")
+            continue
+
+        current_df = partial_correlation(x, y, covariates)
         current_df["strategy"] = strategy
         current_df["groups"] = "full_sample"
         corr_modularity.append(current_df)
 
-    # by group
-    modularity_long = modularity.reset_index().melt(
-        id_vars=["index", "groups"], var_name="strategy"
-    )
+    # Group-wise
+    modularity_long = modularity.reset_index().melt(id_vars=["index", "groups"], var_name="strategy")
     for (group, strategy), df in modularity_long.groupby(["groups", "strategy"]):
         df = df.set_index("index")
-        current_df = partial_correlation(
-            df["value"],
-            movement.loc[df.index, "mean_framewise_displacement"].values,
-            z_movement.loc[df.index, ["age", "gender"]].values,
-        )
+        x = df["value"].values
+        y = movement.loc[df.index, "mean_framewise_displacement"].values
+        covariates = z_movement.loc[df.index, ["age", "gender"]].values
+
+        if not (np.isfinite(x).all() and np.isfinite(y).all() and np.isfinite(covariates).all()):
+            logging.debug(f"[GROUP: {group}] Skipping strategy '{strategy}' due to NaNs or Infs.")
+            continue
+        if np.std(x) == 0 or np.std(y) == 0:
+            logging.debug(f"[GROUP: {group}] Skipping strategy '{strategy}' due to constant values.")
+            continue
+
+        current_df = partial_correlation(x, y, covariates)
         current_df["strategy"] = strategy
         current_df["groups"] = group
         corr_modularity.append(current_df)
 
-    corr_modularity = pd.DataFrame(corr_modularity).set_index(["groups", "strategy"])[
-        "correlation"
-    ]
-    corr_modularity.name = label
-    return corr_modularity
+    if not corr_modularity:
+        logging.warning(f"No valid correlations found for label '{label}'. Returning empty series.")
+        return pd.Series(name=label)
+
+    corr_modularity = pd.DataFrame(corr_modularity)
+    if "groups" not in corr_modularity.columns or "strategy" not in corr_modularity.columns:
+        raise ValueError("Missing 'groups' or 'strategy' in correlation results.")
+
+    return corr_modularity.set_index(["groups", "strategy"])["correlation"].rename(label)
 
 
 def _calculate_descriptive_modularity(modularity, label):

@@ -6,7 +6,11 @@ draft/
 *.drawio.bkp
 _*.md
 outputs/*
-
+outputs1/*
+giga_timeseries/*
+participants_old.tsv
+participants.tsv
+featured.png
 # HCP
 logs/
 

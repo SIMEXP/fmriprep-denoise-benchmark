@@ -1,0 +1,31 @@
+{
+    "corrMatrixMotion": {
+        "denoise_strategy": "simple",
+        "fd_threshold": 0.3
+    },
+    "corrMatrixMotionGSR": {
+        "denoise_strategy": "simple",
+        "global_signal": "basic",
+        "fd_threshold": 0.4
+    },
+    "corrMatrixScrubGSR": {
+        "denoise_strategy": "scrubbing",
+        "global_signal": "basic",
+        "fd_threshold": 0.2,
+        "std_dvars_threshold": null
+    },
+    "corrMatrixScrub": {
+        "denoise_strategy": "scrubbing",
+        "fd_threshold": 0.1,
+        "std_dvars_threshold": null
+    },
+    "corrMatrixCompCor": {
+        "denoise_strategy": "compcor",
+        "fd_threshold": 0.5
+    },
+    "corrMatrixICA": {
+        "denoise_strategy": "ica_aroma",
+        "fd_threshold": 0.6
+    }
+}
+

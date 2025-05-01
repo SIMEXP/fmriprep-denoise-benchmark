@@ -10,9 +10,14 @@ from fmriprep_denoise.visualization import utils
 import itertools
 
 
-qc_names = ["stringent", "minimal", None]
-datasets = ["ds000228", "ds000030"]
-fmriprep_versions = ["fmriprep-20.2.1lts", "fmriprep-20.2.5lts"]
+# qc_names = ["stringent", "minimal", None]
+# datasets = ["ds000228", "ds000030"]
+# fmriprep_versions = ["fmriprep-20.2.1lts", "fmriprep-20.2.5lts"]
+
+
+qc_names = ["minimal"]
+datasets = ["ds000228"]
+fmriprep_versions = ["fmriprep-25.0.0", "fmriprep-20.2.7"]
 
 
 def parse_args():
@@ -49,7 +54,7 @@ def parse_args():
 
 def main():
     args = parse_args()
-    print(vars(args))
+    print(f"Arguments passed: {vars(args)}")
     input_root = (
         utils.get_data_root() / "denoise-metrics"
         if args.output_root is None
@@ -58,7 +63,7 @@ def main():
     output_root = (
         utils.get_data_root() / "denoise-metrics"
         if args.output_root is None
-        else Path(output_root)
+        else Path(args.output_root)
     )
     qc_name = args.qc
     dataset = args.dataset_name
@@ -79,11 +84,10 @@ def main():
             dataset, fmriprep_version, None, None, input_root
         )
         data = pd.concat([ds_qcfc, ds_modularity], axis=1)
-        data.to_csv(
-            output_root
-            / f"{dataset}_{fmriprep_version.replace('.', '-')}_desc-{qc_name}_summary.tsv",
-            sep="\t",
-        )
+        filename = f"{dataset}_{fmriprep_version.replace('.', '-')}_desc-{qc_name}_summary.tsv"
+        output_path = output_root / dataset / fmriprep_version / filename
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        data.to_csv(output_path, sep="\t")
 
 
 if __name__ == "__main__":
