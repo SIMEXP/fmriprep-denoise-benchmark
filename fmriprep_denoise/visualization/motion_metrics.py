@@ -20,38 +20,38 @@ measures = {
         "label": "Percentage %",
         "title": "Significant QC-FC in connectomes\n"
                  + r"(uncorrrected, $\alpha=0.05$)",
-        "ylim": (0, 50),
+        "ylim": None,
     },
     "fdr_p_values": {
         "var_name": "qcfc_fdr_significant",
         "label": "Percentage %",
         "title": "Significant QC-FC in connectomes\n"
                  + r"(FDR corrected, $\alpha=0.05$)",
-        "ylim": (0, 25),
+        "ylim": None,
     },
     "median": {
         "var_name": "qcfc_mad",
         "label": "Absolute values of QC-FC",
         "title": "Medians of absolute values of QC-FC",
-        "ylim": (0, 0.15),
+        "ylim": (0, 0.25),
     },
     "distance": {
         "var_name": "corr_motion_distance",
         "label": "Pearson's correlation, absolute value",
         "title": "DM-FC",
-        "ylim": (0, 0.65),
+        "ylim": None,
     },
     "modularity": {
         "var_name": "modularity",
         "label": "Mean modularity quality (a.u.)",
         "title": "Mean network modularity",
-        "ylim": (0, 0.63),
+        "ylim": None,
     },
     "modularity_motion": {
         "var_name": "corr_motion_modularity",
         "label": "Pearson's correlation, absolute value",
         "title": "Correlation between motion and network modularity",
-        "ylim": (0, 0.42),
+        "ylim": None,
     },
 }
 
@@ -176,9 +176,9 @@ def plot_stats(data, measure, group="full_sample"):
         axs[idx].axhline(baseline_mean, ls="-.", c=paired_palette[0])
         axs[idx].set_title(dataset)
 
-        # ✅ Y-axis setting
-        if not measure.get("ylim_auto", False):
-            axs[idx].set_ylim(measure["ylim"])
+        # Dynamic Y-axis scaling
+        ymax = df[measure["label"]].max()
+        axs[idx].set_ylim(0, ymax * 1.5)  # Add 10% headroom
 
         axs[idx].set_xticklabels(
             strategy_order, rotation=45, ha="right", rotation_mode="anchor"
