@@ -118,13 +118,13 @@ find /home/seann/scratch/halfpipe_test/test15/derivatives/fmriprep -type f -name
 done
 
 
-# Call the updated script that relies only on confounds files.
-python calculate_degrees_of_freedom_test_noboldpreproc_1.py \
-    /home/seann/scratch/denoise/fmriprep-denoise-benchmark/outputs/denoise-metrics-atlas.5-4.27.25/ds000228/fmriprep-20.2.7 \
-    --fmriprep_path=/home/seann/scratch/halfpipe_test/test15/derivatives/fmriprep \
-    --dataset_name=ds000228 \
-    --specifier=task-pixar \
-    --participants_tsv /home/seann/projects/def-cmoreau/All_user_common_folder/datasets/ds000228/participants.tsv
+# # Call the updated script that relies only on confounds files.
+# python calculate_degrees_of_freedom_test_noboldpreproc_1.py \
+#     /home/seann/scratch/denoise/fmriprep-denoise-benchmark/outputs/denoise-metrics-atlas.5-4.27.25/ds000228/fmriprep-20.2.7 \
+#     --fmriprep_path=/home/seann/scratch/halfpipe_test/test15/derivatives/fmriprep \
+#     --dataset_name=ds000228 \
+#     --specifier=task-pixar \
+#     --participants_tsv /home/seann/projects/def-cmoreau/All_user_common_folder/datasets/ds000228/participants.tsv
 
 # # Call the updated script that relies only on confounds files.
 # python calculate_degrees_of_freedom_test_noboldpreproc_1.py \
@@ -133,3 +133,20 @@ python calculate_degrees_of_freedom_test_noboldpreproc_1.py \
 #     --dataset_name=ds000228 \
 #     --specifier=task-pixar \
 #     --participants_tsv /home/seann/projects/def-cmoreau/All_user_common_folder/datasets/ds000228/participants.tsv
+
+
+# Call the updated script that relies only on confounds files.
+# python calculate_degrees_of_freedom_test_noboldpreproc_aromafix.py \
+#     /home/seann/scratch/denoise/fmriprep-denoise-benchmark/outputs/denoise-metrics-atlas.5-4.27.25/ds000228/fmriprep-25.0.0 \
+#     --fmriprep_path=/home/seann/scratch/halfpipe_test/test14/derivatives/fmriprep \
+#     --dataset_name=ds000228 \
+#     --specifier=task-pixar \
+#     --participants_tsv /home/seann/projects/def-cmoreau/All_user_common_folder/datasets/ds000228/participants.tsv
+
+# Call the updated script that relies only on confounds files.
+python calculate_degrees_of_freedom_test_noboldpreproc_aromafix.py \
+    /home/seann/scratch/denoise/fmriprep-denoise-benchmark/outputs/denoise-metrics-atlas.5-4.27.25/ds000228/fmriprep-20.2.7 \
+    --fmriprep_path=/home/seann/scratch/halfpipe_test/test15/derivatives/fmriprep \
+    --dataset_name=ds000228 \
+    --specifier=task-pixar \
+    --participants_tsv /home/seann/projects/def-cmoreau/All_user_common_folder/datasets/ds000228/participants.tsv

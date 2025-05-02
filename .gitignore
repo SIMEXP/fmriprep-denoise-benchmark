@@ -13,6 +13,7 @@ participants.tsv
 featured.png
 # HCP
 logs/
+outputs*/
 
 # Jupyterbook
 content/_build

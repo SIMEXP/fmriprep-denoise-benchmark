@@ -36,7 +36,7 @@ PHENOTYPE_INFO = {
 # Helper
 # -------------------------------
 
-def expand_strategy_columns(strategy_name, df, parameters):
+def expand_strategy_columns(strategy_name, df, parameters, subject_id=None, specifier=None, aroma_dir=None):
     """
     Expand placeholders into actual columns for each denoise strategy.
     """
@@ -74,12 +74,23 @@ def expand_strategy_columns(strategy_name, df, parameters):
         cols = compcor_cols[:5]  # (c_comp_cor_00 to c_comp_cor_04)
 
     elif strat == "ica_aroma":
-        logging.warning(f"[{strategy_name}] No explicit AROMA regressors in TSV — using high-pass + wm/csf averages.")
-        cosine_cols = [] 
-        wmcsf_cols = []  
-        cols = cosine_cols + wmcsf_cols
+        cols = []
+
         if include_gsr and "global_signal" in df.columns:
             cols.append("global_signal")
+
+        if aroma_dir is not None and subject_id is not None and specifier is not None:
+            aroma_path = aroma_dir / subject_id / "func" / f"{subject_id}_{specifier}_desc-aroma_timeseries.tsv"
+            if aroma_path.is_file():
+                try:
+                    aroma_df = pd.read_csv(aroma_path, sep="\t")
+                    aroma_cols = aroma_df.columns.tolist()
+                    cols += [f"aroma_comp_{i}" for i in range(len(aroma_cols))]  # Placeholder names for DOF count
+                    logging.info(f"[{strategy_name}] Found {len(aroma_cols)} AROMA components for {subject_id}")
+                except Exception as e:
+                    logging.warning(f"[{strategy_name}] Could not load AROMA file {aroma_path}: {e}")
+            else:
+                logging.warning(f"[{strategy_name}] AROMA file not found: {aroma_path}")
 
     elif strat == "baseline":
         cosine_cols = []  
@@ -102,25 +113,46 @@ def expand_strategy_columns(strategy_name, df, parameters):
     else:
         logging.debug(f"[{strategy_name}] Final columns: {cols}")
 
-    return cols
+    return cols, aroma_df if 'aroma_df' in locals() else None
 
 def _load_confounds_from_tsv(tsv_path, strategy_name, parameters):
     df = pd.read_csv(tsv_path, sep="\t")
     n_timepoints = df.shape[0]
+    tsv_path = Path(tsv_path)
 
-    cols = expand_strategy_columns(strategy_name, df, parameters)
-    if not cols:
+    cols, aroma_extra = expand_strategy_columns(
+        strategy_name, df, parameters,
+        subject_id=tsv_path.name.split("_")[0],
+        specifier="_".join(tsv_path.name.split("_")[1:tsv_path.name.split("_").index("desc-confounds")]),
+        aroma_dir=tsv_path.parents[3]
+    )
+
+    if not cols and aroma_extra is None:
         logging.warning(f"[{strategy_name}] No valid regressors found in TSV. Proceeding with empty confounds.")
-        reduced_confounds = pd.DataFrame(index=df.index)  # Return an empty DataFrame with correct number of rows
-        return reduced_confounds, [True] * len(df)  # All timepoints retained
+        reduced_confounds = pd.DataFrame(index=df.index)
+        return reduced_confounds, [True] * len(df)
 
     logging.debug(f"[{strategy_name}] Selected columns: {cols}")
 
-    reduced_confounds = df[cols].copy()
-    sample_mask = [True] * n_timepoints
+    # Start with empty DataFrame
+    reduced_confounds = pd.DataFrame(index=df.index)
 
+    # Add columns from main confounds file, if present
+    if any(col in df.columns for col in cols):
+        base_cols = [col for col in cols if col in df.columns]
+        reduced_confounds = df[base_cols].copy()
+
+    # Add AROMA regressors if available and correctly shaped
+    if aroma_extra is not None:
+        if len(aroma_extra) == len(df):
+            reduced_confounds = pd.concat([reduced_confounds, aroma_extra], axis=1)
+        else:
+            logging.warning(f"[{strategy_name}] AROMA file shape mismatch: "
+                            f"expected {len(df)} rows, got {len(aroma_extra)} — skipping AROMA components.")
+
+    sample_mask = [True] * n_timepoints
     logging.debug(
-        f"TSV loader ({strategy_name}): keeping {len(cols)} cols, "
+        f"TSV loader ({strategy_name}): keeping {reduced_confounds.shape[1]} cols, "
         f"{n_timepoints} timepoints → mask of all True"
     )
     return reduced_confounds, sample_mask
@@ -366,19 +398,16 @@ def main():
     participant_tsv = Path(args.participants_tsv) if args.participants_tsv else None
     output_root = Path(args.output_path)
 
-
     output_root.mkdir(exist_ok=True, parents=True)
     logging.debug("Output directory exists: %s", output_root)
 
-    path_movement = output_root / f"dataset-{dataset_name}_desc-movement_phenotype_aromafix.tsv"
-    path_dof = output_root / f"dataset-{dataset_name}_desc-confounds_phenotype.aromafix.tsv"
+    path_movement = output_root / f"dataset-{dataset_name}_desc-movement_phenotype_HALFpipe.tsv"
+    path_dof = output_root / f"dataset-{dataset_name}_desc-confounds_phenotype.HALFpipe.tsv"
 
-    # Fetch confounds derivative data
     logging.info("Fetching confounds derivative data.")
     data = fetch_fmriprep_derivative(dataset_name, participant_tsv, fmriprep_path, specifier)
     data_aroma = fetch_fmriprep_derivative(dataset_name, participant_tsv, fmriprep_path, specifier, aroma=True)
 
-    # Generate movement summary from confounds files
     logging.info("Generating movement summary.")
     movement = generate_movement_summary(data)
     movement = movement.sort_index()
@@ -403,27 +432,25 @@ def main():
             reduced_confounds, sample_mask = get_confounds(strategy_name, parameters, cf_path)
 
             full_length = reduced_confounds.shape[0]
-
             regressors = reduced_confounds.columns.tolist()
 
-            # High-pass filtering was done via Gaussian convolution, not cosine regressors
-            high_pass = 0 # high_pass = sum(col.startswith("cosine") for col in regressors)
-            compcor   = sum("comp_cor" in col for col in regressors)
-            aroma     = sum("aroma" in col.lower() for col in regressors)
-            scrub     = sum(col.startswith("motion_outlier") for col in regressors)
+            high_pass = 0  # placeholder, not counted here
+            compcor = sum("comp_cor" in col for col in regressors)
+            aroma = sum("aroma" in col.lower() for col in regressors)
+            scrub = sum(col.startswith("motion_outlier") for col in regressors)
 
-         
             if sample_mask is None:
                 excised_vol = 0
             elif isinstance(sample_mask, (np.ndarray, list)) and np.array(sample_mask).dtype == np.bool_:
                 excised_vol = np.sum(~np.array(sample_mask)) 
             else:
-                excised_vol = full_length - len(sample_mask) 
+                excised_vol = full_length - len(sample_mask)
+
             excised_vol_pro = excised_vol / full_length if full_length > 0 else 0
             logging.debug(f"[{strategy_name}] sample_mask type: {type(sample_mask)}, dtype: {np.array(sample_mask).dtype}, shape: {np.array(sample_mask).shape}")
 
-            fixed = len(regressors) - compcor
-            
+            fixed = len(regressors) - compcor - aroma
+
             if "scrub" in strategy_name.lower():
                 total = len(regressors) + excised_vol
             else:
