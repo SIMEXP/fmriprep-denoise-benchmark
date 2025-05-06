@@ -223,6 +223,9 @@ def main():
     if metric_option == "connectome":
         collection_metric.columns = used_strategy_names
         logging.debug("Columns set to used strategy names for connectome metric.")
+        print("collection_metric shape:", collection_metric.shape)
+        print("collection_metric preview:")
+        print(collection_metric.head())
 
     output_file = output_path / f"dataset-{dataset}_atlas-{atlas}_nroi-{dimension}_{metric_option}.tsv"
     collection_metric.to_csv(output_file, sep="\t")
