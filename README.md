@@ -5,9 +5,9 @@
 The project is a continuation of [load_confounds](https://github.com/SIMEXP/load_confounds).
 The aim is to evaluate the impact of the denoising strategy on functional connectivity data, using output processed by fMRIPrep LTS in a reproducible workflow.
 
-**The manuscript is now published in *PLOS Computational Biology* doi: [10.1371/journal.pcbi.1011942](http://dx.doi.org/10.1371/journal.pcbi.1011942).
+**The manuscript is now published in *PLOS Computational Biology* doi: [10.1371/journal.pcbi.1011942](http://dx.doi.org/10.1371/journal.pcbi.1011942).**
 
-The reproducible Jupyter Book preprint is on [NeuroLibre](https://neurolibre.org/papers/10.55458/neurolibre.00012).**
+**The reproducible Jupyter Book preprint is on [NeuroLibre](https://neurolibre.org/papers/10.55458/neurolibre.00012).**
 
 ## Recommendations for those who thought this project is a software project
 
